@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+sqlalchemy
+mysql-connector-python
+pymysql
+dotenv
+argon2-cffi
+python-jose[cryptography]
+pydantic
+pydantic-settings
+openai
