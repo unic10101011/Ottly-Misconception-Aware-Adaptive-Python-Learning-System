@@ -1,0 +1,79 @@
+openapi: 3.0.0
+info:
+  title: Mobile App Settings API
+  description: API for managing mobile application settings
+  version: 1.0.0
+servers:
+  - url: https://api.example.com/api/v1
+    description: Production server
+paths:
+  /login:
+    post:
+      summary: User login
+      responses:
+        200:
+          description: OK
+  /user/profile:
+    get:
+      summary: Get user profile
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: OK
+  /user/theme:
+    put:
+      summary: Update theme preference
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                theme:
+                  type: string
+                  enum: [system, light, dark]
+      responses:
+        200:
+          description: OK
+  /notification/preference:
+    get:
+      summary: Get notification preferences
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: OK
+    put:
+      summary: Update notification preferences
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: OK
+  /version:
+    get:
+      summary: Check for app updates
+      parameters:
+        - name: current_version
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: platform
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [android, ios]
+      responses:
+        200:
+          description: OK
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

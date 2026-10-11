@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <title>应用设置系统</title>
+  <link rel="stylesheet" href="./assets/css/app.css">
+  <script>
+    (function () {
+      try {
+        var preference = localStorage.getItem('theme_preference') || 'system';
+        var systemDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var theme = preference === 'system' ? (systemDark ? 'dark' : 'light') : (preference === 'dark' ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+        document.documentElement.lang = localStorage.getItem('lang_preference') || 'zh-CN';
+      } catch (error) {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    }());
+  </script>
+</head>
+<body>
+  <div id="app">
+    <div class="boot-screen">
+      <div class="boot-card">
+        <div class="spinner"></div>
+        <h1>应用设置系统</h1>
+        <p>正在加载浏览器版设置中心…</p>
+      </div>
+    </div>
+  </div>
+  <script src="./assets/js/version.js" defer></script>
+  <script src="./assets/js/i18n.js" defer></script>
+  <script src="./assets/js/services.js" defer></script>
+  <script src="./assets/js/app.js" defer></script>
+</body>
+</html>
