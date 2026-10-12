@@ -792,3 +792,35 @@ body.eye-protection {
 @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.06); } }
 @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
 @keyframes otterFloat { 0%, 100% { transform: translateY(-50%); } 50% { transform: translateY(calc(-50% - 8px)); } }
+/* 提交判题与渐进式提示 */
+.submission-feedback {
+  margin-top: 20px;
+  padding: 16px;
+  border: 1px solid #d7e3ee;
+  border-radius: 12px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #24394a;
+  overflow-wrap: anywhere;
+}
+.submission-feedback h3 { font-size: 18px; margin: 0 0 8px; }
+.submission-feedback h4 { font-size: 16px; margin: 18px 0 8px; }
+.submission-feedback p { margin: 8px 0; white-space: pre-wrap; }
+.judge-passed { color: #237b32; }
+.judge-failed, .judge-error { color: #a43333; }
+.judge-case { margin: 12px 0; padding: 12px; background: #f5f8fb; border-radius: 8px; }
+.judge-output-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 8px; }
+.submission-feedback pre { margin: 4px 0; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 13px; }
+.analysis-status { color: #596d7a; font-size: 13px; }
+.hint-card { border-left: 3px solid #4a90e2; background: #eff6ff; margin: 12px 0; padding: 10px 12px; border-radius: 4px; }
+.btn-hint { border: 1px solid #357abd; background: #fff; color: #2468a9; padding: 8px 14px; border-radius: 8px; cursor: pointer; }
+.btn-hint:hover { background: #eff6ff; }
+.btn-hint:focus-visible, .analysis-details summary:focus-visible { outline: 3px solid #83b9ed; outline-offset: 3px; }
+.analysis-details { margin-top: 16px; border-top: 1px solid #d7e3ee; padding-top: 12px; }
+.analysis-details summary { color: #3d617d; cursor: pointer; }
+.analysis-evidence { margin-top: 12px; padding: 10px; background: #f5f8fb; border-radius: 8px; }
+.code-textarea[readonly] { opacity: 0.75; }
+@media (max-width: 480px) {
+  .judge-output-grid { grid-template-columns: 1fr; }
+  .submission-feedback { padding: 12px; }
+}

@@ -11,11 +11,7 @@ from app.models.class_selection import ClassSelection
 from app.models.settings import UserSettings, NotificationPreferences, LanguageSettings
 
 # 创建数据库表
-try:
-    Base.metadata.create_all(bind=engine)
-    print("建表成功")
-except Exception as e:
-    print(f"建表失败: {e}")
+Base.metadata.create_all(bind=engine)
 
 # 创建FastAPI应用
 app = FastAPI(

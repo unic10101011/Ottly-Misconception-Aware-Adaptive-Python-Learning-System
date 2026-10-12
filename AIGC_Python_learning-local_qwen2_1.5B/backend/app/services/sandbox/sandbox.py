@@ -18,6 +18,23 @@ class TimeoutException(Exception):
     pass
 
 
+OUTPUT_LIMIT = 8000
+
+
+class OutputLimitError(Exception):
+    pass
+
+
+class LimitedStringIO(io.StringIO):
+    """Stop excessive printing before the capture buffer can grow unbounded."""
+    def write(self, text):
+        remaining = OUTPUT_LIMIT - self.tell()
+        if len(text) > remaining:
+            super().write(text[:remaining])
+            raise OutputLimitError(f'程序输出超过 {OUTPUT_LIMIT} 个字符，已停止执行')
+        return super().write(text)
+
+
 class Sandbox:
     """Python代码沙箱"""
     
@@ -110,12 +127,11 @@ class Sandbox:
         result['errors'].extend(security_errors)
         
         if not is_safe:
-            result['output'] = '⚠️ 发现安全问题，请检查代码后重试\n'
             return result
         
         # 2. 执行代码
-        stdout_capture = io.StringIO()
-        stderr_capture = io.StringIO()
+        stdout_capture = LimitedStringIO()
+        stderr_capture = LimitedStringIO()
         start_time = time.time()
         
         try:
@@ -135,6 +151,13 @@ class Sandbox:
             })
             result['output'] = stdout_capture.getvalue()
             
+        except OutputLimitError as e:
+            result['errors'].append({
+                'type': 'OutputLimitError', 'line': None, 'column': None,
+                'message': str(e), 'suggestion': '减少输出数量，并检查循环终止条件'
+            })
+            result['output'] = stdout_capture.getvalue()
+
         except Exception as e:
             # 处理运行时错误
             exc_type, exc_value, exc_traceback = sys.exc_info()

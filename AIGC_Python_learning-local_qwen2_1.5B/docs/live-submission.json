@@ -1,0 +1,263 @@
+{
+  "tested_at": "2026-10-12T12:53:20.249865+00:00",
+  "url": "http://127.0.0.1:3000",
+  "username": "smoke_1b631bfab3",
+  "cases": [
+    {
+      "name": "syntax_error",
+      "student_code": "total = 0\nfor i in range(1, 101)\n    total += i\nprint(total)",
+      "seconds": 15.17,
+      "contract_passed": true,
+      "response": {
+        "problem_id": "level2",
+        "judge": {
+          "status": "execution_error",
+          "passed": false,
+          "passed_cases": 0,
+          "total_cases": 1,
+          "cases": [
+            {
+              "case_id": "stdout-1",
+              "passed": false,
+              "expected_output": "5050",
+              "actual_output": "",
+              "output_available": true,
+              "errors": [
+                {
+                  "type": "语法错误",
+                  "line": 2,
+                  "message": "expected ':' (<unknown>, line 2)"
+                }
+              ],
+              "execution_time": 0.0
+            }
+          ]
+        },
+        "analysis": {
+          "status": "ready",
+          "message": "以下为基于本次测试证据的 AI 提示。",
+          "model": "qwen2.5-coder:3b-instruct",
+          "content": {
+            "suspected_cause": "代码中缺少冒号，导致语法错误。",
+            "evidence": [
+              {
+                "case_id": "stdout-1",
+                "field": "error_message",
+                "quote": "expected ':' (<unknown>, line 2)",
+                "explanation": "代码中缺少冒号，导致语法错误。"
+              }
+            ],
+            "knowledge_points": [
+              "语法错误",
+              "冒号的使用",
+              "代码结构",
+              "调试技巧"
+            ],
+            "hints": {
+              "level1": "请思考一下，为什么代码中缺少冒号会导致语法错误？",
+              "level2": "在代码的第2行，缺少冒号。",
+              "level3": "检查第2行末尾是否缺少冒号。"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "range_boundary",
+      "student_code": "total = 0\nfor i in range(1, 100):\n    total += i\nprint(total)",
+      "seconds": 8.55,
+      "contract_passed": true,
+      "response": {
+        "problem_id": "level2",
+        "judge": {
+          "status": "wrong_answer",
+          "passed": false,
+          "passed_cases": 0,
+          "total_cases": 1,
+          "cases": [
+            {
+              "case_id": "stdout-1",
+              "passed": false,
+              "expected_output": "5050",
+              "actual_output": "4950\n",
+              "output_available": true,
+              "errors": [],
+              "execution_time": 0.001
+            }
+          ]
+        },
+        "analysis": {
+          "status": "ready",
+          "message": "以下为基于本次测试证据的 AI 提示。",
+          "model": "qwen2.5-coder:3b-instruct",
+          "content": {
+            "suspected_cause": "疑似循环的结束条件没有正确计算到 100",
+            "evidence": [
+              {
+                "case_id": "stdout-1",
+                "field": "actual_output",
+                "quote": "4950",
+                "explanation": "实际输出 '4950' 与预期输出 '5050' 不一致，说明循环中可能遗漏了 100。"
+              }
+            ],
+            "knowledge_points": [
+              "for 循环的结束条件",
+              "循环变量的初始值和结束值",
+              "循环中的累加操作",
+              "输出语句的使用方法"
+            ],
+            "hints": {
+              "level1": "思考一下，为什么循环中没有计算到 100？",
+              "level2": "检查循环的结束条件，确保它能正确地计算到 100。",
+              "level3": "在代码中添加一个打印语句，输出循环结束时的 total 值，看看是否遗漏了 100。"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "overwrite_accumulator",
+      "student_code": "total = 0\nfor i in range(1, 101):\n    total = i\nprint(total)",
+      "seconds": 8.78,
+      "contract_passed": true,
+      "response": {
+        "problem_id": "level2",
+        "judge": {
+          "status": "wrong_answer",
+          "passed": false,
+          "passed_cases": 0,
+          "total_cases": 1,
+          "cases": [
+            {
+              "case_id": "stdout-1",
+              "passed": false,
+              "expected_output": "5050",
+              "actual_output": "100\n",
+              "output_available": true,
+              "errors": [],
+              "execution_time": 0.001
+            }
+          ]
+        },
+        "analysis": {
+          "status": "ready",
+          "message": "以下为基于本次测试证据的 AI 提示。",
+          "model": "qwen2.5-coder:3b-instruct",
+          "content": {
+            "suspected_cause": "疑似循环的终止条件或累加操作不正确，导致计算结果错误。",
+            "evidence": [
+              {
+                "case_id": "stdout-1",
+                "field": "actual_output",
+                "quote": "100",
+                "explanation": "输出结果为 100，而不是预期的 5050，说明循环没有正确执行。"
+              }
+            ],
+            "knowledge_points": [
+              "for 循环的终止条件",
+              "循环变量的累加操作",
+              "循环的执行顺序",
+              "输出结果的计算方法"
+            ],
+            "hints": {
+              "level1": "思考一下为什么循环没有正确计算 1 到 100 的和？",
+              "level2": "检查循环的终止条件和累加操作。",
+              "level3": "确保循环的终止条件是 i < 101，累加操作是 total 与 i 相加。"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "undefined_name",
+      "student_code": "print(missing_total)",
+      "seconds": 8.41,
+      "contract_passed": true,
+      "response": {
+        "problem_id": "level2",
+        "judge": {
+          "status": "execution_error",
+          "passed": false,
+          "passed_cases": 0,
+          "total_cases": 1,
+          "cases": [
+            {
+              "case_id": "stdout-1",
+              "passed": false,
+              "expected_output": "5050",
+              "actual_output": "",
+              "output_available": true,
+              "errors": [
+                {
+                  "type": "NameError",
+                  "line": 1,
+                  "message": "变量 'missing_total' 没有定义，请先赋值或检查拼写"
+                }
+              ],
+              "execution_time": 0.002
+            }
+          ]
+        },
+        "analysis": {
+          "status": "ready",
+          "message": "以下为基于本次测试证据的 AI 提示。",
+          "model": "qwen2.5-coder:3b-instruct",
+          "content": {
+            "suspected_cause": "代码中缺少变量 'missing_total' 的定义，导致 NameError 错误。",
+            "evidence": [
+              {
+                "case_id": "stdout-1",
+                "field": "error_message",
+                "quote": "变量 'missing_total' 没有定义，请先赋值或检查拼写",
+                "explanation": "代码中缺少变量 'missing_total' 的定义，导致 NameError 错误。"
+              }
+            ],
+            "knowledge_points": [
+              "变量定义",
+              "函数调用",
+              "错误处理",
+              "代码结构分析"
+            ],
+            "hints": {
+              "level1": "思考一下，为什么需要一个变量来存储计算结果？",
+              "level2": "在代码中找到 'print' 语句，检查它前面是否有变量赋值。",
+              "level3": "检查代码的第 1 行，确保 'missing_total' 变量已经定义。"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "correct",
+      "student_code": "total = 0\nfor i in range(1, 101):\n    total += i\nprint(total)",
+      "seconds": 0.27,
+      "contract_passed": true,
+      "response": {
+        "problem_id": "level2",
+        "judge": {
+          "status": "accepted",
+          "passed": true,
+          "passed_cases": 1,
+          "total_cases": 1,
+          "cases": [
+            {
+              "case_id": "stdout-1",
+              "passed": true,
+              "expected_output": "5050",
+              "actual_output": "5050\n",
+              "output_available": true,
+              "errors": [],
+              "execution_time": 0.001
+            }
+          ]
+        },
+        "analysis": {
+          "status": "skipped",
+          "message": "测试已通过，无需 AI 分析。",
+          "model": null,
+          "content": null
+        }
+      }
+    }
+  ]
+}

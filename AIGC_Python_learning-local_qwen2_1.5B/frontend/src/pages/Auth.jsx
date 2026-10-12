@@ -77,10 +77,10 @@ function Auth() {
         setTimeout(() => {
           navigate('/app/levels')
         }, 1000)
-      } else if (result.code === 401) {
-        showMessage(result.msg || '用户名或密码错误', 'danger')
-      } else if (result.code === 403) {
-        showMessage(result.msg || '账户已被禁用', 'danger')
+      } else if (response.status === 401) {
+        showMessage(result.detail || '用户名或密码错误', 'danger')
+      } else if (response.status === 403) {
+        showMessage(result.detail || '账户已被禁用', 'danger')
       } else if (result.code >= 500) {
         showMessage('服务器错误，请稍后重试', 'danger')
       } else {
@@ -120,7 +120,7 @@ function Auth() {
       
       const result = await response.json()
       
-      if (result.code === 200) {
+      if (result.code === 201) {
         showMessage('注册成功，请登录', 'success')
         setActiveTab('login')
       } else if (result.code === 400) {
@@ -129,49 +129,6 @@ function Auth() {
         showMessage('服务器错误，请稍后重试', 'danger')
       } else {
         showMessage(result.msg || '注册失败', 'danger')
-      }
-    } catch (error) {
-      showMessage('网络错误，请稍后重试', 'danger')
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const handleResetPassword = async (e) => {
-    e.preventDefault()
-    
-    if (!validateForm(e.target)) {
-      return
-    }
-    
-    setLoading(true)
-    
-    const formData = new FormData(e.target)
-    const data = {
-      phone: formData.get('phone'),
-      new_password: formData.get('new_password')
-    }
-    
-    try {
-      const response = await fetch(`${API_BASE_URL}/auth/reset-password`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      })
-      
-      const result = await response.json()
-      
-      if (result.code === 200) {
-        showMessage('密码重置成功，请登录', 'success')
-        setActiveTab('login')
-      } else if (result.code === 404) {
-        showMessage(result.msg || '手机号未注册', 'danger')
-      } else if (result.code >= 500) {
-        showMessage('服务器错误，请稍后重试', 'danger')
-      } else {
-        showMessage(result.msg || '密码重置失败', 'danger')
       }
     } catch (error) {
       showMessage('网络错误，请稍后重试', 'danger')
@@ -274,11 +231,6 @@ function Auth() {
               注册
             </button>
           </li>
-          <li className="nav-item">
-            <button className={`nav-link ${activeTab === 'reset' ? 'active' : ''}`} onClick={() => setActiveTab('reset')}>
-              重置密码
-            </button>
-          </li>
         </ul>
 
         {/* 消息提示 */}
@@ -328,22 +280,6 @@ function Auth() {
           </form>
         )}
 
-        {/* 重置密码 */}
-        {activeTab === 'reset' && (
-          <form onSubmit={handleResetPassword}>
-            <div className="mb-3">
-              <label className="form-label">手机号</label>
-              <input type="tel" className="form-control" name="phone" minLength={10} maxLength={20} required />
-              <div className="invalid-feedback">请输入有效手机号</div>
-            </div>
-            <div className="mb-3">
-              <label className="form-label">新密码</label>
-              <input type="password" className="form-control" name="new_password" minLength={6} required />
-              <div className="invalid-feedback">密码至少6位</div>
-            </div>
-            <button type="submit" className="btn btn-primary w-100">重置密码</button>
-          </form>
-        )}
 
         <img src={loginhaita} alt="海獭" style={{
            position: 'absolute',

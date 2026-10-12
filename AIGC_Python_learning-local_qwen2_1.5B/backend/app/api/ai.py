@@ -10,12 +10,16 @@ import asyncio
 import uuid
 from datetime import datetime
 from typing import List, Optional
+import os
+from app.core.auth import get_current_user
+from app.models.user import User
 import httpx  # 【修改】新增：用于异步HTTP请求，替换原来的 openai 库
 
 router = APIRouter()
 
 # ==================== 【修改】本地大模型配置（替换原来的蓝心大模型配置） ====================
-LOCAL_LLM_URL = "http://172.23.46.241:8000/v1/chat/completions"
+LOCAL_LLM_URL = os.getenv("LOCAL_LLM_URL")
+OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "qwen2.5-coder:3b-instruct")
 MAX_TOKENS = 300  # 可根据需要调整
 TEMPERATURE = 0.7
 
@@ -57,10 +61,11 @@ class ChatHistoryResponse(BaseModel):
 
 
 # ==================== 辅助函数：获取会话历史（与原代码相同） ====================
-async def get_session_history(db: Session, session_id: str):
+async def get_session_history(db: Session, session_id: str, user_id: int):
     """获取指定会话的历史记录，用于构建上下文"""
     history = db.query(AIChatRecord).filter(
-        AIChatRecord.session_id == session_id
+        AIChatRecord.session_id == session_id,
+        AIChatRecord.user_id == user_id
     ).order_by(AIChatRecord.response_time.asc()).all()
 
     messages = []
@@ -71,156 +76,113 @@ async def get_session_history(db: Session, session_id: str):
     return messages
 
 
-# ==================== 【修改】流式响应 - 改用本地模型 ====================
-async def stream_chat_response(chat_data: AIChatRequest, db: Session):
-    # 生成或使用现有的会话ID
-    session_id = chat_data.session_id or str(uuid.uuid4())
-
-    # 获取历史记录作为上下文
-    history_messages = await get_session_history(db, session_id)
-
-    # 构建完整的消息列表
-    messages = history_messages + [{"role": "user", "content": chat_data.question}]
-
-    # 【修改】构造本地模型的请求体
-    payload = {
+def ollama_payload(messages: list[dict], stream: bool) -> dict:
+    return {
+        "model": OLLAMA_MODEL,
         "messages": messages,
-        "max_tokens": MAX_TOKENS,
-        "temperature": TEMPERATURE
+        "stream": stream,
+        "options": {"num_predict": MAX_TOKENS, "temperature": TEMPERATURE},
     }
 
-    full_content = ""
+
+def sse_event(content: str, session_id: str) -> str:
+    return "data: " + json.dumps(
+        {"content": content, "session_id": session_id}, ensure_ascii=False
+    ) + "\n\n"
+
+
+async def stream_chat_response(chat_data: AIChatRequest, db: Session, user_id: int):
+    session_id = chat_data.session_id or str(uuid.uuid4())
+    history_messages = await get_session_history(db, session_id, user_id)
+    messages = history_messages + [{"role": "user", "content": chat_data.question}]
+    payload = ollama_payload(messages, stream=True)
 
     async def generate():
-        nonlocal full_content
-        # 【修改】使用 httpx 异步客户端发送流式请求
-        async with httpx.AsyncClient(timeout=60.0) as client:
-            async with client.stream("POST", LOCAL_LLM_URL, json=payload) as response:
-                if response.status_code != 200:
-                    error_text = await response.aread()
-                    yield f"data: {{\"content\": \"调用本地模型失败: {response.status_code}\", \"session_id\": \"{session_id}\"}}\n\n"
-                    yield f"data: {{\"content\": \"[END]\"}}\n\n"
-                    return
+        full_content = ""
+        try:
+            async with httpx.AsyncClient(timeout=120.0) as client:
+                async with client.stream("POST", LOCAL_LLM_URL, json=payload) as response:
+                    response.raise_for_status()
+                    async for line in response.aiter_lines():
+                        if not line:
+                            continue
+                        data = json.loads(line)
+                        token = data.get("message", {}).get("content", "")
+                        if token:
+                            full_content += token
+                            yield sse_event(token, session_id)
+                        if data.get("done"):
+                            break
+            if not full_content:
+                raise ValueError("Empty model response")
+        except (httpx.HTTPError, ValueError):
+            yield sse_event("模型调用失败，请稍后重试。", session_id)
+            yield sse_event("[END]", session_id)
+            return
 
-                # 逐行读取 SSE 流
-                async for line in response.aiter_lines():
-                    if line.startswith("data: "):
-                        data_str = line[6:]  # 去掉 "data: " 前缀
-                        if data_str.strip():
-                            try:
-                                data = json.loads(data_str)
-                                # 【修改】本地模型返回格式为 {"token": "..."}，需转换为前端期望的 {"content": "..."}
-                                if "token" in data:
-                                    token = data["token"]
-                                    full_content += token
-                                    yield f"data: {{\"content\": \"{token}\", \"session_id\": \"{session_id}\"}}\n\n"
-                                if data.get("done"):
-                                    break
-                            except json.JSONDecodeError:
-                                continue
-
-        # 发送结束标记（与原逻辑一致）
-        yield f"data: {{\"content\": \"[END]\", \"session_id\": \"{session_id}\"}}\n\n"
-
-        # 保存对话记录到数据库（与原逻辑一致）
-        chat_record = AIChatRecord(
-            user_id=1,  # 默认用户ID，可根据实际认证修改
-            conversation_id=1,  # 原代码中使用的默认值
-            session_id=session_id,
-            question=chat_data.question,
-            question_type=chat_data.question_type,
-            answer=full_content,
-            is_stream=True
-        )
-        db.add(chat_record)
-        db.commit()
-
-    return StreamingResponse(
-        generate(),
-        media_type="text/event-stream"
-    )
-
-
-# ==================== 【修改】非流式响应 - 改用本地模型 ====================
-async def normal_chat_response(chat_data: AIChatRequest, db: Session):
-    # 生成或使用现有的会话ID
-    session_id = chat_data.session_id or str(uuid.uuid4())
-
-    # 获取历史记录作为上下文
-    history_messages = await get_session_history(db, session_id)
-
-    # 构建完整的消息列表
-    messages = history_messages + [{"role": "user", "content": chat_data.question}]
-
-    payload = {
-        "messages": messages,
-        "max_tokens": MAX_TOKENS,
-        "temperature": TEMPERATURE
-    }
-
-    try:
-        # 【修改】使用 httpx 发送请求
-        async with httpx.AsyncClient(timeout=60.0) as client:
-            response = await client.post(LOCAL_LLM_URL, json=payload)
-            if response.status_code != 200:
-                raise Exception(f"本地模型返回错误: {response.status_code}")
-
-            # 【修改】本地模型 API 返回的是流式 SSE，这里解析流式并拼接完整回答
-            full_answer = ""
-            async for line in response.aiter_lines():
-                if line.startswith("data: "):
-                    data_str = line[6:]
-                    if data_str.strip():
-                        try:
-                            data = json.loads(data_str)
-                            if "token" in data:
-                                full_answer += data["token"]
-                            if data.get("done"):
-                                break
-                        except:
-                            pass
-            if not full_answer:
-                full_answer = "抱歉，模型没有返回有效回答。"
-
-        # 保存记录（与原逻辑一致）
-        chat_record = AIChatRecord(
-            user_id=1,
+        db.add(AIChatRecord(
+            user_id=user_id,
             conversation_id=1,
             session_id=session_id,
             question=chat_data.question,
             question_type=chat_data.question_type,
-            answer=full_answer,
-            is_stream=False
-        )
-        db.add(chat_record)
+            answer=full_content,
+            is_stream=True,
+        ))
         db.commit()
+        yield sse_event("[END]", session_id)
 
-        return AIChatResponse(
-            code=200,
-            msg="响应成功",
-            data={
-                "question": chat_data.question,
-                "answer": full_answer,
-                "response_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                "session_id": session_id
-            }
-        )
+    return StreamingResponse(generate(), media_type="text/event-stream")
 
-    except Exception as e:
-        return AIChatResponse(
-            code=400,
-            msg=f"本地大模型调用失败: {str(e)}",
-            data={}
-        )
+
+async def normal_chat_response(chat_data: AIChatRequest, db: Session, user_id: int):
+    session_id = chat_data.session_id or str(uuid.uuid4())
+    history_messages = await get_session_history(db, session_id, user_id)
+    messages = history_messages + [{"role": "user", "content": chat_data.question}]
+    payload = ollama_payload(messages, stream=False)
+
+    try:
+        async with httpx.AsyncClient(timeout=120.0) as client:
+            response = await client.post(LOCAL_LLM_URL, json=payload)
+            response.raise_for_status()
+            full_answer = response.json().get("message", {}).get("content", "").strip()
+        if not full_answer:
+            raise ValueError("Empty model response")
+    except (httpx.HTTPError, ValueError):
+        return AIChatResponse(code=400, msg="模型调用失败，请检查 Ollama 服务和模型。", data={})
+
+    db.add(AIChatRecord(
+        user_id=user_id,
+        conversation_id=1,
+        session_id=session_id,
+        question=chat_data.question,
+        question_type=chat_data.question_type,
+        answer=full_answer,
+        is_stream=False,
+    ))
+    db.commit()
+    return AIChatResponse(
+        code=200,
+        msg="响应成功",
+        data={
+            "question": chat_data.question,
+            "answer": full_answer,
+            "response_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "session_id": session_id,
+        },
+    )
 
 
 # ==================== 以下接口完全保持不变（仅修改了注释） ====================
 @router.post("/ai/chat")
 async def chat_with_ai(
         chat_data: AIChatRequest,
-        db: Session = Depends(get_db)
+        db: Session = Depends(get_db),
+        current_user: User = Depends(get_current_user)
 ):
     """AI对话接口（自动选择流式或非流式）"""
+    if not LOCAL_LLM_URL:
+        raise HTTPException(status_code=503, detail="AI 模型地址尚未配置")
     if not chat_data.question:
         return AIChatResponse(
             code=400,
@@ -229,9 +191,9 @@ async def chat_with_ai(
         )
 
     if chat_data.stream:
-        return await stream_chat_response(chat_data, db)
+        return await stream_chat_response(chat_data, db, current_user.id)
     else:
-        return await normal_chat_response(chat_data, db)
+        return await normal_chat_response(chat_data, db, current_user.id)
 
 
 # 获取历史记录（分页）- 原样保留
@@ -240,10 +202,11 @@ async def get_chat_history(
         page: int = Query(1, ge=1, description="页码"),
         page_size: int = Query(10, ge=1, le=100, description="每页数量"),
         session_id: Optional[str] = Query(None, description="会话ID"),
-        db: Session = Depends(get_db)
+        db: Session = Depends(get_db),
+        current_user: User = Depends(get_current_user)
 ):
     """获取聊天历史记录，支持分页和会话ID筛选"""
-    query = db.query(AIChatRecord).filter(AIChatRecord.user_id == 1)
+    query = db.query(AIChatRecord).filter(AIChatRecord.user_id == current_user.id)
 
     if session_id:
         query = query.filter(AIChatRecord.session_id == session_id)
@@ -279,12 +242,13 @@ async def get_chat_history(
 @router.delete("/ai/history/{record_id}")
 async def delete_chat_history(
         record_id: int,
-        db: Session = Depends(get_db)
+        db: Session = Depends(get_db),
+        current_user: User = Depends(get_current_user)
 ):
     """删除指定的聊天历史记录"""
     record = db.query(AIChatRecord).filter(
         AIChatRecord.record_id == record_id,
-        AIChatRecord.user_id == 1
+        AIChatRecord.user_id == current_user.id
     ).first()
 
     if not record:
@@ -306,7 +270,8 @@ async def delete_chat_history(
 
 # 获取会话列表 - 原样保留
 @router.get("/ai/sessions")
-async def get_sessions(db: Session = Depends(get_db)):
+async def get_sessions(db: Session = Depends(get_db),
+        current_user: User = Depends(get_current_user)):
     """获取用户的所有会话列表"""
     from sqlalchemy import func
 
@@ -314,7 +279,7 @@ async def get_sessions(db: Session = Depends(get_db)):
         AIChatRecord.session_id,
         func.max(AIChatRecord.response_time).label('last_message_time')
     ).filter(
-        AIChatRecord.user_id == 1
+        AIChatRecord.user_id == current_user.id
     ).group_by(
         AIChatRecord.session_id
     ).order_by(

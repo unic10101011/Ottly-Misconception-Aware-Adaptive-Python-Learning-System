@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Outlet, Link, useNavigate } from 'react-router-dom'
 
 function Layout() {
   const navigate = useNavigate()
+  const [checking, setChecking] = useState(true)
 
   const handleLogout = () => {
     localStorage.removeItem('access_token')
@@ -10,9 +11,32 @@ function Layout() {
     navigate('/auth')
   }
 
+  useEffect(() => {
+    let active = true
+    const token = localStorage.getItem('access_token')
+    if (!token) {
+      navigate('/auth', { replace: true })
+      return
+    }
+    fetch('/api/v1/auth/me', {
+      headers: { Authorization: 'Bearer ' + token }
+    }).then(response => {
+      if (!active) return
+      if (!response.ok) {
+        handleLogout()
+      } else {
+        setChecking(false)
+      }
+    }).catch(() => {
+      if (active) handleLogout()
+    })
+    return () => { active = false }
+  }, [navigate])
+
+  if (checking) return <div className="p-4">正在验证登录状态...</div>
+
   return (
     <div className="d-flex h-100 bg-light">
-      {/* 侧边栏 */}
       <div className="sidebar bg-white border-right" style={{ width: '250px', height: '100vh', position: 'fixed' }}>
         <div className="p-4 border-bottom">
           <h3 className="text-center">AIGC 应用</h3>
@@ -34,8 +58,6 @@ function Layout() {
           <button onClick={handleLogout} className="btn btn-danger w-100">退出登录</button>
         </div>
       </div>
-
-      {/* 主内容区 - 已删除顶部 AIGC 应用框 */}
       <div className="flex-grow-1 d-flex flex-column" style={{ marginLeft: '250px', height: '100vh', overflow: 'hidden' }}>
         <div className="container py-4 flex-grow-1 d-flex flex-column overflow-hidden">
           <Outlet />

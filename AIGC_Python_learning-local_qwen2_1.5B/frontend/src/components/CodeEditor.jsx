@@ -1,15 +1,18 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
+import SubmissionFeedback from './SubmissionFeedback.jsx'
+import { requestCode } from './codeApi.mjs'
 
-const API_URL = '/api/v1/code/run'
-
-function CodeEditor({ initialCode, expectedOutput, onSuccess, title, children }) {
+function CodeEditor({ initialCode, problemId, onSuccess, title, children }) {
   const navigate = useNavigate()
   const [code, setCode] = useState(initialCode)
   const [output, setOutput] = useState('运行结果将显示在这里')
   const [outputType, setOutputType] = useState('hidden')
   const [running, setRunning] = useState(false)
   const [submitting, setSubmitting] = useState(false)
+  const [submission, setSubmission] = useState(null)
+  const [visibleHintCount, setVisibleHintCount] = useState(0)
+  const [authRequired, setAuthRequired] = useState(false)
   const [modal, setModal] = useState({ show: false, type: 'info', title: '', message: '' })
   const [lineCount, setLineCount] = useState(1)
   const [showConfetti, setShowConfetti] = useState(false)
@@ -20,7 +23,10 @@ function CodeEditor({ initialCode, expectedOutput, onSuccess, title, children })
   const animationRef = useRef(null)
   const particlesRef = useRef([])
   const cannonRef = useRef(null)
-  const lastRunResultRef = useRef(null)
+  const busyRef = useRef(false)
+  const mountedRef = useRef(false)
+  const successTimerRef = useRef(null)
+  const busy = running || submitting
 
   // Update line numbers
   useEffect(() => {
@@ -34,46 +40,61 @@ function CodeEditor({ initialCode, expectedOutput, onSuccess, title, children })
     }
   }
 
+  const updateCode = (value) => {
+    if (busyRef.current) return
+    setCode(value)
+    setSubmission(null)
+    setVisibleHintCount(0)
+    setOutputType('hidden')
+    clearTimeout(successTimerRef.current)
+  }
+
   // Tab key handler
   const handleKeyDown = (e) => {
+    if (busyRef.current) return
     if (e.key === 'Tab') {
       e.preventDefault()
       const start = e.target.selectionStart
       const end = e.target.selectionEnd
       const newCode = code.substring(0, start) + '    ' + code.substring(end)
-      setCode(newCode)
+      if (newCode.length > 6000) return
+      updateCode(newCode)
       setTimeout(() => {
         e.target.selectionStart = e.target.selectionEnd = start + 4
       }, 0)
     }
   }
 
+  const showRequestError = (error) => {
+    setOutput(error.message || '请求失败，请稍后重试。')
+    setOutputType('error')
+    setAuthRequired(error.status === 401)
+  }
+
   const runCode = async () => {
+    if (busyRef.current) return
     if (!code.trim()) {
       setOutput('请输入代码')
       setOutputType('error')
       return
     }
 
+    busyRef.current = true
     setRunning(true)
+    setAuthRequired(false)
     setOutput('代码正在执行，请稍候...')
     setOutputType('info')
+    clearTimeout(successTimerRef.current)
 
     try {
-      const response = await fetch(API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code, timeout: 10 }),
-      })
-      const result = await response.json()
-      lastRunResultRef.current = result.data
-
+      const result = await requestCode('run', { code, timeout: 3 }, localStorage.getItem('access_token'))
+      if (!mountedRef.current) return
       let display = ''
-      if (result.data.output) {
-        display += '📝 程序输出:\n' + result.data.output + '\n'
+      if (result.output) {
+        display += '📝 程序输出:\n' + result.output + '\n'
       }
-      if (result.data.errors && result.data.errors.length > 0) {
-        for (const err of result.data.errors) {
+      if (result.errors && result.errors.length > 0) {
+        for (const err of result.errors) {
           display += '========================================\n'
           display += `⚠️ ${err.type}\n`
           if (err.line) display += `📍 第 ${err.line} 行\n`
@@ -82,81 +103,53 @@ function CodeEditor({ initialCode, expectedOutput, onSuccess, title, children })
           display += '========================================\n\n'
         }
       }
-      if (result.data.execution_time !== undefined) {
-        display += `⏱️ 执行时间: ${result.data.execution_time} 秒`
+      if (result.execution_time !== undefined) {
+        display += `⏱️ 执行时间: ${result.execution_time} 秒`
       }
-
-      setOutput(display.trim())
-      setOutputType(result.data.success ? 'success' : 'error')
+      setOutput(display.trim() || '程序运行结束，没有输出。')
+      setOutputType(result.success ? 'success' : 'error')
     } catch (error) {
-      setOutput('无法连接到服务器，请确保后端服务已启动')
-      setOutputType('error')
+      if (mountedRef.current) showRequestError(error)
     } finally {
-      setRunning(false)
+      busyRef.current = false
+      if (mountedRef.current) setRunning(false)
     }
   }
 
   const submitCode = async () => {
+    if (busyRef.current) return
     if (!code.trim()) {
-      setOutput('请先输入代码并运行')
+      setOutput('请先输入代码')
       setOutputType('error')
       return
     }
 
-    const lastResult = lastRunResultRef.current
-    if (!lastResult || !lastResult.success) {
-      setOutput('请先点击"运行"按钮验证代码')
-      setOutputType('info')
-      return
-    }
-
+    busyRef.current = true
     setSubmitting(true)
+    setAuthRequired(false)
+    setSubmission(null)
+    setVisibleHintCount(0)
+    setModal(current => ({ ...current, show: false }))
+    clearTimeout(successTimerRef.current)
+    setOutput('正在运行测试用例；若未通过，将生成 AI 提示，请稍候...')
+    setOutputType('info')
     try {
-      const response = await fetch(API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code, timeout: 10 }),
-      })
-      const result = await response.json()
-
-      if (result.data.success) {
-        const actualOutput = (result.data.output || '').trim()
-        if (actualOutput === expectedOutput.trim()) {
-          setModal({
-            show: true,
-            type: 'success',
-            title: '通过',
-            message: '恭喜！代码运行结果正确！',
-          })
-          startConfetti()
-          if (onSuccess) {
-            setTimeout(() => onSuccess(), 3000)
-          }
-        } else {
-          setModal({
-            show: true,
-            type: 'error',
-            title: '未通过',
-            message: `预期输出: "${expectedOutput}"\n实际输出: "${actualOutput}"`,
-          })
-        }
-      } else {
-        setModal({
-          show: true,
-          type: 'error',
-          title: '执行错误',
-          message: '代码执行有错误，请修改后重试',
-        })
+      const result = await requestCode('submit', { problem_id: problemId, code }, localStorage.getItem('access_token'))
+      if (!mountedRef.current) return
+      setSubmission(result)
+      setOutputType('hidden')
+      if (result.judge.passed) {
+        setModal({ show: true, type: 'success', title: '通过', message: '恭喜！全部测试用例通过！' })
+        startConfetti()
+        if (onSuccess) successTimerRef.current = setTimeout(() => {
+          if (mountedRef.current) onSuccess()
+        }, 3000)
       }
     } catch (error) {
-      setModal({
-        show: true,
-        type: 'error',
-        title: '错误',
-        message: '网络错误，请稍后重试',
-      })
+      if (mountedRef.current) showRequestError(error)
     } finally {
-      setSubmitting(false)
+      busyRef.current = false
+      if (mountedRef.current) setSubmitting(false)
     }
   }
 
@@ -312,8 +305,11 @@ function CodeEditor({ initialCode, expectedOutput, onSuccess, title, children })
   }, [])
 
   useEffect(() => {
+    mountedRef.current = true
     return () => {
+      mountedRef.current = false
       if (animationRef.current) cancelAnimationFrame(animationRef.current)
+      clearTimeout(successTimerRef.current)
     }
   }, [])
 
@@ -343,7 +339,11 @@ function CodeEditor({ initialCode, expectedOutput, onSuccess, title, children })
               ref={textareaRef}
               className="code-textarea"
               value={code}
-              onChange={(e) => setCode(e.target.value)}
+              onChange={(e) => updateCode(e.target.value)}
+              aria-label="Python 代码编辑器"
+              readOnly={busy}
+              aria-busy={busy}
+              maxLength={6000}
               onScroll={handleScroll}
               onKeyDown={handleKeyDown}
               spellCheck={false}
@@ -353,18 +353,27 @@ function CodeEditor({ initialCode, expectedOutput, onSuccess, title, children })
             />
           </div>
 
-          <div className={`output-box ${outputType}`}>
+          <div className={`output-box ${outputType}`} role="status">
             {output}
           </div>
 
+          {authRequired && <button type="button" className="btn-hint" onClick={() => navigate('/auth')}>重新登录</button>}
+
           <div className="code-buttons">
-            <button className="btn-run" onClick={runCode} disabled={running}>
+            <button className="btn-run" onClick={runCode} disabled={busy}>
               {running ? '运行中...' : '运行'}
             </button>
-            <button className="btn-submit" onClick={submitCode} disabled={submitting}>
+            <button className="btn-submit" onClick={submitCode} disabled={busy}>
               {submitting ? '提交中...' : '提交'}
             </button>
           </div>
+          {submission && (
+            <SubmissionFeedback
+              result={submission}
+              visibleHintCount={visibleHintCount}
+              onRevealHint={() => setVisibleHintCount(count => Math.min(count + 1, 3))}
+            />
+          )}
         </div>
 
         <div className="otter-footer">

@@ -29,7 +29,7 @@ function Level1() {
       </button>
       <CodeEditor
         initialCode={"print('Hello, World!')"}
-        expectedOutput="Hello, World!"
+        problemId="level1"
         onSuccess={handleSuccess}
         title="初识小海獭"
       >
