@@ -54,34 +54,95 @@ OVERWRITE = "total = 0\nfor i in range(1, 101):\n    total = i\nprint(total)"
 CORRECT = "total = 0\nfor i in range(1, 101):\n    total += i\nprint(total)"
 
 
-def mock_model(monkeypatch, handler):
+@pytest.mark.parametrize("code,expected_fragment", [
+    ("for i in range(1, 101)\n    print(i)", "语句结构"),
+    ("print(missing_total)", "变量"),
+    (OVERWRITE, "循环"),
+])
+def test_opening_question_uses_judge_category_and_lesson(code, expected_fragment):
+    from app.services.error_analysis import opening_question
+    from app.services.submission import PROBLEMS, judge_submission
+    question = opening_question(PROBLEMS["level2"], judge_submission(PROBLEMS["level2"], code))
+    assert expected_fragment in question
+    assert question.endswith("？")
+    assert not any(fragment in question for fragment in ("第2行", "101", "缺少", "改为"))
+
+
+@pytest.mark.parametrize("code,expected_fragment", [
+    ("for i in range(1, 101)\n    print(i)", "报错行"),
+    ("print(missing_total)", "首次赋值"),
+    (OVERWRITE, "前两步"),
+])
+def test_safe_hint_fallback_is_progressive_and_avoids_solution(code, expected_fragment):
+    from app.services.error_analysis import safe_hints
+    from app.services.hint_quality import quality_issues
+    from app.services.submission import PROBLEMS, judge_submission
+    judge = judge_submission(PROBLEMS["level2"], code)
+    hints = safe_hints(PROBLEMS["level2"], judge).model_dump()
+    assert expected_fragment in hints["level3"]
+    content = sample_analysis()
+    content["hints"] = hints
+    assert quality_issues(content, code, ["5050"]) == []
+
+
+def test_safe_hint_fallback_does_not_assume_student_wrote_a_loop_or_print():
+    from app.services.error_analysis import safe_hints
+    from app.services.submission import PROBLEMS, judge_submission
+    no_loop = safe_hints(PROBLEMS["level2"], judge_submission(PROBLEMS["level2"], "print(0)"))
+    assert "循环头" not in no_loop.level2
+    assert "程序实际取到" not in no_loop.level3
+    assert "是否有" in no_loop.level2
+    assert "应有" in no_loop.level3
+    name_error = safe_hints(PROBLEMS["level2"], judge_submission(PROBLEMS["level2"], "x = missing_total + 1"))
+    assert "输出语句" not in name_error.level2
+
+
+def test_wrong_answer_fallback_checks_both_range_and_accumulation():
+    from app.services.error_analysis import safe_hints
+    from app.services.submission import PROBLEMS, judge_submission
+    hints = safe_hints(PROBLEMS["level2"], judge_submission(PROBLEMS["level2"], OVERWRITE))
+    assert "前两步" in hints.level3
+    assert "旧总数" in hints.level3
+    assert "新总数" in hints.level3
+
+
+def mock_model(monkeypatch, handler, review_handler=None):
     from app.services import error_analysis
     factory = httpx.AsyncClient
     monkeypatch.setattr(error_analysis, "LOCAL_LLM_URL", "http://ollama.test/api/chat")
-    monkeypatch.setattr(error_analysis.httpx, "AsyncClient", lambda **kwargs: factory(transport=httpx.MockTransport(handler), **kwargs))
+    async def dispatch(request):
+        payload = json.loads(request.content)
+        if payload.get("format", {}).get("title") == "HintReview":
+            result = review_handler(request) if review_handler else httpx.Response(200, json={
+                "done": True, "message": {"content": json.dumps({"issues": []})}})
+        else:
+            result = handler(request)
+        return await result if asyncio.iscoroutine(result) else result
+
+    monkeypatch.setattr(error_analysis.httpx, "AsyncClient", lambda **kwargs: factory(transport=httpx.MockTransport(dispatch), **kwargs))
 
 
 def model_facts(payload):
     return json.JSONDecoder().raw_decode(payload["messages"][1]["content"])[0]
 
 
-def test_nonquestion_hint_is_repaired_once_within_same_request(client, monkeypatch):
+def test_unhelpful_second_hint_uses_reviewed_fallback(client, monkeypatch):
     calls = []
 
     def handler(request):
         payload = json.loads(request.content)
         calls.append(payload)
         content = sample_analysis()
-        if len(calls) == 1:
-            content["hints"]["level1"] = "请观察总数的变化。"
+        content["hints"]["level2"] = "使用变量之前，需要先明确哪些信息？"
         return httpx.Response(200, json={"done": True, "message": {"content": json.dumps(content)}})
 
     mock_model(monkeypatch, handler)
     data = client.post("/api/v1/code/submit", headers=login(client),
                        json={"problem_id": "level2", "code": OVERWRITE}).json()["data"]
     assert data["analysis"]["status"] == "ready"
-    assert len(calls) == 2
-    assert calls[1]["messages"][-1]["role"] == "user"
+    assert len(calls) == 1
+    assert "前两步" in data["analysis"]["content"]["hints"]["level3"]
+    assert "保守" in data["analysis"]["message"]
     # Avoid the Ollama 0.40.3 grammar failure; keep the question check in Pydantic.
     assert calls[0]["format"]["$defs"]["Hints"]["properties"]["level1"]["pattern"].endswith("*$")
 
@@ -102,6 +163,54 @@ def test_analysis_repair_shares_total_deadline(client, monkeypatch):
                        json={"problem_id": "level2", "code": OVERWRITE}).json()["data"]
     assert len(calls) == 2
     assert data["analysis"]["status"] == "timeout"
+    assert data["judge"]["status"] == "wrong_answer"
+
+
+def test_semantic_rejection_triggers_targeted_repair_and_never_changes_judge(client, monkeypatch):
+    drafts, reviews = [], []
+
+    def draft(request):
+        drafts.append(json.loads(request.content))
+        return httpx.Response(200, json={"done": True, "message": {"content": json.dumps(sample_analysis())}})
+
+    def review(request):
+        payload = json.loads(request.content)
+        reviews.append(payload)
+        return httpx.Response(200, json={"done": True, "message": {"content": json.dumps({
+            "issues": [{"code": "unrelated_claim", "reason": "候选解释提及了当前代码不支持的原因。"}]
+        })}})
+
+    mock_model(monkeypatch, draft, review)
+    data = client.post("/api/v1/code/submit", headers=login(client),
+                       json={"problem_id": "level2", "code": OVERWRITE}).json()["data"]
+    assert data["analysis"]["status"] == "invalid_response"
+    assert data["analysis"]["content"] is None
+    assert data["judge"]["cases"][0]["actual_output"] == "100\n"
+    assert len(drafts) == len(reviews) == 2
+    assert "unrelated_claim" in drafts[1]["messages"][-1]["content"]
+    assert model_facts(drafts[1])["student_code"] == OVERWRITE
+    facts = json.loads(reviews[0]["messages"][-1]["content"])
+    assert facts["student_code"] == OVERWRITE
+    assert facts["failed_cases"] == data["judge"]["cases"]
+
+
+@pytest.mark.parametrize("failure,expected", [("format", "invalid_response"), ("offline", "unavailable"), ("slow", "timeout")])
+def test_unverified_analysis_is_not_displayed(client, monkeypatch, failure, expected):
+    def draft(request):
+        return httpx.Response(200, json={"done": True, "message": {"content": json.dumps(sample_analysis())}})
+
+    def review(request):
+        if failure == "offline":
+            raise httpx.ConnectError("review unavailable")
+        if failure == "slow":
+            raise httpx.ReadTimeout("review timed out")
+        return httpx.Response(200, json={"done": True, "message": {"content": "{}"}})
+
+    mock_model(monkeypatch, draft, review)
+    data = client.post("/api/v1/code/submit", headers=login(client),
+                       json={"problem_id": "level2", "code": OVERWRITE}).json()["data"]
+    assert data["analysis"]["status"] == expected
+    assert data["analysis"]["content"] is None
     assert data["judge"]["status"] == "wrong_answer"
 
 

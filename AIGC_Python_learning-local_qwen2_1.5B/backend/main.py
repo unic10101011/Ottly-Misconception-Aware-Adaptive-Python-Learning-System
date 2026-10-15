@@ -3,12 +3,14 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
 import uvicorn
-from app.api import auth, class_selection, settings, ai, coding
+from app.api import auth, class_selection, settings, ai, coding, learning_history
 from app.core.database import engine, Base
 # 导入模型类，确保SQLAlchemy知道需要创建哪些表
 from app.models.user import User, AIChatRecord
 from app.models.class_selection import ClassSelection
 from app.models.settings import UserSettings, NotificationPreferences, LanguageSettings
+from app.models.learning_submission import LearningSubmission
+from app.models.learning_review import LearningReview
 
 # 创建数据库表
 Base.metadata.create_all(bind=engine)
@@ -35,6 +37,7 @@ app.include_router(class_selection.router, prefix="/api/v1", tags=["职业选择
 app.include_router(settings.router, prefix="/api/v1", tags=["设置"])
 app.include_router(ai.router, prefix="/api/v1", tags=["AI对话"])
 app.include_router(coding.router, prefix="/api/v1", tags=["代码执行"])
+app.include_router(learning_history.router, prefix="/api/v1", tags=["学习记录"])
 
 # 根路径
 @app.get("/")

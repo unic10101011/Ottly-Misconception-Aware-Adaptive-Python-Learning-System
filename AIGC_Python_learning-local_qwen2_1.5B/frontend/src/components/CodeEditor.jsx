@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import SubmissionFeedback from './SubmissionFeedback.jsx'
-import { requestCode } from './codeApi.mjs'
+import { requestCode, saveHintView } from './codeApi.mjs'
 
 function CodeEditor({ initialCode, problemId, onSuccess, title, children }) {
   const navigate = useNavigate()
@@ -12,6 +12,8 @@ function CodeEditor({ initialCode, problemId, onSuccess, title, children }) {
   const [submitting, setSubmitting] = useState(false)
   const [submission, setSubmission] = useState(null)
   const [visibleHintCount, setVisibleHintCount] = useState(0)
+  const [hintBusy, setHintBusy] = useState(false)
+  const [hintError, setHintError] = useState('')
   const [authRequired, setAuthRequired] = useState(false)
   const [modal, setModal] = useState({ show: false, type: 'info', title: '', message: '' })
   const [lineCount, setLineCount] = useState(1)
@@ -24,9 +26,11 @@ function CodeEditor({ initialCode, problemId, onSuccess, title, children }) {
   const particlesRef = useRef([])
   const cannonRef = useRef(null)
   const busyRef = useRef(false)
+  const hintBusyRef = useRef(false)
+  const submissionRef = useRef(null)
   const mountedRef = useRef(false)
   const successTimerRef = useRef(null)
-  const busy = running || submitting
+  const busy = running || submitting || hintBusy
 
   // Update line numbers
   useEffect(() => {
@@ -41,17 +45,19 @@ function CodeEditor({ initialCode, problemId, onSuccess, title, children }) {
   }
 
   const updateCode = (value) => {
-    if (busyRef.current) return
+    if (busyRef.current || hintBusyRef.current) return
     setCode(value)
     setSubmission(null)
+    submissionRef.current = null
     setVisibleHintCount(0)
+    setHintError('')
     setOutputType('hidden')
     clearTimeout(successTimerRef.current)
   }
 
   // Tab key handler
   const handleKeyDown = (e) => {
-    if (busyRef.current) return
+    if (busyRef.current || hintBusyRef.current) return
     if (e.key === 'Tab') {
       e.preventDefault()
       const start = e.target.selectionStart
@@ -72,7 +78,7 @@ function CodeEditor({ initialCode, problemId, onSuccess, title, children }) {
   }
 
   const runCode = async () => {
-    if (busyRef.current) return
+    if (busyRef.current || hintBusyRef.current) return
     if (!code.trim()) {
       setOutput('请输入代码')
       setOutputType('error')
@@ -117,7 +123,7 @@ function CodeEditor({ initialCode, problemId, onSuccess, title, children }) {
   }
 
   const submitCode = async () => {
-    if (busyRef.current) return
+    if (busyRef.current || hintBusyRef.current) return
     if (!code.trim()) {
       setOutput('请先输入代码')
       setOutputType('error')
@@ -128,7 +134,9 @@ function CodeEditor({ initialCode, problemId, onSuccess, title, children }) {
     setSubmitting(true)
     setAuthRequired(false)
     setSubmission(null)
+    submissionRef.current = null
     setVisibleHintCount(0)
+    setHintError('')
     setModal(current => ({ ...current, show: false }))
     clearTimeout(successTimerRef.current)
     setOutput('正在运行测试用例；若未通过，将生成 AI 提示，请稍候...')
@@ -136,6 +144,7 @@ function CodeEditor({ initialCode, problemId, onSuccess, title, children }) {
     try {
       const result = await requestCode('submit', { problem_id: problemId, code }, localStorage.getItem('access_token'))
       if (!mountedRef.current) return
+      submissionRef.current = result
       setSubmission(result)
       setOutputType('hidden')
       if (result.judge.passed) {
@@ -150,6 +159,27 @@ function CodeEditor({ initialCode, problemId, onSuccess, title, children }) {
     } finally {
       busyRef.current = false
       if (mountedRef.current) setSubmitting(false)
+    }
+  }
+
+  const revealHint = async () => {
+    const current = submissionRef.current
+    if (hintBusyRef.current || !current?.submission_id || visibleHintCount >= 3) return
+    hintBusyRef.current = true
+    setHintBusy(true)
+    setHintError('')
+    try {
+      const saved = await saveHintView(current.submission_id, visibleHintCount + 1, localStorage.getItem('access_token'))
+      if (mountedRef.current && submissionRef.current === current) {
+        setVisibleHintCount(saved.hints_viewed_max)
+      }
+    } catch (error) {
+      if (mountedRef.current && submissionRef.current === current) {
+        setHintError(`提示查看记录暂未保存：${error.message} 请重试。`)
+      }
+    } finally {
+      hintBusyRef.current = false
+      if (mountedRef.current) setHintBusy(false)
     }
   }
 
@@ -371,7 +401,9 @@ function CodeEditor({ initialCode, problemId, onSuccess, title, children }) {
             <SubmissionFeedback
               result={submission}
               visibleHintCount={visibleHintCount}
-              onRevealHint={() => setVisibleHintCount(count => Math.min(count + 1, 3))}
+              onRevealHint={revealHint}
+              hintBusy={hintBusy}
+              hintError={hintError}
             />
           )}
         </div>

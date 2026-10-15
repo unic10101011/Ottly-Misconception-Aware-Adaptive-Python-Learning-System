@@ -1,6 +1,11 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, Header, HTTPException
+from sqlalchemy.orm import Session
 from starlette.concurrency import run_in_threadpool
 from app.core.auth import get_current_user
+from app.core.database import get_db
+from app.models.learning_submission import LearningSubmission
+from app.models.learning_review import LearningReview
+from app.models.user import User
 from pydantic import BaseModel, Field
 from app.services.sandbox.runner import run_code_process
 from app.services.submission import PROBLEMS, JudgeResult, SubmissionRequest, judge_submission
@@ -38,6 +43,7 @@ def execute_code(request: CodeRunRequest):
 
 
 class SubmissionData(BaseModel):
+    submission_id: int
     problem_id: str
     judge: JudgeResult
     analysis: AnalysisResult
@@ -49,10 +55,43 @@ class SubmissionResponse(BaseModel):
 
 
 @router.post("/code/submit", response_model=SubmissionResponse)
-async def submit_code(request: SubmissionRequest):
+async def submit_code(request: SubmissionRequest, current_user: User = Depends(get_current_user),
+                      db: Session = Depends(get_db),
+                      review_source_id: int | None = Header(default=None, alias="X-Review-Source-Id")):
     problem = PROBLEMS.get(request.problem_id)
     if problem is None:
         raise HTTPException(status_code=404, detail="题目不存在")
+    if review_source_id is not None:
+        source = db.query(LearningSubmission).filter(
+            LearningSubmission.id == review_source_id,
+            LearningSubmission.user_id == current_user.id,
+            LearningSubmission.problem_id == request.problem_id,
+            LearningSubmission.passed.is_(False),
+        ).first()
+        if source is None:
+            raise HTTPException(status_code=404, detail="复习来源错题不存在")
     judge = await run_in_threadpool(judge_submission, problem, request.code)
+    first_error = next((error.type for case in judge.cases for error in case.errors), None)
+    record = LearningSubmission(
+        user_id=current_user.id,
+        problem_id=problem.problem_id,
+        problem_title=problem.title,
+        problem_description=problem.description,
+        code=request.code,
+        judge_json=judge.model_dump(mode="json"),
+        passed=judge.passed,
+        error_type=None if judge.passed else first_error or judge.status,
+    )
+    db.add(record)
+    db.flush()
+    if review_source_id is not None:
+        db.add(LearningReview(user_id=current_user.id, submission_id=record.id,
+                              source_submission_id=review_source_id))
+    db.commit()
+    db.refresh(record)
     analysis = await analyze_failure(problem, request.code, judge)
-    return SubmissionResponse(data=SubmissionData(problem_id=problem.problem_id, judge=judge, analysis=analysis))
+    record.analysis_json = analysis.model_dump(mode="json")
+    db.commit()
+    return SubmissionResponse(data=SubmissionData(
+        submission_id=record.id, problem_id=problem.problem_id, judge=judge, analysis=analysis
+    ))

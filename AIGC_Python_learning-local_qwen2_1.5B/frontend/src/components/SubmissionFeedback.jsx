@@ -6,11 +6,11 @@ const statusLabels = {
   execution_error: '代码执行出现错误',
   timeout: '代码执行超时',
 }
-const hintLabels = ['观察方向', '定位原因', '修改思路']
+const hintLabels = ['思考方向', '知识点与检查位置', '修改与验证思路']
 
-function SubmissionFeedback({ result, visibleHintCount, onRevealHint }) {
+function SubmissionFeedback({ result, visibleHintCount, onRevealHint, hintBusy = false, hintError = '' }) {
   const { judge, analysis } = result
-  const content = analysis.status === 'ready' ? analysis.content : null
+  const content = analysis?.status === 'ready' ? analysis.content : null
 
   return (
     <section className="submission-feedback" aria-label="提交结果" aria-live="polite">
@@ -36,6 +36,7 @@ function SubmissionFeedback({ result, visibleHintCount, onRevealHint }) {
         <div className="ai-feedback">
           <h4>AI 学习提示</h4>
           <p className="analysis-status">先尝试自己修改；需要帮助时，逐级查看提示。AI 分析是基于本次测试的推测。</p>
+          {analysis.message && <p className="analysis-status">{analysis.message}</p>}
           <div className="progressive-hints">
             {hintLabels.slice(0, visibleHintCount).map((label, index) => (
               <article className="hint-card" key={label}>
@@ -44,12 +45,14 @@ function SubmissionFeedback({ result, visibleHintCount, onRevealHint }) {
               </article>
             ))}
             {visibleHintCount < 3 && (
-              <button type="button" className="btn-hint" onClick={onRevealHint}>
-                查看第 {visibleHintCount + 1} 级提示
+              <button type="button" className="btn-hint" onClick={onRevealHint} disabled={hintBusy}>
+                {hintBusy ? '正在保存查看记录...' : `查看第 ${visibleHintCount + 1} 级提示`}
               </button>
             )}
           </div>
-          <details className="analysis-details">
+          {hintError && <p className="judge-error" role="alert">{hintError}</p>}
+          {visibleHintCount < 3 && <p className="analysis-status">逐级查看提示后，可展开完整分析依据。</p>}
+          {visibleHintCount >= 3 && <details className="analysis-details">
             <summary>查看疑似原因、分析依据与知识点</summary>
             <p><strong>疑似原因：</strong>{content.suspected_cause}</p>
             <p><strong>相关知识点：</strong>{content.knowledge_points.join('、')}</p>
@@ -60,10 +63,10 @@ function SubmissionFeedback({ result, visibleHintCount, onRevealHint }) {
                 <p>{item.explanation}</p>
               </div>
             ))}
-          </details>
+          </details>}
         </div>
       ) : (
-        <p className="analysis-status" role="status">{analysis.message || 'AI 分析暂不可用，判题结果已保留。请稍后重新提交。'}</p>
+        <p className="analysis-status" role="status">{analysis?.message || 'AI 分析暂不可用，判题结果已保留。请稍后重新提交。'}</p>
       )}
     </section>
   )

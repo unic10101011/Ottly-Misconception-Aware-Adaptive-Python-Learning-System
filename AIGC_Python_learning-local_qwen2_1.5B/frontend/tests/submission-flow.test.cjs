@@ -62,6 +62,65 @@ test('HTTP auth and invalid responses return readable errors instead of crashing
   } finally { global.fetch = originalFetch }
 })
 
+test('history requests use the current account token and record hint level', async () => {
+  const { getLearningHistory, saveHintView } = await import('../src/components/codeApi.mjs')
+  const originalFetch = global.fetch
+  const requests = []
+  global.fetch = async (url, options) => {
+    requests.push({ url, options })
+    assert.equal(options.headers.Authorization, 'Bearer student-token')
+    if (options.method === 'GET') {
+      return new Response(JSON.stringify({ code: 200, data: { items: [], total: 0 } }), { status: 200 })
+    }
+    return new Response(JSON.stringify({ code: 200, data: { submission_id: 17, hints_viewed_max: 2 } }), { status: 200 })
+  }
+  try {
+    assert.deepEqual(await getLearningHistory(true, 20, 0, 'student-token'), { items: [], total: 0 })
+    assert.deepEqual(await saveHintView(17, 2, 'student-token'), { submission_id: 17, hints_viewed_max: 2 })
+    assert.match(requests[0].url, /code\/submissions\?failed_only=true&limit=20&offset=0$/)
+    assert.equal(requests[0].options.method, 'GET')
+    assert.equal(requests[1].url, '/api/v1/code/submissions/17/hints')
+    assert.equal(requests[1].options.method, 'PATCH')
+    assert.deepEqual(JSON.parse(requests[1].options.body), { level: 2 })
+  } finally { global.fetch = originalFetch }
+})
+
+test('history requests can be aborted and report a timeout', async () => {
+  const { getLearningHistory } = await import('../src/components/codeApi.mjs')
+  const originalFetch = global.fetch
+  global.fetch = async (url, options) => {
+    assert.ok(options.signal, 'history fetch must have an abort signal')
+    const error = new Error('aborted')
+    error.name = 'AbortError'
+    throw error
+  }
+  try {
+    await assert.rejects(getLearningHistory(true, 20, 0, 'token'), /请求超时/)
+  } finally { global.fetch = originalFetch }
+})
+
+test('review submission carries its source and mistake questions load with auth', async () => {
+  const { requestCode, getMistakeQuestions, getLearningHistory } = await import('../src/components/codeApi.mjs')
+  const originalFetch = global.fetch
+  const calls = []
+  global.fetch = async (url, options) => {
+    calls.push({ url, options })
+    assert.equal(options.headers.Authorization, 'Bearer student-token')
+    if (url.endsWith('/code/submit')) {
+      assert.equal(options.headers['X-Review-Source-Id'], '23')
+      return new Response(JSON.stringify({ code: 200, data: failure }), { status: 200 })
+    }
+    return new Response(JSON.stringify({ code: 200, data: { items: [], total: 0 } }), { status: 200 })
+  }
+  try {
+    await requestCode('submit', { problem_id: 'level2', code: 'print(100)' }, 'student-token', { reviewSourceId: 23 })
+    await getMistakeQuestions('student-token')
+    await getLearningHistory(false, 20, 0, 'student-token', 'level2')
+    assert.equal(calls[1].url, '/api/v1/code/mistakes')
+    assert.match(calls[2].url, /problem_id=level2/)
+  } finally { global.fetch = originalFetch }
+})
+
 test('hints start hidden and are revealed in order without showing later hints', () => {
   const Feedback = loadJsx('../src/components/SubmissionFeedback.jsx')
   const render = (visibleHintCount) => renderToStaticMarkup(React.createElement(Feedback, {
@@ -71,8 +130,7 @@ test('hints start hidden and are revealed in order without showing later hints',
   assert.match(initial, /100/)
   assert.match(initial, /查看第 1 级提示/)
   assert.doesNotMatch(initial, /HINT_ONE|HINT_TWO|HINT_THREE/)
-  assert.match(initial, /<details[^>]*>/)
-  assert.doesNotMatch(initial, /<details[^>]*open/)
+  assert.doesNotMatch(initial, /<details|Repeated replacement|Only the last value remains/)
   const first = render(1)
   assert.match(first, /HINT_ONE/)
   assert.doesNotMatch(first, /HINT_TWO|HINT_THREE/)
@@ -80,8 +138,12 @@ test('hints start hidden and are revealed in order without showing later hints',
   const second = render(2)
   assert.match(second, /HINT_TWO/)
   assert.doesNotMatch(second, /HINT_THREE/)
+  assert.doesNotMatch(second, /Repeated replacement|Only the last value remains/)
   const third = render(3)
   assert.match(third, /HINT_THREE/)
+  assert.match(third, /Repeated replacement/)
+  assert.match(third, /<details[^>]*>/)
+  assert.doesNotMatch(third, /<details[^>]*open/)
   assert.doesNotMatch(third, /查看第 4 级提示/)
 })
 
@@ -93,6 +155,24 @@ test('model outage keeps deterministic judge evidence visible and shows recovery
   assert.match(html, /100/)
   assert.match(html, /AI 暂时不可用/)
   assert.doesNotMatch(html, /查看第 1 级提示/)
+})
+
+test('reviewed fallback tells the student why the wording changed', () => {
+  const Feedback = loadJsx('../src/components/SubmissionFeedback.jsx')
+  const result = { ...failure, analysis: { ...failure.analysis, message: '原提示未通过分层检查，已采用保守教学提示。' } }
+  const html = renderToStaticMarkup(React.createElement(Feedback, { result, visibleHintCount: 0 }))
+  assert.match(html, /保守教学提示/)
+  assert.doesNotMatch(html, /HINT_ONE/)
+})
+
+test('hint button waits for saved view and shows a sync error', () => {
+  const Feedback = loadJsx('../src/components/SubmissionFeedback.jsx')
+  const html = renderToStaticMarkup(React.createElement(Feedback, {
+    result: failure, visibleHintCount: 1, hintBusy: true, hintError: '提示查看记录暂未保存',
+  }))
+  assert.match(html, /提示查看记录暂未保存/)
+  assert.match(html, /<button[^>]*disabled/)
+  assert.doesNotMatch(html, /HINT_TWO/)
 })
 
 
