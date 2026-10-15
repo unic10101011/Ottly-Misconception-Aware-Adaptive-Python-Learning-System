@@ -1,4 +1,6 @@
-"""Deterministic judging for the two existing, no-input stdout lessons."""
+"""Server-owned exercises and deterministic judging; legacy IDs stay stable."""
+import json
+from pathlib import Path
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
@@ -9,6 +11,8 @@ from app.services.sandbox.runner import run_code_process
 class TestCase(BaseModel):
     case_id: str
     expected_output: str
+    stdin: str = ''
+    visibility: Literal['public', 'hidden'] = 'public'
 
 
 class Problem(BaseModel):
@@ -16,6 +20,7 @@ class Problem(BaseModel):
     title: str
     description: str
     tests: list[TestCase]
+    comparison: Literal['legacy_trim', 'exact'] = 'legacy_trim'
 
 
 PROBLEMS = {
@@ -26,6 +31,10 @@ PROBLEMS = {
                       description="使用 for 循环计算 1 到 100（含 100）的和，并输出结果；没有输入。",
                       tests=[TestCase(case_id="stdout-1", expected_output="5050")]),
 }
+
+GREETING = json.loads((Path(__file__).resolve().parents[1] / 'data' / 'greeting-v1.json').read_text(encoding='utf-8'))
+GREETING_ID = GREETING['problem_id']
+PROBLEMS[GREETING_ID] = Problem(**{key: GREETING[key] for key in ('problem_id', 'title', 'description', 'tests')}, comparison='exact')
 
 
 class ExecutionError(BaseModel):
@@ -42,6 +51,7 @@ class CaseResult(BaseModel):
     output_available: bool = True
     errors: list[ExecutionError]
     execution_time: float
+    visibility: Literal['public', 'hidden'] = 'public'
 
 
 class JudgeResult(BaseModel):
@@ -68,16 +78,20 @@ class SubmissionRequest(BaseModel):
 def judge_submission(problem: Problem, code: str) -> JudgeResult:
     cases = []
     for test in problem.tests:
-        execution = run_code_process(code, timeout=3)
+        execution = run_code_process(code, timeout=3, stdin=test.stdin)
+        actual = execution['output'].replace('\r\n', '\n')
+        expected = test.expected_output.replace('\r\n', '\n')
+        matches = actual == expected if problem.comparison == 'exact' else actual.strip() == expected.strip()
         cases.append(CaseResult(
             case_id=test.case_id,
-            passed=execution["success"] and execution["output"].strip() == test.expected_output.strip(),
+            passed=execution["success"] and matches,
             expected_output=test.expected_output,
             actual_output=execution["output"],
             output_available=execution.get("output_available", True),
             errors=[ExecutionError(type=error["type"], line=error.get("line"), message=error["message"])
                     for error in execution["errors"]],
             execution_time=execution["execution_time"],
+            visibility=test.visibility,
         ))
     passed_cases = sum(case.passed for case in cases)
     passed = passed_cases == len(cases)
@@ -87,3 +101,15 @@ def judge_submission(problem: Problem, code: str) -> JudgeResult:
     elif any(case.errors for case in cases if not case.passed):
         status = "execution_error"
     return JudgeResult(status=status, passed=passed, passed_cases=passed_cases, total_cases=len(cases), cases=cases)
+
+
+def public_judge(judge: JudgeResult) -> JudgeResult:
+    """Redact before persistence, teaching analysis, and every student response."""
+    result = judge.model_copy(deep=True)
+    for case in result.cases:
+        if case.visibility == 'hidden':
+            case.expected_output = ''
+            case.actual_output = ''
+            case.errors = []
+            case.output_available = False
+    return result

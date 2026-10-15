@@ -14,6 +14,7 @@ function LearningHistory() {
   const [loading, setLoading] = useState(true)
   const [listError, setListError] = useState('')
   const [code, setCode] = useState('')
+  const [stdin, setStdin] = useState('')
   const [running, setRunning] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [runResult, setRunResult] = useState(null)
@@ -61,6 +62,7 @@ function LearningHistory() {
     setSubmission(null)
     setVisibleHintCount(0)
     setActionError('')
+    setStdin('')
   }, [selectedId])
 
   useEffect(() => {
@@ -103,7 +105,7 @@ function LearningHistory() {
     setRunning(true)
     setActionError('')
     try {
-      const result = await requestCode('run', { code, timeout: 3 }, localStorage.getItem('access_token'))
+      const result = await requestCode('run', { code, timeout: 3, stdin }, localStorage.getItem('access_token'))
       setRunResult(result)
     } catch (error) {
       setActionError(error.message)
@@ -203,6 +205,11 @@ function LearningHistory() {
               <div className="mistake-code-title"><span>Python 代码</span><small>已填入最近一次错误代码</small></div>
               <textarea aria-label="复习代码编辑器" className="mistake-code-input" spellCheck={false}
                 value={code} readOnly={busy} maxLength={6000} onChange={event => editCode(event.target.value)} />
+              <div className="lesson-input">
+                <label htmlFor="review-stdin">运行输入（每次 input 读取一行）</label>
+                <textarea id="review-stdin" value={stdin} readOnly={busy} maxLength={8000} rows={3}
+                  onChange={event => { setStdin(event.target.value); setRunResult(null) }} />
+              </div>
               <div className="mistake-actions">
                 <button type="button" className="mistake-secondary-button" disabled={busy || !code.trim()}
                   onClick={runCode}>{running ? '运行中...' : '运行代码'}</button>

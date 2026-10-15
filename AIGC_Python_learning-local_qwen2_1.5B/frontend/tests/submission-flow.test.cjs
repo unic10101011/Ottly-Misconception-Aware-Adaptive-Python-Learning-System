@@ -184,7 +184,7 @@ test('leaving the editor while an accepted submission is pending prevents late u
   let successCount = 0
   const hooks = {
     ...React,
-    useState: value => [value, next => updates.push(next)],
+    useState: value => [typeof value === 'function' ? value() : value, next => updates.push(next)],
     useRef: value => ({ current: value }),
     useEffect: effect => effects.push(effect),
     useCallback: callback => callback,
@@ -240,4 +240,59 @@ test('terminated execution distinguishes unavailable stdout from an empty output
   const html = renderToStaticMarkup(React.createElement(Feedback, { result, visibleHintCount: 0 }))
   assert.match(html, /输出未采集（执行已终止）/)
   assert.doesNotMatch(html, /（无输出）/)
+})
+
+test('private cases never render outputs or errors and fixed hints are labelled honestly', () => {
+  const Feedback = loadJsx('../src/components/SubmissionFeedback.jsx')
+  const result = { ...failure,
+    judge: { ...failure.judge, cases: [{ ...failure.judge.cases[0], visibility: 'hidden',
+      expected_output: 'PRIVATE_EXPECTED', actual_output: 'PRIVATE_ACTUAL',
+      errors: [{ type: 'Error', message: 'PRIVATE_ERROR' }] }] },
+    analysis: { ...failure.analysis, source: 'fixed', message: '本关已审核的基础提示。' },
+  }
+  const html = renderToStaticMarkup(React.createElement(Feedback, { result, visibleHintCount: 1 }))
+  assert.doesNotMatch(html, /PRIVATE_EXPECTED|PRIVATE_ACTUAL|PRIVATE_ERROR|AI 学习提示/)
+  assert.match(html, /隐藏测试仅展示通过状态/)
+  assert.match(html, /本关基础提示/)
+  assert.match(html, /HINT_ONE/)
+})
+
+test('input lesson sends run input but submission uses only the server problem id and current code', async () => {
+  const effects = []
+  const calls = []
+  const hooks = { ...React,
+    useState: value => [typeof value === 'function' ? value() : value, () => {}], useRef: value => ({ current: value }),
+    useEffect: effect => effects.push(effect), useCallback: callback => callback,
+  }
+  const Editor = loadJsx('../src/components/CodeEditor.jsx', {
+    react: hooks, 'react-router-dom': { useNavigate: () => () => {} },
+    './SubmissionFeedback.jsx': { default: () => null },
+    './codeApi.mjs': { requestCode: async (action, payload) => {
+      calls.push({ action, payload })
+      return action === 'run' ? { success: true, output: 'Hello, Sea Otter!\n', errors: [] } : failure
+    } },
+  })
+  const originalStorage = Object.getOwnPropertyDescriptor(global, 'localStorage')
+  Object.defineProperty(global, 'localStorage', { configurable: true, value: { getItem: () => 'token' } })
+  try {
+    const code = 'name = input()\nprint("Hello,", name + "!")'
+    const tree = Editor({ initialCode: code, problemId: 'greeting-v1', acceptsInput: true, sampleInput: 'Sea Otter\n' })
+    const cleanups = effects.map(effect => effect()).filter(fn => typeof fn === 'function')
+    const find = (node, predicate) => {
+      if (!React.isValidElement(node)) return null
+      if (predicate(node)) return node
+      return React.Children.toArray(node.props.children).map(child => find(child, predicate)).find(Boolean)
+    }
+    assert.equal(find(tree, node => node.props.id === 'lesson-stdin').props.value, 'Sea Otter\n')
+    await find(tree, node => node.props.className === 'btn-run').props.onClick()
+    await find(tree, node => node.props.className === 'btn-submit').props.onClick()
+    assert.deepEqual(calls, [
+      { action: 'run', payload: { code, timeout: 3, stdin: 'Sea Otter\n' } },
+      { action: 'submit', payload: { problem_id: 'greeting-v1', code } },
+    ])
+    cleanups.forEach(fn => fn())
+  } finally {
+    if (originalStorage) Object.defineProperty(global, 'localStorage', originalStorage)
+    else delete global.localStorage
+  }
 })

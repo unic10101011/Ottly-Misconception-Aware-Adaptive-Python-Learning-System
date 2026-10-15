@@ -38,7 +38,7 @@ class LimitedStringIO(io.StringIO):
 class Sandbox:
     """Python代码沙箱"""
     
-    def __init__(self, timeout: int = 10):
+    def __init__(self, timeout: int = 10, stdin: str = ''):
         """
         初始化沙箱
         
@@ -46,6 +46,7 @@ class Sandbox:
             timeout: 执行超时时间（秒）
         """
         self.timeout = timeout
+        self.input_stream = io.StringIO(stdin.replace('\r\n', '\n'))
         self.security_checker = SecurityChecker()
         self.error_helper = ErrorHelper()
         
@@ -77,6 +78,7 @@ class Sandbox:
         # 重载危险函数
         safe_builtins['__import__'] = self._safe_import
         safe_builtins['open'] = self._safe_open
+        safe_builtins['input'] = self._read_input
         
         return {
             '__builtins__': safe_builtins,
@@ -84,6 +86,15 @@ class Sandbox:
             '__doc__': None,
         }
     
+    def _read_input(self, prompt=''):
+        # Read only the request's buffer, never the host or worker protocol stdin.
+        if prompt:
+            print(prompt, end='')
+        line = self.input_stream.readline()
+        if line == '':
+            raise EOFError('运行输入不足，请为每次 input 提供一行输入')
+        return line.removesuffix('\n')
+
     def _safe_import(self, name, *args, **kwargs):
         """安全的import函数"""
         from .security_check import DANGEROUS_MODULES, ALLOWED_MODULES
@@ -205,7 +216,7 @@ class Sandbox:
 
 
 # 便捷函数
-def run_code(code: str, timeout: int = 10) -> Dict[str, Any]:
+def run_code(code: str, timeout: int = 10, stdin: str = '') -> Dict[str, Any]:
     """
     便捷运行代码的函数
     
@@ -216,7 +227,7 @@ def run_code(code: str, timeout: int = 10) -> Dict[str, Any]:
     Returns:
         执行结果
     """
-    sandbox = Sandbox(timeout=timeout)
+    sandbox = Sandbox(timeout=timeout, stdin=stdin)
     return sandbox.execute(code)
 
 

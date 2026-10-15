@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { clearUserCodeDrafts } from '../components/codeDraft.mjs'
 
 function Settings() {
   const navigate = useNavigate()
@@ -89,6 +90,7 @@ function Settings() {
     setNotice('')
     try {
       await request('me', 'DELETE', { current_password: deletePassword })
+      clearUserCodeDrafts(account.id)
       logout()
     } catch (error) { setNotice(error.message) }
     finally { setBusy(false) }

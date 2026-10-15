@@ -3,13 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import yunduo from './images/yunduo.png'
 import xingxing from './images/xingxing.png'
 import chathaita from './images/chathaita.png'
-
-const levels = [
-  { id: 1, name: '初识小海獭', icon: '🦦', x: 55, y: 100 },
-  { id: 2, name: 'for循环', icon: '🔄', x: 200, y: 260 },
-  { id: 3, name: '???', icon: '🔒', x: 55, y: 420 },
-  { id: 4, name: '???', icon: '🔒', x: 200, y: 580 },
-]
+import { getLevels } from '../components/codeApi.mjs'
 
 function generatePath(from, to, index) {
   const startX = from.x + 45
@@ -23,45 +17,38 @@ function generatePath(from, to, index) {
 
 function LevelSelection() {
   const navigate = useNavigate()
-  const [passedIds, setPassedIds] = useState(null)
-  const [loadError, setLoadError] = useState('')
-
-  const loadProgress = () => {
-    setLoadError('')
-    fetch('/api/v1/code/progress', {
-      headers: { Authorization: `Bearer ${localStorage.getItem('access_token')}` },
-    }).then(async response => {
-      if (!response.ok) throw new Error('学习进度加载失败')
-      const result = await response.json()
-      setPassedIds(new Set(result.data.passed_problem_ids))
-    }).catch(error => setLoadError(error.message))
-  }
-
-  useEffect(() => { loadProgress() }, [])
-
-  const visibleLevels = levels.map(level => ({
-    ...level,
-    status: level.id === 1
-      ? (passedIds?.has('level1') ? 'completed' : 'current')
-      : level.id === 2
-        ? (passedIds?.has('level2') ? 'completed' : passedIds?.has('level1') ? 'current' : 'available')
-        : 'locked',
-  }))
+  const [levels, setLevels] = useState([])
+  const [error, setError] = useState('')
+  useEffect(() => {
+    let active = true
+    getLevels(localStorage.getItem('access_token')).then(data => {
+      if (!active) return
+      setLevels(data.items.map((level, index) => ({ ...level,
+        x: index % 2 ? 200 : 55, y: 100 + index * 160,
+        color: level.status === 'completed' ? '#27c93f' : '#4A90E2',
+        icon: !level.published ? '🔒' : index === 0 ? '🦦' : '👋',
+      })))
+    }).catch(error => {
+      if (!active) return
+      setError(error.message)
+      if (error.status === 401) navigate('/auth')
+    })
+    return () => { active = false }
+  }, [navigate])
 
   const handleCircleClick = (level) => {
-    if (passedIds === null || level.status === 'locked') return
+    if (level.status === 'locked' || !level.published) return
     navigate(`/app/levels/${level.id}`)
   }
 
   return (
     <div className="level-page">
+      {error && <p role="alert">{error}</p>}
+      {!error && levels.length === 0 && <p role="status">正在读取学习进度...</p>}
       <img src={xingxing} alt="星星" className="level-decoration"
         style={{ top: '2%', left: '3%', width: '50px', opacity: 0.6 }} />
       <img src={yunduo} alt="云朵" className="level-decoration"
         style={{ top: '3%', right: '5%', width: '70px', opacity: 0.6 }} />
-
-      {loadError && <div className="level-load-error" role="alert">{loadError} <button type="button" onClick={loadProgress}>重试</button></div>}
-      {passedIds === null && !loadError && <div className="level-load-error">正在加载学习进度...</div>}
 
       {/* Right-side otter - full body, ~1/3 page height */}
       <div className="otter-side"
@@ -73,10 +60,10 @@ function LevelSelection() {
       {/* Level circles container - centered */}
       <div className="level-path-container">
         <svg>
-          {visibleLevels.slice(0, -1).map((level, i) => (
+          {levels.slice(0, -1).map((level, i) => (
             <path
               key={i}
-              d={generatePath(level, visibleLevels[i + 1], i)}
+              d={generatePath(level, levels[i + 1], i)}
               fill="none"
               stroke={level.status === 'completed' ? '#27c93f' : level.status === 'current' ? '#4A90E2' : level.status === 'available' ? '#78afe4' : '#ccc'}
               strokeWidth="4"
@@ -87,9 +74,12 @@ function LevelSelection() {
           ))}
         </svg>
 
-        {visibleLevels.map((level) => (
+        {levels.map((level) => (
           <div
             key={level.id}
+            role="button" tabIndex={level.published && level.status !== 'locked' ? 0 : -1}
+            aria-disabled={!level.published || level.status === 'locked'}
+            onKeyDown={event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); handleCircleClick(level) } }}
             className={`level-circle ${level.status}`}
             style={{ left: `${level.x}px`, top: `${level.y}px` }}
             onClick={() => handleCircleClick(level)}
@@ -99,7 +89,7 @@ function LevelSelection() {
             <span className="level-icon">{level.icon}</span>
             <span className="level-name">{level.name}</span>
             <span className="level-label">
-              {level.status === 'completed' ? '已通关' : level.status === 'current' ? '当前关卡' : level.status === 'available' ? '可学习' : '未解锁'}
+              {!level.published ? (level.status === 'current' ? '已解锁 · 待开放' : '待开放') : level.status === 'completed' ? '已通关' : level.status === 'current' ? '当前关卡' : '未解锁'}
             </span>
           </div>
         ))}

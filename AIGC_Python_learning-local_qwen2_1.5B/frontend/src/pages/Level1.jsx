@@ -1,9 +1,10 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useOutletContext } from 'react-router-dom'
 import CodeEditor from '../components/CodeEditor.jsx'
 
 function Level1() {
   const navigate = useNavigate()
+  const { userId } = useOutletContext()
 
   const handleSuccess = () => {
     navigate('/app/levels')
@@ -28,6 +29,8 @@ function Level1() {
         ← 返回关卡选择
       </button>
       <CodeEditor
+        key={`${userId}:level1`}
+        userId={userId}
         initialCode=""
         problemId="level1"
         onSuccess={handleSuccess}

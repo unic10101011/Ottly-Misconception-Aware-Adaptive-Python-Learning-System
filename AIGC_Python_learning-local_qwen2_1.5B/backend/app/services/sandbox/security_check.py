@@ -11,7 +11,7 @@ DANGEROUS_MODULES = {
     'os', 'sys', 'subprocess', 'shutil', 'socket', 'http', 'urllib', 
     'requests', 'ftplib', 'pickle', 'marshal', 'importlib', '__import__',
     'exec', 'eval', 'compile', 'globals', 'locals', 'vars', 'dir', 'id',
-    'getattr', 'setattr', 'delattr', 'hasattr', 'open', 'file', 'input',
+    'getattr', 'setattr', 'delattr', 'hasattr', 'open', 'file',
     'codeop', 'code', 'inspect', 'traceback', 'linecache', 'syslog',
     'logging', 'ctypes', 'cffi', 'gc', 'threading', 'multiprocessing',
     'queue', 'asyncio', 'concurrent', 'atexit', 'signal', 'timeit',

@@ -20,13 +20,13 @@ def client(tmp_path_factory):
 def register_and_login(client, username, phone):
     registered = client.post(
         "/api/v1/auth/register",
-        json={"username": username, "password": "TestPass123!", "phone": phone},
+        json={"username": username, "password": "TestPass1234!", "phone": phone},
     )
     assert registered.status_code == 200
     assert registered.json()["code"] == 201
     logged_in = client.post(
         "/api/v1/auth/login",
-        json={"username": username, "password": "TestPass123!"},
+        json={"username": username, "password": "TestPass1234!"},
     )
     assert logged_in.status_code == 200
     return registered.json()["data"]["id"], logged_in.json()["data"]["access_token"]
@@ -34,6 +34,41 @@ def register_and_login(client, username, phone):
 
 def auth(token):
     return {"Authorization": f"Bearer {token}"}
+
+
+@pytest.mark.parametrize('password', ['', '123456', 'x' * 129, ' ' * 12,
+                                      '123456789012', 'password1234', 'a' * 12,
+                                      'policy_student', '139123456789'])
+def test_registration_rejects_weak_password_without_echoing_it(client, password):
+    from app.core.database import SessionLocal
+    from app.models.user import User
+    response = client.post('/api/v1/auth/register', json={
+        'username': 'policy_student', 'phone': '139123456789', 'password': password,
+    })
+    assert response.json()['code'] == 400
+    assert response.json()['data'] == {}
+    if password.strip():
+        assert password not in response.text
+    with SessionLocal() as db:
+        assert db.query(User).filter(User.username == 'policy_student').first() is None
+
+
+def test_password_is_salted_hashed_and_old_short_password_still_logs_in(client):
+    from app.core.auth import get_password_hash, verify_password
+    from app.core.database import SessionLocal
+    from app.models.user import User
+    register_and_login(client, 'hashed_student', '13988880001')
+    with SessionLocal() as db:
+        stored = db.query(User).filter(User.username == 'hashed_student').one().password
+        assert stored.startswith('$argon2id$')
+        assert stored != 'TestPass1234!'
+        assert verify_password('TestPass1234!', stored)
+        assert get_password_hash('TestPass1234!') != stored
+        db.add(User(username='legacy_short_password', phone='13988880002', password=get_password_hash('old123')))
+        db.commit()
+    response = client.post('/api/v1/auth/login', json={'username': 'legacy_short_password', 'password': 'old123'})
+    assert response.status_code == 200
+    assert 'old123' not in response.text
 
 
 def test_login_identifies_each_user_and_protects_private_routes(client):
@@ -64,10 +99,10 @@ def test_chat_history_and_class_records_are_user_isolated(client):
         db.close()
 
     first_token = client.post("/api/v1/auth/login", json={
-        "username": "student_one", "password": "TestPass123!",
+        "username": "student_one", "password": "TestPass1234!",
     }).json()["data"]["access_token"]
     second_token = client.post("/api/v1/auth/login", json={
-        "username": "student_two", "password": "TestPass123!",
+        "username": "student_two", "password": "TestPass1234!",
     }).json()["data"]["access_token"]
     first_history = client.get("/api/v1/ai/history", headers=auth(first_token)).json()
     second_history = client.get("/api/v1/ai/history", headers=auth(second_token)).json()
@@ -105,7 +140,7 @@ def test_account_update_password_and_permanent_deletion(client):
         "username": "account_owner_new", "phone": "13800000018", "current_password": "wrong",
     }).status_code == 403
     updated = client.patch("/api/v1/auth/me", headers=headers, json={
-        "username": "account_owner_new", "phone": "13800000018", "current_password": "TestPass123!",
+        "username": "account_owner_new", "phone": "13800000018", "current_password": "TestPass1234!",
     })
     assert updated.status_code == 200
     token = updated.json()["data"]["access_token"]
@@ -114,12 +149,12 @@ def test_account_update_password_and_permanent_deletion(client):
     assert client.get("/api/v1/auth/me", headers=auth(other_token)).json()["data"]["username"] == "account_other"
 
     changed = client.post("/api/v1/auth/change-password", headers=headers, json={
-        "current_password": "TestPass123!", "new_password": "NewPass123!",
+        "current_password": "TestPass1234!", "new_password": "NewPass123!",
     })
     assert changed.status_code == 200
     assert client.get("/api/v1/auth/me", headers=headers).status_code == 401
     assert client.post("/api/v1/auth/login", json={
-        "username": "account_owner_new", "password": "TestPass123!",
+        "username": "account_owner_new", "password": "TestPass1234!",
     }).status_code == 401
     token = client.post("/api/v1/auth/login", json={
         "username": "account_owner_new", "password": "NewPass123!",

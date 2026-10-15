@@ -9,7 +9,7 @@ from typing import Annotated, Literal
 import httpx
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
-from app.services.submission import JudgeResult, Problem
+from app.services.submission import JudgeResult, Problem, GREETING, GREETING_ID
 from app.services.hint_quality import ISSUE_GUIDANCE, quality_issues
 
 
@@ -25,6 +25,8 @@ def opening_question(problem: Problem, judge: JudgeResult) -> str:
         return "描述一个程序步骤时，需要怎样区分语句结构和执行内容？"
     if "NameError" in error_types:
         return "使用变量之前，需要先明确哪些信息？"
+    if problem.problem_id == GREETING_ID:
+        return GREETING['hints']['level1']
     if judge.status == "wrong_answer" and problem.problem_id == "level2":
         return "使用循环求和时，需要思考哪些步骤？"
     if judge.status == "wrong_answer" and problem.problem_id == "level1":
@@ -61,6 +63,9 @@ def safe_hints(problem: Problem, judge: JudgeResult) -> Hints:
     elif "NameError" in error_types:
         second = "结合变量先赋值后使用的知识，观察报错位置之前是否出现对应变量的赋值。"
         third = "从上到下记录该变量首次赋值和使用的位置，核对拼写与执行顺序后再运行。"
+    elif problem.problem_id == GREETING_ID:
+        second = GREETING['hints']['level2']
+        third = GREETING['hints']['level3']
     elif judge.status == "wrong_answer" and problem.problem_id == "level2":
         second = "结合取值范围和累计更新的知识，检查代码是否有选取每个取值和更新总数的步骤。"
         third = "在纸上记录前两步和最后一步应有的取值、旧总数与新总数，再与代码实际写出的步骤对照。"
@@ -85,6 +90,7 @@ class AnalysisResult(BaseModel):
     message: str
     model: str | None = None
     content: AnalysisContent | None = None
+    source: Literal['ai', 'fixed'] = 'ai'
 
 
 SYSTEM_PROMPT = """你是 Python 初学者助教，只生成符合 schema 的简短中文 JSON。判题已完成，你不判断对错。
@@ -184,7 +190,7 @@ def validate_grounding(content: AnalysisContent, judge: JudgeResult) -> None:
         raise ValueError("Hints must be distinct")
 
 
-async def analyze_failure(problem: Problem, code: str, judge: JudgeResult) -> AnalysisResult:
+async def _analyze_failure(problem: Problem, code: str, judge: JudgeResult) -> AnalysisResult:
     if judge.passed:
         return AnalysisResult(status="skipped", message="测试已通过，无需 AI 分析。")
     if not LOCAL_LLM_URL:
@@ -273,3 +279,26 @@ async def analyze_failure(problem: Problem, code: str, judge: JudgeResult) -> An
         return AnalysisResult(status="unavailable", message="AI 模型暂不可用，请检查 Ollama 服务和模型；判题结果已保留。", model=OLLAMA_MODEL)
     except (ValueError, ValidationError, KeyError, TypeError):
         return AnalysisResult(status="invalid_response", message="AI 提示未通过格式、证据或分层质量检查，本次不展示未经确认的分析。判题结果已保留，请先依据实际输出或报错自行检查，也可稍后重新提交。", model=OLLAMA_MODEL)
+
+
+async def analyze_failure(problem: Problem, code: str, judge: JudgeResult) -> AnalysisResult:
+    result = await _analyze_failure(problem, code, judge)
+    if problem.problem_id != GREETING_ID or judge.passed or result.status == 'ready':
+        return result
+    visible = next((case for case in judge.cases if case.visibility == 'public'), None)
+    if visible is None or any(error.type == 'RunnerError' for error in visible.errors):
+        return result
+    # A fixed lesson hint is guidance, not a diagnosis based on private cases.
+    field = 'error_message' if visible.errors else 'actual_output'
+    quote = visible.errors[0].message if visible.errors else visible.actual_output
+    return AnalysisResult(
+        status='ready', source='fixed',
+        message='AI 暂未提供合格分析，以下使用本关已审核的基础提示。',
+        content=AnalysisContent(
+            suspected_cause='尚未确认具体错因，请结合公开结果逐步核对。',
+            evidence=[Evidence(case_id=visible.case_id, field=field, quote=quote[:1000],
+                               explanation='这里只展示公开样例的执行结果，不据此猜测隐藏用例内容。')],
+            knowledge_points=['输入与变量', '字符串拼接与输出格式'],
+            hints=safe_hints(problem, judge),
+        ),
+    )

@@ -1,0 +1,31 @@
+{
+  "problem_id": "greeting-v1",
+  "version": 1,
+  "level_no": 2,
+  "title": "打招呼",
+  "knowledge_ids": ["K02"],
+  "prerequisite_knowledge_ids": ["K01"],
+  "description": "输入一行姓名（1–20 个字符，不含首尾空格，可以含内部空格）。把输入保存到变量里，输出一行 Hello, 姓名!。保留姓名的大小写与内部空格；逗号后恰好一个空格。不要输出输入提示语。",
+  "story": "上一关，Ottly 学会了第一句话，但不管谁来，她说的都是同一句话。现在朋友们来到海滩，她想让每位朋友都听到自己的名字。帮她根据输入的姓名打招呼吧。",
+  "teaching": [
+    {"title": "变量与赋值", "text": "变量名关联一个值，可以把它想成盒子上的标签。赋值时先计算右侧，再把结果交给左侧的变量名。", "example": "friend = 'Tim'\nprint(friend)"},
+    {"title": "读取输入", "text": "input() 每次读取一行文字。它去掉行末换行，但保留姓名内部的空格。先读取并赋值，后面的代码才能使用这个变量。", "example": "friend = input()"},
+    {"title": "变量名与固定文本", "text": "friend 表示变量中的内容；加上引号的 'friend' 表示固定的六个字母。未赋值就使用变量会报错。", "example": "print(friend)\nprint('friend')"},
+    {"title": "拼接文字与空格", "text": "字符串可以用加号连接。print 输出多个参数时默认在参数间加一个空格；字符串内部的空格也会保留，注意不要重复添加。", "example": "print('Good', 'morning')\nprint('Good ' + 'morning')"}
+  ],
+  "starter_code": "# 读取朋友的姓名，再输出问候语\n",
+  "examples": [{"stdin": "Ottly\n", "stdout": "Hello, Ottly!\n"}, {"stdin": "Tim\n", "stdout": "Hello, Tim!\n"}],
+  "tests": [
+    {"case_id": "sample-1", "stdin": "Ottly\n", "expected_output": "Hello, Ottly!\n", "visibility": "public"},
+    {"case_id": "hidden-1", "stdin": "Amy\n", "expected_output": "Hello, Amy!\n", "visibility": "hidden"},
+    {"case_id": "hidden-2", "stdin": "Sea Otter\n", "expected_output": "Hello, Sea Otter!\n", "visibility": "hidden"},
+    {"case_id": "hidden-3", "stdin": "小海獭\n", "expected_output": "Hello, 小海獭!\n", "visibility": "hidden"}
+  ],
+  "hints": {
+    "level1": "问候语中哪部分会随输入变化？",
+    "level2": "查看变量是否真正接收了输入，打印时有没有把变量名加上引号。",
+    "level3": "把输出分成固定前缀、姓名和标点三部分，检查连接处的空格。"
+  },
+  "reference_solution": "name = input()\nprint(\"Hello,\", name + \"!\")\n",
+  "solution_explanation": "第一行读取整行姓名并保存到 name。第二行把姓名和感叹号拼接，再与前缀一起输出。print 的两个参数之间自动加入一个空格。姓名中的空格和大小写不变。也可以使用其他能得到相同结果的写法。"
+}
