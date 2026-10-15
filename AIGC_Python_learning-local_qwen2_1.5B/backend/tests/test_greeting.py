@@ -33,7 +33,7 @@ def client(tmp_path, monkeypatch):
 
 
 def account(client, name='greeting_student', phone='13900000001'):
-    body = {'username': name, 'password': 'TestPass123!', 'phone': phone}
+    body = {'username': name, 'password': 'TestPass1234!', 'phone': phone}
     assert client.post('/api/v1/auth/register', json=body).json()['code'] == 201
     token = client.post('/api/v1/auth/login', json=body).json()['data']['access_token']
     return {'Authorization': 'Bearer ' + token}
@@ -90,7 +90,7 @@ def test_six_step_flow_and_progress_survive_relogin(client):
     # A later failure must not revoke completion.
     submit(client, headers, GREETING_ID, 'print(0)')
     token = client.post('/api/v1/auth/login', json={
-        'username': 'greeting_student', 'password': 'TestPass123!',
+        'username': 'greeting_student', 'password': 'TestPass1234!',
     }).json()['data']['access_token']
     renewed = {'Authorization': 'Bearer ' + token}
     assert client.get(url, headers=renewed).json()['data']['completed'] is True

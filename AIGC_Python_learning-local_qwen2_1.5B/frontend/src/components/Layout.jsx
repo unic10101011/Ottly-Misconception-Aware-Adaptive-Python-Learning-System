@@ -4,6 +4,7 @@ import { Outlet, Link, useNavigate } from 'react-router-dom'
 function Layout() {
   const navigate = useNavigate()
   const [checking, setChecking] = useState(true)
+  const [userId, setUserId] = useState(null)
 
   const handleLogout = () => {
     localStorage.removeItem('access_token')
@@ -20,11 +21,18 @@ function Layout() {
     }
     fetch('/api/v1/auth/me', {
       headers: { Authorization: 'Bearer ' + token }
-    }).then(response => {
+    }).then(async response => {
       if (!active) return
       if (!response.ok) {
         handleLogout()
       } else {
+        const result = await response.json()
+        if (!active) return
+        if (!Number.isSafeInteger(result.data?.id) || result.data.id <= 0) {
+          handleLogout()
+          return
+        }
+        setUserId(result.data.id)
         setChecking(false)
       }
     }).catch(() => {
@@ -63,7 +71,7 @@ function Layout() {
       </div>
       <div className="app-content flex-grow-1 d-flex flex-column" style={{ marginLeft: '250px', height: '100vh', overflow: 'hidden' }}>
         <div className="app-main container py-4 flex-grow-1 d-flex flex-column overflow-hidden">
-          <Outlet />
+          <Outlet context={{ userId }} />
         </div>
       </div>
     </div>

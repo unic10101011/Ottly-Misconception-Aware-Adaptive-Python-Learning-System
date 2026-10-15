@@ -32,7 +32,7 @@ def client(tmp_path):
 
 
 def login(client):
-    account = {"username": "submission_student", "password": "TestPass123!", "phone": "13800138000"}
+    account = {"username": "submission_student", "password": "TestPass1234!", "phone": "13800138000"}
     assert client.post("/api/v1/auth/register", json=account).json()["code"] == 201
     token = client.post("/api/v1/auth/login", json=account).json()["data"]["access_token"]
     return {"Authorization": "Bearer " + token}

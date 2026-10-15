@@ -243,15 +243,15 @@ function Auth() {
 
         {/* 登录 */}
         {activeTab === 'login' && (
-          <form onSubmit={handleLogin}>
+          <form key="login" onSubmit={handleLogin}>
             <div className="mb-3">
-              <label className="form-label">用户名</label>
-              <input type="text" className="form-control" name="username" required />
+              <label className="form-label" htmlFor="login-username">用户名</label>
+              <input id="login-username" type="text" className="form-control" name="username" autoComplete="username" required />
               <div className="invalid-feedback">请输入用户名</div>
             </div>
             <div className="mb-3">
-              <label className="form-label">密码</label>
-              <input type="password" className="form-control" name="password" required />
+              <label className="form-label" htmlFor="login-password">密码</label>
+              <input id="login-password" type="password" className="form-control" name="password" autoComplete="current-password" required />
               <div className="invalid-feedback">请输入密码</div>
             </div>
             <button type="submit" className="btn btn-primary w-100">登录</button>
@@ -260,20 +260,21 @@ function Auth() {
 
         {/* 注册 */}
         {activeTab === 'register' && (
-          <form onSubmit={handleRegister}>
+          <form key="register" onSubmit={handleRegister}>
             <div className="mb-3">
-              <label className="form-label">用户名</label>
-              <input type="text" className="form-control" name="username" minLength={3} maxLength={50} required />
+              <label className="form-label" htmlFor="register-username">用户名</label>
+              <input id="register-username" type="text" className="form-control" name="username" autoComplete="username" minLength={3} maxLength={50} required />
               <div className="invalid-feedback">用户名长度3-50字符</div>
             </div>
             <div className="mb-3">
-              <label className="form-label">密码</label>
-              <input type="password" className="form-control" name="password" minLength={6} required />
-              <div className="invalid-feedback">密码至少6位</div>
+              <label className="form-label" htmlFor="register-password">密码</label>
+              <input id="register-password" type="password" className="form-control" name="password" autoComplete="new-password" minLength={12} maxLength={128} required />
+              <div className="form-text">12–128 个字符，建议使用密码管理器生成的独立密码，不复用其他网站的密码。</div>
+              <div className="invalid-feedback">请输入 12–128 个字符的密码</div>
             </div>
             <div className="mb-3">
-              <label className="form-label">手机号</label>
-              <input type="tel" className="form-control" name="phone" minLength={10} maxLength={20} required />
+              <label className="form-label" htmlFor="register-phone">手机号</label>
+              <input id="register-phone" type="tel" className="form-control" name="phone" autoComplete="tel" minLength={10} maxLength={20} required />
               <div className="invalid-feedback">请输入有效手机号</div>
             </div>
             <button type="submit" className="btn btn-primary w-100">注册</button>

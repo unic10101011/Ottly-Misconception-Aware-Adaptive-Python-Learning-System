@@ -2,11 +2,14 @@ import React, { useState, useRef, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import SubmissionFeedback from './SubmissionFeedback.jsx'
 import { requestCode, saveHintView } from './codeApi.mjs'
+import { readCodeDraft, saveCodeDraft } from './codeDraft.mjs'
 
-function CodeEditor({ initialCode, problemId, onSuccess, onAccepted, title, children, acceptsInput = false, sampleInput = '' }) {
+function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, title, children, acceptsInput = false, sampleInput = '' }) {
   const navigate = useNavigate()
-  const [code, setCode] = useState(initialCode)
-  const [stdin, setStdin] = useState(sampleInput)
+  const [code, setCode] = useState(() => readCodeDraft(userId, problemId)?.code ?? initialCode)
+  const [stdin, setStdin] = useState(() => readCodeDraft(userId, problemId)?.stdin ?? sampleInput)
+  const [draftError, setDraftError] = useState('')
+  const [runOutput, setRunOutput] = useState(null)
   const [output, setOutput] = useState('运行结果将显示在这里')
   const [outputType, setOutputType] = useState('hidden')
   const [running, setRunning] = useState(false)
@@ -48,12 +51,27 @@ function CodeEditor({ initialCode, problemId, onSuccess, onAccepted, title, chil
   const updateCode = (value) => {
     if (busyRef.current || hintBusyRef.current) return
     setCode(value)
+    persistDraft(value, stdin)
+    setRunOutput(null)
     setSubmission(null)
     submissionRef.current = null
     setVisibleHintCount(0)
     setHintError('')
     setOutputType('hidden')
     clearTimeout(successTimerRef.current)
+  }
+
+  const persistDraft = (nextCode, nextInput) => {
+    const saved = saveCodeDraft(userId, problemId, nextCode, nextInput)
+    setDraftError(saved ? '' : '草稿未能保存到此浏览器，请先复制代码备份。')
+  }
+
+  const updateInput = (value) => {
+    if (busyRef.current || hintBusyRef.current) return
+    setStdin(value)
+    persistDraft(code, value)
+    setOutputType('hidden')
+    setRunOutput(null)
   }
 
   // Tab key handler
@@ -80,17 +98,24 @@ function CodeEditor({ initialCode, problemId, onSuccess, onAccepted, title, chil
 
   const runCode = async () => {
     if (busyRef.current || hintBusyRef.current) return
+    const showRunOutput = (text, type) => {
+      if (acceptsInput) {
+        setRunOutput({ text, type })
+        setOutputType('hidden')
+      } else {
+        setOutput(text)
+        setOutputType(type)
+      }
+    }
     if (!code.trim()) {
-      setOutput('请输入代码')
-      setOutputType('error')
+      showRunOutput('请输入代码', 'error')
       return
     }
 
     busyRef.current = true
     setRunning(true)
     setAuthRequired(false)
-    setOutput('代码正在执行，请稍候...')
-    setOutputType('info')
+    showRunOutput('代码正在执行，请稍候...', 'info')
     clearTimeout(successTimerRef.current)
 
     try {
@@ -98,7 +123,11 @@ function CodeEditor({ initialCode, problemId, onSuccess, onAccepted, title, chil
       if (!mountedRef.current) return
       let display = ''
       if (result.output) {
-        display += '📝 程序输出:\n' + result.output + '\n'
+        display += '程序输出:\n' + result.output + '\n'
+      } else if (result.output_available === false) {
+        display += '输出未采集（执行已终止）。\n'
+      } else if (result.success) {
+        display += '程序运行结束，没有输出。\n'
       }
       if (result.errors && result.errors.length > 0) {
         for (const err of result.errors) {
@@ -111,12 +140,14 @@ function CodeEditor({ initialCode, problemId, onSuccess, onAccepted, title, chil
         }
       }
       if (result.execution_time !== undefined) {
-        display += `⏱️ 执行时间: ${result.execution_time} 秒`
+        display += `执行时间: ${result.execution_time} 秒`
       }
-      setOutput(display.trim() || '程序运行结束，没有输出。')
-      setOutputType(result.success ? 'success' : 'error')
+      showRunOutput(display.trim() || '程序运行结束，没有输出。', result.success ? 'success' : 'error')
     } catch (error) {
-      if (mountedRef.current) showRequestError(error)
+      if (mountedRef.current) {
+        showRunOutput(error.message || '请求失败，请稍后重试。', 'error')
+        setAuthRequired(error.status === 401)
+      }
     } finally {
       busyRef.current = false
       if (mountedRef.current) setRunning(false)
@@ -385,14 +416,25 @@ function CodeEditor({ initialCode, problemId, onSuccess, onAccepted, title, chil
             />
           </div>
 
+          <p className="draft-status" role="status">
+            {draftError || '代码和运行输入自动保存在当前浏览器，按账号和题目分别保留。'}
+          </p>
+
           {acceptsInput && <div className="lesson-input">
             <label htmlFor="lesson-stdin">运行输入（每次 input 读取一行）</label>
             <textarea id="lesson-stdin" value={stdin} maxLength={8000} readOnly={busy}
-              onChange={event => { setStdin(event.target.value); setOutputType('hidden') }} rows={3} />
+              onChange={event => updateInput(event.target.value)} rows={3} />
             <button type="button" className="btn-hint" disabled={busy}
-              onClick={() => { setStdin(sampleInput); setOutputType('hidden') }}>填入样例输入</button>
+              onClick={() => updateInput(sampleInput)}>填入样例输入</button>
             <p>运行只使用这里的输入；提交会由后端检查全部正式测试。</p>
           </div>}
+
+          {acceptsInput && <section className="lesson-output" aria-labelledby="lesson-output-title">
+            <h4 id="lesson-output-title">运行输出</h4>
+            <div className={`output-box ${runOutput?.type || 'info'}`} role="status" aria-live="polite">
+              {runOutput?.text || '点击“运行”后，这里会显示程序输出或错误信息。'}
+            </div>
+          </section>}
 
           <div className={`output-box ${outputType}`} role="status">
             {output}

@@ -16,6 +16,20 @@ from app.models.user import User
 router = APIRouter()
 
 
+def registration_password_error(password: str, username: str, phone: str) -> str | None:
+    if not 12 <= len(password) <= 128 or not password.strip():
+        return '新密码需为 12–128 个字符，建议使用密码管理器生成的独立密码'
+    normalized = password.casefold()
+    common_passwords = {
+        '123456789012', '1234567890123456', 'password1234', 'password123!',
+        'password123456', 'qwerty123456789', 'qwertyuiop123',
+    }
+    if (normalized in common_passwords or len(set(password)) == 1 or
+            normalized == username.casefold() or password == phone):
+        return '请勿使用常见密码、重复字符、用户名或手机号作为密码'
+    return None
+
+
 class UserCreate(BaseModel):
     username: str
     password: str
@@ -35,6 +49,10 @@ class AuthResponse(BaseModel):
 
 @router.post("/auth/register")
 async def register(user: UserCreate, db: Session = Depends(get_db)):
+    password_error = registration_password_error(user.password, user.username, user.phone)
+    if password_error:
+        # Do not echo the submitted password in a validation response.
+        return AuthResponse(code=400, msg=password_error, data={})
     if db.query(User).filter(User.username == user.username).first():
         return AuthResponse(code=400, msg="用户名已存在", data={})
     if db.query(User).filter(User.phone == user.phone).first():

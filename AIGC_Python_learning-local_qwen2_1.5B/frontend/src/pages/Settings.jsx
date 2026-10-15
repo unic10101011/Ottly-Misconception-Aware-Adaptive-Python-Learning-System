@@ -38,7 +38,8 @@ function Settings() {
   }
 
   const handleLogout = () => {
-    localStorage.clear()
+    localStorage.removeItem('access_token')
+    localStorage.removeItem('refresh_token')
     navigate('/auth')
   }
 

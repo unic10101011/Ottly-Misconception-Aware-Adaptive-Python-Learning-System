@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useOutletContext } from 'react-router-dom'
 import CodeEditor from '../components/CodeEditor.jsx'
 import { getLesson, getSolution } from '../components/codeApi.mjs'
 
@@ -7,6 +7,7 @@ const PROBLEM_ID = 'greeting-v1'
 
 function Level2() {
   const navigate = useNavigate()
+  const { userId } = useOutletContext()
   const [lesson, setLesson] = useState(null)
   const [error, setError] = useState('')
   const [completed, setCompleted] = useState(false)
@@ -45,7 +46,7 @@ function Level2() {
     {error && <p role="alert">{error}</p>}
     {!lesson && !error && <p role="status">正在加载第 2 关...</p>}
     {lesson && <>
-      <CodeEditor initialCode={lesson.starter_code} problemId={lesson.problem_id}
+      <CodeEditor key={`${userId}:${lesson.problem_id}`} userId={userId} initialCode={lesson.starter_code} problemId={lesson.problem_id}
         title={`第 2 关 · ${lesson.title}`} acceptsInput sampleInput={lesson.examples[0].stdin}
         onAccepted={() => setCompleted(true)}>
         <h3>情境</h3><p>{lesson.story}</p>

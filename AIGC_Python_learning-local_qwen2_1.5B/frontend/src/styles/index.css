@@ -916,7 +916,7 @@ body.eye-protection {
 }
 
 /* Input-driven lesson and post-completion explanation, using the existing palette. */
-.lesson-page { padding: 12px; }
+.lesson-page { flex: 1; min-height: 0; overflow-y: auto; padding: 12px; }
 .lesson-page .steps-box { color: #17364b; background: #f5fafc; }
 .lesson-page h3 { margin: 20px 0 10px; }
 .lesson-teaching { margin: 16px 0; }
@@ -929,5 +929,9 @@ body.eye-protection {
 .lesson-input textarea { width: 100%; min-height: 80px; padding: 10px; border: 1px solid #9baeb4; border-radius: 8px; font: inherit; white-space: pre-wrap; resize: vertical; }
 .lesson-input p { font-size: 13px; color: #53656b; }
 .lesson-input .btn-hint { justify-self: start; }
+.lesson-output { padding: 0 16px 16px; }
+.draft-status { margin: 10px 16px; color: #53656b; font-size: 13px; }
+.lesson-output h4 { margin: 0; font-size: 16px; font-weight: 600; }
+.lesson-output .output-box { min-height: 100px; max-height: 320px; overflow-y: auto; }
 .lesson-complete { margin-top: 20px; padding: 20px; border: 1px solid #a3cbbb; border-radius: 12px; background: #f2faf6; }
 .lesson-complete .btn-hint { margin: 12px 12px 0 0; }

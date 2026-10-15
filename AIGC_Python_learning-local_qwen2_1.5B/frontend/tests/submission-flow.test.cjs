@@ -184,7 +184,7 @@ test('leaving the editor while an accepted submission is pending prevents late u
   let successCount = 0
   const hooks = {
     ...React,
-    useState: value => [value, next => updates.push(next)],
+    useState: value => [typeof value === 'function' ? value() : value, next => updates.push(next)],
     useRef: value => ({ current: value }),
     useEffect: effect => effects.push(effect),
     useCallback: callback => callback,
@@ -261,7 +261,7 @@ test('input lesson sends run input but submission uses only the server problem i
   const effects = []
   const calls = []
   const hooks = { ...React,
-    useState: value => [value, () => {}], useRef: value => ({ current: value }),
+    useState: value => [typeof value === 'function' ? value() : value, () => {}], useRef: value => ({ current: value }),
     useEffect: effect => effects.push(effect), useCallback: callback => callback,
   }
   const Editor = loadJsx('../src/components/CodeEditor.jsx', {

@@ -53,7 +53,7 @@ def client(tmp_path, monkeypatch):
 
 
 def account(client, username, phone):
-    body = {"username": username, "password": "TestPass123!", "phone": phone}
+    body = {"username": username, "password": "TestPass1234!", "phone": phone}
     assert client.post("/api/v1/auth/register", json=body).json()["code"] == 201
     token = client.post("/api/v1/auth/login", json=body).json()["data"]["access_token"]
     return {"Authorization": "Bearer " + token}
@@ -76,7 +76,7 @@ def test_wrong_and_later_correct_are_both_saved_and_visible_after_relogin(client
     assert correct["analysis"]["status"] == "skipped"
 
     renewed = client.post("/api/v1/auth/login", json={
-        "username": "learner_a", "password": "TestPass123!"
+        "username": "learner_a", "password": "TestPass1234!"
     }).json()["data"]["access_token"]
     renewed_headers = {"Authorization": "Bearer " + renewed}
     all_attempts = client.get("/api/v1/code/submissions", headers=renewed_headers).json()["data"]
