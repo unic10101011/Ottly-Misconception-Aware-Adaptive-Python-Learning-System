@@ -100,3 +100,15 @@ export function getMistakeQuestions(token) {
 export function saveHintView(submissionId, level, token) {
   return requestLearningHistory(`/code/submissions/${submissionId}/hints`, 'PATCH', token, { level })
 }
+
+export function getLevels(token) {
+  return requestLearningHistory('/code/levels', 'GET', token)
+}
+
+export function getLesson(problemId, token) {
+  return requestLearningHistory(`/code/problems/${encodeURIComponent(problemId)}`, 'GET', token)
+}
+
+export function getSolution(problemId, token) {
+  return requestLearningHistory(`/code/problems/${encodeURIComponent(problemId)}/solution`, 'GET', token)
+}

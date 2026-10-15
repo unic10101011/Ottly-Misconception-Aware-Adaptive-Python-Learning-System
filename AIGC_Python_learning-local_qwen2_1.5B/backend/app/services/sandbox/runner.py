@@ -14,7 +14,7 @@ import time
 BACKEND_ROOT = Path(__file__).resolve().parents[3]
 
 
-def run_code_process(code: str, timeout: int = 3) -> dict:
+def run_code_process(code: str, timeout: int = 3, stdin: str = '') -> dict:
     started = time.monotonic()
     # Keep runtime necessities only; never inherit application DB/JWT secrets.
     env = {
@@ -25,7 +25,7 @@ def run_code_process(code: str, timeout: int = 3) -> dict:
     try:
         completed = subprocess.run(
             [sys.executable, '-m', 'app.services.sandbox.worker'],
-            input=json.dumps({'code': code, 'timeout': timeout}, ensure_ascii=False),
+            input=json.dumps({'code': code, 'timeout': timeout, 'stdin': stdin}, ensure_ascii=False),
             cwd=BACKEND_ROOT,
             env=env,
             capture_output=True,

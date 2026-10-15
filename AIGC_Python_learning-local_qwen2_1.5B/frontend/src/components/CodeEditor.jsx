@@ -3,9 +3,10 @@ import { useNavigate } from 'react-router-dom'
 import SubmissionFeedback from './SubmissionFeedback.jsx'
 import { requestCode, saveHintView } from './codeApi.mjs'
 
-function CodeEditor({ initialCode, problemId, onSuccess, title, children }) {
+function CodeEditor({ initialCode, problemId, onSuccess, onAccepted, title, children, acceptsInput = false, sampleInput = '' }) {
   const navigate = useNavigate()
   const [code, setCode] = useState(initialCode)
+  const [stdin, setStdin] = useState(sampleInput)
   const [output, setOutput] = useState('运行结果将显示在这里')
   const [outputType, setOutputType] = useState('hidden')
   const [running, setRunning] = useState(false)
@@ -93,7 +94,7 @@ function CodeEditor({ initialCode, problemId, onSuccess, title, children }) {
     clearTimeout(successTimerRef.current)
 
     try {
-      const result = await requestCode('run', { code, timeout: 3 }, localStorage.getItem('access_token'))
+      const result = await requestCode('run', { code, timeout: 3, ...(acceptsInput ? { stdin } : {}) }, localStorage.getItem('access_token'))
       if (!mountedRef.current) return
       let display = ''
       if (result.output) {
@@ -139,7 +140,7 @@ function CodeEditor({ initialCode, problemId, onSuccess, title, children }) {
     setHintError('')
     setModal(current => ({ ...current, show: false }))
     clearTimeout(successTimerRef.current)
-    setOutput('正在运行测试用例；若未通过，将生成 AI 提示，请稍候...')
+    setOutput('正在运行测试用例；若未通过，将准备学习提示，请稍候...')
     setOutputType('info')
     try {
       const result = await requestCode('submit', { problem_id: problemId, code }, localStorage.getItem('access_token'))
@@ -148,6 +149,7 @@ function CodeEditor({ initialCode, problemId, onSuccess, title, children }) {
       setSubmission(result)
       setOutputType('hidden')
       if (result.judge.passed) {
+        onAccepted?.(result)
         setModal({ show: true, type: 'success', title: '通过', message: '恭喜！全部测试用例通过！' })
         startConfetti()
         if (onSuccess) successTimerRef.current = setTimeout(() => {
@@ -382,6 +384,15 @@ function CodeEditor({ initialCode, problemId, onSuccess, title, children }) {
               autoCapitalize="off"
             />
           </div>
+
+          {acceptsInput && <div className="lesson-input">
+            <label htmlFor="lesson-stdin">运行输入（每次 input 读取一行）</label>
+            <textarea id="lesson-stdin" value={stdin} maxLength={8000} readOnly={busy}
+              onChange={event => { setStdin(event.target.value); setOutputType('hidden') }} rows={3} />
+            <button type="button" className="btn-hint" disabled={busy}
+              onClick={() => { setStdin(sampleInput); setOutputType('hidden') }}>填入样例输入</button>
+            <p>运行只使用这里的输入；提交会由后端检查全部正式测试。</p>
+          </div>}
 
           <div className={`output-box ${outputType}`} role="status">
             {output}

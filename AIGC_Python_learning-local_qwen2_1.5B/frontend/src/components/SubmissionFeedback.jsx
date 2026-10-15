@@ -21,11 +21,11 @@ function SubmissionFeedback({ result, visibleHintCount, onRevealHint, hintBusy =
       {judge.cases.map(testCase => (
         <div className="judge-case" key={testCase.case_id}>
           <strong>测试 {testCase.case_id} · {testCase.passed ? '通过' : '未通过'}</strong>
-          <div className="judge-output-grid">
+          {testCase.visibility === 'hidden' ? <p>隐藏测试仅展示通过状态。</p> : <div className="judge-output-grid">
             <div><span>预期输出</span><pre>{testCase.expected_output || '（无输出）'}</pre></div>
             <div><span>实际输出</span><pre>{testCase.output_available === false ? '输出未采集（执行已终止）' : testCase.actual_output || '（无输出）'}</pre></div>
-          </div>
-          {testCase.errors.map((error, index) => (
+          </div>}
+          {testCase.visibility !== 'hidden' && testCase.errors.map((error, index) => (
             <p className="judge-error" key={index}>
               {error.type}{error.line ? ` · 第 ${error.line} 行` : ''}：{error.message}
             </p>
@@ -34,8 +34,8 @@ function SubmissionFeedback({ result, visibleHintCount, onRevealHint, hintBusy =
       ))}
       {judge.passed ? <p className="analysis-status">全部测试用例通过，本次未调用 AI。</p> : content ? (
         <div className="ai-feedback">
-          <h4>AI 学习提示</h4>
-          <p className="analysis-status">先尝试自己修改；需要帮助时，逐级查看提示。AI 分析是基于本次测试的推测。</p>
+          <h4>{analysis.source === 'fixed' ? '本关基础提示' : 'AI 学习提示'}</h4>
+          <p className="analysis-status">先尝试自己修改；需要帮助时，逐级查看提示。{analysis.source !== 'fixed' && 'AI 分析是基于本次测试的推测。'}</p>
           {analysis.message && <p className="analysis-status">{analysis.message}</p>}
           <div className="progressive-hints">
             {hintLabels.slice(0, visibleHintCount).map((label, index) => (

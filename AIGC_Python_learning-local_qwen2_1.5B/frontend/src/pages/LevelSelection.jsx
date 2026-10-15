@@ -1,15 +1,9 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import yunduo from './images/yunduo.png'
 import xingxing from './images/xingxing.png'
 import chathaita from './images/chathaita.png'
-
-const levels = [
-  { id: 1, name: '初识小海獭', icon: '🦦', color: '#27c93f', status: 'completed', x: 55, y: 100 },
-  { id: 2, name: 'for循环', icon: '🔄', color: '#4A90E2', status: 'current', x: 200, y: 260 },
-  { id: 3, name: '???', icon: '🔒', color: '#999', status: 'locked', x: 55, y: 420 },
-  { id: 4, name: '???', icon: '🔒', color: '#999', status: 'locked', x: 200, y: 580 },
-]
+import { getLevels } from '../components/codeApi.mjs'
 
 function generatePath(from, to, index) {
   const startX = from.x + 45
@@ -23,14 +17,34 @@ function generatePath(from, to, index) {
 
 function LevelSelection() {
   const navigate = useNavigate()
+  const [levels, setLevels] = useState([])
+  const [error, setError] = useState('')
+  useEffect(() => {
+    let active = true
+    getLevels(localStorage.getItem('access_token')).then(data => {
+      if (!active) return
+      setLevels(data.items.map((level, index) => ({ ...level,
+        x: index % 2 ? 200 : 55, y: 100 + index * 160,
+        color: level.status === 'completed' ? '#27c93f' : '#4A90E2',
+        icon: !level.published ? '🔒' : index === 0 ? '🦦' : '👋',
+      })))
+    }).catch(error => {
+      if (!active) return
+      setError(error.message)
+      if (error.status === 401) navigate('/auth')
+    })
+    return () => { active = false }
+  }, [navigate])
 
   const handleCircleClick = (level) => {
-    if (level.status === 'locked') return
+    if (level.status === 'locked' || !level.published) return
     navigate(`/app/levels/${level.id}`)
   }
 
   return (
     <div className="level-page">
+      {error && <p role="alert">{error}</p>}
+      {!error && levels.length === 0 && <p role="status">正在读取学习进度...</p>}
       <img src={xingxing} alt="星星" className="level-decoration"
         style={{ top: '2%', left: '3%', width: '50px', opacity: 0.6 }} />
       <img src={yunduo} alt="云朵" className="level-decoration"
@@ -63,6 +77,9 @@ function LevelSelection() {
         {levels.map((level) => (
           <div
             key={level.id}
+            role="button" tabIndex={level.published && level.status !== 'locked' ? 0 : -1}
+            aria-disabled={!level.published || level.status === 'locked'}
+            onKeyDown={event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); handleCircleClick(level) } }}
             className={`level-circle ${level.status}`}
             style={{ left: `${level.x}px`, top: `${level.y}px` }}
             onClick={() => handleCircleClick(level)}
@@ -72,7 +89,7 @@ function LevelSelection() {
             <span className="level-icon">{level.icon}</span>
             <span className="level-name">{level.name}</span>
             <span className="level-label">
-              {level.status === 'completed' ? '已通关' : level.status === 'current' ? '当前关卡' : '未解锁'}
+              {!level.published ? (level.status === 'current' ? '已解锁 · 待开放' : '待开放') : level.status === 'completed' ? '已通关' : level.status === 'current' ? '当前关卡' : '未解锁'}
             </span>
           </div>
         ))}
