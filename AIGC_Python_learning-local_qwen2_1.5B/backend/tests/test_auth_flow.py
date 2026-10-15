@@ -90,6 +90,101 @@ def test_unverified_password_reset_is_disabled(client):
     assert response.status_code == 410
 
 
+def test_account_update_password_and_permanent_deletion(client):
+    from app.core.database import SessionLocal
+    from app.models.class_selection import ClassSelection
+    from app.models.learning_review import LearningReview
+    from app.models.learning_submission import LearningSubmission
+    from app.models.settings import UserSettings, NotificationPreferences, LanguageSettings
+    from app.models.user import AIChatRecord, User
+
+    user_id, token = register_and_login(client, "account_owner", "13800000008")
+    _, other_token = register_and_login(client, "account_other", "13800000009")
+    headers = auth(token)
+    assert client.patch("/api/v1/auth/me", headers=headers, json={
+        "username": "account_owner_new", "phone": "13800000018", "current_password": "wrong",
+    }).status_code == 403
+    updated = client.patch("/api/v1/auth/me", headers=headers, json={
+        "username": "account_owner_new", "phone": "13800000018", "current_password": "TestPass123!",
+    })
+    assert updated.status_code == 200
+    token = updated.json()["data"]["access_token"]
+    headers = auth(token)
+    assert client.get("/api/v1/auth/me", headers=headers).json()["data"]["phone"] == "13800000018"
+    assert client.get("/api/v1/auth/me", headers=auth(other_token)).json()["data"]["username"] == "account_other"
+
+    changed = client.post("/api/v1/auth/change-password", headers=headers, json={
+        "current_password": "TestPass123!", "new_password": "NewPass123!",
+    })
+    assert changed.status_code == 200
+    assert client.get("/api/v1/auth/me", headers=headers).status_code == 401
+    assert client.post("/api/v1/auth/login", json={
+        "username": "account_owner_new", "password": "TestPass123!",
+    }).status_code == 401
+    token = client.post("/api/v1/auth/login", json={
+        "username": "account_owner_new", "password": "NewPass123!",
+    }).json()["data"]["access_token"]
+    headers = auth(token)
+
+    db = SessionLocal()
+    try:
+        db.add(AIChatRecord(user_id=user_id, conversation_id=1, session_id="remove-me",
+                            question="question", question_type="text", answer="answer"))
+        db.add(ClassSelection(user_id=user_id, class_name="变量巫师"))
+        settings = UserSettings(user_id=user_id)
+        db.add(settings)
+        db.flush()
+        db.add(NotificationPreferences(user_settings_id=settings.id))
+        db.add(LanguageSettings(user_settings_id=settings.id))
+        settings_id = settings.id
+        wrong = LearningSubmission(user_id=user_id, problem_id="level1", problem_title="t",
+                                   problem_description="d", code="bad", judge_json={}, passed=False)
+        db.add(wrong)
+        db.flush()
+        passed = LearningSubmission(user_id=user_id, problem_id="level1", problem_title="t",
+                                    problem_description="d", code="good", judge_json={}, passed=True)
+        db.add(passed)
+        db.flush()
+        db.add(LearningReview(user_id=user_id, submission_id=passed.id, source_submission_id=wrong.id))
+        db.commit()
+    finally:
+        db.close()
+
+    assert client.get("/api/v1/code/progress", headers=headers).json()["data"]["passed_problem_ids"] == ["level1"]
+    assert client.get("/api/v1/code/progress", headers=auth(other_token)).json()["data"]["passed_problem_ids"] == []
+
+    assert client.request("DELETE", "/api/v1/auth/me", headers=headers,
+                          json={"current_password": "wrong"}).status_code == 403
+    assert client.request("DELETE", "/api/v1/auth/me", headers=headers,
+                          json={"current_password": "NewPass123!"}).status_code == 200
+    assert client.get("/api/v1/auth/me", headers=headers).status_code == 401
+    db = SessionLocal()
+    try:
+        for model in (User, AIChatRecord, ClassSelection, UserSettings, NotificationPreferences,
+                      LanguageSettings, LearningSubmission, LearningReview):
+            key = User.id if model is User else model.user_id if hasattr(model, "user_id") else None
+            if key is not None:
+                assert db.query(model).filter(key == user_id).count() == 0
+        assert db.query(NotificationPreferences).filter_by(user_settings_id=settings_id).count() == 0
+        assert db.query(LanguageSettings).filter_by(user_settings_id=settings_id).count() == 0
+    finally:
+        db.close()
+
+    from app.api.ai import save_chat_if_active
+    db = SessionLocal()
+    try:
+        assert not save_chat_if_active(db, user_id, AIChatRecord(
+            user_id=user_id, conversation_id=1, session_id="late-chat",
+            question="late", question_type="text", answer="late answer",
+        ))
+        assert db.query(AIChatRecord).filter_by(session_id="late-chat").count() == 0
+    finally:
+        db.close()
+    _, new_token = register_and_login(client, "account_owner_new", "13800000018")
+    assert client.get("/api/v1/auth/me", headers=headers).status_code == 401
+    assert client.get("/api/v1/ai/history", headers=auth(new_token)).json()["total"] == 0
+
+
 def test_settings_can_only_be_read_or_changed_by_owner(client):
     owner_id, owner_token = register_and_login(client, "settings_owner", "13800000003")
     _, other_token = register_and_login(client, "settings_other", "13800000004")
@@ -102,6 +197,29 @@ def test_settings_can_only_be_read_or_changed_by_owner(client):
     assert client.get(f"/api/v1/settings/{owner_id}", headers=auth(other_token)).status_code == 403
     assert client.put(f"/api/v1/settings/{owner_id}", headers=auth(other_token),
                       json={"eye_protection": False}).status_code == 403
+
+
+def test_delayed_judge_cannot_write_after_account_delete(client, monkeypatch):
+    from app.api import coding
+    from app.core.database import SessionLocal
+    from app.models.learning_submission import LearningSubmission
+    from app.models.user import User
+
+    user_id, token = register_and_login(client, "delayed_student", "13800000010")
+
+    async def delete_before_judge_returns(fn, problem, code):
+        with SessionLocal() as db:
+            db.query(User).filter(User.id == user_id).delete()
+            db.commit()
+        return fn(problem, code)
+
+    monkeypatch.setattr(coding, "run_in_threadpool", delete_before_judge_returns)
+    response = client.post("/api/v1/code/submit", headers=auth(token), json={
+        "problem_id": "level1", "code": "print('Hello, World!')",
+    })
+    assert response.status_code == 401
+    with SessionLocal() as db:
+        assert db.query(LearningSubmission).filter_by(user_id=user_id).count() == 0
 
 def test_ollama_chat_non_stream_and_stream_save_history(client, monkeypatch):
     import json
@@ -148,7 +266,9 @@ def test_ollama_chat_non_stream_and_stream_save_history(client, monkeypatch):
     assert '"content": "for."' in streamed.text
     assert requests[0]["stream"] is False
     assert requests[1]["stream"] is True
-    assert requests[1]["messages"][0]["content"] == "Explain Python lists"
+    assert requests[1]["messages"][0]["role"] == "system"
+    assert "简短" in requests[1]["messages"][0]["content"]
+    assert requests[1]["messages"][1]["content"] == "Explain Python lists"
     history = client.get(f"/api/v1/ai/history?session_id={session_id}", headers=auth(token)).json()
     assert history["total"] == 2
     assert {item["answer"] for item in history["data"]} == {"A list stores values.", "Use for."}

@@ -1,4 +1,6 @@
 import os
+import hashlib
+import hmac
 from datetime import datetime, timedelta, timezone
 from typing import Optional
 
@@ -33,6 +35,10 @@ def get_password_hash(password: str) -> str:
     return ph.hash(password)
 
 
+def auth_fingerprint(user: User) -> str:
+    return hmac.new(SECRET_KEY.encode(), user.password.encode(), hashlib.sha256).hexdigest()[:16]
+
+
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
     to_encode = data.copy()
     expire = datetime.now(timezone.utc) + (
@@ -59,12 +65,14 @@ def get_current_user(
         payload = jwt.decode(credentials.credentials, SECRET_KEY, algorithms=[ALGORITHM])
         if payload.get("type") != "access":
             raise JWTError("Not an access token")
-        username = payload.get("sub")
-        if not username:
+        user_id = payload.get("sub")
+        if not user_id or not str(user_id).isdigit():
             raise JWTError("Missing subject")
     except JWTError:
         raise HTTPException(status_code=401, detail="登录已失效") from None
-    user = db.query(User).filter(User.username == username).first()
-    if user is None or user.status != "enabled":
+    user = db.query(User).filter(User.id == int(user_id)).first()
+    if user is None or user.status != "enabled" or not hmac.compare_digest(
+        str(payload.get("v", "")), auth_fingerprint(user)
+    ):
         raise HTTPException(status_code=401, detail="用户不存在或已禁用")
     return user

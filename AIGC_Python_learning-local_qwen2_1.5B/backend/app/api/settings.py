@@ -9,6 +9,12 @@ from pydantic import BaseModel
 router = APIRouter(dependencies=[Depends(get_current_user)])
 
 
+def lock_settings_owner(db: Session, user_id: int):
+    if db.query(User).filter(User.id == user_id, User.status == "enabled").with_for_update().first() is None:
+        db.rollback()
+        raise HTTPException(status_code=401, detail="账号已注销")
+
+
 def require_settings_owner(user_id: int, current_user: User = Depends(get_current_user)):
     if user_id != current_user.id:
         raise HTTPException(status_code=403, detail="只能访问自己的设置")
@@ -102,6 +108,7 @@ async def get_user_settings(user_id: int, db: Session = Depends(get_db)):
 async def create_settings(settings: UserSettingsCreate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     if settings.user_id != current_user.id:
         raise HTTPException(status_code=403, detail="只能创建自己的设置")
+    lock_settings_owner(db, settings.user_id)
     # 检查是否已存在
     existing = db.query(UserSettings).filter(UserSettings.user_id == settings.user_id).first()
     if existing:
@@ -118,8 +125,7 @@ async def create_settings(settings: UserSettingsCreate, db: Session = Depends(ge
         volume=settings.volume
     )
     db.add(new_settings)
-    db.commit()
-    db.refresh(new_settings)
+    db.flush()
     
     # 创建默认通知偏好
     new_notifications = NotificationPreferences(user_settings_id=new_settings.id)
@@ -130,6 +136,7 @@ async def create_settings(settings: UserSettingsCreate, db: Session = Depends(ge
     db.add(new_language)
     
     db.commit()
+    db.refresh(new_settings)
     
     return SettingsResponse(
         code=201,
@@ -145,6 +152,7 @@ async def create_settings(settings: UserSettingsCreate, db: Session = Depends(ge
 # 更新用户设置
 @router.put("/settings/{user_id}", dependencies=[Depends(require_settings_owner)])
 async def update_settings(user_id: int, settings: UserSettingsUpdate, db: Session = Depends(get_db)):
+    lock_settings_owner(db, user_id)
     db_settings = db.query(UserSettings).filter(UserSettings.user_id == user_id).first()
     if not db_settings:
         return SettingsResponse(
@@ -201,6 +209,7 @@ async def get_notifications(user_id: int, db: Session = Depends(get_db)):
 # 更新用户通知偏好
 @router.put("/settings/{user_id}/notifications", dependencies=[Depends(require_settings_owner)])
 async def update_notifications(user_id: int, preferences: NotificationPreferencesUpdate, db: Session = Depends(get_db)):
+    lock_settings_owner(db, user_id)
     settings = db.query(UserSettings).filter(UserSettings.user_id == user_id).first()
     if not settings:
         return SettingsResponse(
@@ -264,6 +273,7 @@ async def get_language(user_id: int, db: Session = Depends(get_db)):
 # 更新用户语言设置
 @router.put("/settings/{user_id}/language", dependencies=[Depends(require_settings_owner)])
 async def update_language(user_id: int, language: LanguageSettingsUpdate, db: Session = Depends(get_db)):
+    lock_settings_owner(db, user_id)
     settings = db.query(UserSettings).filter(UserSettings.user_id == user_id).first()
     if not settings:
         return SettingsResponse(

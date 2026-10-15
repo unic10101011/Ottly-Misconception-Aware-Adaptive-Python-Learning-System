@@ -4,7 +4,7 @@ from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
 from app.core.database import get_db
 from app.models.user import AIChatRecord
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 import json
 import asyncio
 import uuid
@@ -20,15 +20,21 @@ router = APIRouter()
 # ==================== 【修改】本地大模型配置（替换原来的蓝心大模型配置） ====================
 LOCAL_LLM_URL = os.getenv("LOCAL_LLM_URL")
 OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "qwen2.5-coder:3b-instruct")
-MAX_TOKENS = 300  # 可根据需要调整
-TEMPERATURE = 0.7
+MAX_TOKENS = 450
+TEMPERATURE = 0.3
+CHAT_SYSTEM_PROMPT = (
+    "你是面向 Python 初学者的中文编程辅导助手。先直接回答学生当前问题，"
+    "用简短段落解释原因和下一步。只有确实需要时才给一个简短代码示例，"
+    "代码放在标注 python 的 Markdown 代码块中。不要无关地列举大量例子；"
+    "未实际运行的代码不要声称已验证输出。学生问题不明确时先问一个澄清问题。"
+)
 
 
 # ====================================================================
 
 # 请求和响应模型（保持不变）
 class AIChatRequest(BaseModel):
-    question: str
+    question: str = Field(max_length=1000)
     question_type: str = "text"
     stream: bool = True
     session_id: Optional[str] = None
@@ -91,10 +97,21 @@ def sse_event(content: str, session_id: str) -> str:
     ) + "\n\n"
 
 
+def save_chat_if_active(db: Session, user_id: int, record: AIChatRecord) -> bool:
+    # This lock serializes a delayed model response with account deletion.
+    user = db.query(User).filter(User.id == user_id, User.status == "enabled").with_for_update().first()
+    if user is None:
+        db.rollback()
+        return False
+    db.add(record)
+    db.commit()
+    return True
+
+
 async def stream_chat_response(chat_data: AIChatRequest, db: Session, user_id: int):
     session_id = chat_data.session_id or str(uuid.uuid4())
     history_messages = await get_session_history(db, session_id, user_id)
-    messages = history_messages + [{"role": "user", "content": chat_data.question}]
+    messages = [{"role": "system", "content": CHAT_SYSTEM_PROMPT}] + history_messages[-8:] + [{"role": "user", "content": chat_data.question}]
     payload = ollama_payload(messages, stream=True)
 
     async def generate():
@@ -120,7 +137,7 @@ async def stream_chat_response(chat_data: AIChatRequest, db: Session, user_id: i
             yield sse_event("[END]", session_id)
             return
 
-        db.add(AIChatRecord(
+        saved = save_chat_if_active(db, user_id, AIChatRecord(
             user_id=user_id,
             conversation_id=1,
             session_id=session_id,
@@ -129,7 +146,8 @@ async def stream_chat_response(chat_data: AIChatRequest, db: Session, user_id: i
             answer=full_content,
             is_stream=True,
         ))
-        db.commit()
+        if not saved:
+            yield sse_event("账号已注销，本次对话未保存。", session_id)
         yield sse_event("[END]", session_id)
 
     return StreamingResponse(generate(), media_type="text/event-stream")
@@ -138,7 +156,7 @@ async def stream_chat_response(chat_data: AIChatRequest, db: Session, user_id: i
 async def normal_chat_response(chat_data: AIChatRequest, db: Session, user_id: int):
     session_id = chat_data.session_id or str(uuid.uuid4())
     history_messages = await get_session_history(db, session_id, user_id)
-    messages = history_messages + [{"role": "user", "content": chat_data.question}]
+    messages = [{"role": "system", "content": CHAT_SYSTEM_PROMPT}] + history_messages[-8:] + [{"role": "user", "content": chat_data.question}]
     payload = ollama_payload(messages, stream=False)
 
     try:
@@ -151,7 +169,7 @@ async def normal_chat_response(chat_data: AIChatRequest, db: Session, user_id: i
     except (httpx.HTTPError, ValueError):
         return AIChatResponse(code=400, msg="模型调用失败，请检查 Ollama 服务和模型。", data={})
 
-    db.add(AIChatRecord(
+    saved = save_chat_if_active(db, user_id, AIChatRecord(
         user_id=user_id,
         conversation_id=1,
         session_id=session_id,
@@ -160,7 +178,8 @@ async def normal_chat_response(chat_data: AIChatRequest, db: Session, user_id: i
         answer=full_answer,
         is_stream=False,
     ))
-    db.commit()
+    if not saved:
+        raise HTTPException(status_code=401, detail="账号已注销，本次对话未保存")
     return AIChatResponse(
         code=200,
         msg="响应成功",
@@ -183,7 +202,7 @@ async def chat_with_ai(
     """AI对话接口（自动选择流式或非流式）"""
     if not LOCAL_LLM_URL:
         raise HTTPException(status_code=503, detail="AI 模型地址尚未配置")
-    if not chat_data.question:
+    if not chat_data.question.strip():
         return AIChatResponse(
             code=400,
             msg="问题不能为空",

@@ -10,7 +10,7 @@ function Level1() {
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+    <div className="lesson-page">
       <button
         onClick={() => navigate('/app/levels')}
         style={{
@@ -28,7 +28,7 @@ function Level1() {
         ← 返回关卡选择
       </button>
       <CodeEditor
-        initialCode={"print('Hello, World!')"}
+        initialCode=""
         problemId="level1"
         onSuccess={handleSuccess}
         title="初识小海獭"

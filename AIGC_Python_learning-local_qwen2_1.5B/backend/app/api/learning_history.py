@@ -17,6 +17,15 @@ from app.services.submission import PROBLEMS
 router = APIRouter()
 
 
+@router.get("/code/progress")
+def my_level_progress(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    passed_ids = db.query(LearningSubmission.problem_id).filter(
+        LearningSubmission.user_id == current_user.id,
+        LearningSubmission.passed.is_(True),
+    ).distinct().all()
+    return {"code": 200, "data": {"passed_problem_ids": [row.problem_id for row in passed_ids]}}
+
+
 def utc_iso(value):
     if value.tzinfo is None:
         value = value.replace(tzinfo=timezone.utc)

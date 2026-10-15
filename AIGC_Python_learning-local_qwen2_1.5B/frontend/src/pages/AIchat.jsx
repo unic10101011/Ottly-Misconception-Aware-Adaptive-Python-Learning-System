@@ -1,9 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import ChatContent from '../components/ChatContent.jsx';
 import chathaita from './images/chathaita.png';
 import yonghu from './images/yonghu.png';
 import chatbeijing from './images/chatbeijing.png'; // 背景图
 
 const AIchat = () => {
+  const navigate = useNavigate();
   const [currentSessionId, setCurrentSessionId] = useState(null);
   const [sessions, setSessions] = useState([]);
   const [messages, setMessages] = useState([
@@ -13,10 +16,12 @@ const AIchat = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [typing, setTyping] = useState(false);
+  const [sending, setSending] = useState(false);
   const [question, setQuestion] = useState("");
   const [activeTab, setActiveTab] = useState("chat");
   const [selectedSessionFilter, setSelectedSessionFilter] = useState("");
   const chatBodyRef = useRef(null);
+  const sendingRef = useRef(false);
   const pageSize = 10;
 
   // ====================== 后端接口 完全原封不动 ======================
@@ -50,7 +55,7 @@ const AIchat = () => {
       const data = await response.json();
       if (data.code === 200) {
         setHistory(data.data);
-        setTotalPages(Math.ceil(data.total / pageSize));
+        setTotalPages(Math.max(1, Math.ceil(data.total / pageSize)));
       }
     } catch (error) {
       console.error("加载历史记录失败:", error);
@@ -99,7 +104,9 @@ const AIchat = () => {
 
   const sendMessage = async (e) => {
     e.preventDefault();
-    if (!question.trim()) return;
+    if (sendingRef.current || !question.trim()) return;
+    sendingRef.current = true;
+    setSending(true);
 
     const newMessages = [...messages, { content: question, isUser: true }, { content: "", isUser: false }];
     setMessages(newMessages);
@@ -158,6 +165,9 @@ const AIchat = () => {
       console.error("错误:", error);
       setTyping(false);
       setMessages((prev) => [...prev.slice(0, -1), { content: "抱歉，AI服务暂时不可用，请稍后再试。", isUser: false }]);
+    } finally {
+      sendingRef.current = false;
+      setSending(false);
     }
   };
 
@@ -197,9 +207,10 @@ const AIchat = () => {
   // ====================== 渲染界面 ======================
   return (
     // 根容器改为全宽全高，无左侧边栏
-    <div style={{ width: "100%", height: "100%", margin: 0, overflow: "hidden", padding: 0 }}>
+    <div className="ai-chat-page">
       {/* 右侧区域（现在是整个屏幕） */}
-      <div style={{ display: "flex", flexDirection: "column", width: "100%", height: "100%", overflow: "hidden" }}>
+      <div className="ai-chat-layout">
+        <button type="button" className="chat-back-button" onClick={() => navigate('/app/levels')}>← 返回关卡选择</button>
         <ul className="nav nav-tabs" style={{ margin: 0, padding: 0, borderBottom: 0 }}>
           <li className="nav-item">
             <a
@@ -225,7 +236,7 @@ const AIchat = () => {
 
         {/* 对话页面：背景铺满无留白 */}
         {activeTab === "chat" && (
-          <div style={{ display: "flex", flexDirection: "column", flex: 1, overflow: "hidden" }}>
+          <div className="ai-chat-panel">
             <div
               ref={chatBodyRef}
               style={{
@@ -263,6 +274,7 @@ const AIchat = () => {
                     />
                   )}
                   <div
+                    className="chat-message-bubble"
                     style={{
                       maxWidth: "70%",
                       padding: "12px 16px",
@@ -274,7 +286,7 @@ const AIchat = () => {
                       whiteSpace: "pre-wrap",
                     }}
                   >
-                    {msg.content}
+                    {msg.isUser ? msg.content : <ChatContent content={msg.content} />}
                   </div>
                   {msg.isUser && (
                     <img
@@ -329,10 +341,12 @@ const AIchat = () => {
                   value={question}
                   onChange={(e) => setQuestion(e.target.value)}
                   placeholder="请输入消息..."
+                  maxLength={1000}
                   style={{ flex: 1, borderRadius: "24px", padding: "10px 16px", border: "1px solid #ddd", outline: "none" }}
                 />
                 <button
                   type="submit"
+                  disabled={sending}
                   style={{ borderRadius: "24px", padding: "0 20px", background: "#409EFF", color: "#fff", border: "none" }}
                 >
                   发送
@@ -366,7 +380,7 @@ const AIchat = () => {
               {history.map((record) => (
                 <div key={record.record_id} className="p-3 bg-white bg-opacity-90 rounded border shadow-sm mb-3">
                   <div className="fw-medium mb-2">{record.question}</div>
-                  <div className="text-muted mb-2">{record.answer}</div>
+                  <div className="text-muted mb-2 chat-history-answer"><ChatContent content={record.answer} /></div>
                   <div className="d-flex justify-content-between align-items-center small text-muted pt-2 border-top">
                     <span>{formatDateTime(record.response_time)}</span>
                     <button className="btn btn-danger btn-sm" onClick={() => deleteHistoryRecord(record.record_id)}>删除</button>

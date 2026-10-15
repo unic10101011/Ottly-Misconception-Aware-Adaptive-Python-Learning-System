@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
@@ -35,7 +35,11 @@ async def select_class(
 ):
     if class_data.class_name not in ["变量巫师", "逻辑骑士", "循环射手"]:
         return ClassSelectionResponse(code=400, msg="无效的职业选择", data={})
-    selection = ClassSelection(user_id=current_user.id, class_name=class_data.class_name)
+    user_id = current_user.id
+    if db.query(User).filter(User.id == user_id, User.status == "enabled").with_for_update().first() is None:
+        db.rollback()
+        raise HTTPException(status_code=401, detail="账号已注销")
+    selection = ClassSelection(user_id=user_id, class_name=class_data.class_name)
     db.add(selection)
     db.commit()
     db.refresh(selection)

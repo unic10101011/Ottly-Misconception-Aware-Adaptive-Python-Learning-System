@@ -61,19 +61,34 @@ async def submit_code(request: SubmissionRequest, current_user: User = Depends(g
     problem = PROBLEMS.get(request.problem_id)
     if problem is None:
         raise HTTPException(status_code=404, detail="题目不存在")
+    user_id = current_user.id
     if review_source_id is not None:
         source = db.query(LearningSubmission).filter(
             LearningSubmission.id == review_source_id,
-            LearningSubmission.user_id == current_user.id,
+            LearningSubmission.user_id == user_id,
             LearningSubmission.problem_id == request.problem_id,
             LearningSubmission.passed.is_(False),
         ).first()
         if source is None:
             raise HTTPException(status_code=404, detail="复习来源错题不存在")
     judge = await run_in_threadpool(judge_submission, problem, request.code)
+    owner = db.query(User).filter(User.id == user_id, User.status == "enabled").with_for_update().first()
+    if owner is None:
+        db.rollback()
+        raise HTTPException(status_code=401, detail="账号已注销，本次提交未保存")
+    if review_source_id is not None:
+        source = db.query(LearningSubmission).filter(
+            LearningSubmission.id == review_source_id,
+            LearningSubmission.user_id == user_id,
+            LearningSubmission.problem_id == request.problem_id,
+            LearningSubmission.passed.is_(False),
+        ).first()
+        if source is None:
+            db.rollback()
+            raise HTTPException(status_code=404, detail="复习来源错题不存在")
     first_error = next((error.type for case in judge.cases for error in case.errors), None)
     record = LearningSubmission(
-        user_id=current_user.id,
+        user_id=user_id,
         problem_id=problem.problem_id,
         problem_title=problem.title,
         problem_description=problem.description,
@@ -85,13 +100,25 @@ async def submit_code(request: SubmissionRequest, current_user: User = Depends(g
     db.add(record)
     db.flush()
     if review_source_id is not None:
-        db.add(LearningReview(user_id=current_user.id, submission_id=record.id,
+        db.add(LearningReview(user_id=user_id, submission_id=record.id,
                               source_submission_id=review_source_id))
     db.commit()
     db.refresh(record)
+    submission_id = record.id
     analysis = await analyze_failure(problem, request.code, judge)
-    record.analysis_json = analysis.model_dump(mode="json")
+    owner = db.query(User).filter(User.id == user_id, User.status == "enabled").with_for_update().first()
+    if owner is None:
+        db.rollback()
+        raise HTTPException(status_code=401, detail="账号已注销，本次提交记录已删除")
+    saved_record = db.query(LearningSubmission).filter(
+        LearningSubmission.id == submission_id,
+        LearningSubmission.user_id == user_id,
+    ).with_for_update().first()
+    if saved_record is None:
+        db.rollback()
+        raise HTTPException(status_code=401, detail="账号已注销，本次提交记录已删除")
+    saved_record.analysis_json = analysis.model_dump(mode="json")
     db.commit()
     return SubmissionResponse(data=SubmissionData(
-        submission_id=record.id, problem_id=problem.problem_id, judge=judge, analysis=analysis
+        submission_id=submission_id, problem_id=problem.problem_id, judge=judge, analysis=analysis
     ))

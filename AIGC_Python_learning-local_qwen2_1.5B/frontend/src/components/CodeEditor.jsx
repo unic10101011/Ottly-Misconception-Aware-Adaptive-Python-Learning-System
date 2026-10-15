@@ -368,12 +368,14 @@ function CodeEditor({ initialCode, problemId, onSuccess, title, children }) {
             <textarea
               ref={textareaRef}
               className="code-textarea"
+              placeholder="在这里输入 Python 代码..."
               value={code}
               onChange={(e) => updateCode(e.target.value)}
               aria-label="Python 代码编辑器"
               readOnly={busy}
               aria-busy={busy}
               maxLength={6000}
+              wrap="off"
               onScroll={handleScroll}
               onKeyDown={handleKeyDown}
               spellCheck={false}
@@ -394,9 +396,10 @@ function CodeEditor({ initialCode, problemId, onSuccess, title, children }) {
               {running ? '运行中...' : '运行'}
             </button>
             <button className="btn-submit" onClick={submitCode} disabled={busy}>
-              {submitting ? '提交中...' : '提交'}
+              {submitting ? '提交中...' : '提交判题'}
             </button>
           </div>
+          <p className="code-action-note">“运行”只检查代码执行结果；“提交判题”会测试题目要求，失败后才记入错题本。</p>
           {submission && (
             <SubmissionFeedback
               result={submission}
@@ -405,6 +408,11 @@ function CodeEditor({ initialCode, problemId, onSuccess, title, children }) {
               hintBusy={hintBusy}
               hintError={hintError}
             />
+          )}
+          {submission && !submission.judge.passed && (
+            <button type="button" className="btn-hint" onClick={() => navigate('/app/history')}>
+              查看这道题的错题记录
+            </button>
           )}
         </div>
 
