@@ -5,6 +5,15 @@ import xingxing from './images/xingxing.png'
 import chathaita from './images/chathaita.png'
 import { getLevels } from '../components/codeApi.mjs'
 
+const ROUTE_START = 82
+const ROUTE_STEP = 150
+const ROUTE_X = [112, 288]
+
+function routeCurve(from, to) {
+  const middleY = (from.y + to.y) / 2
+  return `M ${from.x} ${from.y} C ${from.x} ${middleY}, ${to.x} ${middleY}, ${to.x} ${to.y}`
+}
+
 function LevelSelection() {
   const navigate = useNavigate()
   const [levels, setLevels] = useState([])
@@ -31,6 +40,12 @@ function LevelSelection() {
   const completedCount = levels.filter(level => level.published && level.status === 'completed').length
   const nextLevel = levels.find(level => level.published && level.status !== 'locked' && level.status !== 'completed')
   const progress = publishedCount ? Math.round(completedCount / publishedCount * 100) : 0
+  const routePoints = levels.map((level, index) => ({
+    ...level,
+    x: ROUTE_X[index % 2],
+    y: ROUTE_START + index * ROUTE_STEP,
+  }))
+  const routeHeight = Math.max(220, ROUTE_START * 2 + (levels.length - 1) * ROUTE_STEP)
 
   return (
     <div className="level-page">
@@ -59,28 +74,40 @@ function LevelSelection() {
           <div className="level-progress-track" role="progressbar" aria-label="已开放关卡完成进度" aria-valuenow={completedCount} aria-valuemin="0" aria-valuemax={publishedCount || 1}>
             <span style={{ width: progress + '%' }} />
           </div>
-          <ol className="level-map">
-            {levels.map((level, index) => {
+          <div className="level-path-container" style={{ height: routeHeight }}>
+            <svg viewBox={`0 0 400 ${routeHeight}`} preserveAspectRatio="none" aria-hidden="true">
+              {routePoints.slice(0, -1).map((level, index) => (
+                <path key={level.id} d={routeCurve(level, routePoints[index + 1])}
+                  className={'level-route-line ' + level.status} />
+              ))}
+            </svg>
+            <ol className="level-route-stops">
+            {routePoints.map((level, index) => {
               const disabled = !level.published || level.status === 'locked'
               const statusText = !level.published ? '待开放' : level.status === 'completed' ? '已通关' : level.status === 'current' ? '当前关卡' : level.status === 'available' ? '可以挑战' : '尚未解锁'
-              return <li key={level.id} className={'level-step ' + level.status + (disabled ? ' is-disabled' : '')}>
-                <button type="button" className="level-step-button" disabled={disabled} onClick={() => openLevel(level)}
+              return <li key={level.id} className="level-route-stop"
+                style={{ left: `${level.x / 4}%`, top: level.y }}>
+                <button type="button" className={'level-circle ' + level.status} disabled={disabled} onClick={() => openLevel(level)}
+                  aria-current={level.status === 'current' ? 'step' : undefined}
                   aria-label={'第 ' + (index + 1) + ' 关，' + level.name + '，' + statusText}>
-                  <span className="level-step-number">{String(index + 1).padStart(2, '0')}</span>
-                  <span className="level-step-copy"><strong>{level.name}</strong><small>{statusText}</small></span>
-                  <span className="level-step-arrow" aria-hidden="true">{disabled ? '·' : '→'}</span>
+                  {level.status === 'current' && <span className="current-arrow" aria-hidden="true">▲</span>}
+                  {level.status === 'completed' && <span className="check-mark" aria-hidden="true">✓</span>}
+                  <span className="level-icon" aria-hidden="true">{!level.published || level.status === 'locked' ? '🔒' : index === 0 ? '🦦' : '👋'}</span>
+                  <span className="level-name">{level.name}</span>
+                  <span className="level-label">{statusText}</span>
                 </button>
               </li>
             })}
-          </ol>
+            </ol>
+          </div>
         </section>
-        <aside className="level-guide">
-          <img src={chathaita} alt="小海獭" />
-          <div><span className="level-eyebrow">小海獭在线</span><h2>卡住了？一起想办法。</h2>
-            <p>遇到难题时，可以随时和我聊聊思路。</p></div>
-          <button type="button" onClick={() => navigate('/app/ai-chat')}>向小海獭提问 <span aria-hidden="true">→</span></button>
-        </aside>
       </div>}
+      <div className="level-otter-summon">
+        <button type="button" className="otter-help" onClick={() => navigate('/app/ai-chat')}>
+          <img src={chathaita} alt="" />
+          <span>有问题？<strong>召唤小海獭 →</strong></span>
+        </button>
+      </div>
       <div className="level-wave" aria-hidden="true" />
     </div>
   )

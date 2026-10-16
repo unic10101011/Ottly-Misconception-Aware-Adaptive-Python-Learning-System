@@ -488,12 +488,13 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, tit
           )}
         </div>
 
-        <div className="otter-footer">
-          <button type="button" className="otter-help" onClick={() => navigate('/app/ai-chat')}>
-            <img src={new URL('../pages/images/sea_otter.png', import.meta.url).href} alt="" />
-            <span>有问题？<strong>问问小海獭 →</strong></span>
-          </button>
-        </div>
+      </div>
+
+      <div className="otter-footer">
+        <button type="button" className="otter-help" onClick={() => navigate('/app/ai-chat')}>
+          <img src={new URL('../pages/images/sea_otter.png', import.meta.url).href} alt="" />
+          <span>有问题？<strong>问问小海獭 →</strong></span>
+        </button>
       </div>
 
       <div className={`result-modal-overlay ${modal.show ? 'show' : ''}`} onClick={closeModal}>

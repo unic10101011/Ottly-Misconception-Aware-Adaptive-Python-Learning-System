@@ -304,7 +304,7 @@ body.eye-protection {
 }
 
 /* ========== 关卡选择界面 ========== */
-.level-page { position: relative; min-height: calc(100dvh - 64px); overflow: hidden; padding: clamp(24px, 3vw, 42px); border-radius: 27px; background: radial-gradient(circle at 86% 11%, #d0effd, transparent 37%), linear-gradient(145deg, #e8f8fd, #dbeef8); }
+.level-page { position: relative; min-height: calc(100dvh - 64px); overflow: hidden; padding: clamp(24px, 3vw, 42px); padding-bottom: 110px; border-radius: 27px; background: radial-gradient(circle at 86% 11%, #d0effd, transparent 37%), linear-gradient(145deg, #e8f8fd, #dbeef8); }
 .level-intro, .level-content, .level-loading, .level-load-error { position: relative; z-index: 1; }
 .level-intro { display: flex; align-items: flex-end; justify-content: space-between; gap: 22px; margin-bottom: 30px; }
 .level-eyebrow { color: #286f98; font-size: 12px; font-weight: 800; letter-spacing: .1em; }
@@ -312,56 +312,45 @@ body.eye-protection {
 .level-intro p { margin: 0; color: #58788b; font-size: 14px; line-height: 1.7; }
 .level-continue { flex: none; max-width: 100%; min-height: 48px; padding: 11px 18px; border: 0; border-radius: 12px; background: #176caa; color: #fff; font-size: 14px; font-weight: 800; cursor: pointer; box-shadow: 0 8px 18px rgba(23, 108, 170, .2); transition: background-color .16s ease-out, transform .16s ease-out; }
 .level-continue:hover { background: #115884; }
-.level-continue:active, .level-guide button:active, .level-step-button:active:not(:disabled) { transform: scale(.96); }
-.level-content { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(235px, .8fr); align-items: start; gap: clamp(18px, 2.5vw, 32px); }
-.level-map-card { min-width: 0; padding: clamp(19px, 3vw, 30px); border: 1px solid #cae0eb; border-radius: 22px; background: rgba(255, 255, 255, .92); box-shadow: 0 16px 35px rgba(35, 98, 133, .08); }
+.level-continue:active { transform: scale(.96); }
+.level-content { position: relative; }
+.level-map-card { min-width: 0; width: 100%; }
 .level-map-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 10px; }
 .level-map-heading h2 { margin: 4px 0 0; color: #1a465e; font-size: 23px; font-weight: 800; }
 .level-progress-text { color: #416e87; font-size: 12px; font-weight: 700; white-space: nowrap; font-variant-numeric: tabular-nums; }
 .level-progress-track { height: 7px; margin: 17px 0 24px; overflow: hidden; border-radius: 999px; background: #e5f1f7; }
 .level-progress-track span { display: block; height: 100%; border-radius: inherit; background: #39a6d3; transition: width .25s ease-out; }
-.level-map { position: relative; display: grid; gap: 13px; margin: 0; padding: 0; list-style: none; }
-.level-map::before { content: ''; position: absolute; left: 31px; top: 35px; bottom: 35px; border-left: 3px dashed #9ed2e8; }
-.level-step { position: relative; }
-.level-step-button { position: relative; display: grid; grid-template-columns: 55px minmax(0, 1fr) 22px; align-items: center; gap: 13px; width: 100%; min-height: 83px; padding: 10px 16px 10px 6px; border: 1px solid #d6e9f1; border-radius: 17px; background: #fafdfe; color: #244b60; text-align: left; cursor: pointer; transition: border-color .16s ease-out, background-color .16s ease-out, box-shadow .16s ease-out, transform .16s ease-out; }
-.level-step-button:hover:not(:disabled) { border-color: #81bee0; background: #f1faff; box-shadow: 0 7px 16px rgba(35, 98, 133, .08); }
-.level-step-number { position: relative; z-index: 1; display: grid; place-items: center; width: 55px; height: 55px; border: 4px solid #fff; border-radius: 50%; background: #dcecf5; color: #54788b; font-size: 16px; font-weight: 800; box-shadow: 0 2px 8px rgba(40, 105, 138, .12); font-variant-numeric: tabular-nums; }
-.level-step.current .level-step-number { background: #2388bd; color: #fff; }
-.level-step.completed .level-step-number { background: #51a97e; color: #fff; }
-.level-step-copy { display: grid; gap: 5px; min-width: 0; }
-.level-step-copy strong { font-size: 16px; font-weight: 800; overflow-wrap: anywhere; }
-.level-step-copy small { color: #668195; font-size: 12px; font-weight: 600; }
-.level-step.current .level-step-button { border-color: #8bc7e4; background: #eaf8fe; }
-.level-step-arrow { color: #3188b7; font-size: 23px; line-height: 1; }
-.level-step.is-disabled .level-step-button { background: #f7f9fa; color: #70828c; cursor: not-allowed; }
-.level-step.is-disabled .level-step-number { background: #e7ecee; color: #78909c; }
-.level-step.is-disabled .level-step-arrow { color: #a4b4bc; }
-.level-guide { display: grid; justify-items: start; gap: 13px; padding: 24px; border: 1px solid #ecd7b3; border-radius: 23px; background: #fff6e7; box-shadow: 0 14px 27px rgba(133, 104, 60, .07); }
-.level-guide img { width: 145px; height: 145px; border-radius: 50%; object-fit: cover; }
-.level-guide h2 { margin: 6px 0 4px; color: #3b4c4c; font-size: 23px; font-weight: 800; line-height: 1.35; }
-.level-guide p { margin: 0; color: #6a7777; font-size: 13px; line-height: 1.75; }
-.level-guide button { min-height: 44px; padding: 8px 14px; border: 1px solid #b8d8e6; border-radius: 10px; background: #fff; color: #176c98; font-size: 13px; font-weight: 800; cursor: pointer; transition: background-color .16s ease-out, transform .16s ease-out; }
-.level-guide button:hover { background: #eaf8fe; }
+.level-path-container { position: relative; width: min(100%, 960px); margin: 0 auto; padding: 0; }
+.level-path-container svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.level-route-stops { position: absolute; inset: 0; margin: 0; padding: 0; list-style: none; }
+.level-route-line { fill: none; stroke: #afcbd7; stroke-width: 4; stroke-linecap: round; stroke-dasharray: 9 7; vector-effect: non-scaling-stroke; }
+.level-route-line.completed { stroke: #55b98a; stroke-dasharray: none; }
+.level-route-line.current, .level-route-line.available { stroke: #70b9db; stroke-dasharray: none; }
+.level-route-stop { position: absolute; z-index: 1; transform: translate(-50%, -50%); }
+.level-circle { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; width: 114px; height: 114px; padding: 9px; border: 4px solid #fff; border-radius: 50%; background: #e7edf1; color: #6e8694; text-align: center; cursor: pointer; box-shadow: 0 7px 18px rgba(34, 97, 130, .16); transition: transform .16s ease-out, box-shadow .16s ease-out; }
+.level-circle:hover:not(:disabled) { transform: scale(1.07); box-shadow: 0 10px 23px rgba(34, 97, 130, .22); }
+.level-circle:active:not(:disabled) { transform: scale(.96); }
+.level-circle.current { background: #278fc6; color: #fff; box-shadow: 0 0 0 5px rgba(69, 173, 222, .16), 0 9px 20px rgba(36, 136, 187, .25); }
+.level-circle.completed { background: #51ad7f; color: #fff; }
+.level-circle.available { background: #e6f5fc; color: #23678c; border-color: #b7e1f3; }
+.level-circle:disabled { cursor: not-allowed; }
+.level-icon { font-size: 28px; line-height: 1; }
+.level-name { max-width: 100%; font-size: 12px; font-weight: 800; line-height: 1.25; overflow-wrap: anywhere; }
+.level-label { font-size: 10px; font-weight: 600; line-height: 1.1; opacity: .9; }
+.level-circle.current .current-arrow { color: #278fc6; }
+.level-circle.completed .check-mark { color: #2d9867; }
+.level-otter-summon { position: fixed; right: clamp(14px, 2vw, 30px); bottom: max(14px, env(safe-area-inset-bottom)); z-index: 50; }
 .level-decoration { position: absolute; width: 54px; opacity: .48; pointer-events: none; }
 .level-star { top: 12px; left: 12px; }
 .level-cloud { top: 20px; right: 26px; width: 80px; }
 .level-wave { position: absolute; left: 0; right: 0; bottom: 0; height: 65px; background: #caebf9; clip-path: polygon(0 55%, 10% 66%, 22% 45%, 36% 62%, 51% 47%, 68% 61%, 82% 44%, 100% 57%, 100% 100%, 0 100%); opacity: .7; }
 .level-loading, .level-load-error { margin: 18px 0; padding: 14px 17px; border-radius: 12px; background: #fff; color: #536e7d; }
 .level-load-error { color: #9d4131; }
-@media (max-width: 850px) {
-  .level-content { grid-template-columns: 1fr; }
-  .level-guide { grid-template-columns: auto 1fr; align-items: center; }
-  .level-guide img { grid-row: span 2; width: 100px; height: 100px; }
-}
 @media (max-width: 600px) {
-  .level-page { min-height: calc(100dvh - 130px); padding: 22px 14px 65px; border-radius: 20px; }
+  .level-page { min-height: calc(100dvh - 130px); padding: 22px 14px 105px; border-radius: 20px; }
   .level-intro { display: grid; gap: 16px; margin-bottom: 18px; }
   .level-continue { width: 100%; }
-  .level-map-card { padding: 18px 14px; }
-  .level-guide { padding: 17px; gap: 8px 12px; }
-  .level-guide img { width: 77px; height: 77px; }
-  .level-guide h2 { font-size: 18px; }
-  .level-guide button { grid-column: 1 / -1; width: 100%; }
+  .level-otter-summon { right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); }
 }
 /* ========== 关卡详情页 ========== */
 .level-detail-page {
@@ -731,12 +720,8 @@ body.eye-protection {
 }
 
 /* 关卡辅助样式 */
-.level-icon { font-size: 28px; line-height: 1; }
-.level-name { font-size: 11px; font-weight: 600; margin-top: 2px; }
-.level-label { font-size: 9px; opacity: 0.8; }
 .check-mark { position: absolute; top: -4px; right: -4px; background: #fff; color: #27c93f; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; }
 .current-arrow { position: absolute; top: -16px; color: #4A90E2; font-size: 14px; animation: bounce 1s infinite; }
-@keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.06); } }
 @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
 @keyframes otterFloat { 0%, 100% { transform: translateY(-50%); } 50% { transform: translateY(calc(-50% - 8px)); } }
 /* 提交判题与渐进式提示 */
@@ -990,11 +975,11 @@ button:disabled { cursor: not-allowed; }
 }
 
 /* Coding workbench */
-.lesson-page { padding: 0; overflow: visible; }
+.lesson-page { padding: 0 0 110px; overflow: visible; }
 .lesson-back { align-self: flex-start; min-height: 40px; margin: 0 0 13px; padding: 7px 14px; border: 1px solid var(--ottly-line); border-radius: 10px; background: #fff; color: #326b89; font-size: 13px; font-weight: 700; cursor: pointer; }
 .lesson-back:hover { background: #eaf7fc; }
 .level-detail-page { display: block; padding: 16px; border-radius: 24px; background: #e4f5fb; }
-.level-detail-card { display: grid; grid-template-columns: minmax(275px, .82fr) minmax(0, 1.38fr); grid-template-rows: auto 1fr; grid-template-areas: 'problem code' 'otter code'; align-items: start; width: 100%; max-width: 1200px; margin: 0 auto; border: 1px solid #cce4ef; border-radius: 21px; background: #fff; box-shadow: 0 16px 35px rgba(35, 98, 133, .09); }
+.level-detail-card { display: grid; grid-template-columns: minmax(275px, .82fr) minmax(0, 1.38fr); grid-template-areas: 'problem code'; align-items: start; width: 100%; max-width: 1200px; margin: 0 auto; border: 1px solid #cce4ef; border-radius: 21px; background: #fff; box-shadow: 0 16px 35px rgba(35, 98, 133, .09); }
 .problem-section { grid-area: problem; min-width: 0; padding: clamp(23px, 2.6vw, 35px); background: linear-gradient(160deg, #e6f6fd, #d6eff9); color: #20485e; text-align: left; }
 .problem-section h2 { margin: 0 0 20px; color: #143e58; font-size: clamp(24px, 2.4vw, 31px); font-weight: 800; line-height: 1.3; text-wrap: balance; }
 .problem-section .steps-box { padding: 20px; border: 1px solid #bfdeeb; border-radius: 15px; background: rgba(255, 255, 255, .76); color: #21485d; }
@@ -1017,8 +1002,8 @@ button:disabled { cursor: not-allowed; }
 .btn-submit:hover:not(:disabled) { background: #115884; box-shadow: 0 8px 16px rgba(23, 108, 170, .2); transform: none; }
 .code-buttons button:active:not(:disabled) { transform: scale(.96); }
 .code-action-note { text-align: left; }
-.otter-footer { grid-area: otter; align-self: stretch; align-items: stretch; padding: 0 22px 24px; background: #d6eff9; }
-.otter-help { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 76px; padding: 8px 12px; border: 1px solid #a8d3e5; border-radius: 14px; background: #f8fdff; color: #255e7b; text-align: left; cursor: pointer; transition: background-color .16s ease-out, transform .16s ease-out; }
+.otter-footer { position: fixed; right: clamp(14px, 2vw, 30px); bottom: max(14px, env(safe-area-inset-bottom)); z-index: 50; display: block; width: auto; padding: 0; background: transparent; }
+.otter-help { display: flex; align-items: center; gap: 10px; width: auto; min-height: 68px; padding: 7px 13px 7px 8px; border: 1px solid #a8d3e5; border-radius: 18px; background: #f8fdff; color: #255e7b; text-align: left; cursor: pointer; box-shadow: 0 10px 28px rgba(32, 94, 127, .19); transition: background-color .16s ease-out, transform .16s ease-out; }
 .otter-help:hover { background: #fff; }
 .otter-help:active { transform: scale(.96); }
 .otter-help img { width: 56px; height: 56px; flex: none; border-radius: 50%; object-fit: cover; }
@@ -1030,8 +1015,7 @@ button:disabled { cursor: not-allowed; }
 .draft-status { margin: 10px 0; }
 @media (max-width: 1060px) {
   .level-detail-card { display: flex; flex-direction: column; }
-  .problem-section, .code-section, .otter-footer { width: 100%; }
-  .otter-footer { padding: 0 20px 22px; background: #fff; }
+  .problem-section, .code-section { width: 100%; }
 }
 @media (max-width: 600px) {
   .level-detail-page { padding: 8px; border-radius: 17px; }
@@ -1042,6 +1026,10 @@ button:disabled { cursor: not-allowed; }
   .code-editor-box { height: 240px; }
   .code-buttons { display: grid; grid-template-columns: 1fr 1fr; }
   .code-buttons button { min-width: 0; padding: 8px; }
+  .otter-footer { right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); }
+  .otter-help { width: 58px; height: 58px; min-height: 0; justify-content: center; padding: 5px; border-radius: 50%; }
+  .otter-help img { width: 46px; height: 46px; }
+  .otter-help span { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 }
 
 /* AI chat */
