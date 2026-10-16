@@ -26,7 +26,7 @@ function LevelSelection() {
       setLevels(data.items.map((level, index) => ({ ...level,
         x: index % 2 ? 200 : 55, y: 100 + index * 160,
         color: level.status === 'completed' ? '#27c93f' : '#4A90E2',
-        icon: !level.published ? '🔒' : index === 0 ? '🦦' : '👋',
+        icon: !level.published ? '🔒' : ['🦦', '👋', '🛒', '🐚', '🏅', '⛵', '🚩'][index] || '📘',
       })))
     }).catch(error => {
       if (!active) return
@@ -41,8 +41,10 @@ function LevelSelection() {
     navigate(`/app/levels/${level.id}`)
   }
 
+  const pathHeight = Math.max(700, 100 + levels.length * 160)
+
   return (
-    <div className="level-page">
+    <div className="level-page" style={{ minHeight: pathHeight + 40 }}>
       {error && <p role="alert">{error}</p>}
       {!error && levels.length === 0 && <p role="status">正在读取学习进度...</p>}
       <img src={xingxing} alt="星星" className="level-decoration"
@@ -58,7 +60,7 @@ function LevelSelection() {
       </div>
 
       {/* Level circles container - centered */}
-      <div className="level-path-container">
+      <div className="level-path-container" style={{ height: pathHeight }}>
         <svg>
           {levels.slice(0, -1).map((level, i) => (
             <path

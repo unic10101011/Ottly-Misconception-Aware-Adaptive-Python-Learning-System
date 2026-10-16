@@ -96,7 +96,7 @@ def test_six_step_flow_and_progress_survive_relogin(client):
     assert client.get(url, headers=renewed).json()['data']['completed'] is True
     levels = client.get('/api/v1/code/levels', headers=renewed).json()['data']['items']
     assert levels[1]['status'] == 'completed'
-    assert levels[2]['status'] == 'current' and levels[2]['published'] is False
+    assert levels[2]['status'] == 'current' and levels[2]['published'] is True
     history = client.get('/api/v1/code/submissions?problem_id=' + GREETING_ID, headers=renewed).json()['data']
     old = next(item for item in history['items'] if item['id'] == failed['submission_id'])
     assert old['hints_viewed_max'] == 3 and old['resolved_later'] is True

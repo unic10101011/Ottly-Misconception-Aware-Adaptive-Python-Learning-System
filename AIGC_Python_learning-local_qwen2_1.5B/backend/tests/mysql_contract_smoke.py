@@ -33,7 +33,7 @@ def main():
             return response.json()
         locked = client.get('/api/v1/code/problems/greeting-v1', headers=headers)
         assert locked.status_code == 403
-        offline = submit('level1', 'print(0)')
+        offline = submit('level2', 'print(0)')
         assert offline['data']['analysis']['status'] == 'unavailable'
         first = submit('level1', "print('Hello, World!')")
         wrong = submit('greeting-v1', 'print("Hello, Ottly!")')

@@ -118,8 +118,9 @@ def test_analysis_exception_does_not_lose_judgment(client, monkeypatch):
     monkeypatch.setattr(coding, 'analyze_failure', unavailable)
     headers = account(client)
     data = submit(client, headers, 'level1', 'print(0)').json()['data']
-    assert data['analysis']['status'] == 'unavailable'
-    assert data['analysis']['content'] is None
+    assert data['analysis']['status'] == 'ready'
+    assert data['analysis']['source'] == 'fixed'
+    assert data['analysis']['content']['knowledge_ids'] == ['K01']
     assert client.get('/api/v1/code/submissions', headers=headers).json()['data']['total'] == 1
 
 

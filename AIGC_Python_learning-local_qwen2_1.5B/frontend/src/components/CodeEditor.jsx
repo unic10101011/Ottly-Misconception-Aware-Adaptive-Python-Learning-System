@@ -4,7 +4,7 @@ import SubmissionFeedback from './SubmissionFeedback.jsx'
 import { requestCode, saveHintView } from './codeApi.mjs'
 import { readCodeDraft, saveCodeDraft } from './codeDraft.mjs'
 
-function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, title, children, acceptsInput = false, sampleInput = '' }) {
+function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, title, children, acceptsInput = false, persistentOutput = acceptsInput, sampleInput = '' }) {
   const navigate = useNavigate()
   const [code, setCode] = useState(() => readCodeDraft(userId, problemId)?.code ?? initialCode)
   const [stdin, setStdin] = useState(() => readCodeDraft(userId, problemId)?.stdin ?? sampleInput)
@@ -99,7 +99,7 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, tit
   const runCode = async () => {
     if (busyRef.current || hintBusyRef.current) return
     const showRunOutput = (text, type) => {
-      if (acceptsInput) {
+      if (persistentOutput) {
         setRunOutput({ text, type })
         setOutputType('hidden')
       } else {
@@ -431,7 +431,7 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, tit
             <p>运行只使用这里的输入；提交会由后端检查全部正式测试。</p>
           </div>}
 
-          {acceptsInput && <section className="lesson-output" aria-labelledby="lesson-output-title">
+          {persistentOutput && <section className="lesson-output" aria-labelledby="lesson-output-title">
             <h4 id="lesson-output-title">运行输出</h4>
             <div className={`output-box ${runOutput?.type || 'info'}`} role="status" aria-live="polite">
               {runOutput?.text || '点击“运行”后，这里会显示程序输出或错误信息。'}

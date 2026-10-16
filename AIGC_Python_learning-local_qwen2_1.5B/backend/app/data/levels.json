@@ -1,5 +1,10 @@
 [
   {"id":1,"problem_id":"level1","name":"初识小海獭"},
   {"id":2,"problem_id":"greeting-v1","name":"打招呼"},
-  {"id":3,"problem_id":null,"name":"贝壳小商店","prerequisite_problem_ids":["greeting-v1"]}
+  {"id":3,"problem_id":"shell-shop-v1","name":"贝壳小商店"},
+  {"id":4,"problem_id":"shell-groups-v1","name":"贝壳分组"},
+  {"id":5,"problem_id":"badge-v1","name":"领取徽章"},
+  {"id":6,"problem_id":"safe-sailing-v1","name":"安全出航"},
+  {"id":7,"problem_id":"coastal-markers-v1","name":"沿岸数路标"},
+  {"id":8,"problem_id":null,"name":"收集贝壳总数","prerequisite_problem_ids":["coastal-markers-v1"]}
 ]

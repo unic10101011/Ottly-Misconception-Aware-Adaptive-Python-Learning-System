@@ -1,0 +1,34 @@
+{
+  "schema_version":"1.0.0", "problem_id":"badge-v1", "version":1, "level_no":5,
+  "title":"领取徽章", "difficulty":2, "published":true,
+  "knowledge_ids":["K05"], "prerequisite_knowledge_ids":["K03"], "prerequisite_problem_ids":["shell-groups-v1"],
+  "story":"海滩运动会结束了，Ottly 担任颁发徽章的小裁判。每位选手只能领取一枚徽章：90 分及以上获得金徽章，60 到 89 分获得银徽章，低于 60 分则继续加油。请根据分数帮她作出一次正确的选择。",
+  "teaching":[
+    {"title":"比较得到真或假","text":"比较运算判断一个条件是否成立，结果是 True 或 False。注意大于等于包含边界值，而大于不包含。","example":"print(5 > 5)   # False\nprint(5 >= 5)  # True"},
+    {"title":"六种比较运算符","text":"== 表示相等，!= 表示不等，<、<=、>、>= 分别表示小于、小于等于、大于、大于等于。赋值的单个等号与比较的两个等号不同。","example":"points = 5\nprint(points == 5)  # True\nprint(points != 5)  # False"},
+    {"title":"if：条件成立才执行","text":"if 后写条件并以英文冒号结束，下一行缩进四个空格。缩进的语句只在条件为真时执行；不缩进的语句不属于该分支。","example":"age = 8\nif age >= 6:\n    print('可以参加')"},
+    {"title":"else：其余情况","text":"else 不带条件，以冒号结束，与 if 对齐。if 与 else 中只会选择一条分支。这里比较只是示例，本题的徽章规则以任务为准。","example":"age = 4\nif age >= 6:\n    print('可以参加')\nelse:\n    print('再等一等')"},
+    {"title":"elif：依次尝试多个条件","text":"当有三种或更多情况时，使用 if、elif、else。程序从上向下检查，遇到第一个真条件就执行对应分支，跳过后面的分支。","example":"temperature = 18\nif temperature >= 30:\n    print('热')\nelif temperature >= 10:\n    print('温和')\nelse:\n    print('冷')"},
+    {"title":"检查顺序和区间边界","text":"本题从高分区间向下判断。能走到第二个条件，已经说明第一个条件为假。不要用几个独立 if 让同一分数重复获奖。特别手算边界及其相邻分数，确保每个分数恰好输出一行。","example":"# 先判断较高门槛\n# 否则再判断较低门槛\n# 最后处理其余情况"}
+  ],
+  "description":"输入整数得分 score（0–100）。使用 if、elif、else，只输出一行：90–100 输出 GOLD；60–89 输出 SILVER；0–59 输出 TRY_AGAIN。英文单词全部大写，不附其他文字。",
+  "starter_code":"# 读取分数，再按三个区间输出对应徽章\n",
+  "examples":[{"stdin":"75\n","stdout":"SILVER\n"}],
+  "tests":[
+    {"case_id":"sample-1","stdin":"75\n","expected_output":"SILVER\n","visibility":"public"},
+    {"case_id":"hidden-1","stdin":"0\n","expected_output":"TRY_AGAIN\n","visibility":"hidden"},
+    {"case_id":"hidden-2","stdin":"59\n","expected_output":"TRY_AGAIN\n","visibility":"hidden"},
+    {"case_id":"hidden-3","stdin":"60\n","expected_output":"SILVER\n","visibility":"hidden"},
+    {"case_id":"hidden-4","stdin":"89\n","expected_output":"SILVER\n","visibility":"hidden"},
+    {"case_id":"hidden-5","stdin":"90\n","expected_output":"GOLD\n","visibility":"hidden"},
+    {"case_id":"hidden-6","stdin":"100\n","expected_output":"GOLD\n","visibility":"hidden"}
+  ],
+  "comparison":"exact", "time_limit_seconds":3, "output_limit_chars":8000,
+  "hints":{
+    "level1":"分数恰好等于门槛时，应该属于哪一档？",
+    "level2":"从上到下观察条件顺序，并检查包含边界的比较符号。",
+    "level3":"分别手算两个门槛及其相邻分数，确认每个分数只进入一个分支，且只输出一行。"
+  },
+  "reference_solution":"score = int(input())\nif score >= 90:\n    print('GOLD')\nelif score >= 60:\n    print('SILVER')\nelse:\n    print('TRY_AGAIN')\n",
+  "solution_explanation":"读取整数分数后，先判断是否至少 90 分。成立就输出 GOLD，后续分支不再执行。\n\n如果第一个条件为假，已知分数低于 90。此时只需判断是否至少 60 分，成立就输出 SILVER；否则分数一定低于 60，输出 TRY_AGAIN。\n\n90 属于金徽章，60 属于银徽章，59 属于继续加油。三个分支互斥且覆盖题目给出的全部分数。多个独立 if 可能重复输出，不能替代这里的分支链。"
+}

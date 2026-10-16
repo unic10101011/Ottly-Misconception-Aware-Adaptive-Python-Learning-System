@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0.0",
+  "problem_id": "shell-shop-v1", "version": 1, "level_no": 3,
+  "title": "贝壳小商店", "difficulty": 1, "published": true,
+  "knowledge_ids": ["K03"], "prerequisite_knowledge_ids": ["K02"],
+  "prerequisite_problem_ids": ["greeting-v1"],
+  "story": "上一关，Ottly 学会了向每位朋友打招呼。现在她在海边支起小摊，出售自己捡来又打磨过的贝壳。顾客买三件时，她还能掰着手指算；一口气买一百件时，她就忙不过来了。请帮她算出顾客的总花费，以及支付金额减去总价后的差额。",
+  "teaching": [
+    {"title":"数字和文字不同","text":"input() 读到的总是文字。输入 4 时得到的是字符串 '4'，还不能直接与数字计算。引号用来表示文字，不属于数字本身。","example":"print('4' + '3')  # 输出 43\nprint(4 + 3)      # 输出 7"},
+    {"title":"用 int 转换整数","text":"int 把合法的整数字符串转换成整数。先读入并转换，再把整数保存到变量中。题目保证输入合法，不需要自己处理非法输入。","example":"amount = int(input())\nprint(amount + 1)"},
+    {"title":"乘法求总价","text":"同一件商品买多件，总价等于单价乘数量。Python 的乘号是英文星号 *，不能用字母 x 或数学符号 × 代替。数量为零时，总价也为零。","example":"unit_price = 2\ncount = 5\nprint(unit_price * count)  # 输出 10"},
+    {"title":"减法与计算结果赋值","text":"用支付金额减去总价得到差额。先算右边，再把计算结果交给左边的变量。支付不足时，这个差额会是负数，不要擅自改成零。","example":"paid = 12\nspent = 8\nchange = paid - spent\nprint(change)  # 输出 4"},
+    {"title":"运算顺序与输出顺序","text":"乘法先于加减法；也可以先把总价保存下来，再做减法。本关要输出两行，第一行总价，第二行差额。print 一次默认换一行，不要额外输出标签或单位。","example":"print(2 + 3 * 4)    # 输出 14\nprint((2 + 3) * 4)  # 输出 20"}
+  ],
+  "description":"按行依次输入三个整数：单价 price（1–100）、数量 quantity（0–100）、支付金额 budget（0–10000）。第一行输出总价 price × quantity，第二行输出差额 budget − 总价，均为整数，不附单位或标签。支付不足时差额可以为负数。",
+  "starter_code":"# 依次读取单价、数量和支付金额，再计算并输出两行结果\n",
+  "examples":[{"stdin":"4\n3\n20\n","stdout":"12\n8\n"}],
+  "tests":[
+    {"case_id":"sample-1","stdin":"4\n3\n20\n","expected_output":"12\n8\n","visibility":"public"},
+    {"case_id":"hidden-1","stdin":"7\n0\n10\n","expected_output":"0\n10\n","visibility":"hidden"},
+    {"case_id":"hidden-2","stdin":"5\n4\n20\n","expected_output":"20\n0\n","visibility":"hidden"},
+    {"case_id":"hidden-3","stdin":"100\n100\n10000\n","expected_output":"10000\n0\n","visibility":"hidden"},
+    {"case_id":"hidden-4","stdin":"3\n2\n0\n","expected_output":"6\n-6\n","visibility":"hidden"}
+  ],
+  "comparison":"exact", "time_limit_seconds":3, "output_limit_chars":8000,
+  "hints":{
+    "level1":"知道单价和数量后，总花费应该怎样计算？",
+    "level2":"检查三次输入是否都转成整数，并核对总价采用的运算。",
+    "level3":"先保存总价，再用支付金额减去总价，最后按要求分成两行输出。"
+  },
+  "reference_solution":"price = int(input())\nquantity = int(input())\nbudget = int(input())\ncost = price * quantity\nremaining = budget - cost\nprint(cost)\nprint(remaining)\n",
+  "solution_explanation":"前三行分别读取单价、数量和支付金额，并用 int 转成整数，输入的先后顺序不能颠倒。\n\ncost 保存单价乘数量的总价；remaining 保存支付金额减总价的差额。样例中总价为 4 × 3，即 12，差额为 20 − 12，即 8。\n\n最后两次 print 各输出一行。数量为零时总价为零；恰好付清时差额为零；支付不足时按同一个减法得到负数。"
+}
