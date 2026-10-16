@@ -854,6 +854,8 @@ body.eye-protection {
 .lesson-page .steps-box { color: #17364b; background: #f5fafc; }
 .lesson-page h3 { margin: 20px 0 10px; }
 .lesson-teaching { margin: 16px 0; }
+.lesson-illustration { width: min(100%, 560px); margin: 24px auto; }
+.lesson-illustration img { display: block; width: 100%; height: auto; border-radius: 16px; }
 .lesson-teaching summary { cursor: pointer; font-weight: 600; }
 .lesson-teaching section { margin: 14px 0; }
 .lesson-teaching p, .lesson-page .steps-box p { line-height: 1.8; white-space: pre-wrap; }
