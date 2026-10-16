@@ -977,6 +977,7 @@ body.eye-protection {
 .lesson-input .btn-hint { justify-self: start; }
 .lesson-output { padding: 0 16px 16px; }
 .draft-status { margin: 10px 16px; color: #53656b; font-size: 13px; }
+.problem-metadata { padding: 8px 20px; color: #53656b; font-size: 13px; overflow-wrap: anywhere; }
 .lesson-output h4 { margin: 0; font-size: 16px; font-weight: 600; }
 .lesson-output .output-box { min-height: 100px; max-height: 320px; overflow-y: auto; }
 .lesson-complete { margin-top: 20px; padding: 20px; border: 1px solid #a3cbbb; border-radius: 12px; background: #f2faf6; }

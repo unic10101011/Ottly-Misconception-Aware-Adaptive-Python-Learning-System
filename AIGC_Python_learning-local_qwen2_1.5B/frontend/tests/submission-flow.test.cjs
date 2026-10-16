@@ -33,6 +33,32 @@ const failure = {
   } },
 }
 
+test('snapshot metadata distinguishes known values from unavailable historical values', () => {
+  const Metadata = loadJsx('../src/components/ProblemMetadata.jsx')
+  const current = renderToStaticMarkup(React.createElement(Metadata, {
+    version: 2, difficulty: 3, knowledgeIds: ['K02'], knowledgeNames: { K02: '变量与输入' },
+  }))
+  assert.match(current, /版本 2/)
+  assert.match(current, /综合/)
+  assert.match(current, /变量与输入/)
+  const old = renderToStaticMarkup(React.createElement(Metadata, { version: null, difficulty: null, knowledgeIds: [] }))
+  assert.match(old, /历史版本未提供/)
+  assert.match(old, /历史记录未提供/)
+  assert.doesNotMatch(old, /基础|版本 1/)
+})
+
+test('contract failure IDs and mapped knowledge IDs render alongside existing explanations', () => {
+  const Feedback = loadJsx('../src/components/SubmissionFeedback.jsx')
+  const result = { ...failure,
+    judge: { ...failure.judge, failed_tests: ['stdout-1'] },
+    analysis: { ...failure.analysis, content: { ...failure.analysis.content, knowledge_ids: ['K08'] } },
+  }
+  const html = renderToStaticMarkup(React.createElement(Feedback, { result, visibleHintCount: 3 }))
+  assert.match(html, /未通过测试：stdout-1/)
+  assert.match(html, /K08/)
+  assert.match(html, /accumulation/)
+})
+
 test('submission sends current code and problem id with auth and preserves backend verdict', async () => {
   const { requestCode } = await import('../src/components/codeApi.mjs')
   const originalFetch = global.fetch

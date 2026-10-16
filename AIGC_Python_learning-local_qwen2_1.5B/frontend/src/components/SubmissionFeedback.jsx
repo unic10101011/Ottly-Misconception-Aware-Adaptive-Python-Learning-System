@@ -18,6 +18,7 @@ function SubmissionFeedback({ result, visibleHintCount, onRevealHint, hintBusy =
         {statusLabels[judge.status] || '判题结果'}
       </h3>
       <p>测试通过：{judge.passed_cases} / {judge.total_cases}</p>
+      {!!judge.failed_tests?.length && <p>未通过测试：{judge.failed_tests.join('、')}</p>}
       {judge.cases.map(testCase => (
         <div className="judge-case" key={testCase.case_id}>
           <strong>测试 {testCase.case_id} · {testCase.passed ? '通过' : '未通过'}</strong>
@@ -56,6 +57,7 @@ function SubmissionFeedback({ result, visibleHintCount, onRevealHint, hintBusy =
             <summary>查看疑似原因、分析依据与知识点</summary>
             <p><strong>疑似原因：</strong>{content.suspected_cause}</p>
             <p><strong>相关知识点：</strong>{content.knowledge_points.join('、')}</p>
+            {!!content.knowledge_ids?.length && <p><strong>知识点编号：</strong>{content.knowledge_ids.join('、')}</p>}
             {content.evidence.map((item, index) => (
               <div className="analysis-evidence" key={index}>
                 <strong>依据：{item.case_id} · {item.field === 'actual_output' ? '实际输出' : '错误信息'}</strong>
