@@ -14,6 +14,11 @@ class LearningSubmission(Base):
     problem_id = Column(String(100), nullable=False, index=True)
     problem_title = Column(String(255), nullable=False)
     problem_description = Column(Text, nullable=False)
+    # Nullable only for records created before the contract migration.
+    schema_version = Column(String(20), nullable=True)
+    problem_version = Column(Integer, nullable=True)
+    difficulty = Column(Integer, nullable=True)
+    knowledge_ids = Column(JSON, nullable=True)
     code = Column(Text, nullable=False)
     judge_json = Column(JSON, nullable=False)
     analysis_json = Column(JSON, nullable=True)

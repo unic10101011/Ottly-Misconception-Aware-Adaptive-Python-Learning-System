@@ -33,6 +33,32 @@ const failure = {
   } },
 }
 
+test('snapshot metadata distinguishes known values from unavailable historical values', () => {
+  const Metadata = loadJsx('../src/components/ProblemMetadata.jsx')
+  const current = renderToStaticMarkup(React.createElement(Metadata, {
+    version: 2, difficulty: 3, knowledgeIds: ['K02'], knowledgeNames: { K02: '变量与输入' },
+  }))
+  assert.match(current, /版本 2/)
+  assert.match(current, /综合/)
+  assert.match(current, /变量与输入/)
+  const old = renderToStaticMarkup(React.createElement(Metadata, { version: null, difficulty: null, knowledgeIds: [] }))
+  assert.match(old, /历史版本未提供/)
+  assert.match(old, /历史记录未提供/)
+  assert.doesNotMatch(old, /基础|版本 1/)
+})
+
+test('contract failure IDs and mapped knowledge IDs render alongside existing explanations', () => {
+  const Feedback = loadJsx('../src/components/SubmissionFeedback.jsx')
+  const result = { ...failure,
+    judge: { ...failure.judge, failed_tests: ['stdout-1'] },
+    analysis: { ...failure.analysis, content: { ...failure.analysis.content, knowledge_ids: ['K08'] } },
+  }
+  const html = renderToStaticMarkup(React.createElement(Feedback, { result, visibleHintCount: 3 }))
+  assert.match(html, /未通过测试：stdout-1/)
+  assert.match(html, /K08/)
+  assert.match(html, /accumulation/)
+})
+
 test('submission sends current code and problem id with auth and preserves backend verdict', async () => {
   const { requestCode } = await import('../src/components/codeApi.mjs')
   const originalFetch = global.fetch
@@ -379,7 +405,7 @@ test('review submission also shows the judge before its hint request finishes', 
   let finishAnalysis
   const question = { problem_id: 'level2', first_wrong_submission_id: 5,
     last_wrong_code: 'print(100)', title: '求和', description: '求和', source: '系统关卡' }
-  const states = [[question], 'level2', 'practice', false, '', 'print(100)', '', false, false,
+  const states = [[question], {}, 'level2', 'practice', false, '', 'print(100)', '', false, false,
     null, null, 0, null, {}, [], 0, 0, 0, 0, false, '', '']
   let stateIndex = 0
   const hooks = {
@@ -394,6 +420,7 @@ test('review submission also shows the judge before its hint request finishes', 
   const History = loadJsx('../src/pages/LearningHistory.jsx', {
     react: hooks,
     'react-router-dom': { useNavigate: () => () => {} },
+    '../components/ProblemMetadata.jsx': () => null,
     '../components/SubmissionFeedback.jsx': { default: () => null },
     '../components/codeApi.mjs': {
       requestCode: async () => prepared,
@@ -407,19 +434,19 @@ test('review submission also shows the judge before its hint request finishes', 
   try {
     const tree = History()
     const cleanup = effects[0]()
-    effects[2]()
+    effects[3]()
     const find = node => {
       if (!React.isValidElement(node)) return null
       if (node.props.className === 'mistake-primary-button') return node
       return React.Children.toArray(node.props.children).map(find).find(Boolean)
     }
     await find(tree).props.onClick()
-    assert.ok(updates.some(update => update.index === 10 && update.next === prepared))
+    assert.ok(updates.some(update => update.index === 11 && update.next === prepared))
     assert.equal(typeof finishAnalysis, 'function')
     finishAnalysis({ analysis: failure.analysis, timings: { judge_ms: 12 } })
     await Promise.resolve()
     await Promise.resolve()
-    assert.ok(updates.some(update => update.index === 10 && update.next?.analysis?.status === 'ready'))
+    assert.ok(updates.some(update => update.index === 11 && update.next?.analysis?.status === 'ready'))
     cleanup()
   } finally {
     if (originalStorage) Object.defineProperty(global, 'localStorage', originalStorage)
@@ -438,7 +465,7 @@ test('opening an unfinished history entry resumes only that analysis', async () 
     first_wrong_at: '2026-10-16T00:00:00Z', latest_suspected_cause: null,
     review_count: 0, review_rate_percent: null, recent_review_passed: 0,
     recent_review_total: 0, related_questions: [] }
-  const states = [[question], 'level2', 'insight', false, '', 'print(100)', '', false, false,
+  const states = [[question], {}, 'level2', 'insight', false, '', 'print(100)', '', false, false,
     null, null, 0, null, {}, [item], 1, 0, 0, 0, false, '', '']
   let stateIndex = 0
   const hooks = {
@@ -450,6 +477,7 @@ test('opening an unfinished history entry resumes only that analysis', async () 
   const History = loadJsx('../src/pages/LearningHistory.jsx', {
     react: hooks,
     'react-router-dom': { useNavigate: () => () => {} },
+    '../components/ProblemMetadata.jsx': () => null,
     '../components/SubmissionFeedback.jsx': () => null,
     '../components/codeApi.mjs': {
       requestAnalysis: async id => { assert.equal(id, 81); return new Promise(resolve => { finishAnalysis = resolve }) },
@@ -469,7 +497,7 @@ test('opening an unfinished history entry resumes only that analysis', async () 
     assert.equal(typeof finishAnalysis, 'function')
     finishAnalysis({ analysis: failure.analysis })
     await new Promise(resolve => setImmediate(resolve))
-    const changed = updates.find(update => update.index === 14 && typeof update.next === 'function')
+    const changed = updates.find(update => update.index === 15 && typeof update.next === 'function')
     assert.equal(changed.next([item])[0].analysis.status, 'ready')
     cleanup()
   } finally {

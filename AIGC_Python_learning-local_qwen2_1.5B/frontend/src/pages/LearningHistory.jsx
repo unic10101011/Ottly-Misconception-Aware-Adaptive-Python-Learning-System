@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import SubmissionFeedback from '../components/SubmissionFeedback.jsx'
-import { getLearningHistory, getMistakeQuestions, requestAnalysis, requestCode, saveHintView } from '../components/codeApi.mjs'
+import ProblemMetadata from '../components/ProblemMetadata.jsx'
+import { getLearningHistory, getMistakeQuestions, getKnowledge, requestAnalysis, requestCode, saveHintView } from '../components/codeApi.mjs'
 
 const HISTORY_PAGE_SIZE = 10
 const formatDate = value => new Date(value).toLocaleString('zh-CN')
@@ -9,6 +10,7 @@ const formatDate = value => new Date(value).toLocaleString('zh-CN')
 function LearningHistory() {
   const navigate = useNavigate()
   const [questions, setQuestions] = useState([])
+  const [knowledgeNames, setKnowledgeNames] = useState({})
   const [selectedId, setSelectedId] = useState(null)
   const [tab, setTab] = useState('practice')
   const [loading, setLoading] = useState(true)
@@ -40,6 +42,14 @@ function LearningHistory() {
   useEffect(() => {
     mountedRef.current = true
     return () => { mountedRef.current = false }
+  }, [])
+
+  useEffect(() => {
+    let active = true
+    getKnowledge(localStorage.getItem('access_token')).then(data => {
+      if (active) setKnowledgeNames(Object.fromEntries(data.items.map(item => [item.knowledge_id, item.name])))
+    }).catch(() => {}) // IDs still identify the snapshot if the dictionary is unavailable.
+    return () => { active = false }
   }, [])
 
   useEffect(() => {
@@ -234,6 +244,8 @@ function LearningHistory() {
             <span className={`mistake-status ${selected.latest_passed ? 'is-passed' : ''}`}>
               {selected.latest_passed ? '最近已通过' : '继续巩固'}</span>
           </div>
+          <ProblemMetadata version={selected.version} difficulty={selected.difficulty}
+            knowledgeIds={selected.knowledge_ids} knowledgeNames={knowledgeNames} />
           <div className="mistake-tabs" role="tablist" aria-label="错题页面">
             <button type="button" role="tab" aria-selected={tab === 'practice'}
               className={tab === 'practice' ? 'active' : ''} onClick={() => setTab('practice')}>重新做题</button>
@@ -308,6 +320,9 @@ function LearningHistory() {
                   {item.passed ? '通过' : '未通过'}</span><strong>{formatDate(item.created_at)}</strong>
                   <small>{item.judge.passed_cases} / {item.judge.total_cases} 个测试通过</small></summary>
                 <div className="mistake-history-body"><strong>当时提交的代码</strong><pre>{item.code}</pre>
+                  <ProblemMetadata version={item.version} difficulty={item.difficulty}
+                    knowledgeIds={item.knowledge_ids} knowledgeNames={knowledgeNames} />
+                  {!item.passed && <p>错误分类：{item.error_type || '历史记录未提供'}</p>}
                   <SubmissionFeedback result={{ judge: item.judge, analysis: item.analysis }}
                     visibleHintCount={item.hints_viewed_max} onRevealHint={() => revealHint(item)}
                     hintBusy={savingHintId === item.id} hintError={hintErrors[item.id] || ''} />

@@ -136,7 +136,7 @@ def test_syntax_error_uses_fast_grounded_hints_without_model(client, monkeypatch
     data = client.post("/api/v1/code/submit", headers=login(client),
                        json={"problem_id": "level2", "code": code}).json()["data"]
     assert data["judge"]["status"] == "execution_error"
-    assert data["judge"]["cases"][0]["errors"][0]["type"] == "语法错误"
+    assert data["judge"]["cases"][0]["errors"][0]["type"] == "SYNTAX_ERROR"
     analysis = data["analysis"]
     assert analysis["status"] == "ready"
     assert analysis["source"] == "fixed"
@@ -180,8 +180,8 @@ def submit_and_analyze(client, headers, **kwargs):
 
 
 @pytest.mark.parametrize('code,status,evidence', [
-    ("for i in range(1, 101)\n    print(i)", 'execution_error', '语法错误'),
-    ("print(missing_total)", 'execution_error', 'NameError'),
+    ("for i in range(1, 101)\n    print(i)", 'execution_error', 'SYNTAX_ERROR'),
+    ("print(missing_total)", 'execution_error', 'NAME_ERROR'),
     (OVERWRITE, 'wrong_answer', '100\n'),
 ])
 def test_three_error_types_return_real_judge_evidence_before_ai(client, monkeypatch, code, status, evidence):
@@ -197,7 +197,7 @@ def test_three_error_types_return_real_judge_evidence_before_ai(client, monkeypa
         assert public_case['actual_output'] == evidence
     else:
         assert evidence in json.dumps(public_case, ensure_ascii=False)
-    assert data['analysis']['status'] == ('ready' if evidence == '语法错误' else 'preparing')
+    assert data['analysis']['status'] == ('ready' if evidence == 'SYNTAX_ERROR' else 'preparing')
 
 
 def test_model_timings_are_saved_and_repeat_analysis_does_not_recall_model(client, monkeypatch):
@@ -385,6 +385,11 @@ def test_real_judge_evidence_is_sent_to_model(client, monkeypatch, code, status,
     assert len(observed) == 1
     assert observed[0]["student_code"] == code
     assert observed[0]["failed_cases"][0]["actual_output"] == data["judge"]["cases"][0]["actual_output"]
+    # The model retains original error names; only public results normalize them.
+    from app.services.learning_contract import error_code
+    model_errors = observed[0]['failed_cases'][0]['errors']
+    public_errors = data['judge']['cases'][0]['errors']
+    assert [error_code(error['type'], code=code) for error in model_errors] == [error['type'] for error in public_errors]
     assert "100" in observed[0]["problem"]["description"]
 
 

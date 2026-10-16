@@ -1,0 +1,14 @@
+[
+  {"knowledge_id":"K01","name":"字符串与输出","description":"使用字符串引号和 print，区分代码与输出并检查输出格式。","aliases":["输出格式","字符串输出","print","字符串"]},
+  {"knowledge_id":"K02","name":"变量、输入与字符串拼接","description":"理解变量赋值，读取文本输入，并使用变量拼接字符串。","aliases":["输入与变量","变量","赋值","变量先赋值后使用","字符串拼接","字符串拼接与输出格式"]},
+  {"knowledge_id":"K03","name":"整数输入与算术运算","description":"使用 int 转换整数，进行加减乘和结果赋值。","aliases":["整数运算","整数输入","类型转换"]},
+  {"knowledge_id":"K04","name":"整除与取余","description":"区分普通除法、整除和余数。","aliases":["整除","取余"]},
+  {"knowledge_id":"K05","name":"比较与条件分支","description":"使用比较与 if、elif、else 处理互斥区间及其边界。","aliases":["条件判断","比较运算","条件分支","缩进"]},
+  {"knowledge_id":"K06","name":"布尔值与逻辑运算","description":"使用 and、or、not 组合条件。","aliases":["布尔值","逻辑运算"]},
+  {"knowledge_id":"K07","name":"for 循环与 range","description":"理解循环变量、循环体、范围右端不包含和零次循环。","aliases":["for循环","for 循环","range","循环范围"]},
+  {"knowledge_id":"K08","name":"累加器与变量更新","description":"将当前值累加到原总数，正确安排初始化、更新和输出。","aliases":["累加器","累加","累计更新","赋值与累加"]},
+  {"knowledge_id":"K09","name":"while 循环与终止","description":"依据条件重复执行，推进状态并保证循环终止。","aliases":["while循环","while 循环","循环终止"]},
+  {"knowledge_id":"K10","name":"字符串遍历与条件计数","description":"使用 len、字符串遍历和条件计数。","aliases":["字符统计","字符串遍历","条件计数"]},
+  {"knowledge_id":"K11","name":"列表与遍历","description":"使用列表、append、索引、遍历和最大值跟踪。","aliases":["列表","索引","列表遍历"]},
+  {"knowledge_id":"K12","name":"函数与返回值","description":"定义和调用函数，理解参数、return 和局部变量。","aliases":["函数","参数","返回值","局部变量"]}
+]

@@ -99,7 +99,7 @@ def test_wrong_and_later_correct_are_both_saved_and_visible_after_relogin(client
     assert item["analysis"]["status"] == "ready"
     assert item["hints_viewed_max"] == 0
     assert item["resolved_later"] is True
-    assert item["created_at"].endswith("+00:00")
+    assert item["created_at"].endswith("Z")
 
 
 def test_histories_and_hint_updates_are_owned_by_current_user(client):

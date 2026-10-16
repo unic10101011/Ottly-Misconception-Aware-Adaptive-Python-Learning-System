@@ -116,3 +116,7 @@ export function getLesson(problemId, token) {
 export function getSolution(problemId, token) {
   return requestLearningHistory(`/code/problems/${encodeURIComponent(problemId)}/solution`, 'GET', token)
 }
+
+export function getKnowledge(token) {
+  return requestLearningHistory('/code/knowledge', 'GET', token)
+}

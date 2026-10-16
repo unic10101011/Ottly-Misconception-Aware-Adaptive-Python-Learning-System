@@ -14,6 +14,8 @@ from app.models.learning_review import LearningReview
 
 # 创建数据库表
 Base.metadata.create_all(bind=engine)
+from app.core.submission_migration import require_current_schema
+require_current_schema(engine)
 
 # 创建FastAPI应用
 app = FastAPI(
