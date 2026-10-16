@@ -63,7 +63,12 @@ def submit(client, headers, code):
     response = client.post("/api/v1/code/submit", headers=headers,
                            json={"problem_id": "level2", "code": code})
     assert response.status_code == 200, response.text
-    return response.json()["data"]
+    data = response.json()["data"]
+    if data['analysis']['status'] == 'preparing':
+        analysis = client.post(f"/api/v1/code/submissions/{data['submission_id']}/analysis", headers=headers)
+        assert analysis.status_code == 200, analysis.text
+        data['analysis'] = analysis.json()['data']['analysis']
+    return data
 
 
 def test_wrong_and_later_correct_are_both_saved_and_visible_after_relogin(client):
@@ -106,6 +111,7 @@ def test_histories_and_hint_updates_are_owned_by_current_user(client):
     assert client.get("/api/v1/code/submissions", headers=second).json()["data"]["items"] == []
     assert client.patch(f"/api/v1/code/submissions/{submission_id}/hints",
                         headers=second, json={"level": 1}).status_code == 404
+    assert client.post(f"/api/v1/code/submissions/{submission_id}/analysis", headers=second).status_code == 404
     for level, expected in [(1, 1), (3, 3), (2, 3)]:
         result = client.patch(f"/api/v1/code/submissions/{submission_id}/hints",
                               headers=first, json={"level": level})
