@@ -1,6 +1,4 @@
 """Authenticated access to a student's own judged attempts."""
-from datetime import timezone
-
 from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel, Field
 from sqlalchemy import func
@@ -12,6 +10,8 @@ from app.models.learning_submission import LearningSubmission
 from app.models.learning_review import LearningReview
 from app.models.user import User
 from app.services.submission import PROBLEMS
+from app.services.problem_catalog import SCHEMA_VERSION
+from app.services.learning_contract import contract_judge, submission_error, history_analysis, snapshot_fields, utc_iso
 
 
 router = APIRouter()
@@ -23,13 +23,7 @@ def my_level_progress(current_user: User = Depends(get_current_user), db: Sessio
         LearningSubmission.user_id == current_user.id,
         LearningSubmission.passed.is_(True),
     ).distinct().all()
-    return {"code": 200, "data": {"passed_problem_ids": [row.problem_id for row in passed_ids]}}
-
-
-def utc_iso(value):
-    if value.tzinfo is None:
-        value = value.replace(tzinfo=timezone.utc)
-    return value.astimezone(timezone.utc).isoformat()
+    return {"schema_version": SCHEMA_VERSION, "code": 200, "data": {"passed_problem_ids": [row.problem_id for row in passed_ids]}}
 
 
 class HintViewRequest(BaseModel):
@@ -62,21 +56,31 @@ def my_submissions(
                     LearningSubmission.problem_id.in_(problem_ids))
             .group_by(LearningSubmission.problem_id).all()
         )
-    items = [{
-        "id": row.id,
-        "problem_id": row.problem_id,
-        "problem_title": row.problem_title,
-        "problem_description": row.problem_description,
-        "code": row.code,
-        "judge": row.judge_json,
-        "analysis": row.analysis_json,
-        "passed": row.passed,
-        "error_type": row.error_type,
-        "hints_viewed_max": row.hints_viewed_max,
-        "resolved_later": not row.passed and later_passes.get(row.problem_id, 0) > row.id,
-        "created_at": utc_iso(row.created_at),
-    } for row in rows]
-    return {"code": 200, "data": {"items": items, "total": total, "limit": limit, "offset": offset}}
+    review_sources = dict(db.query(LearningReview.submission_id, LearningReview.source_submission_id).filter(
+        LearningReview.user_id == current_user.id,
+        LearningReview.submission_id.in_([row.id for row in rows]),
+    ).all()) if rows else {}
+    items = []
+    for row in rows:
+        judge = contract_judge(row.judge_json, code=row.code)
+        analysis = history_analysis(row, judge)
+        items.append({
+            **snapshot_fields(row),
+            "id": row.id,
+            "problem_id": row.problem_id,
+            "problem_title": row.problem_title,
+            "problem_description": row.problem_description,
+            "code": row.code,
+            "judge": judge.model_dump(mode='json'),
+            "analysis": analysis.model_dump(mode='json') if analysis else None,
+            "passed": row.passed,
+            "error_type": submission_error(judge, row.error_type, code=row.code),
+            "hints_viewed_max": row.hints_viewed_max,
+            "resolved_later": not row.passed and later_passes.get(row.problem_id, 0) > row.id,
+            "created_at": utc_iso(row.created_at),
+            "review_source_id": review_sources.get(row.id),
+        })
+    return {"schema_version": SCHEMA_VERSION, "code": 200, "data": {"items": items, "total": total, "limit": limit, "offset": offset}}
 
 
 @router.get("/code/mistakes")
@@ -99,10 +103,11 @@ def my_mistake_questions(current_user: User = Depends(get_current_user), db: Ses
         reviews = [row for row in rows if row.id in review_ids]
         recent = reviews[:5]
         passed_count = sum(row.passed for row in recent)
-        cause_row = next((row for row in failures if row.analysis_json
-                          and row.analysis_json.get("status") == "ready"
-                          and row.analysis_json.get("content")), None)
+        cause = next((analysis for row in failures
+                      if (analysis := history_analysis(row, contract_judge(row.judge_json)))
+                      and analysis.status == 'ready' and analysis.content), None)
         items.append({
+            **snapshot_fields(rows[0]),
             "problem_id": problem_id,
             "title": rows[0].problem_title,
             "description": rows[0].problem_description,
@@ -112,7 +117,7 @@ def my_mistake_questions(current_user: User = Depends(get_current_user), db: Ses
             "latest_at": utc_iso(rows[0].created_at),
             "latest_passed": rows[0].passed,
             "last_wrong_code": failures[0].code,
-            "latest_suspected_cause": cause_row.analysis_json["content"].get("suspected_cause") if cause_row else None,
+            "latest_suspected_cause": cause.content.suspected_cause if cause else None,
             "attempt_count": len(rows),
             "wrong_count": len(failures),
             "review_count": len(reviews),
@@ -121,7 +126,7 @@ def my_mistake_questions(current_user: User = Depends(get_current_user), db: Ses
             "review_rate_percent": round(passed_count / len(recent) * 100) if len(recent) >= 3 else None,
             "related_questions": [],
         })
-    return {"code": 200, "data": {"items": items, "total": len(items)}}
+    return {"schema_version": SCHEMA_VERSION, "code": 200, "data": {"items": items, "total": len(items)}}
 
 
 @router.patch("/code/submissions/{submission_id}/hints")
@@ -138,7 +143,7 @@ def record_hint_view(
     if row is None:
         raise HTTPException(status_code=404, detail="提交记录不存在")
     if row.passed or not row.analysis_json or row.analysis_json.get("status") != "ready":
-        raise HTTPException(status_code=409, detail="本次提交没有可查看的 AI 提示")
+        raise HTTPException(status_code=409, detail="本次提交没有可查看的学习提示")
     db.query(LearningSubmission).filter(
         LearningSubmission.id == row.id,
         LearningSubmission.user_id == current_user.id,
@@ -146,4 +151,4 @@ def record_hint_view(
     ).update({LearningSubmission.hints_viewed_max: request.level}, synchronize_session=False)
     db.commit()
     db.refresh(row)
-    return {"code": 200, "data": {"submission_id": row.id, "hints_viewed_max": row.hints_viewed_max}}
+    return {"schema_version": SCHEMA_VERSION, "code": 200, "data": {"submission_id": row.id, "hints_viewed_max": row.hints_viewed_max}}

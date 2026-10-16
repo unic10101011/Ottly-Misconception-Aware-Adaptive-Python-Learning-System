@@ -259,7 +259,11 @@ def test_real_judge_evidence_is_sent_to_model(client, monkeypatch, code, status,
     assert data["analysis"]["status"] == "ready", data
     assert len(observed) == 1
     assert observed[0]["student_code"] == code
-    assert observed[0]["failed_cases"] == data["judge"]["cases"]
+    # The model retains original error names; only public/storage results normalize them.
+    from app.services.learning_contract import error_code
+    public_cases = [{**case, 'errors': [{**error, 'type': error_code(error['type'])} for error in case['errors']]}
+                    for case in observed[0]['failed_cases']]
+    assert public_cases == data["judge"]["cases"]
     assert "100" in observed[0]["problem"]["description"]
 
 

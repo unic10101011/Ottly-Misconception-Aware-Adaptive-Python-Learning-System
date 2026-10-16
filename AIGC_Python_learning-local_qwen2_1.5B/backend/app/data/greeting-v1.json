@@ -1,10 +1,17 @@
 {
+  "schema_version": "1.0.0",
   "problem_id": "greeting-v1",
   "version": 1,
+  "difficulty": 1,
+  "published": true,
+  "comparison": "exact",
+  "time_limit_seconds": 3,
+  "output_limit_chars": 8000,
   "level_no": 2,
   "title": "打招呼",
   "knowledge_ids": ["K02"],
   "prerequisite_knowledge_ids": ["K01"],
+  "prerequisite_problem_ids": ["level1"],
   "description": "输入一行姓名（1–20 个字符，不含首尾空格，可以含内部空格）。把输入保存到变量里，输出一行 Hello, 姓名!。保留姓名的大小写与内部空格；逗号后恰好一个空格。不要输出输入提示语。",
   "story": "上一关，Ottly 学会了第一句话，但不管谁来，她说的都是同一句话。现在朋友们来到海滩，她想让每位朋友都听到自己的名字。帮她根据输入的姓名打招呼吧。",
   "teaching": [

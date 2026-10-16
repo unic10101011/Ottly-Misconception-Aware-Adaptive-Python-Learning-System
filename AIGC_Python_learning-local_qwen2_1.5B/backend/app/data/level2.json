@@ -1,0 +1,15 @@
+{
+  "schema_version":"1.0.0","problem_id":"level2","version":1,"level_no":8,
+  "title":"for循环练习","difficulty":2,"published":true,
+  "knowledge_ids":["K08"],"prerequisite_knowledge_ids":["K03","K07"],"prerequisite_problem_ids":[],
+  "story":"历史循环求和练习，保留供旧记录复习，不占新版第 2 关。",
+  "teaching":[{"title":"累加器","text":"循环前初始化总数，循环内把当前值加到旧总数。","example":"total = 0\nfor i in range(1, 4):\n    total = total + i\nprint(total)"}],
+  "description":"使用 for 循环计算 1 到 100（含 100）的和，并输出结果；没有输入。",
+  "starter_code":"total = 0\n",
+  "examples":[{"stdin":"","stdout":"5050\n"}],
+  "tests":[{"case_id":"stdout-1","stdin":"","expected_output":"5050","visibility":"public"}],
+  "comparison":"legacy_trim","time_limit_seconds":3,"output_limit_chars":8000,
+  "hints":{"level1":"总数需要保留上一轮的结果吗？","level2":"检查循环内的更新是否保留旧总数。","level3":"记录前两轮的旧值与新值，再核对累加步骤。"},
+  "reference_solution":"total = 0\nfor i in range(1, 101):\n    total = total + i\nprint(total)\n",
+  "solution_explanation":"初始值为零，每次加上当前整数，循环结束后输出总数。保留原题判题行为，不验证是否使用循环。"
+}

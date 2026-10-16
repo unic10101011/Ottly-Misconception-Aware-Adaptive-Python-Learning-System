@@ -1,0 +1,5 @@
+[
+  {"id":1,"problem_id":"level1","name":"初识小海獭"},
+  {"id":2,"problem_id":"greeting-v1","name":"打招呼"},
+  {"id":3,"problem_id":null,"name":"贝壳小商店","prerequisite_problem_ids":["greeting-v1"]}
+]

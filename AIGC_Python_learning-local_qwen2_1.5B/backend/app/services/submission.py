@@ -1,40 +1,10 @@
 """Server-owned exercises and deterministic judging; legacy IDs stay stable."""
-import json
-from pathlib import Path
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from app.services.sandbox.runner import run_code_process
-
-
-class TestCase(BaseModel):
-    case_id: str
-    expected_output: str
-    stdin: str = ''
-    visibility: Literal['public', 'hidden'] = 'public'
-
-
-class Problem(BaseModel):
-    problem_id: str
-    title: str
-    description: str
-    tests: list[TestCase]
-    comparison: Literal['legacy_trim', 'exact'] = 'legacy_trim'
-
-
-PROBLEMS = {
-    "level1": Problem(problem_id="level1", title="初识小海獭",
-                      description='使用 print 函数输出 Hello, World!，没有输入。',
-                      tests=[TestCase(case_id="stdout-1", expected_output="Hello, World!")]),
-    "level2": Problem(problem_id="level2", title="for循环练习",
-                      description="使用 for 循环计算 1 到 100（含 100）的和，并输出结果；没有输入。",
-                      tests=[TestCase(case_id="stdout-1", expected_output="5050")]),
-}
-
-GREETING = json.loads((Path(__file__).resolve().parents[1] / 'data' / 'greeting-v1.json').read_text(encoding='utf-8'))
-GREETING_ID = GREETING['problem_id']
-PROBLEMS[GREETING_ID] = Problem(**{key: GREETING[key] for key in ('problem_id', 'title', 'description', 'tests')}, comparison='exact')
+from app.services.problem_catalog import Problem, TestCase, PROBLEMS, GREETING, GREETING_ID
 
 
 class ExecutionError(BaseModel):
@@ -78,7 +48,7 @@ class SubmissionRequest(BaseModel):
 def judge_submission(problem: Problem, code: str) -> JudgeResult:
     cases = []
     for test in problem.tests:
-        execution = run_code_process(code, timeout=3, stdin=test.stdin)
+        execution = run_code_process(code, timeout=getattr(problem, 'time_limit_seconds', 3), stdin=test.stdin)
         actual = execution['output'].replace('\r\n', '\n')
         expected = test.expected_output.replace('\r\n', '\n')
         matches = actual == expected if problem.comparison == 'exact' else actual.strip() == expected.strip()

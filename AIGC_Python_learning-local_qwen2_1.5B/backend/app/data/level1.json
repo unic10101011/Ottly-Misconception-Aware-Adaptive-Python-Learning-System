@@ -1,0 +1,15 @@
+{
+  "schema_version":"1.0.0","problem_id":"level1","version":1,"level_no":1,
+  "title":"初识小海獭","difficulty":1,"published":true,
+  "knowledge_ids":["K01"],"prerequisite_knowledge_ids":[],"prerequisite_problem_ids":[],
+  "story":"帮助小海獭说出第一句话。",
+  "teaching":[{"title":"输出文字","text":"print 可以显示引号中的文字。引号不属于输出内容。","example":"print('Hi!')"}],
+  "description":"使用 print 函数输出 Hello, World!，没有输入。",
+  "starter_code":"print('Hello, World!')",
+  "examples":[{"stdin":"","stdout":"Hello, World!\n"}],
+  "tests":[{"case_id":"stdout-1","stdin":"","expected_output":"Hello, World!","visibility":"public"}],
+  "comparison":"legacy_trim","time_limit_seconds":3,"output_limit_chars":8000,
+  "hints":{"level1":"输出内容需要关注哪些细节？","level2":"逐字核对输出文本中的大小写、空格和标点。","level3":"比较实际输出与样例，修改不同之处后重新运行。"},
+  "reference_solution":"print('Hello, World!')\n",
+  "solution_explanation":"print 显示引号内的文字，并在末尾换行。保留原题忽略首尾空白的比较规则。"
+}
