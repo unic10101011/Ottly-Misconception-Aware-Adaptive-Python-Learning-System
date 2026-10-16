@@ -1,0 +1,756 @@
+{
+  "schema_version": "1.0.0",
+  "note": "Generated against isolated MySQL with fixed hint fallback; IDs/times are example values, not model quality results.",
+  "accepted": {
+    "schema_version": "1.0.0",
+    "code": 200,
+    "data": {
+      "submission_id": 10,
+      "problem_id": "greeting-v1",
+      "version": 1,
+      "created_at": "2026-10-16T00:13:29.000Z",
+      "error_type": null,
+      "judge": {
+        "status": "accepted",
+        "passed": true,
+        "passed_cases": 4,
+        "total_cases": 4,
+        "cases": [
+          {
+            "case_id": "sample-1",
+            "passed": true,
+            "expected_output": "Hello, Ottly!\n",
+            "actual_output": "Hello, Ottly!\n",
+            "output_available": true,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "public"
+          },
+          {
+            "case_id": "hidden-1",
+            "passed": true,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "hidden"
+          },
+          {
+            "case_id": "hidden-2",
+            "passed": true,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "hidden"
+          },
+          {
+            "case_id": "hidden-3",
+            "passed": true,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "hidden"
+          }
+        ],
+        "failed_tests": []
+      },
+      "analysis": {
+        "status": "skipped",
+        "message": "测试已通过，无需 AI 分析。",
+        "model": null,
+        "content": null,
+        "source": null
+      }
+    }
+  },
+  "wrong_answer_hidden_cases": {
+    "schema_version": "1.0.0",
+    "code": 200,
+    "data": {
+      "submission_id": 8,
+      "problem_id": "greeting-v1",
+      "version": 1,
+      "created_at": "2026-10-16T00:13:29.000Z",
+      "error_type": "WRONG_ANSWER",
+      "judge": {
+        "status": "wrong_answer",
+        "passed": false,
+        "passed_cases": 1,
+        "total_cases": 4,
+        "cases": [
+          {
+            "case_id": "sample-1",
+            "passed": true,
+            "expected_output": "Hello, Ottly!\n",
+            "actual_output": "Hello, Ottly!\n",
+            "output_available": true,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "public"
+          },
+          {
+            "case_id": "hidden-1",
+            "passed": false,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "hidden"
+          },
+          {
+            "case_id": "hidden-2",
+            "passed": false,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "hidden"
+          },
+          {
+            "case_id": "hidden-3",
+            "passed": false,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "hidden"
+          }
+        ],
+        "failed_tests": [
+          "hidden-1",
+          "hidden-2",
+          "hidden-3"
+        ]
+      },
+      "analysis": {
+        "status": "ready",
+        "message": "AI 暂未提供合格分析，以下使用本关已审核的基础提示。",
+        "model": null,
+        "content": {
+          "suspected_cause": "尚未确认具体错因，请结合公开结果逐步核对。",
+          "evidence": [
+            {
+              "case_id": "sample-1",
+              "field": "actual_output",
+              "quote": "Hello, Ottly!",
+              "explanation": "这里只展示公开样例的执行结果，不据此猜测隐藏用例内容。"
+            }
+          ],
+          "knowledge_points": [
+            "输入与变量",
+            "字符串拼接与输出格式"
+          ],
+          "hints": {
+            "level1": "问候语中哪部分会随输入变化？",
+            "level2": "查看变量是否真正接收了输入，打印时有没有把变量名加上引号。",
+            "level3": "把输出分成固定前缀、姓名和标点三部分，检查连接处的空格。"
+          },
+          "knowledge_ids": [
+            "K02"
+          ]
+        },
+        "source": "fixed"
+      }
+    }
+  },
+  "execution_error": {
+    "schema_version": "1.0.0",
+    "code": 200,
+    "data": {
+      "submission_id": 9,
+      "problem_id": "greeting-v1",
+      "version": 1,
+      "created_at": "2026-10-16T00:13:29.000Z",
+      "error_type": "NAME_ERROR",
+      "judge": {
+        "status": "execution_error",
+        "passed": false,
+        "passed_cases": 0,
+        "total_cases": 4,
+        "cases": [
+          {
+            "case_id": "sample-1",
+            "passed": false,
+            "expected_output": "Hello, Ottly!\n",
+            "actual_output": "",
+            "output_available": true,
+            "errors": [
+              {
+                "type": "NAME_ERROR",
+                "line": 1,
+                "message": "变量 'missing_name' 没有定义，请先赋值或检查拼写"
+              }
+            ],
+            "execution_time": 0.001,
+            "visibility": "public"
+          },
+          {
+            "case_id": "hidden-1",
+            "passed": false,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "hidden"
+          },
+          {
+            "case_id": "hidden-2",
+            "passed": false,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "hidden"
+          },
+          {
+            "case_id": "hidden-3",
+            "passed": false,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "hidden"
+          }
+        ],
+        "failed_tests": [
+          "sample-1",
+          "hidden-1",
+          "hidden-2",
+          "hidden-3"
+        ]
+      },
+      "analysis": {
+        "status": "ready",
+        "message": "AI 暂未提供合格分析，以下使用本关已审核的基础提示。",
+        "model": null,
+        "content": {
+          "suspected_cause": "尚未确认具体错因，请结合公开结果逐步核对。",
+          "evidence": [
+            {
+              "case_id": "sample-1",
+              "field": "error_message",
+              "quote": "变量 'missing_name' 没有定义，请先赋值或检查拼写",
+              "explanation": "这里只展示公开样例的执行结果，不据此猜测隐藏用例内容。"
+            }
+          ],
+          "knowledge_points": [
+            "输入与变量",
+            "字符串拼接与输出格式"
+          ],
+          "hints": {
+            "level1": "使用变量之前，需要先明确哪些信息？",
+            "level2": "结合变量先赋值后使用的知识，观察报错位置之前是否出现对应变量的赋值。",
+            "level3": "从上到下记录该变量首次赋值和使用的位置，核对拼写与执行顺序后再运行。"
+          },
+          "knowledge_ids": [
+            "K02"
+          ]
+        },
+        "source": "fixed"
+      }
+    }
+  },
+  "model_unavailable": {
+    "schema_version": "1.0.0",
+    "code": 200,
+    "data": {
+      "submission_id": 6,
+      "problem_id": "level1",
+      "version": 1,
+      "created_at": "2026-10-16T00:13:29.000Z",
+      "error_type": "WRONG_ANSWER",
+      "judge": {
+        "status": "wrong_answer",
+        "passed": false,
+        "passed_cases": 0,
+        "total_cases": 1,
+        "cases": [
+          {
+            "case_id": "stdout-1",
+            "passed": false,
+            "expected_output": "Hello, World!",
+            "actual_output": "0\n",
+            "output_available": true,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "public"
+          }
+        ],
+        "failed_tests": [
+          "stdout-1"
+        ]
+      },
+      "analysis": {
+        "status": "unavailable",
+        "message": "AI 模型尚未配置，判题结果已保留。",
+        "model": "qwen2.5-coder:3b-instruct",
+        "content": null,
+        "source": null
+      }
+    }
+  },
+  "history": [
+    {
+      "schema_version": "1.0.0",
+      "version": 1,
+      "difficulty": 1,
+      "knowledge_ids": [
+        "K02"
+      ],
+      "id": 11,
+      "problem_id": "greeting-v1",
+      "problem_title": "打招呼",
+      "problem_description": "输入一行姓名（1–20 个字符，不含首尾空格，可以含内部空格）。把输入保存到变量里，输出一行 Hello, 姓名!。保留姓名的大小写与内部空格；逗号后恰好一个空格。不要输出输入提示语。",
+      "code": "name = input()\nprint(\"Hello,\", name + \"!\")",
+      "judge": {
+        "status": "accepted",
+        "passed": true,
+        "passed_cases": 4,
+        "total_cases": 4,
+        "cases": [
+          {
+            "case_id": "sample-1",
+            "passed": true,
+            "expected_output": "Hello, Ottly!\n",
+            "actual_output": "Hello, Ottly!\n",
+            "output_available": true,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "public"
+          },
+          {
+            "case_id": "hidden-1",
+            "passed": true,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "hidden"
+          },
+          {
+            "case_id": "hidden-2",
+            "passed": true,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "hidden"
+          },
+          {
+            "case_id": "hidden-3",
+            "passed": true,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "hidden"
+          }
+        ],
+        "failed_tests": []
+      },
+      "analysis": {
+        "status": "skipped",
+        "message": "测试已通过，无需 AI 分析。",
+        "model": null,
+        "content": null,
+        "source": null
+      },
+      "passed": true,
+      "error_type": null,
+      "hints_viewed_max": 0,
+      "resolved_later": false,
+      "created_at": "2026-10-16T00:13:30.000Z",
+      "review_source_id": 8
+    },
+    {
+      "schema_version": "1.0.0",
+      "version": 1,
+      "difficulty": 1,
+      "knowledge_ids": [
+        "K02"
+      ],
+      "id": 10,
+      "problem_id": "greeting-v1",
+      "problem_title": "打招呼",
+      "problem_description": "输入一行姓名（1–20 个字符，不含首尾空格，可以含内部空格）。把输入保存到变量里，输出一行 Hello, 姓名!。保留姓名的大小写与内部空格；逗号后恰好一个空格。不要输出输入提示语。",
+      "code": "name = input()\nprint(\"Hello,\", name + \"!\")",
+      "judge": {
+        "status": "accepted",
+        "passed": true,
+        "passed_cases": 4,
+        "total_cases": 4,
+        "cases": [
+          {
+            "case_id": "sample-1",
+            "passed": true,
+            "expected_output": "Hello, Ottly!\n",
+            "actual_output": "Hello, Ottly!\n",
+            "output_available": true,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "public"
+          },
+          {
+            "case_id": "hidden-1",
+            "passed": true,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "hidden"
+          },
+          {
+            "case_id": "hidden-2",
+            "passed": true,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "hidden"
+          },
+          {
+            "case_id": "hidden-3",
+            "passed": true,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "hidden"
+          }
+        ],
+        "failed_tests": []
+      },
+      "analysis": {
+        "status": "skipped",
+        "message": "测试已通过，无需 AI 分析。",
+        "model": null,
+        "content": null,
+        "source": null
+      },
+      "passed": true,
+      "error_type": null,
+      "hints_viewed_max": 0,
+      "resolved_later": false,
+      "created_at": "2026-10-16T00:13:29.000Z",
+      "review_source_id": null
+    },
+    {
+      "schema_version": "1.0.0",
+      "version": 1,
+      "difficulty": 1,
+      "knowledge_ids": [
+        "K02"
+      ],
+      "id": 9,
+      "problem_id": "greeting-v1",
+      "problem_title": "打招呼",
+      "problem_description": "输入一行姓名（1–20 个字符，不含首尾空格，可以含内部空格）。把输入保存到变量里，输出一行 Hello, 姓名!。保留姓名的大小写与内部空格；逗号后恰好一个空格。不要输出输入提示语。",
+      "code": "print(missing_name)",
+      "judge": {
+        "status": "execution_error",
+        "passed": false,
+        "passed_cases": 0,
+        "total_cases": 4,
+        "cases": [
+          {
+            "case_id": "sample-1",
+            "passed": false,
+            "expected_output": "Hello, Ottly!\n",
+            "actual_output": "",
+            "output_available": true,
+            "errors": [
+              {
+                "type": "NAME_ERROR",
+                "line": 1,
+                "message": "变量 'missing_name' 没有定义，请先赋值或检查拼写"
+              }
+            ],
+            "execution_time": 0.001,
+            "visibility": "public"
+          },
+          {
+            "case_id": "hidden-1",
+            "passed": false,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "hidden"
+          },
+          {
+            "case_id": "hidden-2",
+            "passed": false,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "hidden"
+          },
+          {
+            "case_id": "hidden-3",
+            "passed": false,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "hidden"
+          }
+        ],
+        "failed_tests": [
+          "sample-1",
+          "hidden-1",
+          "hidden-2",
+          "hidden-3"
+        ]
+      },
+      "analysis": {
+        "status": "ready",
+        "message": "AI 暂未提供合格分析，以下使用本关已审核的基础提示。",
+        "model": null,
+        "content": {
+          "suspected_cause": "尚未确认具体错因，请结合公开结果逐步核对。",
+          "evidence": [
+            {
+              "case_id": "sample-1",
+              "field": "error_message",
+              "quote": "变量 'missing_name' 没有定义，请先赋值或检查拼写",
+              "explanation": "这里只展示公开样例的执行结果，不据此猜测隐藏用例内容。"
+            }
+          ],
+          "knowledge_points": [
+            "输入与变量",
+            "字符串拼接与输出格式"
+          ],
+          "hints": {
+            "level1": "使用变量之前，需要先明确哪些信息？",
+            "level2": "结合变量先赋值后使用的知识，观察报错位置之前是否出现对应变量的赋值。",
+            "level3": "从上到下记录该变量首次赋值和使用的位置，核对拼写与执行顺序后再运行。"
+          },
+          "knowledge_ids": [
+            "K02"
+          ]
+        },
+        "source": "fixed"
+      },
+      "passed": false,
+      "error_type": "NAME_ERROR",
+      "hints_viewed_max": 0,
+      "resolved_later": true,
+      "created_at": "2026-10-16T00:13:29.000Z",
+      "review_source_id": null
+    },
+    {
+      "schema_version": "1.0.0",
+      "version": 1,
+      "difficulty": 1,
+      "knowledge_ids": [
+        "K02"
+      ],
+      "id": 8,
+      "problem_id": "greeting-v1",
+      "problem_title": "打招呼",
+      "problem_description": "输入一行姓名（1–20 个字符，不含首尾空格，可以含内部空格）。把输入保存到变量里，输出一行 Hello, 姓名!。保留姓名的大小写与内部空格；逗号后恰好一个空格。不要输出输入提示语。",
+      "code": "print(\"Hello, Ottly!\")",
+      "judge": {
+        "status": "wrong_answer",
+        "passed": false,
+        "passed_cases": 1,
+        "total_cases": 4,
+        "cases": [
+          {
+            "case_id": "sample-1",
+            "passed": true,
+            "expected_output": "Hello, Ottly!\n",
+            "actual_output": "Hello, Ottly!\n",
+            "output_available": true,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "public"
+          },
+          {
+            "case_id": "hidden-1",
+            "passed": false,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "hidden"
+          },
+          {
+            "case_id": "hidden-2",
+            "passed": false,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "hidden"
+          },
+          {
+            "case_id": "hidden-3",
+            "passed": false,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "hidden"
+          }
+        ],
+        "failed_tests": [
+          "hidden-1",
+          "hidden-2",
+          "hidden-3"
+        ]
+      },
+      "analysis": {
+        "status": "ready",
+        "message": "AI 暂未提供合格分析，以下使用本关已审核的基础提示。",
+        "model": null,
+        "content": {
+          "suspected_cause": "尚未确认具体错因，请结合公开结果逐步核对。",
+          "evidence": [
+            {
+              "case_id": "sample-1",
+              "field": "actual_output",
+              "quote": "Hello, Ottly!",
+              "explanation": "这里只展示公开样例的执行结果，不据此猜测隐藏用例内容。"
+            }
+          ],
+          "knowledge_points": [
+            "输入与变量",
+            "字符串拼接与输出格式"
+          ],
+          "hints": {
+            "level1": "问候语中哪部分会随输入变化？",
+            "level2": "查看变量是否真正接收了输入，打印时有没有把变量名加上引号。",
+            "level3": "把输出分成固定前缀、姓名和标点三部分，检查连接处的空格。"
+          },
+          "knowledge_ids": [
+            "K02"
+          ]
+        },
+        "source": "fixed"
+      },
+      "passed": false,
+      "error_type": "WRONG_ANSWER",
+      "hints_viewed_max": 0,
+      "resolved_later": true,
+      "created_at": "2026-10-16T00:13:29.000Z",
+      "review_source_id": null
+    },
+    {
+      "schema_version": "1.0.0",
+      "version": 1,
+      "difficulty": 1,
+      "knowledge_ids": [
+        "K01"
+      ],
+      "id": 7,
+      "problem_id": "level1",
+      "problem_title": "初识小海獭",
+      "problem_description": "使用 print 函数输出 Hello, World!，没有输入。",
+      "code": "print('Hello, World!')",
+      "judge": {
+        "status": "accepted",
+        "passed": true,
+        "passed_cases": 1,
+        "total_cases": 1,
+        "cases": [
+          {
+            "case_id": "stdout-1",
+            "passed": true,
+            "expected_output": "Hello, World!",
+            "actual_output": "Hello, World!\n",
+            "output_available": true,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "public"
+          }
+        ],
+        "failed_tests": []
+      },
+      "analysis": {
+        "status": "skipped",
+        "message": "测试已通过，无需 AI 分析。",
+        "model": null,
+        "content": null,
+        "source": null
+      },
+      "passed": true,
+      "error_type": null,
+      "hints_viewed_max": 0,
+      "resolved_later": false,
+      "created_at": "2026-10-16T00:13:29.000Z",
+      "review_source_id": null
+    },
+    {
+      "schema_version": "1.0.0",
+      "version": 1,
+      "difficulty": 1,
+      "knowledge_ids": [
+        "K01"
+      ],
+      "id": 6,
+      "problem_id": "level1",
+      "problem_title": "初识小海獭",
+      "problem_description": "使用 print 函数输出 Hello, World!，没有输入。",
+      "code": "print(0)",
+      "judge": {
+        "status": "wrong_answer",
+        "passed": false,
+        "passed_cases": 0,
+        "total_cases": 1,
+        "cases": [
+          {
+            "case_id": "stdout-1",
+            "passed": false,
+            "expected_output": "Hello, World!",
+            "actual_output": "0\n",
+            "output_available": true,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "public"
+          }
+        ],
+        "failed_tests": [
+          "stdout-1"
+        ]
+      },
+      "analysis": {
+        "status": "unavailable",
+        "message": "AI 模型尚未配置，判题结果已保留。",
+        "model": "qwen2.5-coder:3b-instruct",
+        "content": null,
+        "source": null
+      },
+      "passed": false,
+      "error_type": "WRONG_ANSWER",
+      "hints_viewed_max": 0,
+      "resolved_later": true,
+      "created_at": "2026-10-16T00:13:29.000Z",
+      "review_source_id": null
+    }
+  ]
+}

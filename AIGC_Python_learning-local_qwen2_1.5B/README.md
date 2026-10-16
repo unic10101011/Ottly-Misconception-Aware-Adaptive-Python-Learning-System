@@ -8,6 +8,8 @@
 
 可在本目录运行 docker compose ps 查看服务，运行 docker compose logs backend 查看后端错误。
 
+已有数据库升级本轮契约前，需要备份并运行显式迁移；应用不会用 create_all 自动补旧表列。检查命令为 backend 目录的 `python migrate_submissions.py`。SQLite 使用 `--apply` 自动备份后加列；MySQL 先完成外部备份，再使用 `--apply --backup-confirmed`。完整操作和回退步骤见 [契约 v1 实施与迁移](docs/05-契约v1实施与迁移.md)。
+
 ## 注册和登录
 
 注册需要用户名、密码和手机号。登录后页面会验证令牌；聊天记录、职业选择记录和设置接口按当前登录账号隔离。当前未接入短信验证码，所以密码重置入口和接口已停用。请保存演示账号密码。
@@ -32,8 +34,10 @@
 
 设置页面的护眼模式和语言暂存在当前浏览器，昵称按钮尚未保存到账号；逐步回放与 AI 出题尚未接入。.env、Docker 命名卷和 AI 模型服务不在 Git 仓库内。第 2 关的内容位置和验收步骤见 [第 2 关接入与验收](docs/04-第2关接入与验收.md)。
 
+学习接口采用 schema_version=1.0.0，题库校验知识点、难度、题目版本和前置引用；解锁由 prerequisite_problem_ids 决定。提交保存元数据快照，提供规范英文错误码和 failed_tests；历史记录缺失的元数据不推断。模型调用和提示生成流程保持原样，分析知识点编号由后端精确映射。队友对接见 [实施契约](docs/05-契约v1实施与迁移.md) 与 [响应样例](docs/contract-v1-examples.json)。
+
 详细接口、文件职责、三种错误示例、错误处理和测试步骤见 [提交判题与三级提示说明](docs/submission-flow.md)。真实模型验收数据见 [live-submission.json](docs/live-submission.json)。
 
 ## 开发检查
 
-在 backend 目录使用 Python 3.11 虚拟环境安装 requirements.txt 与 pytest，运行 `python -m pytest tests -q`。在 frontend 目录运行 `npm ci`、`node --test tests/submission-flow.test.cjs` 和 `npm run build`。演示版启动后，在 backend 目录运行 `python tests/live_submission_smoke.py --output ../docs/live-submission.json` 可通过真实 HTTP 接口验证四种错误代码和正确代码；脚本每次创建一个独立 smoke_ 测试账号，报告不保存密码和令牌。
+在 backend 目录使用 Python 3.11 虚拟环境安装 requirements.txt 与 pytest，先运行 `python validate_catalog.py --check-solutions`，再运行 `python -m pytest tests -q`。在 frontend 目录运行 `npm ci`、`node --test tests/*.test.cjs` 和 `npm run build`。演示版启动后，在 backend 目录运行 `python tests/live_submission_smoke.py --output ../docs/live-submission.json` 可通过真实 HTTP 接口验证四种错误代码和正确代码；脚本每次创建一个独立 smoke_ 测试账号，报告不保存密码和令牌。专用 MySQL 契约测试和样例生成步骤见实施契约。
