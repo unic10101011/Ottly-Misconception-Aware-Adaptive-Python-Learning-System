@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 def opening_question(problem: Problem, judge: JudgeResult) -> str:
     error_types = {error.type for case in judge.cases for error in case.errors}
     if error_types & {"语法错误", "SyntaxError", "IndentationError"}:
-        return "描述一个程序步骤时，需要怎样区分语句结构和执行内容？"
+        return "Python 写一行代码时，需要遵守哪些基本格式？"
     if "NameError" in error_types:
         return "使用变量之前，需要先明确哪些信息？"
     if problem.problem_id == GREETING_ID:
@@ -58,8 +58,8 @@ def safe_hints(problem: Problem, judge: JudgeResult) -> Hints:
     first = opening_question(problem, judge)
     error_types = {error.type for case in judge.cases for error in case.errors}
     if error_types & {"语法错误", "SyntaxError", "IndentationError"}:
-        second = "结合 Python 的语法结构，观察报错行及相邻语句的写法。"
-        third = "逐字核对报错行附近的语句结构、标点与缩进，找到与语法要求不符的位置后重新运行。"
+        second = "先看报错行和上一行，检查标点、括号或缩进是否符合 Python 的写法。"
+        third = "从报错行开始逐字对照示例，先修改一处可疑写法并重新运行；语法通过后再检查结果。"
     elif "NameError" in error_types:
         second = "结合变量先赋值后使用的知识，观察报错位置之前是否出现对应变量的赋值。"
         third = "从上到下记录该变量首次赋值和使用的位置，核对拼写与执行顺序后再运行。"
@@ -190,9 +190,48 @@ def validate_grounding(content: AnalysisContent, judge: JudgeResult) -> None:
         raise ValueError("Hints must be distinct")
 
 
+def fixed_syntax_analysis(problem: Problem, code: str, judge: JudgeResult) -> AnalysisResult | None:
+    """Use the compiler's public syntax error instead of asking a model to guess."""
+    found = next(((case, error) for case in judge.cases if not case.passed and case.visibility == 'public'
+                  for error in case.errors if error.type in {'语法错误', 'SyntaxError', 'IndentationError'}), None)
+    if found is None:
+        return None
+    case, error = found
+    lines = code.splitlines()
+    source_line = lines[error.line - 1] if error.line and 1 <= error.line <= len(lines) else ''
+    type_declaration = bool(re.match(r'^\s*(?:int|float|str|bool)\s+[A-Za-z_]\w*\s*=', source_line))
+    if type_declaration:
+        cause = (f'第 {error.line} 行疑似用了其他语言的类型声明写法。Python 给变量赋值时，'
+                 '不需要在变量名前写类型名称；这条报错不能说明变量名本身有问题。')
+        hints = Hints(
+            level1='Python 给变量赋值时，需要先写类型名称吗？',
+            level2=f'查看报错的第 {error.line} 行，留意变量名前是否写了类型名称。',
+            level3='试着去掉变量名前表示类型的词，再运行一次；语法通过后继续检查题目结果。',
+        )
+        points = ['Python 变量赋值', '语法错误']
+    else:
+        cause = '判题器确认代码有语法错误；仅凭这条报错，还不能确定后续计算是否正确。'
+        hints = safe_hints(problem, judge)
+        points = ['Python 语法结构']
+    return AnalysisResult(
+        status='ready', source='fixed',
+        message='依据 Python 报错给出基础提示，本次无需等待 AI；语法修好后请重新提交。',
+        content=AnalysisContent(
+            suspected_cause=cause,
+            evidence=[Evidence(case_id=case.case_id, field='error_message', quote=error.message.strip()[:1000],
+                               explanation=f'判题器在第 {error.line} 行报告语法错误，后面的代码尚未执行。'
+                               if error.line else '判题器报告语法错误，后面的代码尚未执行。')],
+            knowledge_points=points, hints=hints,
+        ),
+    )
+
+
 async def _analyze_failure(problem: Problem, code: str, judge: JudgeResult) -> AnalysisResult:
     if judge.passed:
         return AnalysisResult(status="skipped", message="测试已通过，无需 AI 分析。")
+    syntax_result = fixed_syntax_analysis(problem, code, judge)
+    if syntax_result is not None:
+        return syntax_result
     if not LOCAL_LLM_URL:
         return AnalysisResult(status="unavailable", message="AI 模型尚未配置，判题结果已保留。", model=OLLAMA_MODEL)
     if any(error.type == "RunnerError" for case in judge.cases for error in case.errors):

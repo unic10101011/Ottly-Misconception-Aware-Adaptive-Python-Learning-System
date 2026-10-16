@@ -55,7 +55,7 @@ CORRECT = "total = 0\nfor i in range(1, 101):\n    total += i\nprint(total)"
 
 
 @pytest.mark.parametrize("code,expected_fragment", [
-    ("for i in range(1, 101)\n    print(i)", "语句结构"),
+    ("for i in range(1, 101)\n    print(i)", "基本格式"),
     ("print(missing_total)", "变量"),
     (OVERWRITE, "循环"),
 ])
@@ -104,6 +104,30 @@ def test_wrong_answer_fallback_checks_both_range_and_accumulation():
     assert "前两步" in hints.level3
     assert "旧总数" in hints.level3
     assert "新总数" in hints.level3
+
+
+@pytest.mark.parametrize("code", [
+    "int sum = 0\nfor i in range(1,100):\n    sum += i\nprint(sum)",
+    "for i in range(1, 101)\n    print(i)",
+])
+def test_syntax_error_uses_fast_grounded_hints_without_model(client, monkeypatch, code):
+    from app.services import error_analysis
+
+    monkeypatch.setattr(error_analysis, "LOCAL_LLM_URL", "http://ollama.test/api/chat")
+    monkeypatch.setattr(error_analysis.httpx, "AsyncClient",
+                        lambda **kwargs: pytest.fail("Syntax errors must not call Ollama"))
+    data = client.post("/api/v1/code/submit", headers=login(client),
+                       json={"problem_id": "level2", "code": code}).json()["data"]
+    assert data["judge"]["status"] == "execution_error"
+    assert data["judge"]["cases"][0]["errors"][0]["type"] == "语法错误"
+    analysis = data["analysis"]
+    assert analysis["status"] == "ready"
+    assert analysis["source"] == "fixed"
+    assert analysis["content"]["evidence"][0]["quote"] == data["judge"]["cases"][0]["errors"][0]["message"]
+    assert "变量名以数字开头" not in json.dumps(analysis, ensure_ascii=False)
+    if code.startswith("int sum"):
+        assert "声明" in analysis["content"]["suspected_cause"]
+        assert "类型" in analysis["content"]["hints"]["level3"]
 
 
 def mock_model(monkeypatch, handler, review_handler=None):
@@ -231,7 +255,6 @@ def test_accepted_submission_never_calls_model(client, monkeypatch):
 @pytest.mark.parametrize("code,status,actual", [
     (OVERWRITE, "wrong_answer", "100\n"),
     ("total = 0\nfor i in range(1, 100):\n    total += i\nprint(total)", "wrong_answer", "4950\n"),
-    ("for i in range(1, 101)\n    print(i)", "execution_error", ""),
     ("print(missing_total)", "execution_error", ""),
 ])
 def test_real_judge_evidence_is_sent_to_model(client, monkeypatch, code, status, actual):
