@@ -32,7 +32,9 @@ function SubmissionFeedback({ result, visibleHintCount, onRevealHint, hintBusy =
           ))}
         </div>
       ))}
-      {judge.passed ? <p className="analysis-status">全部测试用例通过，本次未调用 AI。</p> : content ? (
+      {judge.passed ? <p className="analysis-status">全部测试用例通过，本次未调用 AI。</p> : analysis?.status === 'preparing' ? (
+        <p className="analysis-status" role="status">正在准备提示，判题结果已显示，你可以先对照测试检查代码。</p>
+      ) : content ? (
         <div className="ai-feedback">
           <h4>{analysis.source === 'fixed' ? '本关基础提示' : 'AI 学习提示'}</h4>
           <p className="analysis-status">先尝试自己修改；需要帮助时，逐级查看提示。{analysis.source !== 'fixed' && 'AI 分析是基于本次测试的推测。'}</p>

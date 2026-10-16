@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import SubmissionFeedback from './SubmissionFeedback.jsx'
-import { requestCode, saveHintView } from './codeApi.mjs'
+import { requestCode, requestAnalysis, saveHintView } from './codeApi.mjs'
 import { readCodeDraft, saveCodeDraft } from './codeDraft.mjs'
 
 function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, title, children, acceptsInput = false, sampleInput = '' }) {
@@ -171,7 +171,7 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, tit
     setHintError('')
     setModal(current => ({ ...current, show: false }))
     clearTimeout(successTimerRef.current)
-    setOutput('正在运行测试用例；若未通过，将准备学习提示，请稍候...')
+    setOutput('正在运行测试用例...')
     setOutputType('info')
     try {
       const result = await requestCode('submit', { problem_id: problemId, code }, localStorage.getItem('access_token'))
@@ -179,6 +179,23 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, tit
       submissionRef.current = result
       setSubmission(result)
       setOutputType('hidden')
+      if (result.analysis?.status === 'preparing') {
+        requestAnalysis(result.submission_id, localStorage.getItem('access_token'))
+          .then(data => {
+            if (!mountedRef.current || submissionRef.current !== result) return
+            const updated = { ...result, analysis: data.analysis, timings: data.timings }
+            submissionRef.current = updated
+            setSubmission(updated)
+          })
+          .catch(error => {
+            if (!mountedRef.current || submissionRef.current !== result) return
+            const updated = { ...result, analysis: {
+              status: 'unavailable', message: `提示暂时无法生成：${error.message} 判题结果已保留。`, content: null,
+            } }
+            submissionRef.current = updated
+            setSubmission(updated)
+          })
+      }
       if (result.judge.passed) {
         onAccepted?.(result)
         setModal({ show: true, type: 'success', title: '通过', message: '恭喜！全部测试用例通过！' })
