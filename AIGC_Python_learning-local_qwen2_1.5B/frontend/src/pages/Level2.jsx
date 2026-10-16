@@ -42,7 +42,7 @@ function Level2() {
   }
 
   return <div className="lesson-page">
-    <button type="button" className="btn-hint" onClick={() => navigate('/app/levels')}>← 返回关卡选择</button>
+    <button type="button" className="lesson-back" onClick={() => navigate('/app/levels')}>← 返回关卡选择</button>
     {error && <p role="alert">{error}</p>}
     {!lesson && !error && <p role="status">正在加载第 2 关...</p>}
     {lesson && <>

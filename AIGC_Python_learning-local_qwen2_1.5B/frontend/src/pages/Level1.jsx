@@ -14,17 +14,7 @@ function Level1() {
     <div className="lesson-page">
       <button
         onClick={() => navigate('/app/levels')}
-        style={{
-          alignSelf: 'flex-start',
-          background: 'none',
-          border: '1px solid #ddd',
-          borderRadius: '8px',
-          padding: '6px 16px',
-          cursor: 'pointer',
-          fontSize: '14px',
-          color: '#666',
-          marginBottom: '8px',
-        }}
+        className="lesson-back"
       >
         ← 返回关卡选择
       </button>
