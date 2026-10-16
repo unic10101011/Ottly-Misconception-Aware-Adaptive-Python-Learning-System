@@ -1,0 +1,31 @@
+{
+  "schema_version":"1.0.0", "problem_id":"temperature-max-v1", "version":1, "level_no":11,
+  "title":"温差记录表", "difficulty":2, "published":true,
+  "knowledge_ids":["K11"], "prerequisite_knowledge_ids":["K03","K05","K07"], "prerequisite_problem_ids":["radio-text-v1"],
+  "assessment":"list_maximum",
+  "story":"海边的天气忽冷忽热，Ottly 决定连续记录几天的海水温度变化，把每天的整数变化值写进温差记录表。变化值可以为负。记录完成后，她想知道这些值中最大的一个，请先用列表保存数据，再逐个比较。",
+  "teaching":[
+    {"title":"列表保存一组数据","text":"列表可以按顺序保存多个值。空方括号表示空列表；把数据放入同一个列表，就不需要为每天分别起一个变量名。","example":"values = []\nprint(values)  # []"},
+    {"title":"append 添加到列表末尾","text":"append 直接在原列表末尾添加一个元素。它的返回值是 None，不是更新后的列表。把返回值赋给原变量，会让变量不再关联原来的列表，后续操作才会报错。","example":"values = []\nvalues.append(5)\nvalues.append(-2)\nprint(values)  # [5, -2]"},
+    {"title":"按次数读取与列表长度","text":"先读取记录数，用 range 重复读取相应次数，把每条输入转成整数后添加。len 也能返回列表的元素个数。","example":"values = [5, -2, 8]\nprint(len(values))  # 3"},
+    {"title":"索引从零开始","text":"values[0] 访问第一项，values[1] 是第二项。单元素列表只有第一项，本题保证记录数至少为一，可以安全读取第一项作为比较初值。","example":"values = [-5]\nprint(values[0])  # -5\n# 此时不能访问 values[1]"},
+    {"title":"逐个比较并更新最大值","text":"先假设第一项是目前最大值，再遍历所有元素。当前元素更大才更新，否则保留原值。第一项再次与自己比较也不会影响答案。","example":"# 记录为 5、-2、8、6\n# 当前最大值：5 → 5 → 8 → 8"},
+    {"title":"全负数时不能从零开始","text":"最大值必须来自真实记录。若所有值为负，把最大值初始化为零会得到不存在的结果。要区分数字比较和字符串比较，输入需要先转整数。","example":"print(-3 > -8)  # True\nprint(10 > 9)   # True\nprint('10' > '9')  # False，文字比较规则不同"},
+    {"title":"本关要自己比较","text":"请使用列表和 for 循环练习比较更新，不调用 max、sorted 或列表的 sort 方法，也不自行排序。最后只打印最大值一次，不输出整个列表或中间结果。","example":"# 保存每条记录\n# 从第一项开始比较\n# 遇到更大值就更新\n# 循环结束后输出"}
+  ],
+  "description":"第一行输入记录数 n（至少为 1），接下来 n 行每行一个整数温差，可以为负。将数据存入列表，使用 for 逐个比较，输出一行整数最大值。不能使用 max、sorted、sort 或通过排序寻找最大值。",
+  "starter_code":"# 读取记录数，把每个整数放入列表，再通过比较寻找最大值\n",
+  "examples":[{"stdin":"4\n2\n9\n3\n7\n","stdout":"9\n"}],
+  "tests":[
+    {"case_id":"sample-1","stdin":"4\n2\n9\n3\n7\n","expected_output":"9\n","visibility":"public"},
+    {"case_id":"hidden-1","stdin":"3\n-8\n-3\n-6\n","expected_output":"-3\n","visibility":"hidden"},
+    {"case_id":"hidden-2","stdin":"1\n-5\n","expected_output":"-5\n","visibility":"hidden"},
+    {"case_id":"hidden-3","stdin":"4\n2\n9\n10\n10\n","expected_output":"10\n","visibility":"hidden"},
+    {"case_id":"hidden-4","stdin":"3\n12\n0\n-1\n","expected_output":"12\n","visibility":"hidden"},
+    {"case_id":"hidden-5","stdin":"2\n0\n0\n","expected_output":"0\n","visibility":"hidden"}
+  ],
+  "comparison":"exact", "time_limit_seconds":3, "output_limit_chars":8000,
+  "hints":{"level1":"比较一组数据时，当前最大值应该从哪里开始？","level2":"检查输入是否转为整数并保存在列表，初值是否来自第一项，以及比较成立后有没有更新。","level3":"用全负数和单元素记录逐步推演，检查首索引与最终输出；确认没有使用最大值函数或排序代替逐个比较。"},
+  "reference_solution":"n = int(input())\nvalues = []\nfor i in range(n):\n    values.append(int(input()))\nlargest = values[0]\nfor value in values:\n    if value > largest:\n        largest = value\nprint(largest)\n",
+  "solution_explanation":"先创建空列表，读取 n 条整数并逐条追加，不能把 append 的返回值赋回列表。因为 n 至少为一，第一项一定存在。\n\nlargest 以第一项初始化，再逐个比较。样例中的当前最大值依次为二、九、九、九，最后输出九。\n\n全负数时第一项仍是有效初值，例如负八、负三、负六中最大的是负三。单元素时第一次比较不会更新，直接输出该元素。"
+}

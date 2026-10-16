@@ -63,7 +63,7 @@ def test_first_seven_full_flow(client):
     renewed = {'Authorization': 'Bearer ' + token}
     levels = client.get('/api/v1/code/levels', headers=renewed).json()['data']['items']
     assert all(item['status'] == 'completed' for item in levels[:7])
-    assert levels[7]['status'] == 'current' and not levels[7]['published']
+    assert levels[7]['status'] == 'current' and levels[7]['published']
     other = account(client, 'seven_other', '13900000002')
     assert client.get('/api/v1/code/problems/shell-shop-v1', headers=other).status_code == 403
     assert client.get('/api/v1/code/problems/coastal-markers-v1/solution', headers=other).status_code == 403

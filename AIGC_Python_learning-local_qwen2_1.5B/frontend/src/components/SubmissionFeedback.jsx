@@ -11,11 +11,12 @@ const hintLabels = ['思考方向', '知识点与检查位置', '修改与验证
 function SubmissionFeedback({ result, visibleHintCount, onRevealHint, hintBusy = false, hintError = '' }) {
   const { judge, analysis } = result
   const content = analysis?.status === 'ready' ? analysis.content : null
+  const requirementFailed = judge.cases.some(testCase => testCase.errors.some(error => error.type === 'REQUIREMENT_NOT_MET'))
 
   return (
     <section className="submission-feedback" aria-label="提交结果" aria-live="polite">
       <h3 className={judge.passed ? 'judge-passed' : 'judge-failed'}>
-        {statusLabels[judge.status] || '判题结果'}
+        {requirementFailed ? '尚未满足本关任务要求' : statusLabels[judge.status] || '判题结果'}
       </h3>
       <p>测试通过：{judge.passed_cases} / {judge.total_cases}</p>
       {!!judge.failed_tests?.length && <p>未通过测试：{judge.failed_tests.join('、')}</p>}
@@ -24,7 +25,9 @@ function SubmissionFeedback({ result, visibleHintCount, onRevealHint, hintBusy =
           <strong>测试 {testCase.case_id} · {testCase.passed ? '通过' : '未通过'}</strong>
           {testCase.visibility === 'hidden' ? <p>隐藏测试仅展示通过状态。</p> : <div className="judge-output-grid">
             <div><span>预期输出</span><pre>{testCase.expected_output || '（无输出）'}</pre></div>
-            <div><span>实际输出</span><pre>{testCase.output_available === false ? '输出未采集（执行已终止）' : testCase.actual_output || '（无输出）'}</pre></div>
+            <div><span>实际输出</span><pre>{testCase.output_available === false
+              ? (testCase.errors.some(error => error.type === 'REQUIREMENT_NOT_MET') ? '未执行：请先满足本关任务要求' : '输出未采集（执行已终止）')
+              : testCase.actual_output || '（无输出）'}</pre></div>
           </div>}
           {testCase.visibility !== 'hidden' && testCase.errors.map((error, index) => (
             <p className="judge-error" key={index}>

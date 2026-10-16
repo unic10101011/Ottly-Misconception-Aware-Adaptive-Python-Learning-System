@@ -1,0 +1,28 @@
+{
+  "schema_version":"1.0.0", "problem_id":"shell-total-v1", "version":1, "level_no":8,
+  "title":"收集贝壳总数", "difficulty":2, "published":true,
+  "knowledge_ids":["K08"], "prerequisite_knowledge_ids":["K07","K03"], "prerequisite_problem_ids":["coastal-markers-v1"],
+  "story":"Ottly 想用贝壳串一串风铃挂在洞口。她每天退潮后去浅滩捡贝壳：第一天捡一枚，第二天捡两枚，第 i 天捡 i 枚，一连攒了 n 天。请帮她算出一共收集了多少枚贝壳。",
+  "teaching":[
+    {"title":"从编号到累计","text":"上一关逐行打印每个编号，这一关要把每天的数量加在一起，最后只输出一次总数。循环仍然依次提供一到 n。","example":"# 捡三天时，要计算 1 + 2 + 3\nfor day in range(1, 4):\n    print(day)  # 先观察每天的数量"},
+    {"title":"循环前准备累加器","text":"用一个变量保存已经收集的总数，称为累加器。开始还没收集，所以初值为零。初始化必须放在循环之前，只做一次。","example":"total = 0\n# 再开始每天的收集"},
+    {"title":"变量更新先算右侧","text":"更新后的总数等于原总数加当天数量。先用旧值计算右侧，再把结果赋给左侧同一个变量。若只把当天数量赋给总数，之前的数量就丢失了。","example":"total = 4\ntoday = 3\ntotal = total + today\nprint(total)  # 7"},
+    {"title":"跟踪每轮的新旧值","text":"假设累计前三天：初值零，加入第一天后是一，加入第二天后是三，加入第三天后是六。每轮都沿用上一轮得到的总数，不要在循环内重新清零。","example":"# 轮次   旧总数   当天数量   新总数\n# 1      0        1          1\n# 2      1        2          3\n# 3      3        3          6"},
+    {"title":"认识 += 简写","text":"对于本关整数，total += day 与 total = total + day 表达相同的累加更新。先理解完整写法，再使用简写；它与仅赋值为当天数量不同。","example":"amount = 2\namount += 3\nprint(amount)  # 5"},
+    {"title":"结束后输出与零次循环","text":"打印语句放在循环外，所有天数累计完后才输出最终答案。当 n 为零时，循环不执行，总数仍是初值零，所以需要输出零，而不是空输出。","example":"total = 0\nfor day in range(1, 1):\n    total = total + day\nprint(total)  # 0"}
+  ],
+  "description":"输入一个整数 n（0–100）。使用 for 循环累加 1 到 n，只输出一行整数总和。n 为零时输出 0，不附标签或中间结果。",
+  "starter_code":"# 读取天数，在循环前初始化总数，逐日累加后输出\n",
+  "examples":[{"stdin":"4\n","stdout":"10\n"}],
+  "tests":[
+    {"case_id":"sample-1","stdin":"4\n","expected_output":"10\n","visibility":"public"},
+    {"case_id":"hidden-1","stdin":"0\n","expected_output":"0\n","visibility":"hidden"},
+    {"case_id":"hidden-2","stdin":"1\n","expected_output":"1\n","visibility":"hidden"},
+    {"case_id":"hidden-3","stdin":"100\n","expected_output":"5050\n","visibility":"hidden"},
+    {"case_id":"hidden-4","stdin":"5\n","expected_output":"15\n","visibility":"hidden"}
+  ],
+  "comparison":"exact", "time_limit_seconds":3, "output_limit_chars":8000,
+  "hints":{"level1":"怎样保留已经收集的数量，并把当天数量加入总数？","level2":"检查总数是否在循环前初始化，每一轮更新是否包含原有总数。","level3":"在纸上记录前三轮的旧总数、当天数量和新总数，再核对打印是否放在循环结束之后。"},
+  "reference_solution":"n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    total = total + i\nprint(total)\n",
+  "solution_explanation":"先读取天数，把总数初始化为零。range 依次提供一到 n，循环每轮把当天数量加入旧总数。\n\n样例四天的更新过程是：零加一得到一，一加二得到三，三加三得到六，六加四得到十。总数只初始化一次，不能放在循环体内。\n\nprint 放在循环之后，只输出最终总数。零天时循环不执行，输出初值零。"
+}

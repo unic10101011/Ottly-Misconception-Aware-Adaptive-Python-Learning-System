@@ -298,6 +298,18 @@ test('terminated execution distinguishes unavailable stdout from an empty output
   assert.doesNotMatch(html, /（无输出）/)
 })
 
+test('requirement failures explain that execution has not started', () => {
+  const Feedback = loadJsx('../src/components/SubmissionFeedback.jsx')
+  const result = { ...failure, judge: { ...failure.judge, cases: [{
+    ...failure.judge.cases[0], output_available: false,
+    errors: [{ type: 'REQUIREMENT_NOT_MET', message: '请保留提供的输入输出代码。' }],
+  }] } }
+  const html = renderToStaticMarkup(React.createElement(Feedback, { result, visibleHintCount: 0 }))
+  assert.match(html, /尚未满足本关任务要求/)
+  assert.match(html, /未执行：请先满足本关任务要求/)
+  assert.doesNotMatch(html, /执行已终止/)
+})
+
 test('private cases never render outputs or errors and fixed hints are labelled honestly', () => {
   const Feedback = loadJsx('../src/components/SubmissionFeedback.jsx')
   const result = { ...failure,
@@ -538,13 +550,13 @@ test('opening an unfinished history entry resumes only that analysis', async () 
   }
 })
 
-test('shared lesson loads the selected problem, handles zero output, and gates the reference solution', async () => {
+for (const levelNo of [7, 12]) test(`shared lesson ${levelNo} loads content and gates reference and completion`, async () => {
   const values = []
   let index = 0
   const effects = []
   let collectEffects = true
   const calls = []
-  const lesson = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../backend/app/data/coastal-markers-v1.json'), 'utf8'))
+  const lesson = JSON.parse(fs.readFileSync(path.resolve(__dirname, `../../backend/app/data/${levelNo === 7 ? 'coastal-markers-v1' : 'count-at-least-v1'}.json`), 'utf8'))
   const hooks = { ...React,
     useState: initial => {
       const slot = index++
@@ -557,12 +569,12 @@ test('shared lesson loads the selected problem, handles zero output, and gates t
   const Page = loadJsx('../src/pages/LessonPage.jsx', {
     react: hooks,
     'react-router-dom': {
-      useNavigate: () => () => {}, useParams: () => ({ levelId: '7' }),
+      useNavigate: () => () => {}, useParams: () => ({ levelId: String(levelNo) }),
       useOutletContext: () => ({ userId: 12 }),
     },
     '../components/CodeEditor.jsx': props => { editorProps = props; return React.createElement('div', null, props.children) },
     '../components/codeApi.mjs': {
-      getLevels: async () => ({ items: [{ id: 7, problem_id: lesson.problem_id, published: true }, { id: 8, published: false }] }),
+      getLevels: async () => ({ items: [{ id: levelNo, problem_id: lesson.problem_id, published: true }, ...(levelNo === 7 ? [{ id: 8, published: false }] : [])] }),
       getLesson: async id => { calls.push(['lesson', id]); return { ...lesson, completed: false } },
       getSolution: async id => { calls.push(['solution', id]); return lesson },
     },
@@ -571,7 +583,7 @@ test('shared lesson loads the selected problem, handles zero output, and gates t
   Object.defineProperty(global, 'localStorage', { configurable: true, value: { getItem: () => 'token' } })
   try {
     const mounted = Page({})
-    assert.equal(mounted.key, '12:7', 'changing account or level remounts all lesson state')
+    assert.equal(mounted.key, `12:${levelNo}`, 'changing account or level remounts all lesson state')
     const render = () => { index = 0; return mounted.type(mounted.props) }
     render()
     const cleanups = effects.map(effect => effect())
@@ -580,17 +592,21 @@ test('shared lesson loads the selected problem, handles zero output, and gates t
     let tree = render()
     let html = renderToStaticMarkup(tree)
     assert.deepEqual(calls, [['lesson', lesson.problem_id]])
-    assert.match(editorProps.title, /第 7 关/)
-    assert.match(html, /无输出，不打印空行/)
-    assert.doesNotMatch(html, /查看参考解与解析|第 7 关已通过/)
+    assert.equal(editorProps.title, `第 ${levelNo} 关 · ${lesson.title}`)
+    if (levelNo === 7) assert.match(html, /无输出，不打印空行/)
+    assert.doesNotMatch(html, /查看参考解与解析|关已通过/)
     assert.equal(editorProps.problemId, lesson.problem_id)
     assert.equal(editorProps.acceptsInput, true)
     assert.equal(editorProps.persistentOutput, true)
     editorProps.onAccepted()
     tree = render()
     html = renderToStaticMarkup(tree)
-    assert.match(html, /第 7 关已通过/)
-    assert.match(html, /第 8 关内容待开放/)
+    assert.match(html, new RegExp(`第 ${levelNo} 关已通过`))
+    if (levelNo === 7) assert.match(html, /第 8 关内容待开放/)
+    else {
+      assert.match(html, /恭喜完成全部 12 关/)
+      assert.doesNotMatch(html, /第 13 关/)
+    }
     const referenceButton = React.Children.toArray(tree.props.children).flatMap(child =>
       React.isValidElement(child) ? React.Children.toArray(child.props.children) : []).flatMap(child =>
       React.isValidElement(child) ? React.Children.toArray(child.props.children) : []).find(child =>

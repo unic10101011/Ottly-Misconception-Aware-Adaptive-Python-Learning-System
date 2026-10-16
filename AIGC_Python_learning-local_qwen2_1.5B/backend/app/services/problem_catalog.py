@@ -55,6 +55,17 @@ class LessonHints(CatalogModel):
     level3: str = Field(min_length=1)
 
 
+class FunctionCall(CatalogModel):
+    scores: list[int] = Field(max_length=1000)
+    threshold: int
+    expected: int = Field(ge=0)
+
+
+class FunctionTest(CatalogModel):
+    case_id: str = Field(min_length=1)
+    calls: list[FunctionCall] = Field(min_length=2, max_length=10)
+
+
 class Lesson(CatalogModel):
     schema_version: Literal['1.0.0']
     problem_id: str = Field(min_length=1, max_length=100)
@@ -72,6 +83,8 @@ class Lesson(CatalogModel):
     starter_code: str = Field(max_length=6000)
     examples: list[Example] = Field(min_length=1)
     tests: list[TestCase] = Field(min_length=1)
+    assessment: Literal['output', 'list_maximum', 'count_at_least'] = 'output'
+    function_tests: list[FunctionTest] = Field(default_factory=list)
     comparison: Literal['legacy_trim', 'exact']
     time_limit_seconds: Literal[3]
     output_limit_chars: Literal[8000]
@@ -98,9 +111,13 @@ class Lesson(CatalogModel):
             values = getattr(self, field)
             if len(values) != len(set(values)):
                 raise ValueError(f'duplicate {field}')
-        ids = [test.case_id for test in self.tests]
+        ids = [test.case_id for test in [*self.tests, *self.function_tests]]
         if len(ids) != len(set(ids)):
             raise ValueError('duplicate case_id')
+        if self.function_tests and self.assessment != 'count_at_least':
+            raise ValueError('function tests require count_at_least assessment')
+        if self.assessment == 'count_at_least' and not self.function_tests:
+            raise ValueError('count_at_least assessment requires function tests')
         if self.problem_id not in LEGACY_IDS and not any(t.visibility == 'public' for t in self.tests):
             raise ValueError('a published input lesson needs a public test')
         if self.problem_id not in LEGACY_IDS and any(t.stdin for t in self.tests) and not any(t.visibility == 'hidden' for t in self.tests):

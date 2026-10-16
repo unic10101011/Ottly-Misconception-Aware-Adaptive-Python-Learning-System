@@ -199,7 +199,9 @@ class Sandbox:
         
         def target():
             try:
-                exec(code, self.safe_globals, {})
+                # A program uses one module namespace. Separate locals prevent
+                # functions from finding other functions or module variables.
+                exec(code, self.safe_globals, self.safe_globals)
             except Exception as e:
                 result['exception'] = e
         

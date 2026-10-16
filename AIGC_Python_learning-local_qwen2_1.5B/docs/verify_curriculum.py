@@ -92,7 +92,7 @@ def main():
     rejected_mutations = 0
     function_checks = 0
     for level, section in zip(numbers, sections[2::2]):
-        solutions = re.findall(r'^```python\n(.*?)^```', section, re.MULTILINE | re.DOTALL)
+        solutions = re.findall(r'^\*\*参考解：\*\*\s*```python\n(.*?)^```', section, re.MULTILINE | re.DOTALL)
         assert len(solutions) == 1, f'Level {level}: expected one reference solution'
         solution = solutions[0]
         cases = [

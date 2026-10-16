@@ -6,5 +6,9 @@
   {"id":5,"problem_id":"badge-v1","name":"领取徽章"},
   {"id":6,"problem_id":"safe-sailing-v1","name":"安全出航"},
   {"id":7,"problem_id":"coastal-markers-v1","name":"沿岸数路标"},
-  {"id":8,"problem_id":null,"name":"收集贝壳总数","prerequisite_problem_ids":["coastal-markers-v1"]}
+  {"id":8,"problem_id":"shell-total-v1","name":"收集贝壳总数"},
+  {"id":9,"problem_id":"shell-savings-v1","name":"存够小贝壳"},
+  {"id":10,"problem_id":"radio-text-v1","name":"Ottly 的海边电台"},
+  {"id":11,"problem_id":"temperature-max-v1","name":"温差记录表"},
+  {"id":12,"problem_id":"count-at-least-v1","name":"封装达标统计器"}
 ]

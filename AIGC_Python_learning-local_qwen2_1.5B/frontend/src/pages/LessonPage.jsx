@@ -81,6 +81,7 @@ function Lesson({ levelNo, userId, navigate }) {
       {completed && <section className="lesson-complete" aria-label="通关复盘">
         <h3>第 {levelNo} 关已通过，进度已保存</h3>
         {next && <p>{next.published ? `可以继续挑战第 ${next.id} 关：${next.name}。` : `第 ${next.id} 关内容待开放。`}</p>}
+        {!next && levelNo === 12 && <p>恭喜完成全部 12 关！可以查看参考详解，或到学习记录复习。</p>}
         {!solution && <button type="button" className="btn-hint" onClick={revealSolution} disabled={solutionBusy}>
           {solutionBusy ? '正在加载...' : '查看参考解与解析'}
         </button>}
