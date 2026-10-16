@@ -30,7 +30,13 @@ def main():
             response = client.post('/api/v1/code/submit', headers={**headers, **(extra or {})},
                                    json={'problem_id':problem_id, 'code':code})
             assert response.status_code == 200, response.text
-            return response.json()
+            result = response.json()
+            if result['data']['analysis']['status'] == 'preparing':
+                submission_id = result['data']['submission_id']
+                prepared = client.post(f'/api/v1/code/submissions/{submission_id}/analysis', headers=headers)
+                assert prepared.status_code == 200, prepared.text
+                result['data']['analysis'] = prepared.json()['data']['analysis']
+            return result
         locked = client.get('/api/v1/code/problems/greeting-v1', headers=headers)
         assert locked.status_code == 403
         offline = submit('level2', 'print(0)')

@@ -1,4 +1,5 @@
 import logging
+from time import perf_counter
 
 from fastapi import APIRouter, Depends, Header, HTTPException
 from sqlalchemy.orm import Session
@@ -10,13 +11,13 @@ from app.models.learning_review import LearningReview
 from app.models.user import User
 from pydantic import BaseModel, Field
 from app.services.sandbox.runner import run_code_process
-from app.services.submission import PROBLEMS, SubmissionRequest, judge_submission, public_judge
-from app.services.error_analysis import AnalysisResult, analyze_failure
+from app.services.submission import PROBLEMS, JudgeResult, SubmissionRequest, judge_submission, public_judge
+from app.services.error_analysis import AnalysisResult, analyze_failure, fixed_syntax_analysis
 from app.services.lesson_feedback import with_lesson_hints
 from app.services.problem_catalog import SCHEMA_VERSION, LEVELS, KNOWLEDGE
 from app.services.learning_contract import (
     ContractJudge, ContractAnalysis, contract_judge, contract_analysis,
-    submission_error, analysis_knowledge_scope, error_code, utc_iso,
+    submission_error, analysis_knowledge_scope, error_code, history_analysis, utc_iso,
 )
 
 router = APIRouter(dependencies=[Depends(get_current_user)])
@@ -63,6 +64,7 @@ class SubmissionData(BaseModel):
     error_type: str | None
     judge: ContractJudge
     analysis: ContractAnalysis
+    timings: dict[str, float]
 
 
 class SubmissionResponse(BaseModel):
@@ -159,7 +161,9 @@ async def submit_code(request: SubmissionRequest, current_user: User = Depends(g
         if source is None:
             raise HTTPException(status_code=404, detail="复习来源错题不存在")
     require_lesson(request.problem_id, passed_problem_ids(db, current_user.id), review=review_source_id is not None)
+    judge_started = perf_counter()
     judge = await run_in_threadpool(judge_submission, problem, request.code)
+    judge_ms = round((perf_counter() - judge_started) * 1000, 2)
     if any(error.type == 'RunnerError' for case in judge.cases for error in case.errors):
         raise HTTPException(status_code=503, detail='执行器暂不可用，请稍后重试；本次不计为学习失败')
     owner = db.query(User).filter(User.id == user_id, User.status == "enabled").with_for_update().first()
@@ -177,9 +181,15 @@ async def submit_code(request: SubmissionRequest, current_user: User = Depends(g
             db.rollback()
             raise HTTPException(status_code=404, detail="复习来源错题不存在")
     main_error = submission_error(judge, code=request.code)
-    # The model retains exactly its original execution/problem shapes and error names.
+    # Keep the model input in its original shape; normalize only public responses.
     model_judge = public_judge(judge)
-    judge = contract_judge(judge, code=request.code)
+    judge = contract_judge(model_judge, code=request.code)
+    raw_analysis = (AnalysisResult(status='skipped', message='测试已通过，无需 AI 分析。') if judge.passed
+                    else fixed_syntax_analysis(problem.execution_problem(), request.code, model_judge)
+                    or AnalysisResult(status='preparing', message='正在准备提示'))
+    analysis = contract_analysis(raw_analysis, analysis_knowledge_scope(problem))
+    timings = {'judge_ms': judge_ms, 'model_load_ms': 0.0, 'hint_generation_ms': 0.0}
+    analysis.timings = timings
     record = LearningSubmission(
         user_id=user_id,
         problem_id=problem.problem_id,
@@ -190,7 +200,8 @@ async def submit_code(request: SubmissionRequest, current_user: User = Depends(g
         difficulty=problem.difficulty,
         knowledge_ids=list(problem.knowledge_ids),
         code=request.code,
-        judge_json=judge.model_dump(mode="json"),
+        judge_json=model_judge.model_dump(mode="json"),
+        analysis_json={**analysis.model_dump(mode="json"), 'timings': timings},
         passed=judge.passed,
         error_type=main_error,
     )
@@ -201,14 +212,44 @@ async def submit_code(request: SubmissionRequest, current_user: User = Depends(g
                               source_submission_id=review_source_id))
     db.commit()
     db.refresh(record)
-    submission_id = record.id
+    logger.info('submission_timing submission_id=%s judge_ms=%.2f model_load_ms=0 hint_generation_ms=0',
+                record.id, judge_ms)
+    return SubmissionResponse(data=SubmissionData(
+        submission_id=record.id, problem_id=problem.problem_id, version=record.problem_version,
+        created_at=utc_iso(record.created_at), error_type=record.error_type,
+        judge=judge, analysis=analysis, timings=timings,
+    ))
+
+
+@router.post('/code/submissions/{submission_id}/analysis')
+async def prepare_analysis(submission_id: int, current_user: User = Depends(get_current_user),
+                           db: Session = Depends(get_db)):
+    record = db.query(LearningSubmission).filter(
+        LearningSubmission.id == submission_id,
+        LearningSubmission.user_id == current_user.id,
+    ).first()
+    if record is None:
+        raise HTTPException(status_code=404, detail='提交记录不存在')
+    if record.analysis_json and record.analysis_json.get('status') != 'preparing':
+        analysis = history_analysis(record, contract_judge(record.judge_json, code=record.code))
+        return {'schema_version': SCHEMA_VERSION, 'code': 200, 'data': {
+            'submission_id': record.id, 'analysis': analysis.model_dump(mode='json') if analysis else None,
+            'timings': record.analysis_json.get('timings', {}),
+        }}
+    problem = PROBLEMS.get(record.problem_id)
+    if problem is None:
+        raise HTTPException(status_code=404, detail='题目不存在')
+    model_judge = JudgeResult.model_validate(record.judge_json)
+    started = perf_counter()
     try:
-        analysis = await analyze_failure(problem.execution_problem(), request.code, model_judge)
+        raw_analysis = await analyze_failure(problem.execution_problem(), record.code, model_judge)
     except Exception:
         logger.exception('Teaching analysis failed; judged submission %s remains saved', submission_id)
-        analysis = AnalysisResult(status='unavailable', message='教学分析暂不可用，判题和提交记录已保存。')
-    analysis = with_lesson_hints(problem, analysis, model_judge)
-    analysis = contract_analysis(analysis, analysis_knowledge_scope(problem))
+        raw_analysis = AnalysisResult(status='unavailable', message='教学分析暂不可用，判题和提交记录已保存。')
+    raw_analysis = with_lesson_hints(problem, raw_analysis, model_judge)
+    hint_ms = round((perf_counter() - started) * 1000, 2)
+    analysis = contract_analysis(raw_analysis, analysis_knowledge_scope(problem))
+    user_id = current_user.id
     owner = db.query(User).filter(User.id == user_id, User.status == "enabled").with_for_update().first()
     if owner is None:
         db.rollback()
@@ -220,9 +261,14 @@ async def submit_code(request: SubmissionRequest, current_user: User = Depends(g
     if saved_record is None:
         db.rollback()
         raise HTTPException(status_code=401, detail="账号已注销，本次提交记录已删除")
-    saved_record.analysis_json = analysis.model_dump(mode="json")
+    timings = dict((saved_record.analysis_json or {}).get('timings', {}))
+    timings['hint_generation_ms'] = hint_ms
+    timings['model_load_ms'] = raw_analysis.model_load_ms
+    analysis.timings = timings
+    saved_record.analysis_json = {**analysis.model_dump(mode='json'), 'timings': timings}
     db.commit()
-    return SubmissionResponse(data=SubmissionData(
-        submission_id=submission_id, problem_id=problem.problem_id, version=saved_record.problem_version,
-        created_at=utc_iso(saved_record.created_at), error_type=saved_record.error_type, judge=judge, analysis=analysis
-    ))
+    logger.info('submission_timing submission_id=%s judge_ms=%.2f model_load_ms=%.2f hint_generation_ms=%.2f',
+                submission_id, timings.get('judge_ms', 0), timings['model_load_ms'], hint_ms)
+    return {'schema_version': SCHEMA_VERSION, 'code': 200, 'data': {
+        'submission_id': submission_id, 'analysis': analysis.model_dump(mode='json'), 'timings': timings,
+    }}

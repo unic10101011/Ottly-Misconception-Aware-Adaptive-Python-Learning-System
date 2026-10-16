@@ -13,6 +13,10 @@ const AIchat = () => {
     { content: "你好呀，我是小海獭，请问有什么可以帮助你的呢？", isUser: false },
   ]);
   const [history, setHistory] = useState([]);
+  const [historyError, setHistoryError] = useState('');
+  const [sessionsError, setSessionsError] = useState('');
+  const [sessionHistoryError, setSessionHistoryError] = useState('');
+  const [sessionHistoryLoading, setSessionHistoryLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [typing, setTyping] = useState(false);
@@ -21,16 +25,17 @@ const AIchat = () => {
   const [activeTab, setActiveTab] = useState("chat");
   const [selectedSessionFilter, setSelectedSessionFilter] = useState("");
   const chatBodyRef = useRef(null);
+  const questionInputRef = useRef(null);
   const sendingRef = useRef(false);
   const pageSize = 10;
 
-  // ====================== 后端接口 完全原封不动 ======================
   useEffect(() => {
     loadSessions();
     loadHistory();
   }, []);
 
   const loadSessions = async () => {
+    setSessionsError('');
     try {
       const response = await fetch("/api/v1/ai/sessions", {
         headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` },
@@ -40,10 +45,12 @@ const AIchat = () => {
       if (data.code === 200) setSessions(data.data.sessions);
     } catch (error) {
       console.error("加载会话失败:", error);
+      setSessionsError('会话列表暂时无法加载，请稍后重试。');
     }
   };
 
   const loadHistory = async (page = currentPage, sessionId = selectedSessionFilter) => {
+    setHistoryError('');
     try {
       const url = `/api/v1/ai/history?page=${page}&page_size=${pageSize}${
         sessionId ? `&session_id=${sessionId}` : ""
@@ -59,10 +66,14 @@ const AIchat = () => {
       }
     } catch (error) {
       console.error("加载历史记录失败:", error);
+      setHistoryError('历史记录暂时无法加载，请稍后重试。');
     }
   };
 
   const loadSessionHistory = async (sessionId) => {
+    setSessionHistoryError('');
+    setSessionHistoryLoading(true);
+    setMessages([]);
     try {
       const response = await fetch(
         `/api/v1/ai/history?session_id=${sessionId}&page=1&page_size=100`,
@@ -89,6 +100,9 @@ const AIchat = () => {
       }
     } catch (error) {
       console.error("加载会话历史失败:", error);
+      setSessionHistoryError('这段会话暂时无法打开，请稍后重试。');
+    } finally {
+      setSessionHistoryLoading(false);
     }
   };
 
@@ -99,6 +113,7 @@ const AIchat = () => {
 
   const createNewSession = () => {
     setCurrentSessionId(null);
+    setSessionHistoryError('');
     setMessages([{ content: "你好呀，我是小海獭，请问有什么可以帮助你的呢？", isUser: false }]);
   };
 
@@ -204,179 +219,101 @@ const AIchat = () => {
     if (chatBodyRef.current) chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
   }, [messages, typing]);
 
-  // ====================== 渲染界面 ======================
   return (
-    // 根容器改为全宽全高，无左侧边栏
     <div className="ai-chat-page">
-      {/* 右侧区域（现在是整个屏幕） */}
       <div className="ai-chat-layout">
-        <button type="button" className="chat-back-button" onClick={() => navigate('/app/levels')}>← 返回关卡选择</button>
-        <ul className="nav nav-tabs" style={{ margin: 0, padding: 0, borderBottom: 0 }}>
-          <li className="nav-item">
-            <a
-              className={`nav-link ${activeTab === "chat" ? "active" : ""}`}
-              href="#"
-              onClick={(e) => { e.preventDefault(); setActiveTab("chat"); }}
-              style={{ padding: "8px 16px" }}
-            >
-              对话
-            </a>
-          </li>
-          <li className="nav-item">
-            <a
-              className={`nav-link ${activeTab === "history" ? "active" : ""}`}
-              href="#"
-              onClick={(e) => { e.preventDefault(); setActiveTab("history"); }}
-              style={{ padding: "8px 16px" }}
-            >
-              历史记录
-            </a>
-          </li>
-        </ul>
+        <header className="chat-heading">
+          <div><span className="level-eyebrow">OTTLY · 学习伙伴</span><h1>和小海獭聊聊</h1><p>问题可以慢慢想，我们一起找到思路。</p></div>
+          <button type="button" className="chat-back-button" onClick={() => navigate('/app/levels')}>← 返回学习地图</button>
+        </header>
+        <div className="chat-tabs" role="tablist" aria-label="AI 对话页面">
+          <button type="button" role="tab" aria-selected={activeTab === 'chat'} className={activeTab === 'chat' ? 'active' : ''} onClick={() => setActiveTab('chat')}>对话</button>
+          <button type="button" role="tab" aria-selected={activeTab === 'history'} className={activeTab === 'history' ? 'active' : ''} onClick={() => setActiveTab('history')}>历史记录</button>
+        </div>
 
-        {/* 对话页面：背景铺满无留白 */}
         {activeTab === "chat" && (
           <div className="ai-chat-panel">
+            <div className="chat-session-bar">
+              <label htmlFor="chat-session-select">当前会话</label>
+              <select id="chat-session-select" value={currentSessionId || ''} disabled={sending || sessionHistoryLoading} onChange={event => event.target.value ? selectSession(event.target.value) : createNewSession()}>
+                <option value="">新对话</option>
+                {sessions.map(session => <option key={session.session_id} value={session.session_id}>会话 {session.session_id.slice(0, 8)} · {formatDateTime(session.last_message_time)}</option>)}
+              </select>
+              <button type="button" disabled={sending || sessionHistoryLoading} onClick={createNewSession}>＋ 新对话</button>
+            </div>
+            {sessionsError && <p className="chat-load-error" role="alert">{sessionsError} <button type="button" onClick={loadSessions}>重试</button></p>}
+            {sessionHistoryError && <p className="chat-load-error" role="alert">{sessionHistoryError} <button type="button" onClick={() => loadSessionHistory(currentSessionId)}>重试</button></p>}
             <div
               ref={chatBodyRef}
-              style={{
-                flex: 1,
-                backgroundImage: `url(${chatbeijing})`,
-                backgroundSize: "cover",
-                backgroundRepeat: "no-repeat",
-                backgroundPosition: "center 90%",
-                padding: "16px",
-                overflowY: "auto",
-              }}
+              className="chat-body"
+              style={{ backgroundImage: `url(${chatbeijing})` }}
             >
+              {sessionHistoryLoading && <p className="chat-history-empty" role="status">正在打开这段会话...</p>}
               {messages.map((msg, i) => (
-                <div
-                  key={i}
-                  style={{
-                    display: "flex",
-                    justifyContent: msg.isUser ? "flex-end" : "flex-start",
-                    marginBottom: "12px",
-                    alignItems: "flex-start",
-                    gap: "8px",
-                  }}
-                >
+                <div key={i} className={'chat-message ' + (msg.isUser ? 'is-user' : 'is-otter')}>
                   {!msg.isUser && (
-                    <img
-                      src={chathaita}
-                      alt="小海獭"
-                      style={{
-                        width: "44px",
-                        height: "44px",
-                        borderRadius: "50%",
-                        objectFit: "cover",
-                        objectPosition: "center",
-                      }}
-                    />
+                    <img src={chathaita} alt="小海獭" className="chat-avatar" />
                   )}
-                  <div
-                    className="chat-message-bubble"
-                    style={{
-                      maxWidth: "70%",
-                      padding: "12px 16px",
-                      borderRadius: msg.isUser ? "16px 4px 16px 16px" : "4px 16px 16px 16px",
-                      backgroundColor: msg.isUser ? "#409EFF" : "#fff",
-                      color: msg.isUser ? "#fff" : "#333",
-                      boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
-                      fontSize: "15px",
-                      whiteSpace: "pre-wrap",
-                    }}
-                  >
+                  <div className="chat-message-bubble">
                     {msg.isUser ? msg.content : <ChatContent content={msg.content} />}
                   </div>
                   {msg.isUser && (
-                    <img
-                      src={yonghu}
-                      alt="用户"
-                      style={{
-                        width: "44px",
-                        height: "44px",
-                        borderRadius: "50%",
-                        objectFit: "cover",
-                        objectPosition: "center",
-                      }}
-                    />
+                    <img src={yonghu} alt="用户" className="chat-avatar" />
                   )}
                 </div>
               ))}
+              {messages.length === 1 && !currentSessionId && <div className="chat-suggestions">
+                <span>可以从这些问题开始</span>
+                {['print() 是做什么的？', '我的代码报错了，怎么排查？', '可以给我一点解题提示吗？'].map(prompt =>
+                  <button type="button" key={prompt} onClick={() => { setQuestion(prompt); questionInputRef.current?.focus() }}>{prompt}</button>)}
+              </div>}
               {typing && (
-                <div style={{ display: "flex", alignItems: "flex-start", gap: "8px", marginBottom: "12px" }}>
-                  <img
-                    src={chathaita}
-                    alt="小海獭"
-                    style={{
-                      width: "44px",
-                      height: "44px",
-                      borderRadius: "50%",
-                      objectFit: "cover",
-                      objectPosition: "center",
-                    }}
-                  />
-                  <div style={{ background: "#fff", padding: "12px 18px", borderRadius: "4px 16px 16px 16px" }}>
-                    <span style={{ display: "inline-block", width: "8px", height: "8px", background: "#ccc", borderRadius: "50%", margin: "0 2px", animation: "typing 1.4s infinite ease-in-out" }}></span>
-                    <span style={{ display: "inline-block", width: "8px", height: "8px", background: "#ccc", borderRadius: "50%", margin: "0 2px", animation: "typing 1.4s infinite ease-in-out 0.16s" }}></span>
-                    <span style={{ display: "inline-block", width: "8px", height: "8px", background: "#ccc", borderRadius: "50%", margin: "0 2px", animation: "typing 1.4s infinite ease-in-out 0.32s" }}></span>
+                <div className="chat-message is-otter" role="status" aria-label="小海獭正在回复">
+                  <img src={chathaita} alt="" className="chat-avatar" />
+                  <div className="chat-typing">
+                    <span></span><span></span><span></span>
                   </div>
                 </div>
               )}
             </div>
 
-            {/* 底部输入框 */}
-            <div
-              style={{
-                padding: "12px 16px",
-                background: "#fff",
-                borderTop: "1px solid #eee",
-                display: "flex",
-                gap: "10px",
-                alignItems: "center",
-              }}
-            >
-              <form onSubmit={sendMessage} style={{ flex: 1, display: "flex", gap: "10px" }}>
+            <div className="chat-composer">
+              <form onSubmit={sendMessage}>
+                <label className="visually-hidden" htmlFor="chat-question">向小海獭提问</label>
                 <input
+                  id="chat-question"
+                  ref={questionInputRef}
                   value={question}
                   onChange={(e) => setQuestion(e.target.value)}
-                  placeholder="请输入消息..."
+                  placeholder="把你的问题告诉小海獭..."
                   maxLength={1000}
-                  style={{ flex: 1, borderRadius: "24px", padding: "10px 16px", border: "1px solid #ddd", outline: "none" }}
                 />
                 <button
                   type="submit"
-                  disabled={sending}
-                  style={{ borderRadius: "24px", padding: "0 20px", background: "#409EFF", color: "#fff", border: "none" }}
+                  disabled={sending || !question.trim()}
                 >
-                  发送
+                  {sending ? '回复中...' : '发送'}
                 </button>
               </form>
             </div>
           </div>
         )}
 
-        {/* 历史记录：背景铺满无留白 */}
         {activeTab === "history" && (
           <div
-            className="p-4 d-flex flex-column"
-            style={{
-              flex: 1,
-              backgroundImage: `url(${chatbeijing})`,
-              backgroundSize: "cover",
-              backgroundRepeat: "no-repeat",
-              backgroundPosition: "center bottom",
-              overflowY: "auto",
-            }}
+            className="chat-history-panel"
+            style={{ backgroundImage: `url(${chatbeijing})` }}
           >
-            <div className="mb-3 d-flex justify-content-between align-items-center">
-              <h5 className="mb-0">历史记录</h5>
-              <select className="form-select form-select-sm w-auto" value={selectedSessionFilter} onChange={e => { setSelectedSessionFilter(e.target.value); setCurrentPage(1); loadHistory(1, e.target.value); }}>
+            <div className="chat-history-heading">
+              <h2>历史记录</h2>
+              <select aria-label="筛选会话" className="form-select form-select-sm" value={selectedSessionFilter} onChange={e => { setSelectedSessionFilter(e.target.value); setCurrentPage(1); loadHistory(1, e.target.value); }}>
                 <option value="">所有会话</option>
                 {sessions.map(s => <option key={s.session_id} value={s.session_id}>会话 {s.session_id.substring(0, 8)}...</option>)}
               </select>
             </div>
-            <div className="flex-grow-1 overflow-auto">
+            <div className="chat-history-list">
+              {historyError && <p className="chat-load-error" role="alert">{historyError} <button type="button" onClick={() => loadHistory()}>重试</button></p>}
+              {!historyError && history.length === 0 && <p className="chat-history-empty">还没有聊天记录。回到“对话”向小海獭提问吧。</p>}
               {history.map((record) => (
                 <div key={record.record_id} className="p-3 bg-white bg-opacity-90 rounded border shadow-sm mb-3">
                   <div className="fw-medium mb-2">{record.question}</div>

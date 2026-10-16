@@ -27,6 +27,10 @@ def test_snapshot_errors_failed_tests_and_deterministic_mapping(client, monkeypa
     response = submit(client, headers, 'greeting-v1', 'print(missing_name)')
     assert response.json()['schema_version'] == SCHEMA_VERSION
     data = response.json()['data']
+    assert data['analysis']['status'] == 'preparing'
+    prepared = client.post(f"/api/v1/code/submissions/{data['submission_id']}/analysis", headers=headers)
+    assert prepared.status_code == 200
+    data['analysis'] = prepared.json()['data']['analysis']
     assert data['error_type'] == 'NAME_ERROR'
     assert data['judge']['failed_tests'] == ['sample-1','hidden-1','hidden-2','hidden-3']
     assert data['judge']['cases'][0]['errors'][0]['type'] == 'NAME_ERROR'
@@ -118,6 +122,10 @@ def test_analysis_exception_does_not_lose_judgment(client, monkeypatch):
     monkeypatch.setattr(coding, 'analyze_failure', unavailable)
     headers = account(client)
     data = submit(client, headers, 'level1', 'print(0)').json()['data']
+    assert data['analysis']['status'] == 'preparing'
+    prepared = client.post(f"/api/v1/code/submissions/{data['submission_id']}/analysis", headers=headers)
+    assert prepared.status_code == 200
+    data['analysis'] = prepared.json()['data']['analysis']
     assert data['analysis']['status'] == 'ready'
     assert data['analysis']['source'] == 'fixed'
     assert data['analysis']['content']['knowledge_ids'] == ['K01']

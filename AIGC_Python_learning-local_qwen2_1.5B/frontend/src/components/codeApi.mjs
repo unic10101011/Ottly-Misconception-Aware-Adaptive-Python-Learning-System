@@ -45,14 +45,14 @@ export async function requestCode(action, payload, token, options = {}) {
   }
 }
 
-async function requestLearningHistory(path, method, token, body) {
+async function requestLearningHistory(path, method, token, body, timeoutMs = 15000) {
   if (!token) {
     const error = new Error('登录已过期，请重新登录后查看。')
     error.status = 401
     throw error
   }
   const controller = new AbortController()
-  const timeout = setTimeout(() => controller.abort(), 15000)
+  const timeout = setTimeout(() => controller.abort(), timeoutMs)
   try {
     let response
     try {
@@ -99,6 +99,10 @@ export function getMistakeQuestions(token) {
 
 export function saveHintView(submissionId, level, token) {
   return requestLearningHistory(`/code/submissions/${submissionId}/hints`, 'PATCH', token, { level })
+}
+
+export function requestAnalysis(submissionId, token) {
+  return requestLearningHistory(`/code/submissions/${submissionId}/analysis`, 'POST', token, undefined, 100000)
 }
 
 export function getLevels(token) {

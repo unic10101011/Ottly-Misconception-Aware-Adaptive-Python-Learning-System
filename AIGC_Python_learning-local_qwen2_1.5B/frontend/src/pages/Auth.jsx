@@ -9,6 +9,7 @@ function Auth() {
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
   const [messageType, setMessageType] = useState('info')
+  const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate()
 
   const API_BASE_URL = '/api/v1'
@@ -138,161 +139,74 @@ function Auth() {
   }
 
   return (
-    <div style={{
-      backgroundColor: '#D6F5FF',
-      minHeight: '100vh',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      position: 'relative',
-    }}>
-    <div style={{
-      position: 'absolute',
-      width: '100%',
-      height: '100%',
-      top: 0,
-      left: 0,
-      pointerEvents: 'none',
-      zIndex: 0,
-    }}></div>
-      {/* 底部海浪 */}
-      <div style={{
-        position:'absolute',
-        left: 0,
-        bottom: 0,
-        width: '100%',
-        height: '140px',
-        background: 'url(\'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 120"><path fill="%23B3E5FF" d="M0,64L80,69.3C160,75,320,85,480,80C640,75,800,53,960,48C1120,43,1280,53,1360,58.7L1440,64L1440,120L1360,120C1280,120,1120,120,960,120C800,120,640,120,480,120C320,120,160,120,80,120L0,120Z"></path></svg>\')',
-        backgroundSize: 'cover',
-        backgroundRepeat: 'no-repeat',
-        zIndex: 1,
-        pointerEvents: 'none',
-      }} />
+    <div className="auth-page">
+      <img src={xingxing} alt="" className="auth-decoration auth-star" />
+      <img src={yunduo} alt="" className="auth-decoration auth-cloud" />
+      <div className="auth-wave" aria-hidden="true" />
+      <div className="auth-shell">
+        <section className="auth-welcome" aria-label="Ottly 欢迎页">
+          <span className="auth-eyebrow">OTTLY · PYTHON LEARNING</span>
+          <h1>和小海獭一起，<br />把 Python 学明白。</h1>
+          <p>从第一行代码出发，闯关、练习、提问。每一步都有小海獭陪你探索。</p>
+          <img src={loginhaita} alt="向你打招呼的小海獭" className="auth-otter" />
+        </section>
+        <section className="auth-card" aria-label="账号登录与注册">
+          <span className="auth-card-eyebrow">开始你的学习旅程</span>
+          <h2>{activeTab === 'login' ? '欢迎回来' : '加入 Ottly'}</h2>
+          <p className="auth-card-subtitle">{activeTab === 'login' ? '登录后继续你的 Python 闯关。' : '创建账号，保存每一步学习进度。'}</p>
 
-      <img src={xingxing} alt="星星" style={{
-    position: 'absolute',
-    top: '3%',
-    left: '3%',
-    width: '8vw',
-    maxWidth: '120px',
-    minWidth: '60px',
-    opacity: 0.85
-  }} />
-  <img src={yunduo} alt="云朵" style={{
-    position: 'absolute',
-    top: '2%',
-    right: '3%',
-    width: '10vw',
-    maxWidth: '140px',
-    minWidth: '70px',
-    opacity: 0.85
-  }} />
-
-      {/* 加载遮罩 */}
-      <div style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: 'rgba(255,255,255,0.8)',
-        display: loading ? 'flex' : 'none',
-        alignItems: 'center',
-        justifyContent: 'center',
-        zIndex: 9999,
-      }}>
-        <div className="spinner-border text-primary" role="status">
-          <span className="visually-hidden">加载中...</span>
-        </div>
-      </div>
-
-      {/* 登录卡片主体 */}
-      <div className="auth-container" style={{
-        backgroundColor: 'white',
-        borderRadius: '10px',
-        boxShadow: '0 0 20px rgba(0,0,0,0.1)',
-        padding: '30px',
-        width: '100%',
-        maxWidth: '450px',
-        position: 'relative',
-        zIndex: 2,
-      }}>
-        <h2 className="text-center mb-5">用户认证系统</h2>
-
-        {/* 标签 */}
-        <ul className="nav nav-tabs mb-4">
-          <li className="nav-item">
-            <button className={`nav-link ${activeTab === 'login' ? 'active' : ''}`} onClick={() => setActiveTab('login')}>
-              登录
-            </button>
-          </li>
-          <li className="nav-item">
-            <button className={`nav-link ${activeTab === 'register' ? 'active' : ''}`} onClick={() => setActiveTab('register')}>
-              注册
-            </button>
-          </li>
-        </ul>
-
-        {/* 消息提示 */}
-        {message && (
-          <div className={`alert alert-${messageType} alert-dismissible fade show mb-3`}>
-            {message}
-            <button type="button" className="btn-close" onClick={() => setMessage('')} aria-label="Close"></button>
+          <div className="auth-tabs" role="tablist" aria-label="账号操作">
+            <button type="button" role="tab" aria-selected={activeTab === 'login'} className={activeTab === 'login' ? 'active' : ''} onClick={() => { setActiveTab('login'); setShowPassword(false); setMessage('') }}>登录</button>
+            <button type="button" role="tab" aria-selected={activeTab === 'register'} className={activeTab === 'register' ? 'active' : ''} onClick={() => { setActiveTab('register'); setShowPassword(false); setMessage('') }}>注册</button>
           </div>
-        )}
 
-        {/* 登录 */}
-        {activeTab === 'login' && (
-          <form key="login" onSubmit={handleLogin}>
-            <div className="mb-3">
-              <label className="form-label" htmlFor="login-username">用户名</label>
-              <input id="login-username" type="text" className="form-control" name="username" autoComplete="username" required />
-              <div className="invalid-feedback">请输入用户名</div>
-            </div>
-            <div className="mb-3">
-              <label className="form-label" htmlFor="login-password">密码</label>
-              <input id="login-password" type="password" className="form-control" name="password" autoComplete="current-password" required />
-              <div className="invalid-feedback">请输入密码</div>
-            </div>
-            <button type="submit" className="btn btn-primary w-100">登录</button>
-          </form>
-        )}
+          {message && <div className={'auth-message auth-message-' + messageType} role={messageType === 'danger' ? 'alert' : 'status'}>
+            <span>{message}</span>
+            <button type="button" onClick={() => setMessage('')} aria-label="关闭提示">×</button>
+          </div>}
 
-        {/* 注册 */}
-        {activeTab === 'register' && (
-          <form key="register" onSubmit={handleRegister}>
-            <div className="mb-3">
-              <label className="form-label" htmlFor="register-username">用户名</label>
-              <input id="register-username" type="text" className="form-control" name="username" autoComplete="username" minLength={3} maxLength={50} required />
-              <div className="invalid-feedback">用户名长度3-50字符</div>
-            </div>
-            <div className="mb-3">
-              <label className="form-label" htmlFor="register-password">密码</label>
-              <input id="register-password" type="password" className="form-control" name="password" autoComplete="new-password" minLength={12} maxLength={128} required />
-              <div className="form-text">12–128 个字符，建议使用密码管理器生成的独立密码，不复用其他网站的密码。</div>
-              <div className="invalid-feedback">请输入 12–128 个字符的密码</div>
-            </div>
-            <div className="mb-3">
-              <label className="form-label" htmlFor="register-phone">手机号</label>
-              <input id="register-phone" type="tel" className="form-control" name="phone" autoComplete="tel" minLength={10} maxLength={20} required />
-              <div className="invalid-feedback">请输入有效手机号</div>
-            </div>
-            <button type="submit" className="btn btn-primary w-100">注册</button>
-          </form>
-        )}
-
-
-        <img src={loginhaita} alt="海獭" style={{
-           position: 'absolute',
-           left: '-25vw',
-           bottom: '-20px',
-           width: '20vw',
-           maxWidth: '200px',
-           minWidth: '100px',
-           opacity: 1,
-           zIndex: 1,
-           pointerEvents: 'none',
-        }} />
+          {activeTab === 'login' ? (
+            <form key="login" onSubmit={handleLogin} className="auth-form">
+              <div className="auth-field">
+                <label htmlFor="login-username">用户名</label>
+                <input id="login-username" type="text" className="form-control" name="username" autoComplete="username" required />
+                <div className="invalid-feedback">请输入用户名</div>
+              </div>
+              <div className="auth-field">
+                <label htmlFor="login-password">密码</label>
+                <div className="auth-password">
+                  <input id="login-password" type={showPassword ? 'text' : 'password'} className="form-control" name="password" autoComplete="current-password" required />
+                  <button type="button" aria-label={showPassword ? '隐藏密码' : '显示密码'} aria-pressed={showPassword} onClick={() => setShowPassword(value => !value)}>{showPassword ? '隐藏' : '显示'}</button>
+                  <div className="invalid-feedback">请输入密码</div>
+                </div>
+              </div>
+              <button type="submit" className="auth-submit" disabled={loading}>{loading ? '正在登录...' : '登录并继续学习'}</button>
+            </form>
+          ) : (
+            <form key="register" onSubmit={handleRegister} className="auth-form">
+              <div className="auth-field">
+                <label htmlFor="register-username">用户名</label>
+                <input id="register-username" type="text" className="form-control" name="username" autoComplete="username" minLength={3} maxLength={50} required />
+                <div className="invalid-feedback">用户名长度为 3–50 个字符</div>
+              </div>
+              <div className="auth-field">
+                <label htmlFor="register-password">密码</label>
+                <div className="auth-password">
+                  <input id="register-password" type={showPassword ? 'text' : 'password'} className="form-control" name="password" autoComplete="new-password" minLength={12} maxLength={128} required />
+                  <button type="button" aria-label={showPassword ? '隐藏密码' : '显示密码'} aria-pressed={showPassword} onClick={() => setShowPassword(value => !value)}>{showPassword ? '隐藏' : '显示'}</button>
+                  <div className="invalid-feedback">请输入 12–128 个字符的密码</div>
+                </div>
+                <p className="auth-help">建议使用密码管理器生成独立密码。</p>
+              </div>
+              <div className="auth-field">
+                <label htmlFor="register-phone">手机号</label>
+                <input id="register-phone" type="tel" className="form-control" name="phone" autoComplete="tel" minLength={10} maxLength={20} required />
+                <div className="invalid-feedback">请输入有效手机号</div>
+              </div>
+              <button type="submit" className="auth-submit" disabled={loading}>{loading ? '正在注册...' : '创建账号'}</button>
+            </form>
+          )}
+        </section>
       </div>
     </div>
   )

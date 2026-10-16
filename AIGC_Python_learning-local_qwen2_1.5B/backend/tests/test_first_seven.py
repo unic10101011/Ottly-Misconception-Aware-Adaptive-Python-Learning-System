@@ -28,6 +28,10 @@ def test_first_seven_full_flow(client):
 
         failed = submit(client, headers, lesson.problem_id, 'print("incorrect")').json()['data']
         assert failed['judge']['passed'] is False
+        assert failed['analysis']['status'] == 'preparing'
+        prepared = client.post(f"/api/v1/code/submissions/{failed['submission_id']}/analysis", headers=headers)
+        assert prepared.status_code == 200, prepared.text
+        failed['analysis'] = prepared.json()['data']['analysis']
         assert failed['analysis']['status'] == 'ready'
         assert failed['analysis']['source'] == 'fixed'
         assert failed['analysis']['model'] is None

@@ -44,9 +44,15 @@ def main():
             response = client.post("/api/v1/code/submit", json={"problem_id": "level2", "code": code})
             response.raise_for_status()
             data = response.json()["data"]
+            judge_seconds = round(time.monotonic() - started, 2)
+            if data['analysis']['status'] == 'preparing':
+                prepared = client.post(f"/api/v1/code/submissions/{data['submission_id']}/analysis")
+                prepared.raise_for_status()
+                data['analysis'] = prepared.json()['data']['analysis']
+                data['timings'] = prepared.json()['data']['timings']
             expected_analysis = "skipped" if verdict == "accepted" else "ready"
             ok = data["judge"]["status"] == verdict and data["analysis"]["status"] == expected_analysis
-            report["cases"].append({"name": name, "student_code": code, "seconds": round(time.monotonic() - started, 2),
+            report["cases"].append({"name": name, "student_code": code, "judge_seconds": judge_seconds, "seconds": round(time.monotonic() - started, 2),
                                     "contract_passed": ok, "response": data})
             target = Path(args.output)
             target.parent.mkdir(parents=True, exist_ok=True)

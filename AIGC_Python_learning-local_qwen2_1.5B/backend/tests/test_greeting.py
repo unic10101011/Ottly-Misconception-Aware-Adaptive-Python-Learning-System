@@ -70,6 +70,10 @@ def test_six_step_flow_and_progress_survive_relogin(client):
     failed = submit(client, headers, GREETING_ID, 'print("Hello, Ottly!")').json()['data']
     assert failed['judge']['passed_cases'] == 1
     assert failed['judge']['total_cases'] == 4
+    assert failed['analysis']['status'] == 'preparing'
+    analyzed = client.post(f"/api/v1/code/submissions/{failed['submission_id']}/analysis", headers=headers)
+    assert analyzed.status_code == 200, analyzed.text
+    failed['analysis'] = analyzed.json()['data']['analysis']
     assert failed['analysis']['source'] == 'fixed'
     assert failed['analysis']['status'] == 'ready'
     for name in ('Amy', 'Sea Otter', '小海獭'):

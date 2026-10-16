@@ -334,6 +334,189 @@ test('input lesson sends run input but submission uses only the server problem i
     else delete global.localStorage
   }
 })
+test('analysis request uses the owning token and a model sized timeout', async () => {
+  const { requestAnalysis } = await import('../src/components/codeApi.mjs')
+  const originalFetch = global.fetch
+  const originalSetTimeout = global.setTimeout
+  let timeoutMs = 0
+  global.setTimeout = (callback, ms) => { timeoutMs = ms; return originalSetTimeout(callback, ms) }
+  global.fetch = async (url, options) => {
+    assert.equal(url, '/api/v1/code/submissions/17/analysis')
+    assert.equal(options.method, 'POST')
+    assert.equal(options.headers.Authorization, 'Bearer owner-token')
+    return new Response(JSON.stringify({ code: 200, data: { analysis: { status: 'ready' } } }), { status: 200 })
+  }
+  try {
+    assert.equal((await requestAnalysis(17, 'owner-token')).analysis.status, 'ready')
+    assert.ok(timeoutMs >= 90000, 'the browser must wait through the model deadline')
+  } finally {
+    global.fetch = originalFetch
+    global.setTimeout = originalSetTimeout
+  }
+})
+
+test('pending analysis renders real judge evidence before hints arrive', () => {
+  const Feedback = loadJsx('../src/components/SubmissionFeedback.jsx')
+  const result = { ...failure, analysis: { status: 'preparing', message: '正在准备提示', content: null } }
+  const html = renderToStaticMarkup(React.createElement(Feedback, { result, visibleHintCount: 0 }))
+  assert.match(html, /5050/)
+  assert.match(html, /100/)
+  assert.match(html, /正在准备提示/)
+  assert.doesNotMatch(html, /查看第 1 级提示|HINT_ONE/)
+})
+test('editor shows the judge before analysis resolves and keeps the verdict', async () => {
+  const effects = []
+  const updates = []
+  let finishAnalysis
+  const prepared = { ...failure, submission_id: 71, analysis: { status: 'preparing', message: '正在准备提示', content: null } }
+  const hooks = {
+    ...React,
+    useState: value => [typeof value === 'function' ? value() : value, next => updates.push(next)],
+    useRef: value => ({ current: value }),
+    useEffect: effect => effects.push(effect),
+    useCallback: callback => callback,
+  }
+  const Editor = loadJsx('../src/components/CodeEditor.jsx', {
+    react: hooks,
+    'react-router-dom': { useNavigate: () => () => {} },
+    './SubmissionFeedback.jsx': { default: () => null },
+    './codeApi.mjs': {
+      requestCode: async () => prepared,
+      requestAnalysis: () => new Promise(resolve => { finishAnalysis = resolve }),
+    },
+  })
+  const originalStorage = Object.getOwnPropertyDescriptor(global, 'localStorage')
+  Object.defineProperty(global, 'localStorage', { configurable: true, value: { getItem: () => 'owner-token' } })
+  try {
+    const tree = Editor({ initialCode: 'print(100)', problemId: 'level2', title: 'test' })
+    const cleanups = effects.map(effect => effect()).filter(fn => typeof fn === 'function')
+    const find = node => {
+      if (!React.isValidElement(node)) return null
+      if (node.props.className === 'btn-submit') return node
+      return React.Children.toArray(node.props.children).map(find).find(Boolean)
+    }
+    await find(tree).props.onClick()
+    assert.equal(typeof finishAnalysis, 'function')
+    assert.ok(updates.includes(prepared), 'first render update must contain the real judge')
+    assert.equal(prepared.judge.status, 'wrong_answer')
+    finishAnalysis({ analysis: failure.analysis, timings: { judge_ms: 12, model_load_ms: 5, hint_generation_ms: 30 } })
+    await Promise.resolve()
+    await Promise.resolve()
+    const completed = updates.find(value => value?.analysis?.status === 'ready' && value?.submission_id === 71)
+    assert.ok(completed, 'later update should contain the hints')
+    assert.deepEqual(completed.judge, prepared.judge)
+    cleanups.forEach(fn => fn())
+  } finally {
+    if (originalStorage) Object.defineProperty(global, 'localStorage', originalStorage)
+    else delete global.localStorage
+  }
+})
+test('review submission also shows the judge before its hint request finishes', async () => {
+  const effects = []
+  const updates = []
+  let finishAnalysis
+  const question = { problem_id: 'level2', first_wrong_submission_id: 5,
+    last_wrong_code: 'print(100)', title: '求和', description: '求和', source: '系统关卡' }
+  const states = [[question], {}, 'level2', 'practice', false, '', 'print(100)', '', false, false,
+    null, null, 0, null, {}, [], 0, 0, 0, 0, false, '', '']
+  let stateIndex = 0
+  const hooks = {
+    ...React,
+    useState: () => {
+      const index = stateIndex++
+      return [states[index], next => updates.push({ index, next })]
+    },
+    useRef: value => ({ current: value }),
+    useEffect: effect => effects.push(effect),
+  }
+  const History = loadJsx('../src/pages/LearningHistory.jsx', {
+    react: hooks,
+    'react-router-dom': { useNavigate: () => () => {} },
+    '../components/ProblemMetadata.jsx': () => null,
+    '../components/SubmissionFeedback.jsx': { default: () => null },
+    '../components/codeApi.mjs': {
+      requestCode: async () => prepared,
+      requestAnalysis: () => new Promise(resolve => { finishAnalysis = resolve }),
+    },
+  })
+  const prepared = { ...failure, submission_id: 72,
+    analysis: { status: 'preparing', message: '正在准备提示', content: null } }
+  const originalStorage = Object.getOwnPropertyDescriptor(global, 'localStorage')
+  Object.defineProperty(global, 'localStorage', { configurable: true, value: { getItem: () => 'owner-token' } })
+  try {
+    const tree = History()
+    const cleanup = effects[0]()
+    effects[3]()
+    const find = node => {
+      if (!React.isValidElement(node)) return null
+      if (node.props.className === 'mistake-primary-button') return node
+      return React.Children.toArray(node.props.children).map(find).find(Boolean)
+    }
+    await find(tree).props.onClick()
+    assert.ok(updates.some(update => update.index === 11 && update.next === prepared))
+    assert.equal(typeof finishAnalysis, 'function')
+    finishAnalysis({ analysis: failure.analysis, timings: { judge_ms: 12 } })
+    await Promise.resolve()
+    await Promise.resolve()
+    assert.ok(updates.some(update => update.index === 11 && update.next?.analysis?.status === 'ready'))
+    cleanup()
+  } finally {
+    if (originalStorage) Object.defineProperty(global, 'localStorage', originalStorage)
+    else delete global.localStorage
+  }
+})
+test('opening an unfinished history entry resumes only that analysis', async () => {
+  const effects = []
+  const updates = []
+  let finishAnalysis
+  const item = { id: 81, code: 'print(100)', judge: failure.judge,
+    analysis: { status: 'preparing', message: '正在准备提示' },
+    hints_viewed_max: 0, passed: false, created_at: '2026-10-16T00:00:00Z' }
+  const question = { problem_id: 'level2', first_wrong_submission_id: 5,
+    last_wrong_code: 'print(100)', title: '求和', description: '求和', source: '系统关卡',
+    first_wrong_at: '2026-10-16T00:00:00Z', latest_suspected_cause: null,
+    review_count: 0, review_rate_percent: null, recent_review_passed: 0,
+    recent_review_total: 0, related_questions: [] }
+  const states = [[question], {}, 'level2', 'insight', false, '', 'print(100)', '', false, false,
+    null, null, 0, null, {}, [item], 1, 0, 0, 0, false, '', '']
+  let stateIndex = 0
+  const hooks = {
+    ...React,
+    useState: () => { const index = stateIndex++; return [states[index], next => updates.push({ index, next })] },
+    useRef: value => ({ current: value }),
+    useEffect: effect => effects.push(effect),
+  }
+  const History = loadJsx('../src/pages/LearningHistory.jsx', {
+    react: hooks,
+    'react-router-dom': { useNavigate: () => () => {} },
+    '../components/ProblemMetadata.jsx': () => null,
+    '../components/SubmissionFeedback.jsx': () => null,
+    '../components/codeApi.mjs': {
+      requestAnalysis: async id => { assert.equal(id, 81); return new Promise(resolve => { finishAnalysis = resolve }) },
+    },
+  })
+  const originalStorage = Object.getOwnPropertyDescriptor(global, 'localStorage')
+  Object.defineProperty(global, 'localStorage', { configurable: true, value: { getItem: () => 'owner-token' } })
+  try {
+    const tree = History()
+    const cleanup = effects[0]()
+    const find = node => {
+      if (!React.isValidElement(node)) return null
+      if (node.props.className === 'mistake-history-item') return node
+      return React.Children.toArray(node.props.children).map(find).find(Boolean)
+    }
+    find(tree).props.onToggle({ currentTarget: { open: true } })
+    assert.equal(typeof finishAnalysis, 'function')
+    finishAnalysis({ analysis: failure.analysis })
+    await new Promise(resolve => setImmediate(resolve))
+    const changed = updates.find(update => update.index === 15 && typeof update.next === 'function')
+    assert.equal(changed.next([item])[0].analysis.status, 'ready')
+    cleanup()
+  } finally {
+    if (originalStorage) Object.defineProperty(global, 'localStorage', originalStorage)
+    else delete global.localStorage
+  }
+})
 
 for (const levelNo of [7, 12]) test(`shared lesson ${levelNo} loads content and gates reference and completion`, async () => {
   const values = []

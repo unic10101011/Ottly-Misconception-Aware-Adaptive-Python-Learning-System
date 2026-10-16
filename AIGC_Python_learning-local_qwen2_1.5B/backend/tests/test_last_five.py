@@ -30,6 +30,10 @@ def test_last_five_learning_flow(client):
         assert not client.get(url, headers=headers).json()['data']['completed']
         failed = submit(client, headers, lesson.problem_id, 'print("incorrect")').json()['data']
         assert not failed['judge']['passed']
+        assert failed['analysis']['status'] == 'preparing'
+        analyzed = client.post(f"/api/v1/code/submissions/{failed['submission_id']}/analysis", headers=headers)
+        assert analyzed.status_code == 200, analyzed.text
+        failed['analysis'] = analyzed.json()['data']['analysis']
         assert failed['analysis']['status'] == 'ready' and failed['analysis']['source'] == 'fixed'
         assert failed['analysis']['content']['knowledge_ids'] == lesson.knowledge_ids
         if slot.id in (11, 12):

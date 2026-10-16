@@ -22,6 +22,7 @@ def with_lesson_hints(lesson: Lesson, analysis: AnalysisResult, judge: JudgeResu
     return AnalysisResult(
         status='ready', source='fixed',
         message='AI 暂未提供合格分析，以下使用本关已审核的基础提示。',
+        model_load_ms=analysis.model_load_ms,
         content=AnalysisContent(
             suspected_cause='尚未确认具体错因，请结合公开结果逐步核对。',
             evidence=[Evidence(

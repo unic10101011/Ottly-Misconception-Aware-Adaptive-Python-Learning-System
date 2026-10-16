@@ -5,29 +5,15 @@ import xingxing from './images/xingxing.png'
 import chathaita from './images/chathaita.png'
 import { getLevels } from '../components/codeApi.mjs'
 
-function generatePath(from, to, index) {
-  const startX = from.x + 45
-  const startY = from.y + 90
-  const endX = to.x + 45
-  const endY = to.y
-  const midY = (startY + endY) / 2
-  const bend = index % 2 === 0 ? 60 : -60
-  return `M ${startX} ${startY} C ${startX + bend} ${midY}, ${endX + bend} ${midY}, ${endX} ${endY}`
-}
-
 function LevelSelection() {
   const navigate = useNavigate()
   const [levels, setLevels] = useState([])
   const [error, setError] = useState('')
+
   useEffect(() => {
     let active = true
     getLevels(localStorage.getItem('access_token')).then(data => {
-      if (!active) return
-      setLevels(data.items.map((level, index) => ({ ...level,
-        x: index % 2 ? 200 : 55, y: 100 + index * 160,
-        color: level.status === 'completed' ? '#27c93f' : '#4A90E2',
-        icon: !level.published ? '🔒' : ['🦦', '👋', '🛒', '🐚', '🏅', '⛵', '🚩', '🧺', '💰', '📻', '🌡️', '🛠️'][index] || '📘',
-      })))
+      if (active) setLevels(data.items)
     }).catch(error => {
       if (!active) return
       setError(error.message)
@@ -36,68 +22,66 @@ function LevelSelection() {
     return () => { active = false }
   }, [navigate])
 
-  const handleCircleClick = (level) => {
+  const openLevel = level => {
     if (level.status === 'locked' || !level.published) return
-    navigate(`/app/levels/${level.id}`)
+    navigate('/app/levels/' + level.id)
   }
 
-  const pathHeight = Math.max(700, 100 + levels.length * 160)
+  const publishedCount = levels.filter(level => level.published).length
+  const completedCount = levels.filter(level => level.published && level.status === 'completed').length
+  const nextLevel = levels.find(level => level.published && level.status !== 'locked' && level.status !== 'completed')
+  const progress = publishedCount ? Math.round(completedCount / publishedCount * 100) : 0
 
   return (
-    <div className="level-page" style={{ minHeight: pathHeight + 40 }}>
-      {error && <p role="alert">{error}</p>}
-      {!error && levels.length === 0 && <p role="status">正在读取学习进度...</p>}
-      <img src={xingxing} alt="星星" className="level-decoration"
-        style={{ top: '2%', left: '3%', width: '50px', opacity: 0.6 }} />
-      <img src={yunduo} alt="云朵" className="level-decoration"
-        style={{ top: '3%', right: '5%', width: '70px', opacity: 0.6 }} />
+    <div className="level-page">
+      <img src={xingxing} alt="" className="level-decoration level-star" />
+      <img src={yunduo} alt="" className="level-decoration level-cloud" />
+      <header className="level-intro">
+        <div>
+          <span className="level-eyebrow">OTTLY · 学习地图</span>
+          <h1>和小海獭继续探索 Python</h1>
+          <p>沿着海岸一步步前进，完成练习后解锁下一站。</p>
+        </div>
+        {nextLevel && <button type="button" className="level-continue" onClick={() => openLevel(nextLevel)}>
+          继续学习 · {nextLevel.name} <span aria-hidden="true">→</span>
+        </button>}
+      </header>
 
-      {/* Right-side otter - full body, ~1/3 page height */}
-      <div className="otter-side"
-        onClick={() => navigate('/app/ai-chat')}>
-        <div className="otter-bubble">有问题问我哦</div>
-        <img src={chathaita} alt="海獭" />
-      </div>
+      {error && <p className="level-load-error" role="alert">{error}</p>}
+      {!error && levels.length === 0 && <p className="level-loading" role="status">正在读取学习进度...</p>}
 
-      {/* Level circles container - centered */}
-      <div className="level-path-container" style={{ height: pathHeight }}>
-        <svg>
-          {levels.slice(0, -1).map((level, i) => (
-            <path
-              key={i}
-              d={generatePath(level, levels[i + 1], i)}
-              fill="none"
-              stroke={level.status === 'completed' ? '#27c93f' : level.status === 'current' ? '#4A90E2' : level.status === 'available' ? '#78afe4' : '#ccc'}
-              strokeWidth="4"
-              strokeDasharray={level.status === 'locked' ? '8,4' : 'none'}
-              strokeLinecap="round"
-              opacity="0.7"
-            />
-          ))}
-        </svg>
-
-        {levels.map((level) => (
-          <div
-            key={level.id}
-            role="button" tabIndex={level.published && level.status !== 'locked' ? 0 : -1}
-            aria-disabled={!level.published || level.status === 'locked'}
-            onKeyDown={event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); handleCircleClick(level) } }}
-            className={`level-circle ${level.status}`}
-            style={{ left: `${level.x}px`, top: `${level.y}px` }}
-            onClick={() => handleCircleClick(level)}
-          >
-            {level.status === 'current' && <div className="current-arrow">▲</div>}
-            {level.status === 'completed' && <div className="check-mark">✓</div>}
-            <span className="level-icon">{level.icon}</span>
-            <span className="level-name">{level.name}</span>
-            <span className="level-label">
-              {!level.published ? (level.status === 'current' ? '已解锁 · 待开放' : '待开放') : level.status === 'completed' ? '已通关' : level.status === 'current' ? '当前关卡' : '未解锁'}
-            </span>
+      {levels.length > 0 && <div className="level-content">
+        <section className="level-map-card" aria-labelledby="level-map-heading">
+          <div className="level-map-heading">
+            <div><span className="level-eyebrow">你的学习旅程</span><h2 id="level-map-heading">闯关路线</h2></div>
+            <span className="level-progress-text">已完成 {completedCount} / {publishedCount} 关</span>
           </div>
-        ))}
-      </div>
-
-      <div className="level-wave" />
+          <div className="level-progress-track" role="progressbar" aria-label="已开放关卡完成进度" aria-valuenow={completedCount} aria-valuemin="0" aria-valuemax={publishedCount || 1}>
+            <span style={{ width: progress + '%' }} />
+          </div>
+          <ol className="level-map">
+            {levels.map((level, index) => {
+              const disabled = !level.published || level.status === 'locked'
+              const statusText = !level.published ? '待开放' : level.status === 'completed' ? '已通关' : level.status === 'current' ? '当前关卡' : level.status === 'available' ? '可以挑战' : '尚未解锁'
+              return <li key={level.id} className={'level-step ' + level.status + (disabled ? ' is-disabled' : '')}>
+                <button type="button" className="level-step-button" disabled={disabled} onClick={() => openLevel(level)}
+                  aria-label={'第 ' + (index + 1) + ' 关，' + level.name + '，' + statusText}>
+                  <span className="level-step-number">{String(index + 1).padStart(2, '0')}</span>
+                  <span className="level-step-copy"><strong>{level.name}</strong><small>{statusText}</small></span>
+                  <span className="level-step-arrow" aria-hidden="true">{disabled ? '·' : '→'}</span>
+                </button>
+              </li>
+            })}
+          </ol>
+        </section>
+        <aside className="level-guide">
+          <img src={chathaita} alt="小海獭" />
+          <div><span className="level-eyebrow">小海獭在线</span><h2>卡住了？一起想办法。</h2>
+            <p>遇到难题时，可以随时和我聊聊思路。</p></div>
+          <button type="button" onClick={() => navigate('/app/ai-chat')}>向小海獭提问 <span aria-hidden="true">→</span></button>
+        </aside>
+      </div>}
+      <div className="level-wave" aria-hidden="true" />
     </div>
   )
 }

@@ -51,6 +51,7 @@ class ContractAnalysisContent(AnalysisContent):
 class ContractAnalysis(AnalysisResult):
     source: Literal['ai', 'fixed'] | None = None
     content: ContractAnalysisContent | None = None
+    timings: dict[str, float] = Field(default_factory=dict)
 
 
 def submission_error(judge: JudgeResult, raw: str | None = None, *, code: str | None = None) -> str | None:
