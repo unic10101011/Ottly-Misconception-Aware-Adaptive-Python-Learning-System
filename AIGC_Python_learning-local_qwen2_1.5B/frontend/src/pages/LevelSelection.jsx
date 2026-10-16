@@ -26,7 +26,7 @@ function LevelSelection() {
       setLevels(data.items.map((level, index) => ({ ...level,
         x: index % 2 ? 200 : 55, y: 100 + index * 160,
         color: level.status === 'completed' ? '#27c93f' : '#4A90E2',
-        icon: !level.published ? '🔒' : ['🦦', '👋', '🛒', '🐚', '🏅', '⛵', '🚩'][index] || '📘',
+        icon: !level.published ? '🔒' : ['🦦', '👋', '🛒', '🐚', '🏅', '⛵', '🚩', '🧺', '💰', '📻', '🌡️', '🛠️'][index] || '📘',
       })))
     }).catch(error => {
       if (!active) return

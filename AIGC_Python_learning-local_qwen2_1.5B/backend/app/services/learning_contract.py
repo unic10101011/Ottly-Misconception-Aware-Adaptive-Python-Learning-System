@@ -19,6 +19,7 @@ ERROR_CODES = {
     'EOFError': 'EOF_ERROR', 'ImportError': 'IMPORT_ERROR', 'ModuleNotFoundError': 'IMPORT_ERROR',
     '安全警告': 'SECURITY_ERROR', 'OutputLimitError': 'OUTPUT_LIMIT_EXCEEDED',
     '超时警告': 'TIMEOUT', 'wrong_answer': 'WRONG_ANSWER',
+    'RequirementError': 'REQUIREMENT_NOT_MET',
 }
 STUDENT_ERRORS = set(ERROR_CODES.values()) | {'RUNTIME_ERROR'}
 

@@ -5,6 +5,7 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from app.services.sandbox.runner import run_code_process
 from app.services.problem_catalog import Problem, TestCase, PROBLEMS, GREETING, GREETING_ID
+from app.services.lesson_assessment import requirement_error, function_test_program
 
 
 class ExecutionError(BaseModel):
@@ -47,28 +48,44 @@ class SubmissionRequest(BaseModel):
 
 def judge_submission(problem: Problem, code: str) -> JudgeResult:
     cases = []
-    for test in problem.tests:
-        execution = run_code_process(code, timeout=getattr(problem, 'time_limit_seconds', 3), stdin=test.stdin)
+    requirement = requirement_error(problem, code)
+    tests = list(problem.tests)
+    # Invalid syntax remains the sandbox's responsibility; do not try to extract
+    # a function until all ordinary executions have successfully completed.
+    for test in [*tests, *getattr(problem, 'function_tests', [])]:
+        expected_output = test.expected_output if isinstance(test, TestCase) else 'True\n' * len(test.calls)
+        if requirement:
+            execution = requirement
+        elif isinstance(test, TestCase):
+            execution = run_code_process(code, timeout=getattr(problem, 'time_limit_seconds', 3), stdin=test.stdin)
+        elif any(case.errors for case in cases):
+            # No private harness is attempted after a normal execution failure.
+            cases.append(CaseResult(case_id=test.case_id, passed=False, expected_output=expected_output,
+                actual_output='', output_available=False, errors=[], execution_time=0, visibility='hidden'))
+            continue
+        else:
+            program, expected_output = function_test_program(code, test)
+            execution = run_code_process(program, timeout=problem.time_limit_seconds)
         actual = execution['output'].replace('\r\n', '\n')
-        expected = test.expected_output.replace('\r\n', '\n')
+        expected = expected_output.replace('\r\n', '\n')
         matches = actual == expected if problem.comparison == 'exact' else actual.strip() == expected.strip()
         cases.append(CaseResult(
             case_id=test.case_id,
             passed=execution["success"] and matches,
-            expected_output=test.expected_output,
+            expected_output=expected_output,
             actual_output=execution["output"],
             output_available=execution.get("output_available", True),
             errors=[ExecutionError(type=error["type"], line=error.get("line"), message=error["message"])
                     for error in execution["errors"]],
             execution_time=execution["execution_time"],
-            visibility=test.visibility,
+            visibility=getattr(test, 'visibility', 'hidden'),
         ))
     passed_cases = sum(case.passed for case in cases)
     passed = passed_cases == len(cases)
     status = "accepted" if passed else "wrong_answer"
     if any(error.type == "超时警告" for case in cases if not case.passed for error in case.errors):
         status = "timeout"
-    elif any(case.errors for case in cases if not case.passed):
+    elif any(error.type != 'RequirementError' for case in cases if not case.passed for error in case.errors):
         status = "execution_error"
     return JudgeResult(status=status, passed=passed, passed_cases=passed_cases, total_cases=len(cases), cases=cases)
 

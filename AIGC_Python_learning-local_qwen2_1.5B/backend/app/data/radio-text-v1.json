@@ -1,0 +1,29 @@
+{
+  "schema_version":"1.0.0", "problem_id":"radio-text-v1", "version":1, "level_no":10,
+  "title":"Ottly 的海边电台", "difficulty":2, "published":true,
+  "knowledge_ids":["K10"], "prerequisite_knowledge_ids":["K02","K05","K08"], "prerequisite_problem_ids":["shell-savings-v1"],
+  "story":"Ottly 最近迷上了海边的小海浪电台。今天电台播出一段特别的留言，她想知道整段留言有多少个字符，以及某个目标字符出现了多少次。请逐字检查留言，帮她完成统计。",
+  "teaching":[
+    {"title":"完整读取文本与目标字符","text":"两次 input 分别读取文本和目标字符，只去掉行末换行。空行表示空文本，空格也是有效内容。不要调用 strip 清除首尾空格，也不要改变大小写。","example":"text = input()\ntarget = input()\n# 第一行可以为空，第二行也可能是一个空格"},
+    {"title":"len 获取字符数量","text":"len 返回字符串包含的字符数，空格也计入长度，空字符串长度为零。它与目标字符出现次数是两个不同的量。","example":"print(len('Hi Ottly'))  # 8\nprint(len(''))          # 0"},
+    {"title":"逐个遍历字符串","text":"可以把字符串直接放在 for 的 in 后面，循环变量每轮得到一个字符。遍历不会自动去掉空格。空字符串没有字符，循环执行零次。","example":"for char in 'Otter':\n    print(char)  # 依次输出 O、t、t、e、r"},
+    {"title":"比较字符并区分大小写","text":"使用两个等号判断当前字符与目标字符是否相同。大小写不同就是不同字符；单个等号是赋值，不用于条件比较。","example":"print('A' == 'a')  # False\nprint(' ' == ' ')  # True"},
+    {"title":"循环内嵌入条件计数","text":"先在循环外把次数设为零。循环体中的 if 检查当前字符，只有匹配时才让次数加一。计数更新比 if 再多缩进一级，不匹配的字符不能增加次数。","example":"matches = 0\nfor char in 'book':\n    if char == 'o':\n        matches = matches + 1\nprint(matches)  # 2"},
+    {"title":"按顺序输出两个结果","text":"遍历结束后，第一行输出文本长度，第二行输出匹配次数。空文本的两个结果都是零；没有目标字符时，次数为零，但文本长度不一定为零。","example":"# 文本为 Hi、目标为 z 时\n# 长度是 2，匹配次数是 0"}
+  ],
+  "description":"第一行输入文本 text（0～100 个字符，仅英文字母和空格），第二行输入目标字符 target（恰好一个英文字母或空格）。区分大小写并保留首尾空格。输出两行整数：文本长度、目标字符出现次数。",
+  "starter_code":"# 读取文本和目标字符，逐字符统计后输出长度和次数\n",
+  "examples":[{"stdin":"banana\na\n","stdout":"6\n3\n"}],
+  "tests":[
+    {"case_id":"sample-1","stdin":"banana\na\n","expected_output":"6\n3\n","visibility":"public"},
+    {"case_id":"hidden-1","stdin":"\na\n","expected_output":"0\n0\n","visibility":"hidden"},
+    {"case_id":"hidden-2","stdin":"AaA\na\n","expected_output":"3\n1\n","visibility":"hidden"},
+    {"case_id":"hidden-3","stdin":" a \n \n","expected_output":"3\n2\n","visibility":"hidden"},
+    {"case_id":"hidden-4","stdin":"Otter\nz\n","expected_output":"5\n0\n","visibility":"hidden"},
+    {"case_id":"hidden-5","stdin":"aaa\na\n","expected_output":"3\n3\n","visibility":"hidden"}
+  ],
+  "comparison":"exact", "time_limit_seconds":3, "output_limit_chars":8000,
+  "hints":{"level1":"文本长度与某个字符出现的次数有什么区别？","level2":"检查是否逐字符比较，并确认只有字符匹配时才增加次数，读取时是否保留了空格。","level3":"分别推演空文本、大小写不同和目标为空格的情况，核对计数初值、缩进层级及两行结果的顺序。"},
+  "reference_solution":"text = input()\ntarget = input()\ncount = 0\nfor char in text:\n    if char == target:\n        count = count + 1\nprint(len(text))\nprint(count)\n",
+  "solution_explanation":"先读取完整两行，不清除空格。count 在循环前从零开始，每轮取出一个字符，与目标字符相同才增加一次。\n\n样例 banana 一共六个字符，其中 a 出现三次，所以输出六和三，两行分开。长度与计数不能混为一谈。\n\n空文本遍历零次，输出零和零。大小写分别比较；首尾空格属于文本，目标为一个空格时也要正常统计。"
+}

@@ -1,0 +1,28 @@
+{
+  "schema_version":"1.0.0", "problem_id":"shell-savings-v1", "version":1, "level_no":9,
+  "title":"存够小贝壳", "difficulty":2, "published":true,
+  "knowledge_ids":["K09"], "prerequisite_knowledge_ids":["K08","K05"], "prerequisite_problem_ids":["shell-total-v1"],
+  "story":"Ottly 看中了一件装饰洞口的海底饰品，需要 target 枚贝壳才能兑换。她从零开始，每天结束时存入三枚贝壳，达到或超过目标就停止。请帮她算出至少需要存多少天。",
+  "teaching":[
+    {"title":"按条件重复的 while","text":"for 常用于遍历一个范围；while 在每一轮开始前检查条件。条件为真就执行缩进的循环体，再回到条件处检查；条件为假就结束。行末需要英文冒号。","example":"remaining = 2\nwhile remaining > 0:\n    print(remaining)\n    remaining = remaining - 1"},
+    {"title":"保存数量与天数","text":"本题有两个状态：已经存了多少枚、已经过了多少天。还没开始时二者都是零，都应在循环外初始化。","example":"saved = 0\ndays = 0"},
+    {"title":"未达目标才继续","text":"只要已经存下的数量还小于目标，就要再存一天。达到或超过目标都应该停止。如果写成小于等于，恰好达到目标时会多存一天。","example":"# 目标为 6 时\n# 已存 3：还不足，继续\n# 已存 6：已经足够，停止"},
+    {"title":"一轮完成两次更新","text":"每过一天，数量增加三，天数增加一。循环体中两项状态都要更新。忘记推进数量，条件可能一直为真；忘记更新天数，最终答案就不正确。","example":"saved = 0\ndays = 0\nsaved = saved + 3\ndays = days + 1\nprint(saved, days)  # 3 1"},
+    {"title":"超过目标也算达成","text":"以目标十枚为例：零天零枚，三天九枚还不够，四天十二枚就够了。因此不要求数量恰好等于目标，而是第一次达到或超过。","example":"# 天数：0  1  2  3  4\n# 数量：0  3  6  9  12"},
+    {"title":"零次循环和最终输出","text":"目标为零时，第一次检查条件就为假，无需存入，天数为零。把打印放在循环结束后，输出天数而不是已存数量。","example":"remaining = 0\nwhile remaining > 0:\n    remaining = remaining - 1\nprint(remaining)  # 0，循环体没有执行"}
+  ],
+  "description":"输入一个整数 target（0–1000）。从零枚贝壳开始，每天结束存入 3 枚。使用 while 循环，输出达到或超过 target 所需的最少天数，一行整数。target 为零时输出 0。",
+  "starter_code":"# 读取目标，记录已存数量和天数，未达目标时继续存入\n",
+  "examples":[{"stdin":"7\n","stdout":"3\n"}],
+  "tests":[
+    {"case_id":"sample-1","stdin":"7\n","expected_output":"3\n","visibility":"public"},
+    {"case_id":"hidden-1","stdin":"0\n","expected_output":"0\n","visibility":"hidden"},
+    {"case_id":"hidden-2","stdin":"1\n","expected_output":"1\n","visibility":"hidden"},
+    {"case_id":"hidden-3","stdin":"6\n","expected_output":"2\n","visibility":"hidden"},
+    {"case_id":"hidden-4","stdin":"1000\n","expected_output":"334\n","visibility":"hidden"}
+  ],
+  "comparison":"exact", "time_limit_seconds":3, "output_limit_chars":8000,
+  "hints":{"level1":"循环在什么条件下应该继续，又在什么条件下应该停止？","level2":"检查条件是否表达尚未达到目标，并确认每轮都推进已存数量和天数。","level3":"手算刚好达到与最后一次超过目标两种情况，再检查零目标是否会进入循环，以及最后打印的是哪一个状态。"},
+  "reference_solution":"target = int(input())\nsaved = 0\ndays = 0\nwhile saved < target:\n    saved = saved + 3\n    days = days + 1\nprint(days)\n",
+  "solution_explanation":"数量和天数从零开始。每轮先判断数量是否仍小于目标，成立才增加三枚并记录一天。\n\n样例目标七枚，依次存到三、六、九枚，对应一、二、三天。九枚达到目标，下一次检查为假，最终输出三。\n\n目标六枚在两天后恰好达到，不能多循环一次。目标零枚一开始已经足够，循环执行零次，输出零。"
+}
