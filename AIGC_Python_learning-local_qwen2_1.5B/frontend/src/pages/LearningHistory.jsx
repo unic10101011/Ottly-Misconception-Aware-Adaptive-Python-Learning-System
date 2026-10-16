@@ -2,7 +2,8 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import SubmissionFeedback from '../components/SubmissionFeedback.jsx'
 import ProblemMetadata from '../components/ProblemMetadata.jsx'
-import { getLearningHistory, getMistakeQuestions, getKnowledge, requestAnalysis, requestCode, saveHintView } from '../components/codeApi.mjs'
+import MisconceptionOverview from '../components/MisconceptionOverview.jsx'
+import { getLearningHistory, getMistakeQuestions, getMisconceptions, getKnowledge, requestAnalysis, requestCode, saveHintView } from '../components/codeApi.mjs'
 
 const HISTORY_PAGE_SIZE = 10
 const formatDate = value => new Date(value).toLocaleString('zh-CN')
@@ -32,6 +33,9 @@ function LearningHistory() {
   const [historyLoading, setHistoryLoading] = useState(false)
   const [historyError, setHistoryError] = useState('')
   const [actionError, setActionError] = useState('')
+  const [misconceptions, setMisconceptions] = useState([])
+  const [misconceptionLoading, setMisconceptionLoading] = useState(true)
+  const [misconceptionError, setMisconceptionError] = useState('')
   const selectedRef = useRef(null)
   const latestSubmissionRef = useRef(null)
   const pendingHistoryRef = useRef(new Set())
@@ -101,6 +105,20 @@ function LearningHistory() {
     }).finally(() => { if (active) setHistoryLoading(false) })
     return () => { active = false }
   }, [selectedId, historyOffset, historyReload, navigate])
+
+  useEffect(() => {
+    let active = true
+    setMisconceptionLoading(true)
+    setMisconceptionError('')
+    getMisconceptions(localStorage.getItem('access_token')).then(data => {
+      if (active) setMisconceptions(data.items)
+    }).catch(error => {
+      if (!active) return
+      setMisconceptionError(error.message)
+      if (error.status === 401) navigate('/auth')
+    }).finally(() => { if (active) setMisconceptionLoading(false) })
+    return () => { active = false }
+  }, [navigate, summaryReload])
 
   const chooseQuestion = problemId => {
     if (busy) return
@@ -222,6 +240,8 @@ function LearningHistory() {
           <p>选择一道题重新练习，也可以查看它的复习轨迹。</p></div>
         <span className="mistake-count">{questions.length} 道错题</span>
       </header>
+
+      <MisconceptionOverview items={misconceptions} loading={misconceptionLoading} error={misconceptionError} />
 
       {loading && <p role="status">正在加载错题...</p>}
       {listError && <p className="mistake-alert" role="alert">{listError}</p>}

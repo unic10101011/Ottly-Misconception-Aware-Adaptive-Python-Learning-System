@@ -111,6 +111,36 @@ test('history requests use the current account token and record hint level', asy
   } finally { global.fetch = originalFetch }
 })
 
+test('misconception overview requests only the current account summary', async () => {
+  const { getMisconceptions } = await import('../src/components/codeApi.mjs')
+  const originalFetch = global.fetch
+  global.fetch = async (url, options) => {
+    assert.equal(url, '/api/v1/code/misconceptions')
+    assert.equal(options.method, 'GET')
+    assert.equal(options.headers.Authorization, 'Bearer student-token')
+    return new Response(JSON.stringify({ code: 200, data: { items: [] } }), { status: 200 })
+  }
+  try {
+    assert.deepEqual(await getMisconceptions('student-token'), { items: [] })
+  } finally { global.fetch = originalFetch }
+})
+
+test('misconception overview explains uncertainty and shows saved counts or an empty state', () => {
+  const Overview = loadJsx('../src/components/MisconceptionOverview.jsx')
+  const item = { misconception_tag: 'range_boundary', label: '循环边界', occurrence_count: 3,
+    problem_count: 2, latest_at: '2026-10-16T08:00:00Z', later_passed_count: 1 }
+  const filled = renderToStaticMarkup(React.createElement(Overview, { items: [item] }))
+  assert.match(filled, /疑似误区概览/)
+  assert.match(filled, /根据提交记录推测/)
+  assert.match(filled, /循环边界/)
+  assert.match(filled, /3 次/)
+  assert.match(filled, /2 道/)
+  assert.match(filled, /后来做对.*1 道/)
+  assert.match(filled, /2026/)
+  const empty = renderToStaticMarkup(React.createElement(Overview, { items: [] }))
+  assert.match(empty, /完成一些题目后/)
+})
+
 test('history requests can be aborted and report a timeout', async () => {
   const { getLearningHistory } = await import('../src/components/codeApi.mjs')
   const originalFetch = global.fetch
@@ -421,6 +451,7 @@ test('review submission also shows the judge before its hint request finishes', 
     react: hooks,
     'react-router-dom': { useNavigate: () => () => {} },
     '../components/ProblemMetadata.jsx': () => null,
+    '../components/MisconceptionOverview.jsx': () => null,
     '../components/SubmissionFeedback.jsx': { default: () => null },
     '../components/codeApi.mjs': {
       requestCode: async () => prepared,
@@ -478,6 +509,7 @@ test('opening an unfinished history entry resumes only that analysis', async () 
     react: hooks,
     'react-router-dom': { useNavigate: () => () => {} },
     '../components/ProblemMetadata.jsx': () => null,
+    '../components/MisconceptionOverview.jsx': () => null,
     '../components/SubmissionFeedback.jsx': () => null,
     '../components/codeApi.mjs': {
       requestAnalysis: async id => { assert.equal(id, 81); return new Promise(resolve => { finishAnalysis = resolve }) },

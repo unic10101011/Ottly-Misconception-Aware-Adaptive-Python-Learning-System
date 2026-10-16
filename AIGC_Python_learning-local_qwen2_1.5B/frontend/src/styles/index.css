@@ -774,6 +774,16 @@ body.eye-protection {
 .mistake-page-header { margin-bottom: 20px; }
 .mistake-page-header h1 { font-size: 29px; font-weight: 700; margin: 2px 0 5px; }
 .mistake-page-header p { margin: 0; color: #687d8e; font-size: 14px; }
+.misconception-overview { margin-bottom: 18px; padding: 18px 20px; border: 1px solid #e0eaf3; border-radius: 14px; background: #fff; }
+.misconception-overview h2 { margin: 0 0 4px; font-size: 18px; }
+.misconception-note, .misconception-empty { margin: 0; color: #687d8e; font-size: 14px; line-height: 1.6; }
+.misconception-empty { margin-top: 12px; }
+.misconception-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 10px; margin-top: 14px; }
+.misconception-item { padding: 13px; border: 1px solid #e0eaf3; border-radius: 10px; background: #fbfdff; }
+.misconception-item h3 { margin: 0 0 10px; font-size: 16px; }
+.misconception-item dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; margin: 0; }
+.misconception-item dt { color: #687d8e; font-size: 12px; }
+.misconception-item dd { margin: 2px 0 0; font-size: 14px; font-weight: 700; overflow-wrap: anywhere; }
 .mistake-eyebrow { color: #4a90e2; font-size: 12px; font-weight: 700; letter-spacing: .08em; }
 .mistake-count, .mistake-status { flex: none; border-radius: 999px; padding: 7px 13px; background: #e8f2ff; color: #2f6fae; font-size: 13px; font-weight: 700; }
 .mistake-status.is-passed { background: #e5f5e9; color: #237b43; }

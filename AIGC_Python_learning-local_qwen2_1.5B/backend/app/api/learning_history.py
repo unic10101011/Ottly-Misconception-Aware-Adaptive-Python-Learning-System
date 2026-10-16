@@ -12,9 +12,18 @@ from app.models.user import User
 from app.services.submission import PROBLEMS
 from app.services.problem_catalog import SCHEMA_VERSION
 from app.services.learning_contract import contract_judge, submission_error, history_analysis, snapshot_fields, utc_iso
+from app.services.error_analysis import MISCONCEPTION_TAGS
 
 
 router = APIRouter()
+MISCONCEPTION_LABELS = {
+    'range_boundary': '循环边界',
+    'accumulation_error': '累加逻辑',
+    'condition_error': '条件判断',
+    'variable_error': '变量使用',
+    'syntax_error': '语法与缩进',
+    'other': '其他疑似问题',
+}
 
 
 @router.get("/code/progress")
@@ -127,6 +136,46 @@ def my_mistake_questions(current_user: User = Depends(get_current_user), db: Ses
             "related_questions": [],
         })
     return {"schema_version": SCHEMA_VERSION, "code": 200, "data": {"items": items, "total": len(items)}}
+
+
+@router.get('/code/misconceptions')
+def my_misconceptions(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    rows = db.query(
+        LearningSubmission.id, LearningSubmission.problem_id, LearningSubmission.passed,
+        LearningSubmission.analysis_json, LearningSubmission.created_at,
+    ).filter(
+        LearningSubmission.user_id == current_user.id,
+    ).order_by(LearningSubmission.id).all()
+    last_pass = {row.problem_id: row.id for row in rows if row.passed}
+    grouped = {}
+    for row in rows:
+        if row.passed or not row.analysis_json or row.analysis_json.get('status') != 'ready':
+            continue
+        content = row.analysis_json.get('content') or {}
+        tag = content.get('misconception_tag')
+        if tag not in MISCONCEPTION_TAGS:
+            continue
+        item = grouped.setdefault(tag, {
+            'misconception_tag': tag, 'label': MISCONCEPTION_LABELS[tag],
+            'occurrence_count': 0, 'problem_ids': set(), 'later_passed_ids': set(),
+            'latest_at': row.created_at,
+        })
+        item['occurrence_count'] += 1
+        item['problem_ids'].add(row.problem_id)
+        if last_pass.get(row.problem_id, 0) > row.id:
+            item['later_passed_ids'].add(row.problem_id)
+        if row.created_at > item['latest_at']:
+            item['latest_at'] = row.created_at
+    items = [{
+        'misconception_tag': item['misconception_tag'],
+        'label': item['label'],
+        'occurrence_count': item['occurrence_count'],
+        'problem_count': len(item['problem_ids']),
+        'latest_at': utc_iso(item['latest_at']),
+        'later_passed_count': len(item['later_passed_ids']),
+    } for item in grouped.values()]
+    items.sort(key=lambda item: item['latest_at'], reverse=True)
+    return {'schema_version': SCHEMA_VERSION, 'code': 200, 'data': {'items': items}}
 
 
 @router.patch("/code/submissions/{submission_id}/hints")

@@ -40,6 +40,7 @@ def login(client):
 
 def sample_analysis():
     return {
+        "misconception_tag": "accumulation_error",
         "suspected_cause": "疑似每次循环覆盖了累计结果。",
         "evidence": [{"case_id": "stdout-1", "field": "actual_output", "quote": "100",
                       "explanation": "程序输出了循环的最后一个数，和要求的总和不同。"}],
@@ -140,11 +141,88 @@ def test_syntax_error_uses_fast_grounded_hints_without_model(client, monkeypatch
     analysis = data["analysis"]
     assert analysis["status"] == "ready"
     assert analysis["source"] == "fixed"
+    assert analysis["content"]["misconception_tag"] == "syntax_error"
     assert analysis["content"]["evidence"][0]["quote"] == data["judge"]["cases"][0]["errors"][0]["message"]
     assert "变量名以数字开头" not in json.dumps(analysis, ensure_ascii=False)
     if code.startswith("int sum"):
         assert "声明" in analysis["content"]["suspected_cause"]
         assert "类型" in analysis["content"]["hints"]["level3"]
+
+
+@pytest.mark.parametrize('code,tag,actual', [
+    ('total = 0\nfor i in range(1, 100):\n    total += i\nprint(total)', 'range_boundary', '4950\n'),
+    (OVERWRITE, 'accumulation_error', '100\n'),
+    ('print(0)', 'other', '0\n'),
+    ('print(missing_total)', 'variable_error', ''),
+])
+def test_model_tag_is_saved_with_the_same_public_judge_evidence(client, monkeypatch, code, tag, actual):
+    def handler(request):
+        facts = model_facts(json.loads(request.content))
+        case = facts['failed_cases'][0]
+        content = sample_analysis()
+        content['misconception_tag'] = tag
+        content['suspected_cause'] = '疑似本次代码处理方式与题目要求不符。'
+        content['evidence'][0].update(
+            field='error_message' if case['errors'] else 'actual_output',
+            quote=case['errors'][0]['message'] if case['errors'] else case['actual_output'].strip(),
+            explanation='公开测试显示了本次失败的真实结果。',
+        )
+        return httpx.Response(200, json={'done': True, 'message': {'content': json.dumps(content)}})
+
+    mock_model(monkeypatch, handler)
+    headers = login(client)
+    result = submit_and_analyze(client, headers, json={'problem_id': 'level2', 'code': code})
+    assert result['judge']['cases'][0]['actual_output'] == actual
+    assert result['analysis']['content']['misconception_tag'] == tag
+    history = client.get('/api/v1/code/submissions', headers=headers).json()['data']['items'][0]
+    assert history['analysis']['content']['misconception_tag'] == tag
+
+
+def test_unknown_model_tag_is_downgraded_to_other(client, monkeypatch):
+    def handler(request):
+        content = sample_analysis()
+        content['misconception_tag'] = 'sum_variable_name_error'
+        return httpx.Response(200, json={'done': True, 'message': {'content': json.dumps(content)}})
+
+    mock_model(monkeypatch, handler)
+    result = submit_and_analyze(client, login(client), json={'problem_id': 'level2', 'code': OVERWRITE})
+    assert result['analysis']['status'] == 'ready'
+    assert result['analysis']['content']['misconception_tag'] == 'other'
+
+
+def test_greeting_undefined_username_uses_public_error_for_variable_tag(client, monkeypatch):
+    observed = []
+
+    def handler(request):
+        facts = model_facts(json.loads(request.content))
+        observed.append(facts)
+        case = facts['failed_cases'][0]
+        content = sample_analysis()
+        content.update(
+            misconception_tag='variable_error',
+            suspected_cause='疑似使用了尚未赋值的名字。',
+            knowledge_points=['变量赋值'],
+        )
+        content['evidence'][0].update(case_id=case['case_id'], field='error_message',
+                                      quote=case['errors'][0]['message'],
+                                      explanation='公开运行错误指出这个名字尚未定义。')
+        content['hints']['level2'] = '查看报错行里的名字，核对前面赋值时的拼写。'
+        content['hints']['level3'] = '把报错中的名字和已有赋值逐字对照，再重新运行。'
+        return httpx.Response(200, json={'done': True, 'message': {'content': json.dumps(content)}})
+
+    mock_model(monkeypatch, handler)
+    headers = login(client)
+    passed = client.post('/api/v1/code/submit', headers=headers,
+                         json={'problem_id': 'level1', 'code': "print('Hello, World!')"})
+    assert passed.json()['data']['judge']['passed'] is True
+    code = 'name = input()\nprint("Hello, " + username + "!")'
+    result = submit_and_analyze(client, headers, json={'problem_id': 'greeting-v1', 'code': code})
+    assert result['analysis']['status'] == 'ready'
+    assert result['analysis']['content']['misconception_tag'] == 'variable_error'
+    assert len(observed[0]['failed_cases']) == 1
+    assert observed[0]['failed_cases'][0]['case_id'] == 'sample-1'
+    assert all(case['expected_output'] == '' and case['errors'] == []
+               for case in result['judge']['cases'] if case['visibility'] == 'hidden')
 
 
 def mock_model(monkeypatch, handler, review_handler=None):
@@ -155,7 +233,7 @@ def mock_model(monkeypatch, handler, review_handler=None):
         payload = json.loads(request.content)
         if payload.get("format", {}).get("title") == "HintReview":
             result = review_handler(request) if review_handler else httpx.Response(200, json={
-                "done": True, "message": {"content": json.dumps({"issues": []})}})
+                "done": True, "message": {"content": json.dumps({"issues": [], "tag_supported": True})}})
         else:
             result = handler(request)
         return await result if asyncio.iscoroutine(result) else result
@@ -211,7 +289,7 @@ def test_model_timings_are_saved_and_repeat_analysis_does_not_recall_model(clien
     def review(request):
         calls.append('review')
         return httpx.Response(200, json={'done': True, 'load_duration': 2_000_000,
-                                         'message': {'content': '{"issues": []}'}})
+                                         'message': {'content': '{"issues": [], "tag_supported": true}'}})
 
     mock_model(monkeypatch, draft, review)
     headers = login(client)
@@ -223,6 +301,7 @@ def test_model_timings_are_saved_and_repeat_analysis_does_not_recall_model(clien
     assert calls == ['draft', 'review']
     assert second['timings']['judge_ms'] == first['timings']['judge_ms']
     assert second['timings']['model_load_ms'] == 5.0
+    assert second['analysis']['content']['misconception_tag'] == 'accumulation_error'
     assert second['timings']['hint_generation_ms'] >= 0
     assert client.post(path, headers=headers).json()['data']['analysis'] == second['analysis']
     assert calls == ['draft', 'review']
@@ -305,7 +384,8 @@ def test_semantic_rejection_does_not_change_judge_or_retry(client, monkeypatch):
         payload = json.loads(request.content)
         reviews.append(payload)
         return httpx.Response(200, json={"done": True, "message": {"content": json.dumps({
-            "issues": [{"code": "unrelated_claim", "reason": "候选解释提及了当前代码不支持的原因。"}]
+            "issues": [{"code": "unrelated_claim", "reason": "候选解释提及了当前代码不支持的原因。"}],
+            "tag_supported": True,
         })}})
 
     mock_model(monkeypatch, draft, review)
@@ -318,6 +398,26 @@ def test_semantic_rejection_does_not_change_judge_or_retry(client, monkeypatch):
     facts = json.loads(reviews[0]["messages"][-1]["content"])
     assert facts["student_code"] == OVERWRITE
     assert facts["failed_cases"][0]["actual_output"] == data["judge"]["cases"][0]["actual_output"]
+
+
+def test_unsupported_specific_tag_is_saved_as_other(client, monkeypatch):
+    def draft(request):
+        content = sample_analysis()
+        content['misconception_tag'] = 'range_boundary'
+        return httpx.Response(200, json={'done': True, 'message': {'content': json.dumps(content)}})
+
+    def review(request):
+        return httpx.Response(200, json={'done': True, 'message': {'content': json.dumps({
+            'issues': [], 'tag_supported': False,
+        })}})
+
+    mock_model(monkeypatch, draft, review)
+    headers = login(client)
+    data = submit_and_analyze(client, headers, json={'problem_id': 'level2', 'code': OVERWRITE})
+    assert data['analysis']['status'] == 'ready'
+    assert data['analysis']['content']['misconception_tag'] == 'other'
+    items = client.get('/api/v1/code/misconceptions', headers=headers).json()['data']['items']
+    assert [item['misconception_tag'] for item in items] == ['other']
 
 
 @pytest.mark.parametrize("failure,expected", [("format", "invalid_response"), ("offline", "unavailable"),

@@ -97,6 +97,10 @@ export function getMistakeQuestions(token) {
   return requestLearningHistory('/code/mistakes', 'GET', token)
 }
 
+export function getMisconceptions(token) {
+  return requestLearningHistory('/code/misconceptions', 'GET', token)
+}
+
 export function saveHintView(submissionId, level, token) {
   return requestLearningHistory(`/code/submissions/${submissionId}/hints`, 'PATCH', token, { level })
 }

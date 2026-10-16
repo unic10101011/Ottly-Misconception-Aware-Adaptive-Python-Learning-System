@@ -34,6 +34,7 @@ def client(tmp_path, monkeypatch):
         return AnalysisResult.model_validate({
             "status": "ready", "message": "基于本次证据的提示。",
             "content": {
+                "misconception_tag": "accumulation_error",
                 "suspected_cause": "疑似每轮覆盖了此前的总数。",
                 "evidence": [{"case_id": "stdout-1", "field": "actual_output",
                               "quote": "100", "explanation": "实际输出只保留了最后一个值。"}],
@@ -97,6 +98,7 @@ def test_wrong_and_later_correct_are_both_saved_and_visible_after_relogin(client
     assert "100" in item["problem_description"]
     assert item["judge"]["cases"][0]["actual_output"] == "100\n"
     assert item["analysis"]["status"] == "ready"
+    assert item["analysis"]["content"]["misconception_tag"] == "accumulation_error"
     assert item["hints_viewed_max"] == 0
     assert item["resolved_later"] is True
     assert item["created_at"].endswith("Z")
@@ -122,6 +124,47 @@ def test_histories_and_hint_updates_are_owned_by_current_user(client):
     assert client.patch(f"/api/v1/code/submissions/{submission_id}/hints",
                         headers=first, json={"level": 4}).status_code == 422
     assert client.get("/api/v1/code/submissions").status_code == 401
+
+
+def test_misconception_counts_keep_repeats_later_passes_and_user_isolation(client):
+    first = account(client, 'tag_owner', '13800000031')
+    second = account(client, 'tag_other', '13800000032')
+    assert client.get('/api/v1/code/misconceptions').status_code == 401
+    submit(client, first, WRONG)
+    submit(client, first, WRONG)
+    repeated = client.get('/api/v1/code/misconceptions', headers=first).json()['data']['items'][0]
+    assert (repeated['occurrence_count'], repeated['problem_count']) == (2, 1)
+    level1 = client.post('/api/v1/code/submit', headers=first,
+                         json={'problem_id': 'level1', 'code': 'print(0)'}).json()['data']
+    client.post(f"/api/v1/code/submissions/{level1['submission_id']}/analysis", headers=first)
+    before = client.get('/api/v1/code/misconceptions', headers=first).json()['data']['items']
+    assert len(before) == 1
+    assert before[0]['misconception_tag'] == 'accumulation_error'
+    assert (before[0]['occurrence_count'], before[0]['problem_count'], before[0]['later_passed_count']) == (3, 2, 0)
+    assert before[0]['label'] == '累加逻辑'
+    assert before[0]['latest_at'].endswith('Z')
+    assert client.get('/api/v1/code/misconceptions', headers=second).json()['data']['items'] == []
+    submit(client, first, CORRECT)
+    after = client.get('/api/v1/code/misconceptions', headers=first).json()['data']['items'][0]
+    assert (after['occurrence_count'], after['problem_count'], after['later_passed_count']) == (3, 2, 1)
+    assert client.get('/api/v1/code/misconceptions', headers=second).json()['data']['items'] == []
+
+
+def test_model_failure_and_run_do_not_create_misconception_count(client, monkeypatch):
+    from app.api import coding
+    from app.services.error_analysis import AnalysisResult
+
+    async def unavailable(problem, code, judge):
+        return AnalysisResult(status='unavailable', message='模型不可用')
+
+    monkeypatch.setattr(coding, 'analyze_failure', unavailable)
+    headers = account(client, 'tag_failure', '13800000033')
+    client.post('/api/v1/code/run', headers=headers, json={'code': WRONG})
+    assert client.get('/api/v1/code/misconceptions', headers=headers).json()['data']['items'] == []
+    attempt = submit(client, headers, WRONG)
+    assert attempt['judge']['passed'] is False
+    assert attempt['analysis']['content'] is None
+    assert client.get('/api/v1/code/misconceptions', headers=headers).json()['data']['items'] == []
 
 
 def test_ai_unavailable_and_accepted_submission_still_have_records(client, monkeypatch):
