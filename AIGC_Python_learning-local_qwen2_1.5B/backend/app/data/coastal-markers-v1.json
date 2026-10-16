@@ -1,0 +1,33 @@
+{
+  "schema_version":"1.0.0", "problem_id":"coastal-markers-v1", "version":1, "level_no":7,
+  "title":"沿岸数路标", "difficulty":1, "published":true,
+  "knowledge_ids":["K07"], "prerequisite_knowledge_ids":["K03","K05"], "prerequisite_problem_ids":["safe-sailing-v1"],
+  "story":"海獭港湾外有一片浅滩，夜航时只靠月光很容易偏离路线。Ottly 接到一个任务：沿浅滩插上 n 根路标桩，从 1 号一直编到 n 号。每根桩写一个编号，朋友们就能按顺序安全靠岸。请帮她依次生成这些编号。",
+  "teaching":[
+    {"title":"为什么需要循环","text":"如果只给三根桩编号，可以写三次 print；但桩数来自输入，写代码时无法知道要复制多少次。循环让同一个步骤重复执行，每一轮使用不同的数字。","example":"print(1)\nprint(2)\nprint(3)"},
+    {"title":"for 的结构","text":"for 后是循环变量，in 后是要遍历的范围，行末写英文冒号。缩进的语句组成循环体，每取得一个数字就执行一遍。for、in 都要小写。","example":"for number in range(1, 4):\n    print(number)"},
+    {"title":"range 含起点、不含终点","text":"range(1, 4) 依次给出 1、2、3，不给出 4。若默认步长为正的一，且终点大于起点，次数为终点减起点；终点不大于起点时是零次。","example":"for number in range(2, 5):\n    print(number)  # 依次输出 2、3、4"},
+    {"title":"range 的两种常见写法","text":"range(n) 从零开始，常用于重复 n 次；range(1, n + 1) 从一开始，适合打印一到 n 的编号。想包含 n，需要把不包含的终点设到 n 的下一个数。","example":"# range(3)       给出 0、1、2\n# range(1, 4)    给出 1、2、3\n# range(1, 1)    没有数字"},
+    {"title":"循环变量每轮都会更新","text":"循环变量是普通变量，由 for 在每轮开始时自动赋值。变量名不一定叫 i，但循环体必须使用同一个名字。本题应使用与输入数量不同的名字，避免混淆两者。","example":"for marker in range(1, 4):\n    print(marker)  # 每轮的 marker 不同"},
+    {"title":"缩进决定哪些语句重复","text":"缩进到 for 下面的语句每轮执行。循环前的输入只读一次，循环后的语句在循环结束后执行一次。没有缩进的循环体会产生缩进错误。","example":"for number in range(1, 4):\n    print(number)\nprint('结束')  # 这行只执行一次，本题不应额外输出它"},
+    {"title":"零次循环也是合法情况","text":"当 n 为零时，range(1, n + 1) 就是 range(1, 1)，没有数字，循环体一次都不执行。不需要额外打印零或空行，也不要在循环后引用可能还没赋值的循环变量。","example":"for number in range(1, 1):\n    print(number)  # 一次也不执行"}
+  ],
+  "description":"输入整数 n（0–100）。使用 for 循环依次输出 1 到 n，每个数字单独一行，包含 n。n 为零时不输出任何字符，不能输出零或空行。",
+  "starter_code":"# 读取路标数量，再逐行输出从 1 开始的编号\n",
+  "examples":[{"stdin":"3\n","stdout":"1\n2\n3\n"},{"stdin":"0\n","stdout":""}],
+  "tests":[
+    {"case_id":"sample-1","stdin":"3\n","expected_output":"1\n2\n3\n","visibility":"public"},
+    {"case_id":"sample-2","stdin":"0\n","expected_output":"","visibility":"public"},
+    {"case_id":"hidden-1","stdin":"1\n","expected_output":"1\n","visibility":"hidden"},
+    {"case_id":"hidden-2","stdin":"5\n","expected_output":"1\n2\n3\n4\n5\n","visibility":"hidden"},
+    {"case_id":"hidden-3","stdin":"10\n","expected_output":"1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n","visibility":"hidden"}
+  ],
+  "comparison":"exact", "time_limit_seconds":3, "output_limit_chars":8000,
+  "hints":{
+    "level1":"想让同一条语句重复执行，可以使用哪一种语句？",
+    "level2":"写出范围实际提供的首个和最后一个数字，检查终点是否包含所需的最后编号。",
+    "level3":"从一开始取数，把不包含的终点设到最后编号之后；打印要放在循环体内，再检查零次和单次循环。"
+  },
+  "reference_solution":"n = int(input())\nfor i in range(1, n + 1):\n    print(i)\n",
+  "solution_explanation":"第一行读取整数数量。range 从 1 开始，到 n + 1 之前结束，因此恰好提供 1 到 n。\n\n循环变量 i 每轮取到一个编号；缩进的 print 每轮执行一次，所以样例中依次输出 1、2、3，各占一行。\n\nn 为零时范围中没有数字，循环体不执行，输出为空。不能在循环后多打印零，也不能把打印放到循环外只输出最后一个编号。其他变量名和能得到相同结果的实现也可以。"
+}

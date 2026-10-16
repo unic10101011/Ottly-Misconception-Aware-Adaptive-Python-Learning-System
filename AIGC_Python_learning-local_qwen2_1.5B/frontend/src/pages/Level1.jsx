@@ -1,39 +1,6 @@
 import React from 'react'
-import { useNavigate, useOutletContext } from 'react-router-dom'
-import CodeEditor from '../components/CodeEditor.jsx'
+import LessonPage from './LessonPage.jsx'
 
-function Level1() {
-  const navigate = useNavigate()
-  const { userId } = useOutletContext()
-
-  const handleSuccess = () => {
-    navigate('/app/levels')
-  }
-
-  return (
-    <div className="lesson-page">
-      <button
-        onClick={() => navigate('/app/levels')}
-        className="lesson-back"
-      >
-        ← 返回关卡选择
-      </button>
-      <CodeEditor
-        key={`${userId}:level1`}
-        userId={userId}
-        initialCode=""
-        problemId="level1"
-        onSuccess={handleSuccess}
-        title="初识小海獭"
-      >
-        <p style={{ fontWeight: 600, marginBottom: 8 }}>步骤:</p>
-        <p>1. 使用 <code>print()</code> 函数输出 "Hello, World!"</p>
-        <p style={{ fontSize: 13, opacity: 0.8, marginTop: 8 }}>
-          💡 提示：<code>print()</code> 是 Python 中最常用的输出函数
-        </p>
-      </CodeEditor>
-    </div>
-  )
+export default function Level1() {
+  return <LessonPage levelNo={1} />
 }
-
-export default Level1

@@ -846,8 +846,10 @@ body.eye-protection {
 }
 @media (max-width: 700px) {
   .level-detail-page { padding: 12px; }
+  .ai-chat-page { height: calc(100dvh - 90px); }
 }
 @media (max-width: 480px) {
+  .otter-side { display: none; }
   .judge-output-grid { grid-template-columns: 1fr; }
   .submission-feedback { padding: 12px; }
 }

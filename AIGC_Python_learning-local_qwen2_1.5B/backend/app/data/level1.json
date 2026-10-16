@@ -1,15 +1,68 @@
 {
-  "schema_version":"1.0.0","problem_id":"level1","version":1,"level_no":1,
-  "title":"初识小海獭","difficulty":1,"published":true,
-  "knowledge_ids":["K01"],"prerequisite_knowledge_ids":[],"prerequisite_problem_ids":[],
-  "story":"帮助小海獭说出第一句话。",
-  "teaching":[{"title":"输出文字","text":"print 可以显示引号中的文字。引号不属于输出内容。","example":"print('Hi!')"}],
-  "description":"使用 print 函数输出 Hello, World!，没有输入。",
-  "starter_code":"print('Hello, World!')",
-  "examples":[{"stdin":"","stdout":"Hello, World!\n"}],
-  "tests":[{"case_id":"stdout-1","stdin":"","expected_output":"Hello, World!","visibility":"public"}],
-  "comparison":"legacy_trim","time_limit_seconds":3,"output_limit_chars":8000,
-  "hints":{"level1":"输出内容需要关注哪些细节？","level2":"逐字核对输出文本中的大小写、空格和标点。","level3":"比较实际输出与样例，修改不同之处后重新运行。"},
-  "reference_solution":"print('Hello, World!')\n",
-  "solution_explanation":"print 显示引号内的文字，并在末尾换行。保留原题忽略首尾空白的比较规则。"
+  "schema_version": "1.0.0",
+  "problem_id": "level1",
+  "version": 1,
+  "level_no": 1,
+  "title": "初识小海獭",
+  "difficulty": 1,
+  "published": true,
+  "knowledge_ids": [
+    "K01"
+  ],
+  "prerequisite_knowledge_ids": [],
+  "prerequisite_problem_ids": [],
+  "story": "Ottly 被海浪送到一座陌生的小岛。她想向岸边的朋友们问好，却还不知道怎样让电脑显示文字。帮助她说出第一句问候：Hello, World!。",
+  "teaching": [
+    {
+      "title": "代码与输出有什么不同",
+      "text": "代码是写给电脑执行的指令，输出是执行后显示的结果。编辑器里填写 Python 代码，运行输出区里查看结果，不要把结果当作代码直接填写。",
+      "example": "print('Hi!')\n# 运行后输出 Hi!，不包含 print、括号或引号"
+    },
+    {
+      "title": "认识 print",
+      "text": "print 是显示内容的函数，五个字母都要小写。函数名后写英文半角圆括号，要显示的内容放在括号中。",
+      "example": "print('Good morning!')"
+    },
+    {
+      "title": "字符串与引号",
+      "text": "文字要用一对匹配的英文单引号或双引号包住，这段文字称为字符串。引号标记字符串的开始和结束，本身不会显示。中文弯引号不能替代代码里的英文引号。",
+      "example": "print('Hi!')\nprint(\"Hi!\")  # 两种写法输出相同"
+    },
+    {
+      "title": "逐字核对输出格式",
+      "text": "字符串里面的大小写、标点和空格都会影响显示内容。英文逗号与中文逗号不同。题目要求逗号后一个空格，末尾是英文感叹号，不要添加解释文字。",
+      "example": "print('Good, morning!')\n# 逗号后有一个空格"
+    },
+    {
+      "title": "换行与运行",
+      "text": "print 默认在输出末尾换行。一行代码写好后先点击运行，再对照样例检查，确认后提交判题。第一关无需输入。",
+      "example": "print('Hi!')\nprint('Ottly')\n# 两次输出会分成两行"
+    }
+  ],
+  "description": "使用 print 函数输出 Hello, World!，没有输入。",
+  "starter_code": "# 请让 Ottly 说出她的第一句话\n",
+  "examples": [
+    {
+      "stdin": "",
+      "stdout": "Hello, World!\n"
+    }
+  ],
+  "tests": [
+    {
+      "case_id": "stdout-1",
+      "stdin": "",
+      "expected_output": "Hello, World!",
+      "visibility": "public"
+    }
+  ],
+  "comparison": "legacy_trim",
+  "time_limit_seconds": 3,
+  "output_limit_chars": 8000,
+  "hints": {
+    "level1": "输出内容需要关注哪些细节？",
+    "level2": "逐字核对输出文本中的大小写、空格和标点。",
+    "level3": "比较实际输出与样例，修改不同之处后重新运行。"
+  },
+  "reference_solution": "print('Hello, World!')\n",
+  "solution_explanation": "把 Hello, World! 作为字符串传给 print。引号只用于标记文字，不会被输出；逗号后保留一个空格，末尾使用英文感叹号。print 默认在末尾换行。本关沿用原有忽略首尾空白的判题规则。"
 }

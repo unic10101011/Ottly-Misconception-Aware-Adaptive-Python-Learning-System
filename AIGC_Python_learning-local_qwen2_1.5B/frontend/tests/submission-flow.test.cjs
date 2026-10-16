@@ -505,3 +505,71 @@ test('opening an unfinished history entry resumes only that analysis', async () 
     else delete global.localStorage
   }
 })
+
+test('shared lesson loads the selected problem, handles zero output, and gates the reference solution', async () => {
+  const values = []
+  let index = 0
+  const effects = []
+  let collectEffects = true
+  const calls = []
+  const lesson = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../backend/app/data/coastal-markers-v1.json'), 'utf8'))
+  const hooks = { ...React,
+    useState: initial => {
+      const slot = index++
+      if (!(slot in values)) values[slot] = initial
+      return [values[slot], next => { values[slot] = next }]
+    },
+    useEffect: effect => { if (collectEffects) effects.push(effect) },
+  }
+  let editorProps
+  const Page = loadJsx('../src/pages/LessonPage.jsx', {
+    react: hooks,
+    'react-router-dom': {
+      useNavigate: () => () => {}, useParams: () => ({ levelId: '7' }),
+      useOutletContext: () => ({ userId: 12 }),
+    },
+    '../components/CodeEditor.jsx': props => { editorProps = props; return React.createElement('div', null, props.children) },
+    '../components/codeApi.mjs': {
+      getLevels: async () => ({ items: [{ id: 7, problem_id: lesson.problem_id, published: true }, { id: 8, published: false }] }),
+      getLesson: async id => { calls.push(['lesson', id]); return { ...lesson, completed: false } },
+      getSolution: async id => { calls.push(['solution', id]); return lesson },
+    },
+  })
+  const originalStorage = Object.getOwnPropertyDescriptor(global, 'localStorage')
+  Object.defineProperty(global, 'localStorage', { configurable: true, value: { getItem: () => 'token' } })
+  try {
+    const mounted = Page({})
+    assert.equal(mounted.key, '12:7', 'changing account or level remounts all lesson state')
+    const render = () => { index = 0; return mounted.type(mounted.props) }
+    render()
+    const cleanups = effects.map(effect => effect())
+    await new Promise(resolve => setImmediate(resolve))
+    collectEffects = false
+    let tree = render()
+    let html = renderToStaticMarkup(tree)
+    assert.deepEqual(calls, [['lesson', lesson.problem_id]])
+    assert.match(editorProps.title, /第 7 关/)
+    assert.match(html, /无输出，不打印空行/)
+    assert.doesNotMatch(html, /查看参考解与解析|第 7 关已通过/)
+    assert.equal(editorProps.problemId, lesson.problem_id)
+    assert.equal(editorProps.acceptsInput, true)
+    assert.equal(editorProps.persistentOutput, true)
+    editorProps.onAccepted()
+    tree = render()
+    html = renderToStaticMarkup(tree)
+    assert.match(html, /第 7 关已通过/)
+    assert.match(html, /第 8 关内容待开放/)
+    const referenceButton = React.Children.toArray(tree.props.children).flatMap(child =>
+      React.isValidElement(child) ? React.Children.toArray(child.props.children) : []).flatMap(child =>
+      React.isValidElement(child) ? React.Children.toArray(child.props.children) : []).find(child =>
+      React.isValidElement(child) && child.type === 'button' && child.props.children === '查看参考解与解析')
+    assert.ok(referenceButton)
+    await referenceButton.props.onClick()
+    assert.deepEqual(calls[1], ['solution', lesson.problem_id])
+    assert.match(renderToStaticMarkup(render()), /for i in range/)
+    cleanups.forEach(cleanup => cleanup?.())
+  } finally {
+    if (originalStorage) Object.defineProperty(global, 'localStorage', originalStorage)
+    else delete global.localStorage
+  }
+})

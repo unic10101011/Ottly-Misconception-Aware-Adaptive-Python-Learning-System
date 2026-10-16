@@ -13,6 +13,7 @@ from pydantic import BaseModel, Field
 from app.services.sandbox.runner import run_code_process
 from app.services.submission import PROBLEMS, JudgeResult, SubmissionRequest, judge_submission, public_judge
 from app.services.error_analysis import AnalysisResult, analyze_failure, fixed_syntax_analysis
+from app.services.lesson_feedback import with_lesson_hints
 from app.services.problem_catalog import SCHEMA_VERSION, LEVELS, KNOWLEDGE
 from app.services.learning_contract import (
     ContractJudge, ContractAnalysis, contract_judge, contract_analysis,
@@ -245,6 +246,7 @@ async def prepare_analysis(submission_id: int, current_user: User = Depends(get_
     except Exception:
         logger.exception('Teaching analysis failed; judged submission %s remains saved', submission_id)
         raw_analysis = AnalysisResult(status='unavailable', message='教学分析暂不可用，判题和提交记录已保存。')
+    raw_analysis = with_lesson_hints(problem, raw_analysis, model_judge)
     hint_ms = round((perf_counter() - started) * 1000, 2)
     analysis = contract_analysis(raw_analysis, analysis_knowledge_scope(problem))
     user_id = current_user.id

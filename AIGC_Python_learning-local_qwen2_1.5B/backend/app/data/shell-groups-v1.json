@@ -1,0 +1,31 @@
+{
+  "schema_version":"1.0.0", "problem_id":"shell-groups-v1", "version":1, "level_no":4,
+  "title":"贝壳分组", "difficulty":1, "published":true,
+  "knowledge_ids":["K04"], "prerequisite_knowledge_ids":["K03"], "prerequisite_problem_ids":["shell-shop-v1"],
+  "story":"在你的帮助下，Ottly 的贝壳小摊越做越好。她想把攒了一季的贝壳装进小袋，送给海滩上的朋友。每袋只能装固定颗数，不满一袋的贝壳单独留下。请帮她算出能装满几袋，以及最后还剩几颗。",
+  "teaching":[
+    {"title":"三种运算回答不同问题","text":"普通除法 / 得到除法结果；整除 // 得到整商；取余 % 得到剩余数。本关只考虑非负贝壳数量和正的每袋容量。","example":"print(17 / 5)   # 3.4\nprint(17 // 5)  # 3\nprint(17 % 5)   # 2"},
+    {"title":"为什么不能用普通除法求袋数","text":"袋子需要装满才算一袋，不能把 0.4 袋当成完整的一袋。/ 即使恰好整除也会得到浮点数，例如 4.0，与本题要求的整数输出不同。","example":"print(20 / 5)   # 4.0\nprint(20 // 5)  # 4"},
+    {"title":"整除求完整组数","text":"在本关的非负整数范围内，整商就是完整袋数。不足一袋时，完整袋数为零。Python 对负数的整除会向下取整，本关不涉及负数量。","example":"print(3 // 5)  # 0\nprint(0 // 5)  # 0"},
+    {"title":"取余求剩余数量","text":"装满的袋子移走后，剩下的数量就是余数。对非负数量和正容量，余数至少为零，并且一定小于每袋容量。恰好装完时余数为零。","example":"print(20 % 5)  # 0\nprint(3 % 5)   # 3"},
+    {"title":"用还原关系自查","text":"完整袋数乘每袋数量，再加剩余数量，应该等于原来的总数。分别保存这两个答案，再按完整袋数、剩余数量的顺序输出。","example":"print(3 * 5 + 2)  # 还原为 17"}
+  ],
+  "description":"第一行输入贝壳数量 n（0–10000），第二行输入每袋容量 k（1–100）。使用整除和取余，输出两行整数：能装满的完整袋数、剩余贝壳数。剩余贝壳不再算作一袋，不附标签或单位。",
+  "starter_code":"# 读取总数量和每袋容量，分别计算完整袋数与余数\n",
+  "examples":[{"stdin":"17\n5\n","stdout":"3\n2\n"}],
+  "tests":[
+    {"case_id":"sample-1","stdin":"17\n5\n","expected_output":"3\n2\n","visibility":"public"},
+    {"case_id":"hidden-1","stdin":"20\n5\n","expected_output":"4\n0\n","visibility":"hidden"},
+    {"case_id":"hidden-2","stdin":"3\n5\n","expected_output":"0\n3\n","visibility":"hidden"},
+    {"case_id":"hidden-3","stdin":"0\n1\n","expected_output":"0\n0\n","visibility":"hidden"},
+    {"case_id":"hidden-4","stdin":"10000\n1\n","expected_output":"10000\n0\n","visibility":"hidden"}
+  ],
+  "comparison":"exact", "time_limit_seconds":3, "output_limit_chars":8000,
+  "hints":{
+    "level1":"完整装满几袋和剩下几颗，分别在问什么？",
+    "level2":"核对求整商与求余数的位置，想一想普通除法的结果是否满足整数要求。",
+    "level3":"用样例手算袋数和剩余，再用袋数乘容量加余数还原总数，检查两行输出是否颠倒。"
+  },
+  "reference_solution":"n = int(input())\nk = int(input())\ngroups = n // k\nleft = n % k\nprint(groups)\nprint(left)\n",
+  "solution_explanation":"前两行读入并转换总数与每袋容量。groups 用整除计算完整袋数，left 用取余计算剩下的数量。\n\n样例 17 颗贝壳每袋装 5 颗，可以装满 3 袋，装走 15 颗，剩 2 颗。检验 3 × 5 + 2 = 17。\n\n不足一袋时输出的完整袋数为零；总数为零时两个答案都为零。输出顺序必须先袋数、后余数。"
+}
