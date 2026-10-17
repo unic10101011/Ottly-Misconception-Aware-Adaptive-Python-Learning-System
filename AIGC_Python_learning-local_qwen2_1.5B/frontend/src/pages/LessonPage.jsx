@@ -3,6 +3,11 @@ import { useNavigate, useOutletContext, useParams } from 'react-router-dom'
 import CodeEditor from '../components/CodeEditor.jsx'
 import { getLevels, getLesson, getSolution } from '../components/codeApi.mjs'
 
+const lessonIllustrations = [null,
+  '第一关.png', '第二关.png', '第三关.png', '第四关.png', '第五关.png',
+  '第六关.jpg', '第七关.png', '第八关.png', '第九关.png', '第十关.png', '第十一关.png',
+]
+
 export default function LessonPage({ levelNo: fixedLevelNo }) {
   const navigate = useNavigate()
   const { levelId } = useParams()
@@ -65,6 +70,10 @@ function Lesson({ levelNo, userId, navigate }) {
         title={`第 ${levelNo} 关 · ${lesson.title}`} acceptsInput={levelNo !== 1} persistentOutput
         sampleInput={lesson.examples[0]?.stdin || ''} onAccepted={() => setCompleted(true)}>
         <h3>情境</h3><p>{lesson.story}</p>
+        {lessonIllustrations[levelNo] && <figure className="lesson-illustration">
+          <img src={`/lesson-illustrations/${lessonIllustrations[levelNo]}`}
+            alt={`第 ${levelNo} 关 · ${lesson.title}的情境插图`} loading="lazy" decoding="async" />
+        </figure>}
         <details className="lesson-teaching" open>
           <summary>知识点讲解</summary>
           {lesson.teaching.map(item => <section key={item.title}>

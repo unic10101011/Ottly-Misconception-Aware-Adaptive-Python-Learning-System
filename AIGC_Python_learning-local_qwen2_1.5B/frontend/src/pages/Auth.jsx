@@ -146,8 +146,8 @@ function Auth() {
       <div className="auth-shell">
         <section className="auth-welcome" aria-label="Ottly 欢迎页">
           <span className="auth-eyebrow">OTTLY · PYTHON LEARNING</span>
-          <h1>和小海獭一起，<br />把 Python 学明白。</h1>
-          <p>从第一行代码出发，闯关、练习、提问。每一步都有小海獭陪你探索。</p>
+          <h1>嗨獭</h1>
+          <p>Hello, Ottly!</p>
           <img src={loginhaita} alt="向你打招呼的小海獭" className="auth-otter" />
         </section>
         <section className="auth-card" aria-label="账号登录与注册">
