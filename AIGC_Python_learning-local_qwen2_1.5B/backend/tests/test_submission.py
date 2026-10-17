@@ -190,6 +190,85 @@ def test_unknown_model_tag_is_downgraded_to_other(client, monkeypatch):
     assert result['analysis']['content']['misconception_tag'] == 'other'
 
 
+def test_related_history_reaches_model_as_summary_and_status_is_saved(client, monkeypatch):
+    drafts = []
+
+    def handler(request):
+        facts = model_facts(json.loads(request.content))
+        drafts.append(facts)
+        return httpx.Response(200, json={'done': True, 'message': {'content': json.dumps(sample_analysis())}})
+
+    mock_model(monkeypatch, handler)
+    headers = login(client)
+    first = submit_and_analyze(client, headers, json={'problem_id': 'level2', 'code': OVERWRITE})
+    assert first['analysis']['personalization'] == {'used': False, 'related_history_count': 0}
+    second = submit_and_analyze(client, headers, json={'problem_id': 'level2', 'code': OVERWRITE})
+    assert second['analysis']['personalization'] == {'used': True, 'related_history_count': 1}
+    history = drafts[1]['related_history']
+    assert len(history) == 1
+    assert history[0]['misconception_tag'] == 'accumulation_error'
+    assert history[0]['knowledge_ids'] == ['K08']
+    assert history[0]['problem_id'] == 'level2'
+    assert OVERWRITE not in json.dumps(history)
+    assert 'analysis_json' not in json.dumps(history)
+    path = f"/api/v1/code/submissions/{second['submission_id']}/analysis"
+    assert client.post(path, headers=headers).json()['data']['analysis']['personalization'] == second['analysis']['personalization']
+    assert len(drafts) == 2
+    saved = client.get('/api/v1/code/submissions', headers=headers).json()['data']['items'][0]
+    assert saved['analysis']['personalization'] == second['analysis']['personalization']
+
+
+@pytest.mark.parametrize('current_tag,expected_tag', [
+    ('range_boundary', 'other'), ('variable_error', 'variable_error'),
+])
+def test_current_name_error_cannot_inherit_a_past_range_tag(client, monkeypatch, current_tag, expected_tag):
+    observed = []
+
+    def handler(request):
+        facts = model_facts(json.loads(request.content))
+        observed.append(facts)
+        content = sample_analysis()
+        if len(observed) == 1:
+            content['misconception_tag'] = 'range_boundary'
+            content['evidence'][0]['quote'] = '4950'
+        else:
+            content['misconception_tag'] = current_tag
+            content['suspected_cause'] = '疑似使用了没有定义的名字。'
+            content['evidence'][0].update(
+                field='error_message', quote=facts['failed_cases'][0]['errors'][0]['message'],
+                explanation='公开报错说明名字尚未定义。',
+            )
+        return httpx.Response(200, json={'done': True, 'message': {'content': json.dumps(content)}})
+
+    mock_model(monkeypatch, handler)
+    headers = login(client)
+    range_code = 'total = 0\nfor i in range(1, 100):\n    total += i\nprint(total)'
+    first = submit_and_analyze(client, headers, json={'problem_id': 'level2', 'code': range_code})
+    assert first['analysis']['content']['misconception_tag'] == 'range_boundary'
+    second = submit_and_analyze(client, headers, json={'problem_id': 'level2', 'code': 'print(missing_total)'})
+    assert observed[1]['related_history'][0]['misconception_tag'] == 'range_boundary'
+    assert second['judge']['status'] == 'execution_error'
+    assert second['analysis']['content']['misconception_tag'] == expected_tag
+
+
+def test_model_failure_after_related_history_does_not_claim_personalization(client, monkeypatch):
+    calls = []
+
+    def handler(request):
+        calls.append(request)
+        if len(calls) > 1:
+            return httpx.Response(200, json={'done': True, 'message': {'content': 'invalid json'}})
+        return httpx.Response(200, json={'done': True, 'message': {'content': json.dumps(sample_analysis())}})
+
+    mock_model(monkeypatch, handler)
+    headers = login(client)
+    submit_and_analyze(client, headers, json={'problem_id': 'level2', 'code': OVERWRITE})
+    second = submit_and_analyze(client, headers, json={'problem_id': 'level2', 'code': OVERWRITE})
+    assert second['analysis']['status'] == 'invalid_response'
+    assert second['analysis']['personalization'] == {'used': False, 'related_history_count': 0}
+    assert second['judge']['status'] == 'wrong_answer'
+
+
 def test_greeting_undefined_username_uses_public_error_for_variable_tag(client, monkeypatch):
     observed = []
 
@@ -317,7 +396,7 @@ def test_analysis_can_resume_older_record_without_saved_analysis(client, monkeyp
     from app.models.learning_submission import LearningSubmission
     from app.services.error_analysis import AnalysisResult
 
-    async def unavailable(*args):
+    async def unavailable(*args, **kwargs):
         return AnalysisResult(status='unavailable', message='模型暂不可用。')
 
     monkeypatch.setattr(coding, 'analyze_failure', unavailable)

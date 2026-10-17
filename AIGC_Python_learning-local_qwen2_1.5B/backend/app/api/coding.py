@@ -14,6 +14,7 @@ from app.services.sandbox.runner import run_code_process
 from app.services.submission import PROBLEMS, JudgeResult, SubmissionRequest, judge_submission, public_judge
 from app.services.error_analysis import AnalysisResult, analyze_failure, fixed_syntax_analysis
 from app.services.lesson_feedback import with_lesson_hints
+from app.services.personalized_history import select_related_history
 from app.services.problem_catalog import SCHEMA_VERSION, LEVELS, KNOWLEDGE
 from app.services.learning_contract import (
     ContractJudge, ContractAnalysis, contract_judge, contract_analysis,
@@ -242,7 +243,9 @@ async def prepare_analysis(submission_id: int, current_user: User = Depends(get_
     model_judge = JudgeResult.model_validate(record.judge_json)
     started = perf_counter()
     try:
-        raw_analysis = await analyze_failure(problem.execution_problem(), record.code, model_judge)
+        related_history = select_related_history(db, current_user.id, record.id, record.knowledge_ids or [])
+        raw_analysis = await analyze_failure(problem.execution_problem(), record.code, model_judge,
+                                             related_history=related_history)
     except Exception:
         logger.exception('Teaching analysis failed; judged submission %s remains saved', submission_id)
         raw_analysis = AnalysisResult(status='unavailable', message='教学分析暂不可用，判题和提交记录已保存。')

@@ -83,6 +83,7 @@ def contract_analysis(analysis: AnalysisResult | dict | None, allowed_ids: list[
     if data.get('status') != 'ready':
         data['content'] = None
         data['source'] = None
+        data['personalization'] = {'used': False, 'related_history_count': 0}
         if data.get('status') == 'skipped':
             data['model'] = None
     elif data.get('content'):
@@ -92,6 +93,7 @@ def contract_analysis(analysis: AnalysisResult | dict | None, allowed_ids: list[
         data['content'] = content
         if data.get('source') == 'fixed':
             data['model'] = None
+            data['personalization'] = {'used': False, 'related_history_count': 0}
     return ContractAnalysis.model_validate(data)
 
 

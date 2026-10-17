@@ -14,7 +14,7 @@ def test_snapshot_errors_failed_tests_and_deterministic_mapping(client, monkeypa
     submit(client, headers, 'level1', "print('Hello, World!')")
     model_inputs = []
 
-    async def analysis(problem, code, judge):
+    async def analysis(problem, code, judge, related_history=None):
         model_inputs.append((problem, judge.model_copy(deep=True)))
         return AnalysisResult(status='ready', message='依据公开结果提供提示。', content={
             'suspected_cause': '疑似使用了未定义的变量。',
@@ -117,7 +117,7 @@ def test_old_history_keeps_unknown_metadata_null_and_redacts_again(client):
 
 def test_analysis_exception_does_not_lose_judgment(client, monkeypatch):
     from app.api import coding
-    async def unavailable(*args):
+    async def unavailable(*args, **kwargs):
         raise RuntimeError('temporary model service failure')
     monkeypatch.setattr(coding, 'analyze_failure', unavailable)
     headers = account(client)

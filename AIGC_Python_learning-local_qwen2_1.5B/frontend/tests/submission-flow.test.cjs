@@ -213,6 +213,18 @@ test('model outage keeps deterministic judge evidence visible and shows recovery
   assert.doesNotMatch(html, /查看第 1 级提示/)
 })
 
+test('personalization note appears only for a ready AI analysis that used history', () => {
+  const Feedback = loadJsx('../src/components/SubmissionFeedback.jsx')
+  const render = analysis => renderToStaticMarkup(React.createElement(Feedback, {
+    result: { ...failure, analysis }, visibleHintCount: 0,
+  }))
+  const used = { ...failure.analysis, personalization: { used: true, related_history_count: 2 } }
+  assert.match(render(used), /本次提示参考了你的相关练习记录/)
+  assert.doesNotMatch(render({ ...used, personalization: { used: false, related_history_count: 0 } }), /本次提示参考了/)
+  assert.doesNotMatch(render({ ...used, source: 'fixed' }), /本次提示参考了/)
+  assert.doesNotMatch(render({ ...used, status: 'timeout', content: null }), /本次提示参考了/)
+})
+
 test('reviewed fallback tells the student why the wording changed', () => {
   const Feedback = loadJsx('../src/components/SubmissionFeedback.jsx')
   const result = { ...failure, analysis: { ...failure.analysis, message: '原提示未通过分层检查，已采用保守教学提示。' } }

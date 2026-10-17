@@ -28,7 +28,7 @@ def client(tmp_path, monkeypatch):
         with sessions() as db:
             yield db
 
-    async def analysis_stub(problem, code, judge):
+    async def analysis_stub(problem, code, judge, related_history=None):
         if judge.passed:
             return AnalysisResult(status="skipped", message="测试已通过。")
         return AnalysisResult.model_validate({
@@ -154,7 +154,7 @@ def test_model_failure_and_run_do_not_create_misconception_count(client, monkeyp
     from app.api import coding
     from app.services.error_analysis import AnalysisResult
 
-    async def unavailable(problem, code, judge):
+    async def unavailable(problem, code, judge, related_history=None):
         return AnalysisResult(status='unavailable', message='模型不可用')
 
     monkeypatch.setattr(coding, 'analyze_failure', unavailable)
@@ -170,7 +170,7 @@ def test_model_failure_and_run_do_not_create_misconception_count(client, monkeyp
 def test_ai_unavailable_and_accepted_submission_still_have_records(client, monkeypatch):
     from app.api import coding
     from app.services.error_analysis import AnalysisResult
-    async def unavailable(problem, code, judge):
+    async def unavailable(problem, code, judge, related_history=None):
         if judge.passed:
             return AnalysisResult(status="skipped", message="测试已通过。")
         return AnalysisResult(status="unavailable", message="模型不可用。")

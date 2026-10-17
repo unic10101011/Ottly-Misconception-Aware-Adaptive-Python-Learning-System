@@ -42,6 +42,8 @@ function SubmissionFeedback({ result, visibleHintCount, onRevealHint, hintBusy =
         <div className="ai-feedback">
           <h4>{analysis.source === 'fixed' ? '本关基础提示' : 'AI 学习提示'}</h4>
           <p className="analysis-status">先尝试自己修改；需要帮助时，逐级查看提示。{analysis.source !== 'fixed' && 'AI 分析是基于本次测试的推测。'}</p>
+          {analysis.source !== 'fixed' && analysis.personalization?.used &&
+            <p className="analysis-status">本次提示参考了你的相关练习记录。</p>}
           {analysis.message && <p className="analysis-status">{analysis.message}</p>}
           <div className="progressive-hints">
             {hintLabels.slice(0, visibleHintCount).map((label, index) => (
