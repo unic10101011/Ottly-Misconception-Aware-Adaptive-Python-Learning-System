@@ -1,0 +1,579 @@
+{
+  "model": "qwen2.5-coder:3b-instruct",
+  "problem_id": "level2",
+  "note": "Gold labels were written before model calls; this is evaluation, not training.",
+  "results": [
+    {
+      "id": "range_ends_100",
+      "history": false,
+      "code": "total = 0\nfor i in range(1, 100):\n    total += i\nprint(total)",
+      "gold_tag": "range_boundary",
+      "gold_reason": "range stops before 100",
+      "judge_status": "wrong_answer",
+      "actual_output": "4950\n",
+      "public_errors": [],
+      "analysis_status": "ready",
+      "model_tag": "variable_error",
+      "model_cause": "循环内的代码没有正确更新 total 变量的值。",
+      "personalization": {
+        "used": false,
+        "related_history_count": 0
+      },
+      "outcome": "wrong_tag",
+      "seconds": 18.09
+    },
+    {
+      "id": "range_starts_0",
+      "history": false,
+      "code": "total = 0\nfor i in range(100):\n    total += i\nprint(total)",
+      "gold_tag": "range_boundary",
+      "gold_reason": "range includes 0 but omits 100",
+      "judge_status": "wrong_answer",
+      "actual_output": "4950\n",
+      "public_errors": [],
+      "analysis_status": "invalid_response",
+      "model_tag": null,
+      "model_cause": null,
+      "personalization": {
+        "used": false,
+        "related_history_count": 0
+      },
+      "outcome": "no_diagnosis",
+      "seconds": 15.27
+    },
+    {
+      "id": "range_starts_2",
+      "history": false,
+      "code": "total = 0\nfor i in range(2, 101):\n    total += i\nprint(total)",
+      "gold_tag": "range_boundary",
+      "gold_reason": "range omits 1",
+      "judge_status": "wrong_answer",
+      "actual_output": "5049\n",
+      "public_errors": [],
+      "analysis_status": "ready",
+      "model_tag": "range_boundary",
+      "model_cause": "range 函数的参数设置不正确，导致计算范围不完整。",
+      "personalization": {
+        "used": false,
+        "related_history_count": 0
+      },
+      "outcome": "correct_tag",
+      "seconds": 7.66
+    },
+    {
+      "id": "range_ends_99",
+      "history": false,
+      "code": "total = 0\nfor i in range(1, 99):\n    total += i\nprint(total)",
+      "gold_tag": "range_boundary",
+      "gold_reason": "range omits 99 and 100",
+      "judge_status": "wrong_answer",
+      "actual_output": "4851\n",
+      "public_errors": [],
+      "analysis_status": "ready",
+      "model_tag": "range_boundary",
+      "model_cause": "循环终止条件不正确，导致 100 没有被累加。",
+      "personalization": {
+        "used": false,
+        "related_history_count": 0
+      },
+      "outcome": "correct_tag",
+      "seconds": 8.14
+    },
+    {
+      "id": "range_new_names",
+      "history": false,
+      "code": "answer = 0\nfor number in range(1, 100):\n    answer = answer + number\nprint(answer)",
+      "gold_tag": "range_boundary",
+      "gold_reason": "renamed variables do not change the missing endpoint",
+      "judge_status": "wrong_answer",
+      "actual_output": "4950\n",
+      "public_errors": [],
+      "analysis_status": "ready",
+      "model_tag": "variable_error",
+      "model_cause": "学生在循环中使用了 answer 的值来累计和，而不是直接累加数字。",
+      "personalization": {
+        "used": false,
+        "related_history_count": 0
+      },
+      "outcome": "wrong_tag",
+      "seconds": 8.01
+    },
+    {
+      "id": "range_explicit_step",
+      "history": false,
+      "code": "result = 0\nfor value in range(1, 100, 1):\n    result += value\nprint(result)",
+      "gold_tag": "range_boundary",
+      "gold_reason": "explicit step still omits 100",
+      "judge_status": "wrong_answer",
+      "actual_output": "4950\n",
+      "public_errors": [],
+      "analysis_status": "ready",
+      "model_tag": "variable_error",
+      "model_cause": "学生在循环内使用了 result 的值来累计，导致结果少了 100。",
+      "personalization": {
+        "used": false,
+        "related_history_count": 0
+      },
+      "outcome": "wrong_tag",
+      "seconds": 8.33
+    },
+    {
+      "id": "overwrite_each_turn",
+      "history": false,
+      "code": "total = 0\nfor i in range(1, 101):\n    total = i\nprint(total)",
+      "gold_tag": "accumulation_error",
+      "gold_reason": "assignment replaces the previous total",
+      "judge_status": "wrong_answer",
+      "actual_output": "100\n",
+      "public_errors": [],
+      "analysis_status": "ready",
+      "model_tag": "variable_error",
+      "model_cause": "学生在循环体内错误地使用了 total 覆盖旧总数，导致只输出了 100，而不是 1 到 100 的和。",
+      "personalization": {
+        "used": false,
+        "related_history_count": 0
+      },
+      "outcome": "wrong_tag",
+      "seconds": 8.02
+    },
+    {
+      "id": "count_instead_of_add",
+      "history": false,
+      "code": "total = 0\nfor i in range(1, 101):\n    total += 1\nprint(total)",
+      "gold_tag": "accumulation_error",
+      "gold_reason": "adds one per iteration instead of the current number",
+      "judge_status": "wrong_answer",
+      "actual_output": "100\n",
+      "public_errors": [],
+      "analysis_status": "invalid_response",
+      "model_tag": null,
+      "model_cause": null,
+      "personalization": {
+        "used": false,
+        "related_history_count": 0
+      },
+      "outcome": "no_diagnosis",
+      "seconds": 9.98
+    },
+    {
+      "id": "subtract_instead_of_add",
+      "history": false,
+      "code": "total = 0\nfor i in range(1, 101):\n    total -= i\nprint(total)",
+      "gold_tag": "accumulation_error",
+      "gold_reason": "subtracts each number",
+      "judge_status": "wrong_answer",
+      "actual_output": "-5050\n",
+      "public_errors": [],
+      "analysis_status": "invalid_response",
+      "model_tag": null,
+      "model_cause": null,
+      "personalization": {
+        "used": false,
+        "related_history_count": 0
+      },
+      "outcome": "no_diagnosis",
+      "seconds": 9.17
+    },
+    {
+      "id": "reset_inside_loop",
+      "history": false,
+      "code": "total = 0\nfor i in range(1, 101):\n    total = 0\n    total += i\nprint(total)",
+      "gold_tag": "accumulation_error",
+      "gold_reason": "resets the previous total on each iteration",
+      "judge_status": "wrong_answer",
+      "actual_output": "100\n",
+      "public_errors": [],
+      "analysis_status": "ready",
+      "model_tag": "variable_error",
+      "model_cause": "代码中使用了 total 的初始值为 0，但在循环内又将 total 重新赋值为 0，导致每次循环只计算当前的 i 值，而不是累加所有值。",
+      "personalization": {
+        "used": false,
+        "related_history_count": 0
+      },
+      "outcome": "wrong_tag",
+      "seconds": 8.96
+    },
+    {
+      "id": "initial_total_one",
+      "history": false,
+      "code": "total = 1\nfor i in range(1, 101):\n    total += i\nprint(total)",
+      "gold_tag": "accumulation_error",
+      "gold_reason": "the initial total contributes an extra one",
+      "judge_status": "wrong_answer",
+      "actual_output": "5051\n",
+      "public_errors": [],
+      "analysis_status": "ready",
+      "model_tag": "variable_error",
+      "model_cause": "在循环内部使用了 total 变量，导致总和多加了一次。",
+      "personalization": {
+        "used": false,
+        "related_history_count": 0
+      },
+      "outcome": "wrong_tag",
+      "seconds": 8.31
+    },
+    {
+      "id": "overwrite_after_add",
+      "history": false,
+      "code": "total = 0\nfor i in range(1, 101):\n    total += i\n    total = i\nprint(total)",
+      "gold_tag": "accumulation_error",
+      "gold_reason": "the later assignment discards each accumulated total",
+      "judge_status": "wrong_answer",
+      "actual_output": "100\n",
+      "public_errors": [],
+      "analysis_status": "ready",
+      "model_tag": "variable_error",
+      "model_cause": "学生误解了循环的累计功能，认为每次循环都会重置 total。",
+      "personalization": {
+        "used": false,
+        "related_history_count": 0
+      },
+      "outcome": "wrong_tag",
+      "seconds": 8.1
+    },
+    {
+      "id": "missing_print_name",
+      "history": false,
+      "code": "print(missing_total)",
+      "gold_tag": "variable_error",
+      "gold_reason": "the printed name has no definition",
+      "judge_status": "execution_error",
+      "actual_output": "",
+      "public_errors": [
+        "NameError"
+      ],
+      "analysis_status": "ready",
+      "model_tag": "variable_error",
+      "model_cause": "变量未定义",
+      "personalization": {
+        "used": false,
+        "related_history_count": 0
+      },
+      "outcome": "correct_tag",
+      "seconds": 8.23
+    },
+    {
+      "id": "typo_in_print",
+      "history": false,
+      "code": "total = 0\nprint(totla)",
+      "gold_tag": "variable_error",
+      "gold_reason": "the printed name is misspelled",
+      "judge_status": "execution_error",
+      "actual_output": "",
+      "public_errors": [
+        "NameError"
+      ],
+      "analysis_status": "ready",
+      "model_tag": "variable_error",
+      "model_cause": "拼写错误",
+      "personalization": {
+        "used": false,
+        "related_history_count": 0
+      },
+      "outcome": "correct_tag",
+      "seconds": 7.78
+    },
+    {
+      "id": "wrong_print_name_after_loop",
+      "history": false,
+      "code": "sum_value = 0\nfor i in range(1, 101):\n    sum_value += i\nprint(total)",
+      "gold_tag": "variable_error",
+      "gold_reason": "the computed name differs from the printed name",
+      "judge_status": "execution_error",
+      "actual_output": "",
+      "public_errors": [
+        "NameError"
+      ],
+      "analysis_status": "ready",
+      "model_tag": "variable_error",
+      "model_cause": "变量未定义",
+      "personalization": {
+        "used": false,
+        "related_history_count": 0
+      },
+      "outcome": "correct_tag",
+      "seconds": 8.43
+    },
+    {
+      "id": "missing_addend",
+      "history": false,
+      "code": "total = 0\nfor i in range(1, 101):\n    total += number\nprint(total)",
+      "gold_tag": "variable_error",
+      "gold_reason": "the addend name was never defined",
+      "judge_status": "execution_error",
+      "actual_output": "",
+      "public_errors": [
+        "NameError"
+      ],
+      "analysis_status": "ready",
+      "model_tag": "variable_error",
+      "model_cause": "变量 'number' 没有定义",
+      "personalization": {
+        "used": false,
+        "related_history_count": 0
+      },
+      "outcome": "correct_tag",
+      "seconds": 7.97
+    },
+    {
+      "id": "missing_result",
+      "history": false,
+      "code": "print(result)",
+      "gold_tag": "variable_error",
+      "gold_reason": "the result name was never defined",
+      "judge_status": "execution_error",
+      "actual_output": "",
+      "public_errors": [
+        "NameError"
+      ],
+      "analysis_status": "invalid_response",
+      "model_tag": null,
+      "model_cause": null,
+      "personalization": {
+        "used": false,
+        "related_history_count": 0
+      },
+      "outcome": "no_diagnosis",
+      "seconds": 5.95
+    },
+    {
+      "id": "missing_accumulator",
+      "history": false,
+      "code": "total = 0\nfor i in range(1, 101):\n    subtotal += i\nprint(total)",
+      "gold_tag": "variable_error",
+      "gold_reason": "the updated accumulator name was never defined",
+      "judge_status": "execution_error",
+      "actual_output": "",
+      "public_errors": [
+        "NameError"
+      ],
+      "analysis_status": "ready",
+      "model_tag": "variable_error",
+      "model_cause": "变量未定义",
+      "personalization": {
+        "used": false,
+        "related_history_count": 0
+      },
+      "outcome": "correct_tag",
+      "seconds": 8.34
+    },
+    {
+      "id": "correct_augmented_assignment",
+      "history": false,
+      "code": "total = 0\nfor i in range(1, 101):\n    total += i\nprint(total)",
+      "gold_tag": null,
+      "gold_reason": "adds all requested values",
+      "judge_status": "accepted",
+      "actual_output": "5050\n",
+      "public_errors": [],
+      "analysis_status": "skipped",
+      "model_tag": null,
+      "model_cause": null,
+      "personalization": {
+        "used": false,
+        "related_history_count": 0
+      },
+      "outcome": "correctly_skipped",
+      "seconds": 0.0
+    },
+    {
+      "id": "correct_named_variables",
+      "history": false,
+      "code": "answer = 0\nfor number in range(1, 101):\n    answer = answer + number\nprint(answer)",
+      "gold_tag": null,
+      "gold_reason": "different names with the same correct sum",
+      "judge_status": "accepted",
+      "actual_output": "5050\n",
+      "public_errors": [],
+      "analysis_status": "skipped",
+      "model_tag": null,
+      "model_cause": null,
+      "personalization": {
+        "used": false,
+        "related_history_count": 0
+      },
+      "outcome": "correctly_skipped",
+      "seconds": 0.0
+    },
+    {
+      "id": "correct_zero_based_loop",
+      "history": false,
+      "code": "total = 0\nfor i in range(100):\n    total += i + 1\nprint(total)",
+      "gold_tag": null,
+      "gold_reason": "zero-based loop maps each value to 1 through 100",
+      "judge_status": "accepted",
+      "actual_output": "5050\n",
+      "public_errors": [],
+      "analysis_status": "skipped",
+      "model_tag": null,
+      "model_cause": null,
+      "personalization": {
+        "used": false,
+        "related_history_count": 0
+      },
+      "outcome": "correctly_skipped",
+      "seconds": 0.0
+    },
+    {
+      "id": "correct_explicit_step",
+      "history": false,
+      "code": "sum_value = 0\nfor value in range(1, 101, 1):\n    sum_value += value\nprint(sum_value)",
+      "gold_tag": null,
+      "gold_reason": "explicit step preserves the correct range and accumulation",
+      "judge_status": "accepted",
+      "actual_output": "5050\n",
+      "public_errors": [],
+      "analysis_status": "skipped",
+      "model_tag": null,
+      "model_cause": null,
+      "personalization": {
+        "used": false,
+        "related_history_count": 0
+      },
+      "outcome": "correctly_skipped",
+      "seconds": 0.0
+    },
+    {
+      "id": "constant_zero",
+      "history": false,
+      "code": "print(0)",
+      "gold_tag": "other",
+      "gold_reason": "no sum is attempted",
+      "judge_status": "wrong_answer",
+      "actual_output": "0\n",
+      "public_errors": [],
+      "analysis_status": "invalid_response",
+      "model_tag": null,
+      "model_cause": null,
+      "personalization": {
+        "used": false,
+        "related_history_count": 0
+      },
+      "outcome": "no_diagnosis",
+      "seconds": 9.0
+    },
+    {
+      "id": "constant_plus_one",
+      "history": false,
+      "code": "total = 5050\nprint(total + 1)",
+      "gold_tag": "other",
+      "gold_reason": "the printed constant expression is not a range or accumulation error",
+      "judge_status": "wrong_answer",
+      "actual_output": "5051\n",
+      "public_errors": [],
+      "analysis_status": "invalid_response",
+      "model_tag": null,
+      "model_cause": null,
+      "personalization": {
+        "used": false,
+        "related_history_count": 0
+      },
+      "outcome": "no_diagnosis",
+      "seconds": 9.11
+    },
+    {
+      "id": "extra_output_one",
+      "history": false,
+      "code": "total = 0\nfor i in range(1, 101):\n    total += i\nprint(total + 1)",
+      "gold_tag": "other",
+      "gold_reason": "the computed sum is correct but the printed expression adds one",
+      "judge_status": "wrong_answer",
+      "actual_output": "5051\n",
+      "public_errors": [],
+      "analysis_status": "ready",
+      "model_tag": "variable_error",
+      "model_cause": "变量 total 在循环结束后被额外加了一次 1。",
+      "personalization": {
+        "used": false,
+        "related_history_count": 0
+      },
+      "outcome": "wrong_tag",
+      "seconds": 7.98
+    },
+    {
+      "id": "unrelated_text",
+      "history": false,
+      "code": "print(\"done\")",
+      "gold_tag": "other",
+      "gold_reason": "unrelated output gives no supported specific tag",
+      "judge_status": "wrong_answer",
+      "actual_output": "done\n",
+      "public_errors": [],
+      "analysis_status": "invalid_response",
+      "model_tag": null,
+      "model_cause": null,
+      "personalization": {
+        "used": false,
+        "related_history_count": 0
+      },
+      "outcome": "no_diagnosis",
+      "seconds": 11.94
+    },
+    {
+      "id": "range_ends_100",
+      "history": true,
+      "code": "total = 0\nfor i in range(1, 100):\n    total += i\nprint(total)",
+      "gold_tag": "range_boundary",
+      "gold_reason": "range stops before 100",
+      "judge_status": "wrong_answer",
+      "actual_output": "4950\n",
+      "public_errors": [],
+      "analysis_status": "ready",
+      "model_tag": "range_boundary",
+      "model_cause": "先前一次练习可能漏掉范围终点。",
+      "personalization": {
+        "used": true,
+        "related_history_count": 1
+      },
+      "outcome": "correct_tag",
+      "seconds": 8.66
+    },
+    {
+      "id": "overwrite_each_turn",
+      "history": true,
+      "code": "total = 0\nfor i in range(1, 101):\n    total = i\nprint(total)",
+      "gold_tag": "accumulation_error",
+      "gold_reason": "assignment replaces the previous total",
+      "judge_status": "wrong_answer",
+      "actual_output": "100\n",
+      "public_errors": [],
+      "analysis_status": "invalid_response",
+      "model_tag": null,
+      "model_cause": null,
+      "personalization": {
+        "used": false,
+        "related_history_count": 0
+      },
+      "outcome": "no_diagnosis",
+      "seconds": 5.92
+    },
+    {
+      "id": "missing_print_name",
+      "history": true,
+      "code": "print(missing_total)",
+      "gold_tag": "variable_error",
+      "gold_reason": "the printed name has no definition",
+      "judge_status": "execution_error",
+      "actual_output": "",
+      "public_errors": [
+        "NameError"
+      ],
+      "analysis_status": "invalid_response",
+      "model_tag": null,
+      "model_cause": null,
+      "personalization": {
+        "used": false,
+        "related_history_count": 0
+      },
+      "outcome": "no_diagnosis",
+      "seconds": 6.62
+    }
+  ],
+  "counts": {
+    "correct_tag": 8,
+    "wrong_tag": 8,
+    "no_diagnosis": 9,
+    "correctly_skipped": 4,
+    "unexpected_analysis": 0
+  }
+}

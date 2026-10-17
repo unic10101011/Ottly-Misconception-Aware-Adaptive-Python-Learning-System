@@ -1,0 +1,90 @@
+"""Human-labeled examples for the legacy 1-to-100 sum lesson.
+
+The labels describe the primary mistake in this code, not the student's ability.
+These examples evaluate a model; they are never sent to it as answer keys.
+"""
+
+CASES = [
+    # Range boundaries: the accumulation itself is correct.
+    dict(id='range_ends_100', tag='range_boundary', output='4950\n',
+         code='total = 0\nfor i in range(1, 100):\n    total += i\nprint(total)',
+         reason='range stops before 100'),
+    dict(id='range_starts_0', tag='range_boundary', output='4950\n',
+         code='total = 0\nfor i in range(100):\n    total += i\nprint(total)',
+         reason='range includes 0 but omits 100'),
+    dict(id='range_starts_2', tag='range_boundary', output='5049\n',
+         code='total = 0\nfor i in range(2, 101):\n    total += i\nprint(total)',
+         reason='range omits 1'),
+    dict(id='range_ends_99', tag='range_boundary', output='4851\n',
+         code='total = 0\nfor i in range(1, 99):\n    total += i\nprint(total)',
+         reason='range omits 99 and 100'),
+    dict(id='range_new_names', tag='range_boundary', output='4950\n',
+         code='answer = 0\nfor number in range(1, 100):\n    answer = answer + number\nprint(answer)',
+         reason='renamed variables do not change the missing endpoint'),
+    dict(id='range_explicit_step', tag='range_boundary', output='4950\n',
+         code='result = 0\nfor value in range(1, 100, 1):\n    result += value\nprint(result)',
+         reason='explicit step still omits 100'),
+
+    # Accumulation: the range already includes 1 through 100.
+    dict(id='overwrite_each_turn', tag='accumulation_error', output='100\n',
+         code='total = 0\nfor i in range(1, 101):\n    total = i\nprint(total)',
+         reason='assignment replaces the previous total'),
+    dict(id='count_instead_of_add', tag='accumulation_error', output='100\n',
+         code='total = 0\nfor i in range(1, 101):\n    total += 1\nprint(total)',
+         reason='adds one per iteration instead of the current number'),
+    dict(id='subtract_instead_of_add', tag='accumulation_error', output='-5050\n',
+         code='total = 0\nfor i in range(1, 101):\n    total -= i\nprint(total)',
+         reason='subtracts each number'),
+    dict(id='reset_inside_loop', tag='accumulation_error', output='100\n',
+         code='total = 0\nfor i in range(1, 101):\n    total = 0\n    total += i\nprint(total)',
+         reason='resets the previous total on each iteration'),
+    dict(id='initial_total_one', tag='accumulation_error', output='5051\n',
+         code='total = 1\nfor i in range(1, 101):\n    total += i\nprint(total)',
+         reason='the initial total contributes an extra one'),
+    dict(id='overwrite_after_add', tag='accumulation_error', output='100\n',
+         code='total = 0\nfor i in range(1, 101):\n    total += i\n    total = i\nprint(total)',
+         reason='the later assignment discards each accumulated total'),
+
+    # Public NameError evidence is more reliable than a guessed output cause.
+    dict(id='missing_print_name', tag='variable_error', output='', error='NameError',
+         code='print(missing_total)', reason='the printed name has no definition'),
+    dict(id='typo_in_print', tag='variable_error', output='', error='NameError',
+         code='total = 0\nprint(totla)', reason='the printed name is misspelled'),
+    dict(id='wrong_print_name_after_loop', tag='variable_error', output='', error='NameError',
+         code='sum_value = 0\nfor i in range(1, 101):\n    sum_value += i\nprint(total)',
+         reason='the computed name differs from the printed name'),
+    dict(id='missing_addend', tag='variable_error', output='', error='NameError',
+         code='total = 0\nfor i in range(1, 101):\n    total += number\nprint(total)',
+         reason='the addend name was never defined'),
+    dict(id='missing_result', tag='variable_error', output='', error='NameError',
+         code='print(result)', reason='the result name was never defined'),
+    dict(id='missing_accumulator', tag='variable_error', output='', error='NameError',
+         code='total = 0\nfor i in range(1, 101):\n    subtotal += i\nprint(total)',
+         reason='the updated accumulator name was never defined'),
+
+    # Accepted solutions must not receive a misconception label.
+    dict(id='correct_augmented_assignment', tag=None, output='5050\n',
+         code='total = 0\nfor i in range(1, 101):\n    total += i\nprint(total)',
+         reason='adds all requested values'),
+    dict(id='correct_named_variables', tag=None, output='5050\n',
+         code='answer = 0\nfor number in range(1, 101):\n    answer = answer + number\nprint(answer)',
+         reason='different names with the same correct sum'),
+    dict(id='correct_zero_based_loop', tag=None, output='5050\n',
+         code='total = 0\nfor i in range(100):\n    total += i + 1\nprint(total)',
+         reason='zero-based loop maps each value to 1 through 100'),
+    dict(id='correct_explicit_step', tag=None, output='5050\n',
+         code='sum_value = 0\nfor value in range(1, 101, 1):\n    sum_value += value\nprint(sum_value)',
+         reason='explicit step preserves the correct range and accumulation'),
+
+    # Wrong answers outside these three misconception categories.
+    dict(id='constant_zero', tag='other', output='0\n',
+         code='print(0)', reason='no sum is attempted'),
+    dict(id='constant_plus_one', tag='other', output='5051\n',
+         code='total = 5050\nprint(total + 1)',
+         reason='the printed constant expression is not a range or accumulation error'),
+    dict(id='extra_output_one', tag='other', output='5051\n',
+         code='total = 0\nfor i in range(1, 101):\n    total += i\nprint(total + 1)',
+         reason='the computed sum is correct but the printed expression adds one'),
+    dict(id='unrelated_text', tag='other', output='done\n',
+         code='print("done")', reason='unrelated output gives no supported specific tag'),
+]
