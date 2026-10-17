@@ -1,0 +1,197 @@
+{
+  "model": "qwen2.5-coder:3b-instruct",
+  "cases": [
+    {
+      "name": "first_range",
+      "judge_status": "wrong_answer",
+      "judge_cases": [
+        {
+          "case_id": "stdout-1",
+          "passed": false,
+          "expected_output": "5050",
+          "actual_output": "4950\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "judge_seconds": 0.29,
+      "analysis_status": "ready",
+      "analysis_source": "ai",
+      "personalization": {
+        "used": false,
+        "related_history_count": 0
+      },
+      "misconception_tag": "variable_error",
+      "suspected_cause": "循环内的代码没有正确更新 total 变量的值。",
+      "hints": {
+        "level1": "每次得到一个数后，总数应该怎样变化？",
+        "level2": "本题要把一串数相加。检查代码里有没有在每轮把新数加进总数。",
+        "level3": "拿前两轮的数算一遍，记下旧总数和新总数，再对照代码的更新方式。"
+      },
+      "analysis_message": "原提示不够清楚，已改用基础提示。",
+      "elapsed_seconds": 18.34
+    },
+    {
+      "name": "other_user_range",
+      "judge_status": "wrong_answer",
+      "judge_cases": [
+        {
+          "case_id": "stdout-1",
+          "passed": false,
+          "expected_output": "5050",
+          "actual_output": "4950\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "judge_seconds": 0.21,
+      "analysis_status": "ready",
+      "analysis_source": "ai",
+      "personalization": {
+        "used": false,
+        "related_history_count": 0
+      },
+      "misconception_tag": "variable_error",
+      "suspected_cause": "循环内的代码没有正确更新 total 变量的值。",
+      "hints": {
+        "level1": "每次得到一个数后，总数应该怎样变化？",
+        "level2": "本题要把一串数相加。检查代码里有没有在每轮把新数加进总数。",
+        "level3": "拿前两轮的数算一遍，记下旧总数和新总数，再对照代码的更新方式。"
+      },
+      "analysis_message": "原提示不够清楚，已改用基础提示。",
+      "elapsed_seconds": 7.08
+    },
+    {
+      "name": "second_accumulation",
+      "judge_status": "wrong_answer",
+      "judge_cases": [
+        {
+          "case_id": "stdout-1",
+          "passed": false,
+          "expected_output": "5050",
+          "actual_output": "100\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "judge_seconds": 0.2,
+      "analysis_status": "ready",
+      "analysis_source": "ai",
+      "personalization": {
+        "used": true,
+        "related_history_count": 1
+      },
+      "misconception_tag": "variable_error",
+      "suspected_cause": "循环内的代码没有正确更新 total 变量的值。",
+      "hints": {
+        "level1": "每次得到一个数后，总数应该怎样变化？",
+        "level2": "本题要把一串数相加。检查代码里有没有在每轮把新数加进总数。",
+        "level3": "拿前两轮的数算一遍，记下旧总数和新总数，再对照代码的更新方式。"
+      },
+      "analysis_message": "原提示不够清楚，已改用基础提示。",
+      "elapsed_seconds": 9.32
+    },
+    {
+      "name": "current_variable",
+      "judge_status": "execution_error",
+      "judge_cases": [
+        {
+          "case_id": "stdout-1",
+          "passed": false,
+          "expected_output": "5050",
+          "actual_output": "",
+          "output_available": true,
+          "errors": [
+            {
+              "type": "NAME_ERROR",
+              "line": 1,
+              "message": "变量 'missing_total' 没有定义，请先赋值或检查拼写"
+            }
+          ],
+          "execution_time": 0.009,
+          "visibility": "public"
+        }
+      ],
+      "judge_seconds": 0.21,
+      "analysis_status": "invalid_response",
+      "analysis_source": null,
+      "personalization": {
+        "used": false,
+        "related_history_count": 0
+      },
+      "misconception_tag": null,
+      "suspected_cause": null,
+      "hints": null,
+      "analysis_message": "提示未通过内容检查，判题结果已保留。请先对照实际输出或报错。",
+      "elapsed_seconds": 7.01
+    },
+    {
+      "name": "later_correct",
+      "judge_status": "accepted",
+      "judge_cases": [
+        {
+          "case_id": "stdout-1",
+          "passed": true,
+          "expected_output": "5050",
+          "actual_output": "5050\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "judge_seconds": 0.21,
+      "analysis_status": "skipped",
+      "analysis_source": null,
+      "personalization": {
+        "used": false,
+        "related_history_count": 0
+      },
+      "misconception_tag": null,
+      "suspected_cause": null,
+      "hints": null,
+      "analysis_message": "测试已通过，无需 AI 分析。",
+      "elapsed_seconds": 0.21
+    },
+    {
+      "name": "after_correct_accumulation",
+      "judge_status": "wrong_answer",
+      "judge_cases": [
+        {
+          "case_id": "stdout-1",
+          "passed": false,
+          "expected_output": "5050",
+          "actual_output": "100\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "judge_seconds": 0.21,
+      "analysis_status": "ready",
+      "analysis_source": "ai",
+      "personalization": {
+        "used": true,
+        "related_history_count": 2
+      },
+      "misconception_tag": "variable_error",
+      "suspected_cause": "循环内的代码没有正确更新 total 变量的值。",
+      "hints": {
+        "level1": "每次得到一个数后，总数应该怎样变化？",
+        "level2": "本题要把一串数相加。检查代码里有没有在每轮把新数加进总数。",
+        "level3": "拿前两轮的数算一遍，记下旧总数和新总数，再对照代码的更新方式。"
+      },
+      "analysis_message": "原提示不够清楚，已改用基础提示。",
+      "elapsed_seconds": 9.42
+    }
+  ],
+  "first_user_history_count": 5,
+  "other_user_history_count": 1
+}
