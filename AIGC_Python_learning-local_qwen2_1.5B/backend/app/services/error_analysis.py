@@ -117,6 +117,7 @@ evidence 的 case_id/field/quote 从 allowed_evidence 逐字复制；空 quote �
 knowledge_points 只列直接相关的知识点，不凑数量。语法阶段失败时不要推测后续执行结果。
 misconception_tag 只能是 range_boundary、accumulation_error、condition_error、variable_error、syntax_error、other。
 它是本次提交的疑似误区，不是长期掌握结论。范围边界、累加覆盖、条件判断、变量使用、语法错误分别用对应标签；公开证据不足以区分具体原因时用 other。不能凭变量名或代码风格猜测。
+本题若要求计算 1 到 100，range(1, 101) 已包含 100，不能标为范围边界错误；循环内用 total = i 覆盖旧总数属于累加问题，不是边界或变量未定义问题。
 related_history 是这名学生过去的少量摘要，只能帮助调整讲解方式。当前题目、当前代码和当前公开失败证据是本次错因和标签的唯一事实依据；历史标签不能替代本次证据，无法确认时用 other。后来做对表示已有改正经历，不要说学生一直不会或仍未掌握。只有至少两条相关历史支持同一模式，且本次证据也支持，才能提及以前也容易混淆。
 面向十几岁的初学者，一句话只讲一个重点；少用术语，用到术语时顺手解释。
 三级严格分工：一级仅提概念方向问题，不含行号、数字、变量名、具体诊断或修复动作；二级联系知识点，引导检查代码位置或操作；三级给出对应的具体核验动作或修改思路。
@@ -220,7 +221,8 @@ def evidence_options(judge: JudgeResult) -> list[dict]:
     return options
 
 
-def validate_grounding(content: AnalysisContent, judge: JudgeResult) -> None:
+def validate_grounding(content: AnalysisContent, judge: JudgeResult, *,
+                       problem_id: str | None = None, code: str = '') -> None:
     if content.misconception_tag is None:
         raise ValueError('Missing misconception tag')
     syntax_error = any(error.type in {'语法错误', 'SyntaxError', 'IndentationError'}
@@ -228,11 +230,22 @@ def validate_grounding(content: AnalysisContent, judge: JudgeResult) -> None:
                        for error in case.errors)
     if content.misconception_tag == 'syntax_error' and not syntax_error:
         raise ValueError('Syntax tag without public syntax evidence')
+    if (content.misconception_tag == 'range_boundary' and problem_id == 'level2'
+            and re.search(r'\brange\s*\(\s*1\s*,\s*101\s*\)', code)):
+        if re.search(r'范围|边界|包含|漏掉', content.suspected_cause):
+            raise ValueError('Boundary cause contradicts this submission range')
+        content.misconception_tag = 'other'
     name_error = any(error.type in {'NameError', 'NAME_ERROR', 'UnboundLocalError'}
                      for case in judge.cases if not case.passed and case.visibility == 'public'
                      for error in case.errors)
     if name_error and content.misconception_tag not in {'variable_error', 'other'}:
         content.misconception_tag = 'other'
+    if name_error and not re.search(r'未定义|没有定义|未赋值|找不到|不存在|没找到|未声明|未初始化|拼写|写错|打错|名字不一致|名称不一致',
+                                    content.suspected_cause):
+        raise ValueError('NameError cause does not describe an undefined name')
+    if (name_error and not re.search(r'\b(?:for|while)\b', code)
+            and re.search(r'循环|累加', content.suspected_cause)):
+        raise ValueError('Cause describes a loop absent from the submission')
     allowed = evidence_options(judge)
     for item in content.evidence:
         if item.model_dump(exclude={"explanation"}) not in allowed:
@@ -344,7 +357,7 @@ async def _analyze_failure(problem: Problem, code: str, judge: JudgeResult,
                 load_times.append(model_load_ms(response))
                 content = parse_analysis_content(model_content(response))
                 content.hints.level1 = first_question
-                validate_grounding(content, judge)
+                validate_grounding(content, judge, problem_id=problem.problem_id, code=code)
                 issues = quality_issues(content.model_dump(), code, [case.expected_output for case in judge.cases])
                 fallback_used = False
                 if issues and set(issues) <= {"weak_level2", "weak_level3", "repetition"}:

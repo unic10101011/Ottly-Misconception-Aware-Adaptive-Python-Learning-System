@@ -161,7 +161,8 @@ def test_model_tag_is_saved_with_the_same_public_judge_evidence(client, monkeypa
         case = facts['failed_cases'][0]
         content = sample_analysis()
         content['misconception_tag'] = tag
-        content['suspected_cause'] = '疑似本次代码处理方式与题目要求不符。'
+        content['suspected_cause'] = ('疑似使用了没有定义的名字。' if case['errors'] else
+                                      '疑似本次代码处理方式与题目要求不符。')
         content['evidence'][0].update(
             field='error_message' if case['errors'] else 'actual_output',
             quote=case['errors'][0]['message'] if case['errors'] else case['actual_output'].strip(),
@@ -249,6 +250,61 @@ def test_current_name_error_cannot_inherit_a_past_range_tag(client, monkeypatch,
     assert observed[1]['related_history'][0]['misconception_tag'] == 'range_boundary'
     assert second['judge']['status'] == 'execution_error'
     assert second['analysis']['content']['misconception_tag'] == expected_tag
+
+
+def test_correct_range_cannot_be_reported_as_boundary_error(client, monkeypatch):
+    def handler(request):
+        content = sample_analysis()
+        content['misconception_tag'] = 'range_boundary'
+        content['suspected_cause'] = '疑似循环范围没有包含一百。'
+        return httpx.Response(200, json={'done': True, 'message': {'content': json.dumps(content)}})
+
+    mock_model(monkeypatch, handler)
+    headers = login(client)
+    result = submit_and_analyze(client, headers, json={'problem_id': 'level2', 'code': OVERWRITE})
+    assert result['judge']['status'] == 'wrong_answer'
+    assert result['analysis']['status'] == 'invalid_response'
+    assert result['analysis']['content'] is None
+    assert result['analysis']['personalization']['used'] is False
+
+
+@pytest.mark.parametrize('cause', ['疑似循环内没有正确累加总数。', '变量未正确更新。'])
+def test_name_error_rejects_unrelated_cause(client, monkeypatch, cause):
+    def handler(request):
+        case = model_facts(json.loads(request.content))['failed_cases'][0]
+        content = sample_analysis()
+        content['misconception_tag'] = 'variable_error'
+        content['suspected_cause'] = cause
+        content['evidence'][0].update(case_id=case['case_id'], field='error_message',
+                                      quote=case['errors'][0]['message'],
+                                      explanation='公开报错指出变量没有定义。')
+        return httpx.Response(200, json={'done': True, 'message': {'content': json.dumps(content)}})
+
+    mock_model(monkeypatch, handler)
+    headers = login(client)
+    result = submit_and_analyze(client, headers,
+                                json={'problem_id': 'level2', 'code': 'print(missing_total)'})
+    assert result['judge']['status'] == 'execution_error'
+    assert result['analysis']['status'] == 'invalid_response'
+    assert result['analysis']['content'] is None
+
+
+def test_name_error_accepts_spelling_explanation(client, monkeypatch):
+    def handler(request):
+        case = model_facts(json.loads(request.content))['failed_cases'][0]
+        content = sample_analysis()
+        content['misconception_tag'] = 'variable_error'
+        content['suspected_cause'] = '疑似变量名拼写不一致。'
+        content['evidence'][0].update(case_id=case['case_id'], field='error_message',
+                                      quote=case['errors'][0]['message'],
+                                      explanation='公开报错指出这个名字没有定义。')
+        return httpx.Response(200, json={'done': True, 'message': {'content': json.dumps(content)}})
+
+    mock_model(monkeypatch, handler)
+    result = submit_and_analyze(client, login(client),
+                                json={'problem_id': 'level2', 'code': 'print(missing_total)'})
+    assert result['analysis']['status'] == 'ready'
+    assert result['analysis']['content']['misconception_tag'] == 'variable_error'
 
 
 def test_model_failure_after_related_history_does_not_claim_personalization(client, monkeypatch):
@@ -553,6 +609,8 @@ def test_real_judge_evidence_is_sent_to_model(client, monkeypatch, code, status,
             field="error_message" if case["errors"] else "actual_output",
             quote=case["errors"][0]["message"] if case["errors"] else case["actual_output"].strip(),
         )
+        if case["errors"]:
+            content["suspected_cause"] = "疑似使用了没有定义的名字。"
         assert payload["format"]["type"] == "object"
         return httpx.Response(200, json={"done": True, "message": {"content": json.dumps(content)}})
 
