@@ -323,10 +323,13 @@ function LearningHistory() {
                 <small>AI 推测仅供复习参考，正确与否以判题结果为准。</small>
               </article>
               <article className="mistake-info-card">
-                <h3>同类加练</h3>
+                <h3>根据 AI 知识点推荐</h3>
                 {selected.related_questions.length ? selected.related_questions.map(question =>
-                  <a key={question.problem_id} href={question.url}>{question.title}</a>)
-                  : <p>暂无已验证的同类题，先巩固这道题。</p>}
+                  <a className="mistake-practice-link" key={question.problem_id} href={question.url}>
+                    <strong>{question.title}</strong><span>{question.practice_focus}</span>
+                    {question.completed && <small>已练过，可再次练习</small>}
+                  </a>)
+                  : <p>暂无可直接练习的推荐题；AI 分析可能还没有可靠知识点，或对应加练尚未解锁。</p>}
               </article>
             </div>
             <div className="mistake-history-heading"><h3>提交与复习记录</h3>

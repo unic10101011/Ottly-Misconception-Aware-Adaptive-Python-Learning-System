@@ -68,18 +68,15 @@ function Lesson({ levelNo, userId, navigate }) {
     {lesson && <>
       <CodeEditor userId={userId} initialCode={lesson.starter_code} problemId={lesson.problem_id}
         title={`第 ${levelNo} 关 · ${lesson.title}`} acceptsInput={levelNo !== 1} persistentOutput
-        sampleInput={lesson.examples[0]?.stdin || ''} onAccepted={() => setCompleted(true)}>
+        sampleInput={lesson.examples[0]?.stdin || ''} onAccepted={() => setCompleted(true)}
+        teaching={lesson.teaching.map(item => <section className="lesson-teaching" key={item.title}>
+          <h4>{item.title}</h4><p>{item.text}</p><pre>{item.example}</pre>
+        </section>)}>
         <h3>情境</h3><p>{lesson.story}</p>
         {lessonIllustrations[levelNo] && <figure className="lesson-illustration">
           <img src={`/lesson-illustrations/${lessonIllustrations[levelNo]}`}
             alt={`第 ${levelNo} 关 · ${lesson.title}的情境插图`} loading="lazy" decoding="async" />
         </figure>}
-        <details className="lesson-teaching" open>
-          <summary>知识点讲解</summary>
-          {lesson.teaching.map(item => <section key={item.title}>
-            <h4>{item.title}</h4><p>{item.text}</p><pre>{item.example}</pre>
-          </section>)}
-        </details>
         <h3>任务</h3><p>{lesson.description}</p>
         <h3>样例</h3>
         {lesson.examples.map((example, index) => <div className="judge-output-grid" key={index}>

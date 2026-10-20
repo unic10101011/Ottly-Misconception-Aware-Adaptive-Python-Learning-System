@@ -4,7 +4,7 @@ import SubmissionFeedback from './SubmissionFeedback.jsx'
 import { requestCode, requestAnalysis, saveHintView } from './codeApi.mjs'
 import { readCodeDraft, saveCodeDraft } from './codeDraft.mjs'
 
-function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, title, children, acceptsInput = false, persistentOutput = acceptsInput, sampleInput = '' }) {
+function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, title, children, teaching, acceptsInput = false, persistentOutput = acceptsInput, sampleInput = '', allowReset = false }) {
   const navigate = useNavigate()
   const [code, setCode] = useState(() => readCodeDraft(userId, problemId)?.code ?? initialCode)
   const [stdin, setStdin] = useState(() => readCodeDraft(userId, problemId)?.stdin ?? sampleInput)
@@ -22,6 +22,7 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, tit
   const [modal, setModal] = useState({ show: false, type: 'info', title: '', message: '' })
   const [lineCount, setLineCount] = useState(1)
   const [showConfetti, setShowConfetti] = useState(false)
+  const [contentTab, setContentTab] = useState('task')
 
   const textareaRef = useRef(null)
   const lineNumbersRef = useRef(null)
@@ -398,8 +399,20 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, tit
       <div className="level-detail-card">
         <div className="problem-section">
           <h2>{title}</h2>
-          <div className="steps-box">
-            {children}
+          <div className="problem-tabs" role="tablist" aria-label="学习内容">
+            <button id="problem-task-tab" type="button" role="tab"
+              aria-selected={contentTab === 'task'} aria-controls="problem-content-panel"
+              className={contentTab === 'task' ? 'active' : ''}
+              onClick={() => setContentTab('task')}>题目要求</button>
+            <button id="problem-teaching-tab" type="button" role="tab"
+              aria-selected={contentTab === 'teaching'} aria-controls="problem-content-panel"
+              className={contentTab === 'teaching' ? 'active' : ''}
+              onClick={() => setContentTab('teaching')}>知识点讲解</button>
+          </div>
+          <div className="steps-box" id="problem-content-panel" role="tabpanel"
+            aria-labelledby={contentTab === 'task' ? 'problem-task-tab' : 'problem-teaching-tab'}
+            tabIndex={0}>
+            {contentTab === 'task' ? children : teaching}
           </div>
           <a className="problem-jump" href="#code-workspace">开始编写代码 ↓</a>
         </div>
@@ -410,6 +423,14 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, tit
             <span className="code-dot yellow"></span>
             <span className="code-dot green"></span>
             <span className="code-file-label">main.py</span>
+            {allowReset && <button type="button" className="code-reset-button"
+              aria-label="清除代码痕迹，恢复初始代码" title="清除代码痕迹，恢复初始代码"
+              disabled={busy} onClick={() => updateCode(initialCode)}>
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M4 7h16M9 7V4h6v3m3 0-1 13H7L6 7m4 4v6m4-6v6" />
+              </svg>
+            </button>}
           </div>
           <div className="code-editor-box">
             <div className="code-line-numbers" ref={lineNumbersRef}>

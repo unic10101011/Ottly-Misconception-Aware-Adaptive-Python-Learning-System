@@ -10,7 +10,6 @@ export default function PracticePage() {
   const requestedLevel = Number(params.get('level_no'))
   const levelNo = Number.isInteger(requestedLevel) && requestedLevel >= 1 && requestedLevel <= 12 ? requestedLevel : 1
   const [items, setItems] = useState([])
-  const [selectedId, setSelectedId] = useState(null)
   const [lesson, setLesson] = useState(null)
   const [solution, setSolution] = useState(null)
   const [error, setError] = useState('')
@@ -31,16 +30,12 @@ export default function PracticePage() {
   }, [navigate])
 
   const visible = items.filter(item => item.level_no === levelNo)
-  const activeId = visible.some(item => item.problem_id === selectedId && item.available) ? selectedId : null
+  const requestedId = params.get('problem_id')
+  const activeId = visible.find(item => item.problem_id === requestedId && item.available)?.problem_id
+    || visible.find(item => item.available)?.problem_id || null
   const activeIdRef = useRef(activeId)
   activeIdRef.current = activeId
   const currentSolution = solution?.problem_id === activeId ? solution : null
-
-  useEffect(() => {
-    if (!visible.some(item => item.problem_id === selectedId && item.available)) {
-      setSelectedId(visible.find(item => item.available)?.problem_id || null)
-    }
-  }, [levelNo, items, selectedId])
 
   useEffect(() => {
     if (!activeId) {
@@ -75,7 +70,7 @@ export default function PracticePage() {
     <h1>针对性加练</h1>
     <p>每关三题，选择想巩固的知识点。加练结果会保存，但不会改变主线关卡进度。</p>
     <label className="practice-level-label" htmlFor="practice-level">选择关卡</label>
-    <select id="practice-level" value={levelNo} onChange={event => { setSelectedId(null); setError(''); setParams({ level_no: event.target.value }) }}>
+    <select id="practice-level" value={levelNo} onChange={event => { setError(''); setParams({ level_no: event.target.value }) }}>
       {Array.from({ length: 12 }, (_, index) => <option key={index + 1} value={index + 1}>第 {index + 1} 关</option>)}
     </select>
     {busy && <p role="status">正在读取加练题库...</p>}
@@ -84,7 +79,7 @@ export default function PracticePage() {
       {visible.map(item => <button type="button" key={item.problem_id}
         className="practice-item" disabled={!item.available}
         aria-pressed={activeId === item.problem_id}
-        onClick={() => setSelectedId(item.problem_id)}>
+        onClick={() => setParams({ level_no: String(levelNo), problem_id: item.problem_id })}>
         <strong>{item.title}</strong>
         <span>{item.practice_focus}</span>
         <small>{item.completed ? '已完成' : item.available ? '可练习' : '完成前置关卡后解锁'}</small>
@@ -94,7 +89,10 @@ export default function PracticePage() {
     {lesson?.problem_id === activeId && <>
       <CodeEditor key={lesson.problem_id} userId={userId} initialCode={lesson.starter_code}
         problemId={lesson.problem_id} title={`加练 · ${lesson.title}`}
-        acceptsInput={levelNo !== 1} persistentOutput sampleInput={lesson.examples[0]?.stdin || ''}
+        acceptsInput={levelNo !== 1} persistentOutput allowReset sampleInput={lesson.examples[0]?.stdin || ''}
+        teaching={lesson.teaching.map(item => <section className="lesson-teaching" key={item.title}>
+          <h4>{item.title}</h4><p>{item.text}</p><pre>{item.example}</pre>
+        </section>)}
         onAccepted={() => {
           setLesson(current => ({ ...current, completed: true }))
           setItems(current => current.map(item => item.problem_id === lesson.problem_id ? { ...item, completed: true } : item))

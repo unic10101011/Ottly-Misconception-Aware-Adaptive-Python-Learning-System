@@ -281,6 +281,40 @@ def test_review_submissions_group_by_problem_and_keep_all_attempts(client):
     assert client.get("/api/v1/code/submissions?problem_id=level1", headers=headers).json()["data"]["items"] == []
 
 
+def test_ai_knowledge_recommends_unlocked_practice_with_direct_links(client, monkeypatch):
+    from app.api import coding
+    from app.services.error_analysis import AnalysisResult
+
+    async def analysis_for_strings(problem, code, judge, related_history=None):
+        return AnalysisResult.model_validate({
+            'status': 'ready', 'message': '按输出知识点复习。', 'source': 'ai',
+            'content': {
+                'suspected_cause': '疑似输出文本不符合题意。',
+                'evidence': [{'case_id': 'stdout-1', 'field': 'actual_output',
+                              'quote': 'wrong\n', 'explanation': '实际输出与要求不同。'}],
+                'knowledge_points': ['字符串与输出'],
+                'hints': {'level1': '输出要和什么一致？', 'level2': '检查输出文本。',
+                          'level3': '逐字比较输出与样例。'},
+            },
+        })
+
+    monkeypatch.setattr(coding, 'analyze_failure', analysis_for_strings)
+    headers = account(client, 'practice_recommendation', '13800000032')
+    response = client.post('/api/v1/code/submit', headers=headers,
+                           json={'problem_id': 'level1', 'code': "print('wrong')"})
+    assert response.status_code == 200, response.text
+    submitted = response.json()['data']
+    if submitted['analysis']['status'] == 'preparing':
+        client.post(f"/api/v1/code/submissions/{submitted['submission_id']}/analysis", headers=headers)
+    item = client.get('/api/v1/code/mistakes', headers=headers).json()['data']['items'][0]
+    links = item['related_questions']
+    assert len(links) == 3
+    assert {link['problem_id'] for link in links} == {
+        'practice-01-1-v1', 'practice-01-2-v1', 'practice-01-3-v1'}
+    assert all(link['url'] == f"/app/practice?level_no=1&problem_id={link['problem_id']}"
+               and link['matched_knowledge_ids'] == ['K01'] for link in links)
+
+
 def test_review_source_must_be_owned_wrong_and_same_problem(client):
     first = account(client, "review_owner", "13800000006")
     second = account(client, "review_other", "13800000007")

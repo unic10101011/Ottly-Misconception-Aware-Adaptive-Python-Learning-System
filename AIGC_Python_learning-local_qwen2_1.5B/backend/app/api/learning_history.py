@@ -97,6 +97,7 @@ def my_mistake_questions(current_user: User = Depends(get_current_user), db: Ses
     attempts = db.query(LearningSubmission).filter(
         LearningSubmission.user_id == current_user.id,
     ).order_by(LearningSubmission.id.desc()).all()
+    passed_ids = {row.problem_id for row in attempts if row.passed}
     review_ids = {row.submission_id for row in db.query(LearningReview).filter(
         LearningReview.user_id == current_user.id,
     ).all()}
@@ -115,6 +116,14 @@ def my_mistake_questions(current_user: User = Depends(get_current_user), db: Ses
         cause = next((analysis for row in failures
                       if (analysis := history_analysis(row, contract_judge(row.judge_json)))
                       and analysis.status == 'ready' and analysis.content), None)
+        ai_ids = set(cause.content.knowledge_ids) if cause and cause.source == 'ai' else set()
+        related = [problem for problem in PROBLEMS.values()
+                   if problem.kind == 'practice' and problem.published
+                   and problem.problem_id != problem_id
+                   and ai_ids.intersection(problem.knowledge_ids)
+                   and set(problem.prerequisite_problem_ids).issubset(passed_ids)]
+        related.sort(key=lambda problem: (problem.problem_id in passed_ids,
+                                          problem.level_no, problem.problem_id))
         items.append({
             **snapshot_fields(rows[0]),
             "problem_id": problem_id,
@@ -134,7 +143,13 @@ def my_mistake_questions(current_user: User = Depends(get_current_user), db: Ses
             "recent_review_passed": passed_count,
             "recent_review_total": len(recent),
             "review_rate_percent": round(passed_count / len(recent) * 100) if len(recent) >= 3 else None,
-            "related_questions": [],
+            "related_questions": [{
+                "problem_id": problem.problem_id, "title": problem.title,
+                "practice_focus": problem.practice_focus,
+                "matched_knowledge_ids": [key for key in problem.knowledge_ids if key in ai_ids],
+                "completed": problem.problem_id in passed_ids,
+                "url": f"/app/practice?level_no={problem.level_no}&problem_id={problem.problem_id}",
+            } for problem in related[:3]],
         })
     return {"schema_version": SCHEMA_VERSION, "code": 200, "data": {"items": items, "total": len(items)}}
 

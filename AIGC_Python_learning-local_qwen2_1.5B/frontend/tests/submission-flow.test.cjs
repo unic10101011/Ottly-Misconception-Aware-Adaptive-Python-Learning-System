@@ -654,9 +654,10 @@ test('late practice solution response is not shown under another question', asyn
   const items = ['A', 'B'].map(id => ({ problem_id: id, level_no: 1, title: id,
     practice_focus: id, available: true, completed: true }))
   const lesson = id => ({ problem_id: id, title: id, completed: true,
-    starter_code: '', description: id, examples: [] })
-  const values = [items, 'A', lesson('A'), null, '', false]
+    starter_code: '', description: id, examples: [], teaching: [] })
+  const values = [items, lesson('A'), null, '', false]
   let index = 0
+  let params = new URLSearchParams('level_no=1&problem_id=A')
   const activeIdRef = { current: 'A' }
   let finishSolution
   const hooks = { ...React,
@@ -671,7 +672,7 @@ test('late practice solution response is not shown under another question', asyn
     react: hooks,
     'react-router-dom': {
       useNavigate: () => () => {}, useOutletContext: () => ({ userId: 1 }),
-      useSearchParams: () => [new URLSearchParams('level_no=1'), () => {}],
+      useSearchParams: () => [params, () => {}],
     },
     '../components/CodeEditor.jsx': props => React.createElement('div', null, props.children),
     '../components/codeApi.mjs': { getSolution: () => new Promise(resolve => { finishSolution = resolve }) },
@@ -686,8 +687,8 @@ test('late practice solution response is not shown under another question', asyn
   Object.defineProperty(global, 'localStorage', { configurable: true, value: { getItem: () => 'token' } })
   try {
     const pending = findSolutionButton(render()).props.onClick()
-    values[1] = 'B'
-    values[2] = lesson('B')
+    params = new URLSearchParams('level_no=1&problem_id=B')
+    values[1] = lesson('B')
     assert.match(renderToStaticMarkup(render()), /B/)
     finishSolution({ problem_id: 'A', reference_solution: 'SOLUTION_FOR_A', solution_explanation: 'A' })
     await pending
@@ -696,4 +697,130 @@ test('late practice solution response is not shown under another question', asyn
     if (originalStorage) Object.defineProperty(global, 'localStorage', originalStorage)
     else delete global.localStorage
   }
+})
+
+test('practice reset restores starter code in the saved draft without removing completion', async () => {
+  const { readCodeDraft, saveCodeDraft } = await import('../src/components/codeDraft.mjs')
+  const entries = new Map()
+  const originalStorage = Object.getOwnPropertyDescriptor(global, 'localStorage')
+  Object.defineProperty(global, 'localStorage', { configurable: true, value: {
+    getItem: key => entries.get(key) ?? null,
+    setItem: (key, value) => entries.set(key, value),
+  } })
+  try {
+    saveCodeDraft(7, 'practice-12-2-v1', 'old answer', '5\n2\n')
+    const values = []
+    let index = 0
+    const hooks = { ...React,
+      useState: initial => {
+        const slot = index++
+        if (!(slot in values)) values[slot] = typeof initial === 'function' ? initial() : initial
+        return [values[slot], next => { values[slot] = typeof next === 'function' ? next(values[slot]) : next }]
+      },
+      useRef: value => ({ current: value }), useEffect: () => {}, useCallback: callback => callback,
+    }
+    const Editor = loadJsx('../src/components/CodeEditor.jsx', {
+      react: hooks,
+      'react-router-dom': { useNavigate: () => () => {} },
+      './SubmissionFeedback.jsx': { default: () => null },
+    })
+    const starter = 'def can_sail(wind, wave):\n    pass\n'
+    const tree = Editor({ initialCode: starter, problemId: 'practice-12-2-v1', userId: 7,
+      title: '练习', allowReset: true })
+    const findReset = node => {
+      if (!React.isValidElement(node)) return null
+      if (node.props['aria-label'] === '清除代码痕迹，恢复初始代码') return node
+      return React.Children.toArray(node.props.children).map(findReset).find(Boolean)
+    }
+    const reset = findReset(tree)
+    assert.ok(reset)
+    reset.props.onClick()
+    assert.equal(values[0], starter)
+    assert.deepEqual(readCodeDraft(7, 'practice-12-2-v1'), { code: starter, stdin: '5\n2\n' })
+  } finally {
+    if (originalStorage) Object.defineProperty(global, 'localStorage', originalStorage)
+    else delete global.localStorage
+  }
+})
+
+test('practice direct link opens the recommended question instead of the first one', () => {
+  const items = ['A', 'B'].map(id => ({ problem_id: id, level_no: 1, title: id,
+    practice_focus: id, available: true, completed: false }))
+  const values = [items, { problem_id: 'B', title: 'B', completed: false,
+    starter_code: '', description: 'B_DIRECT_DETAIL', examples: [], teaching: [] }, null, '', false]
+  let index = 0
+  const hooks = { ...React,
+    useState: () => [values[index++], () => {}], useRef: value => ({ current: value }),
+    useEffect: () => {},
+  }
+  const Page = loadJsx('../src/pages/PracticePage.jsx', {
+    react: hooks,
+    'react-router-dom': {
+      useNavigate: () => () => {}, useOutletContext: () => ({ userId: 1 }),
+      useSearchParams: () => [new URLSearchParams('level_no=1&problem_id=B'), () => {}],
+    },
+    '../components/CodeEditor.jsx': props => React.createElement('div', null, props.children),
+    '../components/codeApi.mjs': {},
+  })
+  assert.match(renderToStaticMarkup(Page()), /B_DIRECT_DETAIL/)
+})
+
+test('lesson information tabs switch between task and teaching', () => {
+  const values = []
+  let index = 0
+  const hooks = { ...React,
+    useState: initial => {
+      const slot = index++
+      if (!(slot in values)) values[slot] = typeof initial === 'function' ? initial() : initial
+      return [values[slot], next => { values[slot] = typeof next === 'function' ? next(values[slot]) : next }]
+    },
+    useRef: value => ({ current: value }), useEffect: () => {}, useCallback: callback => callback,
+  }
+  const Editor = loadJsx('../src/components/CodeEditor.jsx', {
+    react: hooks,
+    'react-router-dom': { useNavigate: () => () => {} },
+    './SubmissionFeedback.jsx': { default: () => null },
+  })
+  const props = { initialCode: 'print(1)', problemId: 'level1', userId: 7, title: '测试',
+    children: React.createElement('p', null, 'TASK_MARKER'),
+    teaching: React.createElement('p', null, 'TEACHING_MARKER') }
+  const render = () => { index = 0; return Editor(props) }
+  const findTeachingTab = node => {
+    if (!React.isValidElement(node)) return null
+    if (node.props.role === 'tab' && node.props.children === '知识点讲解') return node
+    return React.Children.toArray(node.props.children).map(findTeachingTab).find(Boolean)
+  }
+  let tree = render()
+  assert.match(renderToStaticMarkup(tree), /TASK_MARKER/)
+  assert.doesNotMatch(renderToStaticMarkup(tree), /TEACHING_MARKER/)
+  findTeachingTab(tree).props.onClick()
+  tree = render()
+  assert.match(renderToStaticMarkup(tree), /TEACHING_MARKER/)
+  assert.doesNotMatch(renderToStaticMarkup(tree), /TASK_MARKER/)
+})
+
+test('mistake insight shows the AI matched practice focus and direct link', () => {
+  const question = { problem_id: 'level1', first_wrong_submission_id: 1,
+    last_wrong_code: 'print(1)', title: '初识小海獭', description: '输出', source: '系统关卡',
+    first_wrong_at: '2026-10-20T00:00:00Z', latest_suspected_cause: '疑似文本不一致',
+    review_count: 0, review_rate_percent: null, recent_review_passed: 0,
+    recent_review_total: 0, related_questions: [{ problem_id: 'practice-01-2-v1',
+      title: '加练二', practice_focus: '练习字符串输出', matched_knowledge_ids: ['K01'],
+      url: '/app/practice?level_no=1&problem_id=practice-01-2-v1' }] }
+  const states = [[question], { K01: '字符串与输出' }, 'level1', 'insight', false, '',
+    'print(1)', '', false, false, null, null, 0, null, {}, [], 0, 0, 0, 0, false, '', '']
+  let index = 0
+  const History = loadJsx('../src/pages/LearningHistory.jsx', {
+    react: { ...React, useState: () => [states[index++], () => {}],
+      useRef: value => ({ current: value }), useEffect: () => {} },
+    'react-router-dom': { useNavigate: () => () => {} },
+    '../components/ProblemMetadata.jsx': () => null,
+    '../components/MisconceptionOverview.jsx': () => null,
+    '../components/SubmissionFeedback.jsx': { default: () => null },
+    '../components/codeApi.mjs': {},
+  })
+  const html = renderToStaticMarkup(History())
+  assert.match(html, /根据 AI 知识点推荐/)
+  assert.match(html, /练习字符串输出/)
+  assert.match(html, /href="\/app\/practice\?level_no=1&amp;problem_id=practice-01-2-v1"/)
 })
