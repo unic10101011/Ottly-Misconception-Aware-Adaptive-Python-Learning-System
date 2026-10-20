@@ -67,8 +67,6 @@ export default function PracticePage() {
   }
 
   return <div className="lesson-page practice-page">
-    <h1>针对性加练</h1>
-    <p>每关三题，选择想巩固的知识点。加练结果会保存，但不会改变主线关卡进度。</p>
     <label className="practice-level-label" htmlFor="practice-level">选择关卡</label>
     <select id="practice-level" value={levelNo} onChange={event => { setError(''); setParams({ level_no: event.target.value }) }}>
       {Array.from({ length: 12 }, (_, index) => <option key={index + 1} value={index + 1}>第 {index + 1} 关</option>)}
