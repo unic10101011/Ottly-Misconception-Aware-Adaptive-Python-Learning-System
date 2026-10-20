@@ -113,6 +113,10 @@ export function getLevels(token) {
   return requestLearningHistory('/code/levels', 'GET', token)
 }
 
+export function getPractice(token) {
+  return requestLearningHistory('/code/practice', 'GET', token)
+}
+
 export function getLesson(problemId, token) {
   return requestLearningHistory(`/code/problems/${encodeURIComponent(problemId)}`, 'GET', token)
 }

@@ -54,6 +54,7 @@ function Layout() {
         </Link>
         <nav className="app-nav" aria-label="主要导航">
           <NavLink to="/app/levels" end={false} className={({ isActive }) => `app-nav-link ${isActive ? 'active' : ''}`}>学习地图</NavLink>
+          <NavLink to="/app/practice" className={({ isActive }) => `app-nav-link ${isActive ? 'active' : ''}`}>加练题库</NavLink>
           <NavLink to="/app/ai-chat" className={({ isActive }) => `app-nav-link ${isActive ? 'active' : ''}`}>AI 对话</NavLink>
           <NavLink to="/app/history" className={({ isActive }) => `app-nav-link ${isActive ? 'active' : ''}`}>我的错题</NavLink>
           <NavLink to="/app/settings" className={({ isActive }) => `app-nav-link ${isActive ? 'active' : ''}`}>个人中心</NavLink>

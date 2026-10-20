@@ -1,7 +1,7 @@
 import logging
 from time import perf_counter
 
-from fastapi import APIRouter, Depends, Header, HTTPException
+from fastapi import APIRouter, Depends, Header, HTTPException, Query
 from sqlalchemy.orm import Session
 from starlette.concurrency import run_in_threadpool
 from app.core.auth import get_current_user
@@ -115,13 +115,30 @@ def knowledge_dictionary():
     ]}}
 
 
+@router.get('/code/practice')
+def practice_questions(level_no: int | None = Query(default=None, ge=1, le=12),
+                       current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    passed = passed_problem_ids(db, current_user.id)
+    items = [{
+        'problem_id': problem.problem_id, 'level_no': problem.level_no,
+        'kind': problem.kind, 'title': problem.title, 'practice_focus': problem.practice_focus,
+        'knowledge_ids': problem.knowledge_ids, 'completed': problem.problem_id in passed,
+        'available': problem.published and set(problem.prerequisite_problem_ids).issubset(passed),
+    } for problem in PROBLEMS.values()
+        if problem.kind == 'practice' and problem.published
+        and (level_no is None or problem.level_no == level_no)]
+    items.sort(key=lambda item: (item['level_no'], item['problem_id']))
+    return {'schema_version': SCHEMA_VERSION, 'code': 200, 'data': {'items': items}}
+
+
 @router.get('/code/problems/{problem_id}')
 def lesson(problem_id: str, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     passed = passed_problem_ids(db, current_user.id)
     problem = require_lesson(problem_id, passed)
     # Explicit allowlist: never include private tests, hints or solutions here.
     data = problem.model_dump(include={
-        'schema_version', 'problem_id', 'version', 'level_no', 'title', 'difficulty', 'knowledge_ids',
+        'schema_version', 'problem_id', 'version', 'level_no', 'kind', 'practice_focus',
+        'title', 'difficulty', 'knowledge_ids',
         'prerequisite_knowledge_ids', 'prerequisite_problem_ids', 'description', 'story', 'teaching',
         'starter_code', 'examples', 'comparison', 'time_limit_seconds', 'output_limit_chars',
     })

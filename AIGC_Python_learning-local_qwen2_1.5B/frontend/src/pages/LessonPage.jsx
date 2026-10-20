@@ -87,6 +87,9 @@ function Lesson({ levelNo, userId, navigate }) {
           <div><span>输出</span><pre>{example.stdout || '（无输出，不打印空行）'}</pre></div>
         </div>)}
       </CodeEditor>
+      <button type="button" className="btn-hint" onClick={() => navigate(`/app/practice?level_no=${levelNo}`)}>
+        练习第 {levelNo} 关知识点
+      </button>
       {completed && <section className="lesson-complete" aria-label="通关复盘">
         <h3>第 {levelNo} 关已通过，进度已保存</h3>
         {next && <p>{next.published ? `可以继续挑战第 ${next.id} 关：${next.name}。` : `第 ${next.id} 关内容待开放。`}</p>}

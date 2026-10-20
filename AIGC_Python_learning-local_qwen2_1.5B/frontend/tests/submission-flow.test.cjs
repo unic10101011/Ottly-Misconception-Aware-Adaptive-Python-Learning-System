@@ -75,6 +75,22 @@ test('submission sends current code and problem id with auth and preserves backe
   } finally { global.fetch = originalFetch }
 })
 
+test('practice catalog request uses the authenticated endpoint', async () => {
+  const { getPractice } = await import('../src/components/codeApi.mjs')
+  const originalFetch = global.fetch
+  global.fetch = async (url, options) => {
+    assert.equal(url, '/api/v1/code/practice')
+    assert.equal(options.headers.Authorization, 'Bearer token')
+    return new Response(JSON.stringify({ code: 200, data: { items: [
+      { problem_id: 'practice-01-1-v1', level_no: 1, available: true },
+    ] } }), { status: 200 })
+  }
+  try {
+    const data = await getPractice('token')
+    assert.equal(data.items[0].problem_id, 'practice-01-1-v1')
+  } finally { global.fetch = originalFetch }
+})
+
 test('HTTP auth and invalid responses return readable errors instead of crashing on data', async () => {
   const { requestCode } = await import('../src/components/codeApi.mjs')
   const originalFetch = global.fetch
@@ -628,6 +644,54 @@ for (const levelNo of [7, 12]) test(`shared lesson ${levelNo} loads content and 
     assert.deepEqual(calls[1], ['solution', lesson.problem_id])
     assert.match(renderToStaticMarkup(render()), /for i in range/)
     cleanups.forEach(cleanup => cleanup?.())
+  } finally {
+    if (originalStorage) Object.defineProperty(global, 'localStorage', originalStorage)
+    else delete global.localStorage
+  }
+})
+
+test('late practice solution response is not shown under another question', async () => {
+  const items = ['A', 'B'].map(id => ({ problem_id: id, level_no: 1, title: id,
+    practice_focus: id, available: true, completed: true }))
+  const lesson = id => ({ problem_id: id, title: id, completed: true,
+    starter_code: '', description: id, examples: [] })
+  const values = [items, 'A', lesson('A'), null, '', false]
+  let index = 0
+  const activeIdRef = { current: 'A' }
+  let finishSolution
+  const hooks = { ...React,
+    useState: () => {
+      const slot = index++
+      return [values[slot], next => { values[slot] = typeof next === 'function' ? next(values[slot]) : next }]
+    },
+    useRef: () => activeIdRef,
+    useEffect: () => {},
+  }
+  const Page = loadJsx('../src/pages/PracticePage.jsx', {
+    react: hooks,
+    'react-router-dom': {
+      useNavigate: () => () => {}, useOutletContext: () => ({ userId: 1 }),
+      useSearchParams: () => [new URLSearchParams('level_no=1'), () => {}],
+    },
+    '../components/CodeEditor.jsx': props => React.createElement('div', null, props.children),
+    '../components/codeApi.mjs': { getSolution: () => new Promise(resolve => { finishSolution = resolve }) },
+  })
+  const render = () => { index = 0; return Page() }
+  const findSolutionButton = node => {
+    if (!React.isValidElement(node)) return null
+    if (node.type === 'button' && node.props.children === '查看参考解与解析') return node
+    return React.Children.toArray(node.props.children).map(findSolutionButton).find(Boolean)
+  }
+  const originalStorage = Object.getOwnPropertyDescriptor(global, 'localStorage')
+  Object.defineProperty(global, 'localStorage', { configurable: true, value: { getItem: () => 'token' } })
+  try {
+    const pending = findSolutionButton(render()).props.onClick()
+    values[1] = 'B'
+    values[2] = lesson('B')
+    assert.match(renderToStaticMarkup(render()), /B/)
+    finishSolution({ problem_id: 'A', reference_solution: 'SOLUTION_FOR_A', solution_explanation: 'A' })
+    await pending
+    assert.doesNotMatch(renderToStaticMarkup(render()), /SOLUTION_FOR_A/)
   } finally {
     if (originalStorage) Object.defineProperty(global, 'localStorage', originalStorage)
     else delete global.localStorage

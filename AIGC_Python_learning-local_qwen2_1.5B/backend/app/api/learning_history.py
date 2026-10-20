@@ -120,7 +120,8 @@ def my_mistake_questions(current_user: User = Depends(get_current_user), db: Ses
             "problem_id": problem_id,
             "title": rows[0].problem_title,
             "description": rows[0].problem_description,
-            "source": "系统关卡" if problem_id in PROBLEMS else "来源待题库提供",
+            "source": ("加练题" if problem_id in PROBLEMS and PROBLEMS[problem_id].kind == 'practice'
+                       else "系统关卡" if problem_id in PROBLEMS else "来源待题库提供"),
             "first_wrong_submission_id": failures[-1].id,
             "first_wrong_at": utc_iso(failures[-1].created_at),
             "latest_at": utc_iso(rows[0].created_at),

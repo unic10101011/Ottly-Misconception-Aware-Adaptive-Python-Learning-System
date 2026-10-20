@@ -4,8 +4,8 @@ from typing import Literal
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from app.services.sandbox.runner import run_code_process
-from app.services.problem_catalog import Problem, TestCase, PROBLEMS, GREETING, GREETING_ID
-from app.services.lesson_assessment import requirement_error, function_test_program
+from app.services.problem_catalog import Problem, TestCase, DirectFunctionTest, PROBLEMS, GREETING, GREETING_ID
+from app.services.lesson_assessment import requirement_error, function_test_program, direct_function_test_program
 
 
 class ExecutionError(BaseModel):
@@ -52,7 +52,7 @@ def judge_submission(problem: Problem, code: str) -> JudgeResult:
     tests = list(problem.tests)
     # Invalid syntax remains the sandbox's responsibility; do not try to extract
     # a function until all ordinary executions have successfully completed.
-    for test in [*tests, *getattr(problem, 'function_tests', [])]:
+    for test in [*tests, *getattr(problem, 'function_tests', []), *getattr(problem, 'direct_function_tests', [])]:
         expected_output = test.expected_output if isinstance(test, TestCase) else 'True\n' * len(test.calls)
         if requirement:
             execution = requirement
@@ -63,6 +63,9 @@ def judge_submission(problem: Problem, code: str) -> JudgeResult:
             cases.append(CaseResult(case_id=test.case_id, passed=False, expected_output=expected_output,
                 actual_output='', output_available=False, errors=[], execution_time=0, visibility='hidden'))
             continue
+        elif isinstance(test, DirectFunctionTest):
+            program, expected_output = direct_function_test_program(code, test)
+            execution = run_code_process(program, timeout=problem.time_limit_seconds)
         else:
             program, expected_output = function_test_program(code, test)
             execution = run_code_process(program, timeout=problem.time_limit_seconds)

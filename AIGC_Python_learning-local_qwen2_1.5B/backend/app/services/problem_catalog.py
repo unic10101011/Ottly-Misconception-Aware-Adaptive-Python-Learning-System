@@ -66,11 +66,24 @@ class FunctionTest(CatalogModel):
     calls: list[FunctionCall] = Field(min_length=2, max_length=10)
 
 
+class DirectFunctionCall(CatalogModel):
+    args: list[str | int | list[int]]
+    expected: str | int | bool
+
+
+class DirectFunctionTest(CatalogModel):
+    case_id: str = Field(min_length=1)
+    function_name: str = Field(pattern=r'^[a-z][a-z_]*$')
+    calls: list[DirectFunctionCall] = Field(min_length=2, max_length=10)
+
+
 class Lesson(CatalogModel):
     schema_version: Literal['1.0.0']
     problem_id: str = Field(min_length=1, max_length=100)
     version: int = Field(strict=True, ge=1)
     level_no: int = Field(strict=True, ge=1, le=12)
+    kind: Literal['main', 'practice'] = 'main'
+    practice_focus: str = ''
     title: str = Field(min_length=1, max_length=255)
     difficulty: Literal[1, 2, 3]
     knowledge_ids: list[str] = Field(min_length=1)
@@ -83,8 +96,9 @@ class Lesson(CatalogModel):
     starter_code: str = Field(max_length=6000)
     examples: list[Example] = Field(min_length=1)
     tests: list[TestCase] = Field(min_length=1)
-    assessment: Literal['output', 'list_maximum', 'count_at_least'] = 'output'
+    assessment: Literal['output', 'list_maximum', 'count_at_least', 'practice_function'] = 'output'
     function_tests: list[FunctionTest] = Field(default_factory=list)
+    direct_function_tests: list[DirectFunctionTest] = Field(default_factory=list)
     comparison: Literal['legacy_trim', 'exact']
     time_limit_seconds: Literal[3]
     output_limit_chars: Literal[8000]
@@ -101,6 +115,8 @@ class Lesson(CatalogModel):
 
     @model_validator(mode='after')
     def consistent(self):
+        if self.kind == 'practice' and not self.practice_focus.strip():
+            raise ValueError('practice lesson needs a concrete focus')
         if self.problem_id not in LEGACY_IDS:
             match = re.fullmatch(r'[a-z][a-z0-9]*(?:-[a-z0-9]+)*-v([1-9]\d*)', self.problem_id)
             if not match or int(match[1]) != self.version:
@@ -111,13 +127,17 @@ class Lesson(CatalogModel):
             values = getattr(self, field)
             if len(values) != len(set(values)):
                 raise ValueError(f'duplicate {field}')
-        ids = [test.case_id for test in [*self.tests, *self.function_tests]]
+        ids = [test.case_id for test in [*self.tests, *self.function_tests, *self.direct_function_tests]]
         if len(ids) != len(set(ids)):
             raise ValueError('duplicate case_id')
         if self.function_tests and self.assessment != 'count_at_least':
             raise ValueError('function tests require count_at_least assessment')
         if self.assessment == 'count_at_least' and not self.function_tests:
             raise ValueError('count_at_least assessment requires function tests')
+        if self.direct_function_tests and self.assessment != 'practice_function':
+            raise ValueError('direct function tests require practice_function assessment')
+        if self.assessment == 'practice_function' and not self.direct_function_tests:
+            raise ValueError('practice_function assessment requires direct function tests')
         if self.problem_id not in LEGACY_IDS and not any(t.visibility == 'public' for t in self.tests):
             raise ValueError('a published input lesson needs a public test')
         if self.problem_id not in LEGACY_IDS and any(t.stdin for t in self.tests) and not any(t.visibility == 'hidden' for t in self.tests):
@@ -133,6 +153,59 @@ class LevelSlot(CatalogModel):
     problem_id: str | None
     name: str = Field(min_length=1)
     prerequisite_problem_ids: list[str] = Field(default_factory=list)
+
+
+class PracticeSpec(CatalogModel):
+    problem_id: str = Field(pattern=r'^practice-\d{2}-[1-3]-v1$')
+    level_no: int = Field(ge=1, le=12)
+    title: str = Field(min_length=1)
+    focus: str = Field(min_length=1)
+    description: str = Field(min_length=1)
+    sample: Example
+    hidden: list[Example] = Field(default_factory=list)
+    reference_solution: str = Field(min_length=1)
+    wrong_solution: str = Field(min_length=1)
+    solution_explanation: str = Field(min_length=1)
+    source_url: str = Field(pattern=r'^https://')
+    starter_code: str = ''
+    assessment: Literal['output', 'list_maximum'] = 'output'
+    function_name: str | None = None
+    direct_calls: list[DirectFunctionCall] = Field(default_factory=list)
+
+
+def practice_lesson(spec: PracticeSpec, levels: list[LevelSlot], problems: dict[str, Lesson]) -> Lesson:
+    if (spec.level_no == 12) != bool(spec.function_name and spec.direct_calls):
+        raise ValueError(f'{spec.problem_id}: level 12 needs direct function calls only')
+    slots = {slot.id: slot for slot in levels}
+    main = problems[slots[spec.level_no].problem_id]
+    tests = [TestCase(case_id='sample-1', stdin=spec.sample.stdin,
+                      expected_output=spec.sample.stdout, visibility='public')]
+    tests += [TestCase(case_id=f'hidden-{i}', stdin=case.stdin,
+                       expected_output=case.stdout, visibility='hidden')
+              for i, case in enumerate(spec.hidden, 1)]
+    return Lesson(
+        schema_version=SCHEMA_VERSION, problem_id=spec.problem_id, version=1,
+        level_no=spec.level_no, kind='practice', practice_focus=spec.focus,
+        title=spec.title, difficulty=1, published=True,
+        knowledge_ids=[f'K{spec.level_no:02d}'],
+        prerequisite_knowledge_ids=main.prerequisite_knowledge_ids,
+        prerequisite_problem_ids=[] if spec.level_no == 1 else [slots[spec.level_no - 1].problem_id],
+        story=f'这是第 {spec.level_no} 关的针对性加练。',
+        teaching=[Teaching(title='本题练习重点', text=spec.focus,
+                           example='先用样例运行，再检查题目中的边界条件。')],
+        description=spec.description, starter_code=spec.starter_code or '# 在这里编写 Python 代码\n',
+        examples=[spec.sample], tests=tests, comparison='exact',
+        assessment='practice_function' if spec.direct_calls else spec.assessment,
+        direct_function_tests=([DirectFunctionTest(case_id='hidden-function-1',
+                                                    function_name=spec.function_name,
+                                                    calls=spec.direct_calls)] if spec.direct_calls else []),
+        time_limit_seconds=3, output_limit_chars=8000,
+        hints=LessonHints(level1='题目要求输入什么、输出什么？先用样例核对。',
+                          level2=spec.focus,
+                          level3='逐行追踪变量，在边界输入下检查最终输出。'),
+        reference_solution=spec.reference_solution,
+        solution_explanation=spec.solution_explanation,
+    )
 
 
 def alias_key(text: str) -> str:
@@ -176,6 +249,8 @@ def validate_catalog(problems: dict[str, Lesson], knowledge: dict[str, Knowledge
         if slot.problem_id is not None:
             if slot.problem_id not in problems or problems[slot.problem_id].level_no != slot.id:
                 raise ValueError('level slot refers to an unknown/mismatched problem')
+            if problems[slot.problem_id].kind != 'main':
+                raise ValueError('practice cannot occupy a main level')
             if slot.prerequisite_problem_ids:
                 raise ValueError('configured levels must use the lesson prerequisites')
         elif len(slot.prerequisite_problem_ids) != len(set(slot.prerequisite_problem_ids)) or any(key not in problems for key in slot.prerequisite_problem_ids):
@@ -190,7 +265,7 @@ def load_catalog(directory: Path = DATA_DIR):
         raise ValueError('duplicate knowledge ID')
     problems = {}
     for path in sorted(directory.glob('*.json')):
-        if path.name in {'knowledge.json', 'levels.json'}:
+        if path.name in {'knowledge.json', 'levels.json', 'practice.json'}:
             continue
         lesson = Lesson.model_validate_json(path.read_text(encoding='utf-8'))
         if lesson.problem_id in problems:
@@ -199,6 +274,14 @@ def load_catalog(directory: Path = DATA_DIR):
     if not problems:
         raise ValueError('empty catalog')
     levels = [LevelSlot.model_validate(item) for item in json.loads((directory / 'levels.json').read_text(encoding='utf-8'))]
+    practice_path = directory / 'practice.json'
+    if practice_path.exists():
+        for item in json.loads(practice_path.read_text(encoding='utf-8')):
+            spec = PracticeSpec.model_validate(item)
+            lesson = practice_lesson(spec, levels, problems)
+            if lesson.problem_id in problems:
+                raise ValueError(f'duplicate problem ID: {lesson.problem_id}')
+            problems[lesson.problem_id] = lesson
     aliases = validate_catalog(problems, knowledge, levels)
     return problems, knowledge, levels, aliases
 

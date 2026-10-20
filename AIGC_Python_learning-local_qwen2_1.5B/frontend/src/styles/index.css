@@ -872,6 +872,16 @@ body.eye-protection {
 .lesson-output .output-box { min-height: 100px; max-height: 320px; overflow-y: auto; }
 .lesson-complete { margin-top: 20px; padding: 20px; border: 1px solid #a3cbbb; border-radius: 12px; background: #f2faf6; }
 .lesson-complete .btn-hint { margin: 12px 12px 0 0; }
+.practice-page > p { color: #49677b; line-height: 1.7; }
+.practice-level-label { display: block; margin: 18px 0 7px; font-weight: 700; }
+.practice-page select { min-height: 44px; padding: 8px 12px; border: 1px solid #9baeb4; border-radius: 8px; background: #fff; color: #17394f; font: inherit; }
+.practice-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 20px 0; }
+.practice-item { display: grid; gap: 8px; min-height: 120px; padding: 16px; border: 1px solid #cfe3ee; border-radius: 12px; background: #fff; color: #17394f; text-align: left; cursor: pointer; }
+.practice-item span { color: #49677b; line-height: 1.5; }
+.practice-item small { color: #2468a9; font-weight: 700; }
+.practice-item[aria-pressed="true"] { border-color: #176caa; box-shadow: inset 0 0 0 1px #176caa; }
+.practice-item:disabled { opacity: .65; cursor: not-allowed; }
+@media (max-width: 760px) { .practice-list { grid-template-columns: 1fr; } }
 
 /* Ottly learning shell */
 :root {
@@ -917,7 +927,7 @@ button:disabled { cursor: not-allowed; }
   .app-brand img { width: 37px; height: 37px; border-radius: 10px; }
   .app-brand strong { font-size: 18px; }
   .app-brand small { display: none; }
-  .app-nav { grid-column: 1 / -1; grid-row: 2; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 3px; }
+  .app-nav { grid-column: 1 / -1; grid-row: 2; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 3px; }
   .app-nav-link { min-height: 42px; padding: 6px 3px; justify-content: center; text-align: center; font-size: 12px; white-space: nowrap; }
   .app-nav-link:hover { transform: none; }
   .app-nav-link.active { box-shadow: inset 0 -3px #1d83bd; }
