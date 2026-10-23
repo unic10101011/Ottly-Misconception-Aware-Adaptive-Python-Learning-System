@@ -19,7 +19,7 @@ router = APIRouter()
 
 # ==================== 【修改】本地大模型配置（替换原来的蓝心大模型配置） ====================
 LOCAL_LLM_URL = os.getenv("LOCAL_LLM_URL")
-OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "qwen2.5-coder:3b-instruct")
+OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "qwen2.5-coder:7b-instruct-q4_K_M")
 MAX_TOKENS = 450
 TEMPERATURE = 0.3
 CHAT_SYSTEM_PROMPT = (

@@ -31,7 +31,7 @@ if (-not (Test-Path -LiteralPath $envFile)) {
         'DB_ROOT_PASSWORD=' + (New-HexSecret)
         'JWT_SECRET=' + (New-HexSecret)
         'LOCAL_LLM_URL=http://host.docker.internal:11434/api/chat'
-        'OLLAMA_MODEL=qwen2.5-coder:3b-instruct'
+        'OLLAMA_MODEL=qwen2.5-coder:7b-instruct-q4_K_M'
     ) -join [Environment]::NewLine
     [System.IO.File]::WriteAllText($envFile, $contents + [Environment]::NewLine, [System.Text.Encoding]::ASCII)
     Write-Host '已生成本机演示配置 .env'

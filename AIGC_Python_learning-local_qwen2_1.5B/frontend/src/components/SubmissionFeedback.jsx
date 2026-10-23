@@ -6,15 +6,15 @@ const statusLabels = {
   execution_error: '代码执行出现错误',
   timeout: '代码执行超时',
 }
-const hintLabels = ['思考方向', '知识点与检查位置', '修改与验证思路']
 
-function SubmissionFeedback({ result, visibleHintCount, onRevealHint, hintBusy = false, hintError = '' }) {
+function SubmissionFeedback({ result, showJudge = true, showAnalysis = true }) {
   const { judge, analysis } = result
   const content = analysis?.status === 'ready' ? analysis.content : null
   const requirementFailed = judge.cases.some(testCase => testCase.errors.some(error => error.type === 'REQUIREMENT_NOT_MET'))
 
   return (
-    <section className="submission-feedback" aria-label="提交结果" aria-live="polite">
+    <section className="submission-feedback" aria-label={showJudge ? '提交结果' : '本次错因分析'} aria-live="polite">
+      {showJudge && <>
       <h3 className={judge.passed ? 'judge-passed' : 'judge-failed'}>
         {requirementFailed ? '尚未满足本关任务要求' : statusLabels[judge.status] || '判题结果'}
       </h3>
@@ -36,31 +36,18 @@ function SubmissionFeedback({ result, visibleHintCount, onRevealHint, hintBusy =
           ))}
         </div>
       ))}
-      {judge.passed ? <p className="analysis-status">全部测试用例通过，本次未调用 AI。</p> : analysis?.status === 'preparing' ? (
-        <p className="analysis-status" role="status">正在准备提示，判题结果已显示，你可以先对照测试检查代码。</p>
+      </>}
+      {showAnalysis && (judge.passed ? <p className="analysis-status">全部测试用例通过，本次未调用 AI。</p> : analysis?.status === 'preparing' ? (
+        <p className="analysis-status" role="status">Ottly正在分析错因，判题结果已显示，你可以先对照测试检查代码。</p>
       ) : content ? (
         <div className="ai-feedback">
-          <h4>{analysis.source === 'fixed' ? '本关基础提示' : 'AI 学习提示'}</h4>
-          <p className="analysis-status">先尝试自己修改；需要帮助时，逐级查看提示。{analysis.source !== 'fixed' && 'AI 分析是基于本次测试的推测。'}</p>
+          <h4>{analysis.source === 'fixed' ? '基础错因分析' : 'AI 错因分析'}</h4>
+          <p className="analysis-status">{analysis.source === 'fixed'
+            ? '依据本次报错提供基础分析。'
+            : 'AI 分析基于本次执行结果，仅供参考。'}</p>
           {analysis.source !== 'fixed' && analysis.personalization?.used &&
-            <p className="analysis-status">本次提示参考了你的相关练习记录。</p>}
-          {analysis.message && <p className="analysis-status">{analysis.message}</p>}
-          <div className="progressive-hints">
-            {hintLabels.slice(0, visibleHintCount).map((label, index) => (
-              <article className="hint-card" key={label}>
-                <strong>第 {index + 1} 级 · {label}</strong>
-                <p>{content.hints[`level${index + 1}`]}</p>
-              </article>
-            ))}
-            {visibleHintCount < 3 && (
-              <button type="button" className="btn-hint" onClick={onRevealHint} disabled={hintBusy}>
-                {hintBusy ? '正在保存查看记录...' : `查看第 ${visibleHintCount + 1} 级提示`}
-              </button>
-            )}
-          </div>
-          {hintError && <p className="judge-error" role="alert">{hintError}</p>}
-          {visibleHintCount < 3 && <p className="analysis-status">逐级查看提示后，可展开完整分析依据。</p>}
-          {visibleHintCount >= 3 && <details className="analysis-details">
+            <p className="analysis-status">本次分析参考了你的相关练习记录。</p>}
+          <details className="analysis-details" open>
             <summary>查看疑似原因、分析依据与知识点</summary>
             <p><strong>疑似原因：</strong>{content.suspected_cause}</p>
             <p><strong>相关知识点：</strong>{content.knowledge_points.join('、')}</p>
@@ -72,11 +59,11 @@ function SubmissionFeedback({ result, visibleHintCount, onRevealHint, hintBusy =
                 <p>{item.explanation}</p>
               </div>
             ))}
-          </details>}
+          </details>
         </div>
       ) : (
         <p className="analysis-status" role="status">{analysis?.message || 'AI 分析暂不可用，判题结果已保留。请稍后重新提交。'}</p>
-      )}
+      ))}
     </section>
   )
 }
