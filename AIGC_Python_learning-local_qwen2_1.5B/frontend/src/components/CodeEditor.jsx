@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import SubmissionFeedback from './SubmissionFeedback.jsx'
-import { requestCode, requestAnalysis } from './codeApi.mjs'
+import PracticeRecommendationModal from './PracticeRecommendationModal.jsx'
+import { requestCode, requestAnalysis, requestPracticeRecommendation } from './codeApi.mjs'
 import { readCodeDraft, saveCodeDraft } from './codeDraft.mjs'
 
 function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, title, children, teaching, completionPanel, nextAction, acceptsInput = false, persistentOutput = acceptsInput, sampleInput = '', allowReset = false }) {
@@ -20,6 +21,8 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, tit
   const [lineCount, setLineCount] = useState(1)
   const [showConfetti, setShowConfetti] = useState(false)
   const [contentTab, setContentTab] = useState('task')
+  const [recommendation, setRecommendation] = useState(null)
+  const [recommendationPending, setRecommendationPending] = useState(false)
 
   const textareaRef = useRef(null)
   const lineNumbersRef = useRef(null)
@@ -50,6 +53,8 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, tit
   const updateCode = (value) => {
     if (busyRef.current) return
     setCode(value)
+    setRecommendation(null)
+    setRecommendationPending(false)
     persistDraft(value, stdin)
     setRunOutput(null)
     setSubmission(null)
@@ -115,6 +120,8 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, tit
 
     busyRef.current = true
     setRunning(true)
+    setRecommendation(null)
+    setRecommendationPending(false)
     setAuthRequired(false)
     setSubmission(null)
     submissionRef.current = null
@@ -185,6 +192,8 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, tit
 
     busyRef.current = true
     setSubmitting(true)
+    setRecommendation(null)
+    setRecommendationPending(false)
     setAuthRequired(false)
     setSubmission(null)
     submissionRef.current = null
@@ -217,9 +226,21 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, tit
       }
       if (result.judge.passed) {
         onAccepted?.(result)
-        setModal({ show: true, type: 'success', title: '通过', message: '恭喜！全部测试用例通过！' })
         startConfetti()
-        if (onSuccess) successTimerRef.current = setTimeout(() => {
+        if (result.practice_recommendation_eligible) {
+          setRecommendationPending(true)
+          requestPracticeRecommendation(result.submission_id, localStorage.getItem('access_token')).then(data => {
+            if (!mountedRef.current || submissionRef.current !== result) return
+            setRecommendationPending(false)
+            if (data.status === 'ready' && data.recommendation) setRecommendation(data.recommendation)
+            else setModal({ show: true, type: 'success', title: '通过', message: '恭喜！全部测试用例通过！' })
+          }).catch(() => {
+            if (!mountedRef.current || submissionRef.current !== result) return
+            setRecommendationPending(false)
+            setModal({ show: true, type: 'success', title: '通过', message: '恭喜！全部测试用例通过！' })
+          })
+        } else setModal({ show: true, type: 'success', title: '通过', message: '恭喜！全部测试用例通过！' })
+        if (onSuccess && !result.practice_recommendation_eligible) successTimerRef.current = setTimeout(() => {
           if (mountedRef.current) onSuccess()
         }, 3000)
       }
@@ -481,9 +502,7 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, tit
             />
           </div>
 
-          <p className="draft-status" role="status">
-            {draftError || '代码和运行输入自动保存在当前浏览器，按账号和题目分别保留。'}
-          </p>
+          {draftError && <p className="draft-status" role="status">{draftError}</p>}
 
           {acceptsInput && <div className="lesson-input">
             <label htmlFor="lesson-stdin">运行输入（每次 input 读取一行）</label>
@@ -491,7 +510,6 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, tit
               onChange={event => updateInput(event.target.value)} rows={3} />
             <button type="button" className="btn-hint" disabled={busy}
               onClick={() => updateInput(sampleInput)}>填入样例输入</button>
-            <p>运行只使用这里的输入；提交会由后端检查全部正式测试。</p>
           </div>}
 
           {persistentOutput && <section className="lesson-output" aria-labelledby="lesson-output-title">
@@ -516,8 +534,8 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, tit
             </button>
             {nextAction && <button type="button" className="btn-next-level" onClick={nextAction} disabled={busy}>前往下一关 →</button>}
             {analysisPending && <span className="ottly-analysis-pending" role="status"><span aria-hidden="true" />Ottly正在分析错因</span>}
+            {recommendationPending && <span className="ottly-analysis-pending" role="status"><span aria-hidden="true" />Ottly正在挑选加练题</span>}
           </div>
-          <p className="code-action-note">“运行”报错后自动分析本次输入；“提交判题”会检查题目要求并分析失败原因，失败提交才记入错题本。</p>
           {submission && (
             <SubmissionFeedback
               result={submission}
@@ -553,6 +571,12 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, tit
         </div>
       </div>
 
+      {recommendation && <PracticeRecommendationModal recommendation={recommendation}
+        onSkip={() => setRecommendation(null)}
+        onPractice={() => {
+          setRecommendation(null)
+          navigate(`/app/practice?level_no=${recommendation.level_no}&problem_id=${encodeURIComponent(recommendation.problem_id)}`)
+        }} />}
       {showConfetti && <canvas ref={canvasRef} className="confetti-canvas" />}
     </div>
   )

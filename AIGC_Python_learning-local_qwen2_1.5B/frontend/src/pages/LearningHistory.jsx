@@ -262,7 +262,7 @@ function LearningHistory() {
                 查看这道题的个人详情 →</button>
             </div>
             <div className="mistake-code-pane">
-              <div className="mistake-code-title"><span>Python 代码</span><small>已填入最近一次错误代码</small></div>
+              <div className="mistake-code-title"><span>Python 代码</span></div>
               <textarea aria-label="复习代码编辑器" className="mistake-code-input" spellCheck={false}
                 value={code} readOnly={busy} maxLength={6000} onChange={event => editCode(event.target.value)} />
               <div className="lesson-input">

@@ -131,6 +131,11 @@ export function requestAnalysis(submissionId, token) {
   return requestLearningHistory(`/code/submissions/${submissionId}/analysis`, 'POST', token, undefined, 100000)
 }
 
+
+export function requestPracticeRecommendation(submissionId, token) {
+  return requestLearningHistory(`/code/submissions/${submissionId}/practice-recommendation`, 'POST', token, undefined, 35000)
+}
+
 export function getLevels(token) {
   return requestLearningHistory('/code/levels', 'GET', token)
 }

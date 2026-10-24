@@ -15,7 +15,8 @@ function loadJsx(file, overrides = {}) {
   loaded.filename = filename
   loaded.paths = Module._nodeModulePaths(path.dirname(filename))
   const nativeRequire = loaded.require.bind(loaded)
-  loaded.require = id => Object.hasOwn(overrides, id) ? overrides[id] : nativeRequire(id)
+  loaded.require = id => Object.hasOwn(overrides, id) ? overrides[id]
+    : id === './PracticeRecommendationModal.jsx' ? { default: () => null } : nativeRequire(id)
   loaded._compile(compiled.code, filename)
   return loaded.exports.default
 }
@@ -224,11 +225,11 @@ test('diagnosis is visible immediately and legacy hint counts never expose learn
     const html = renderToStaticMarkup(React.createElement(Feedback, {
       result: failure, visibleHintCount,
     }))
-    assert.match(html, /AI 错因分析/)
+    assert.match(html, /疑似原因：/)
     assert.match(html, /Repeated replacement/)
     assert.match(html, /Only the last value remains/)
     assert.match(html, /accumulation/)
-    assert.match(html, /<details[^>]*open/)
+    assert.doesNotMatch(html, /<details|<summary|<h4|AI 错因分析|AI 分析基于|仅供参考|查看疑似原因/)
     assert.doesNotMatch(html, /HINT_ONE|HINT_TWO|HINT_THREE|AI 学习提示|查看第|逐级|progressive-hints|hint-card/)
   }
 })
@@ -243,13 +244,14 @@ test('model outage keeps deterministic judge evidence visible and shows recovery
   assert.doesNotMatch(html, /查看第 1 级提示/)
 })
 
-test('personalization note appears only for a ready AI analysis that used history', () => {
+test('historical personalization metadata does not restore the removed introduction', () => {
   const Feedback = loadJsx('../src/components/SubmissionFeedback.jsx')
   const render = analysis => renderToStaticMarkup(React.createElement(Feedback, {
     result: { ...failure, analysis }, visibleHintCount: 0,
   }))
   const used = { ...failure.analysis, personalization: { used: true, related_history_count: 2 } }
-  assert.match(render(used), /本次分析参考了你的相关练习记录/)
+  assert.match(render(used), /Repeated replacement/)
+  assert.doesNotMatch(render(used), /本次分析参考了你的相关练习记录/)
   assert.doesNotMatch(render({ ...used, personalization: { used: false, related_history_count: 0 } }), /本次分析参考了/)
   assert.doesNotMatch(render({ ...used, source: 'fixed' }), /本次分析参考了/)
   assert.doesNotMatch(render({ ...used, status: 'timeout', content: null }), /本次分析参考了/)
@@ -261,7 +263,8 @@ test('legacy ready messages cannot restore removed learning hint wording', () =>
     const result = { ...failure, analysis: { ...failure.analysis, source,
       message: '错因分析由 AI 根据本次执行生成；三级提示采用已审核的基础提示。' } }
     const html = renderToStaticMarkup(React.createElement(Feedback, { result }))
-    assert.match(html, source === 'fixed' ? /基础错因分析/ : /AI 错因分析/)
+    assert.match(html, source === 'fixed' ? /基础说明：/ : /疑似原因：/)
+    assert.doesNotMatch(html, /<h4|<summary|仅供参考/)
     assert.match(html, /Repeated replacement/)
     assert.doesNotMatch(html, /三级提示|基础提示|HINT_ONE/)
   }
@@ -357,16 +360,24 @@ test('requirement failures explain that execution has not started', () => {
 
 test('private cases never render outputs or errors and fixed analysis is labelled honestly', () => {
   const Feedback = loadJsx('../src/components/SubmissionFeedback.jsx')
+  const hidden = { ...failure.judge.cases[0], case_id: 'hidden-1', visibility: 'hidden',
+    expected_output: 'PRIVATE_EXPECTED', actual_output: 'PRIVATE_ACTUAL',
+    errors: [{ type: 'Error', message: 'PRIVATE_ERROR' }] }
   const result = { ...failure,
-    judge: { ...failure.judge, cases: [{ ...failure.judge.cases[0], visibility: 'hidden',
-      expected_output: 'PRIVATE_EXPECTED', actual_output: 'PRIVATE_ACTUAL',
-      errors: [{ type: 'Error', message: 'PRIVATE_ERROR' }] }] },
+    judge: { ...failure.judge, passed_cases: 1, total_cases: 3,
+      cases: [failure.judge.cases[0], hidden, { ...hidden, case_id: 'hidden-2', passed: true }] },
     analysis: { ...failure.analysis, source: 'fixed', message: '本关已审核的基础提示。' },
   }
   const html = renderToStaticMarkup(React.createElement(Feedback, { result, visibleHintCount: 1 }))
   assert.doesNotMatch(html, /PRIVATE_EXPECTED|PRIVATE_ACTUAL|PRIVATE_ERROR|AI 学习提示/)
-  assert.match(html, /隐藏测试仅展示通过状态/)
-  assert.match(html, /基础错因分析/)
+  assert.doesNotMatch(html, /隐藏测试仅展示通过状态/)
+  assert.equal((html.match(/class="judge-case"/g) || []).length, 1)
+  assert.match(html, /预期输出|5050/)
+  assert.match(html, /hidden-test-tile is-failed/)
+  assert.match(html, /hidden-test-tile is-passed/)
+  assert.match(html, /隐藏测试 1（hidden-1）：未通过/)
+  assert.match(html, /隐藏测试 2（hidden-2）：通过/)
+  assert.match(html, /基础说明：/)
   assert.doesNotMatch(html, /HINT_ONE|基础提示/)
 })
 
@@ -514,7 +525,7 @@ test('Ottly message shows only this diagnosis and judge visibility remains indep
     result: failure, showJudge: false,
   }))
   assert.match(html, /Repeated replacement|Only the last value remains/)
-  assert.match(html, /<details[^>]*open/)
+  assert.doesNotMatch(html, /<details|<summary|AI 错因分析|仅供参考/)
   assert.doesNotMatch(html, /查看第 1 级提示|AI 学习提示/)
   assert.doesNotMatch(html, /测试通过：|预期输出|HINT_ONE|HINT_TWO|HINT_THREE/)
   const judge = renderToStaticMarkup(React.createElement(Feedback, {
@@ -1097,6 +1108,113 @@ test('lesson information tabs switch between task and teaching', () => {
   tree = render()
   assert.match(renderToStaticMarkup(tree), /TEACHING_MARKER/)
   assert.doesNotMatch(renderToStaticMarkup(tree), /TASK_MARKER/)
+})
+
+test('practice recommendation modal presents the supplied exercise with skip and go actions', () => {
+  const Modal = loadJsx('../src/components/PracticeRecommendationModal.jsx', {
+    '../pages/images/ottly-exercise.png': 'ottly-exercise.png',
+  })
+  const html = renderToStaticMarkup(React.createElement(Modal, {
+    recommendation: { title: '装满的盒数', reason: '巩固整除与取余。' }, onSkip() {}, onPractice() {},
+  }))
+  assert.match(html, /<dialog/)
+  assert.match(html, /Ottly 向你推荐一道加练题！|快来巩固一下知识点/)
+  assert.match(html, /ottly-exercise.png/)
+  assert.match(html, /装满的盒数|巩固整除与取余/)
+  assert.match(html, />跳过<|>去看看 →</)
+})
+
+test('practice recommendation request uses the owning token and accepted submission id', async () => {
+  const { requestPracticeRecommendation } = await import('../src/components/codeApi.mjs')
+  const originalFetch = global.fetch
+  global.fetch = async (url, options) => {
+    assert.equal(url, '/api/v1/code/submissions/81/practice-recommendation')
+    assert.equal(options.method, 'POST')
+    assert.equal(options.headers.Authorization, 'Bearer student-token')
+    return new Response(JSON.stringify({ code: 200, data: { status: 'skipped', recommendation: null } }), { status: 200 })
+  }
+  try {
+    assert.equal((await requestPracticeRecommendation(81, 'student-token')).status, 'skipped')
+  } finally { global.fetch = originalFetch }
+})
+
+test('corrected-pass recommendations preserve the verdict, support skipping and navigation, and ignore stale results', async () => {
+  const originalStorage = Object.getOwnPropertyDescriptor(global, 'localStorage')
+  Object.defineProperty(global, 'localStorage', { configurable: true, value: { getItem: () => 'student-token' } })
+  try {
+    for (const action of ['skip', 'practice', 'edit', 'unmount', 'unavailable', 'first_pass']) {
+      const values = [], refs = [], effects = [], requests = [], navigations = []
+      let index = 0, refIndex = 0, collect = true, resolveRecommendation, acceptedCount = 0
+      const hooks = { ...React,
+        useState: initial => {
+          const slot = index++
+          if (!(slot in values)) values[slot] = typeof initial === 'function' ? initial() : initial
+          return [values[slot], next => { values[slot] = typeof next === 'function' ? next(values[slot]) : next }]
+        },
+        useRef: value => refs[refIndex++] ||= { current: value },
+        useEffect: effect => { if (collect) effects.push(effect) },
+        useCallback: callback => callback,
+      }
+      const selected = { problem_id: 'practice-04-1-v1', level_no: 4, title: '装满的盒数', reason: '巩固整除。' }
+      const accepted = { ...failure, submission_id: 81, practice_recommendation_eligible: action !== 'first_pass',
+        judge: { ...failure.judge, passed: true, status: 'accepted', passed_cases: 1 }, analysis: { status: 'skipped' } }
+      const Modal = () => null
+      const Editor = loadJsx('../src/components/CodeEditor.jsx', {
+        react: hooks, 'react-router-dom': { useNavigate: () => url => navigations.push(url) },
+        './SubmissionFeedback.jsx': loadJsx('../src/components/SubmissionFeedback.jsx'),
+        './PracticeRecommendationModal.jsx': Modal,
+        './codeDraft.mjs': { readCodeDraft: () => null, saveCodeDraft: () => true },
+        './codeApi.mjs': {
+          requestCode: async () => accepted,
+          requestPracticeRecommendation: (id, token) => {
+            requests.push([id, token])
+            return new Promise(resolve => { resolveRecommendation = resolve })
+          },
+        },
+      })
+      const render = () => { index = 0; refIndex = 0; return Editor({
+        initialCode: 'print(3)', problemId: 'shell-groups-v1', userId: 1, onAccepted: () => { acceptedCount++ },
+      }) }
+      const find = (node, predicate) => !React.isValidElement(node) ? null : predicate(node) ? node
+        : React.Children.toArray(node.props.children).map(child => find(child, predicate)).find(Boolean)
+      let tree = render()
+      const cleanups = effects.map(effect => effect()).filter(fn => typeof fn === 'function')
+      collect = false
+      await find(tree, node => node.props.className === 'btn-submit').props.onClick()
+      tree = render()
+      assert.equal(acceptedCount, 1)
+      assert.match(renderToStaticMarkup(tree), /全部测试通过/)
+      if (action === 'first_pass') {
+        assert.deepEqual(requests, [])
+        assert.equal(find(tree, node => node.type === Modal), undefined)
+      } else {
+        assert.deepEqual(requests, [[81, 'student-token']])
+        assert.match(renderToStaticMarkup(tree), /Ottly正在挑选加练题/)
+        if (action === 'edit') find(tree, node => node.props.className === 'code-textarea').props.onChange({ target: { value: 'print(4)' } })
+        if (action === 'unmount') cleanups.forEach(fn => fn())
+        resolveRecommendation(action === 'unavailable' ? { status: 'unavailable' } : { status: 'ready', recommendation: selected })
+        await new Promise(resolve => setImmediate(resolve))
+        tree = render()
+        const modal = find(tree, node => node.type === Modal)
+        if (['edit', 'unmount', 'unavailable'].includes(action)) assert.equal(modal, undefined, action)
+        else {
+          assert.equal(modal.props.recommendation, selected)
+          if (action === 'skip') {
+            modal.props.onSkip()
+            assert.equal(find(render(), node => node.type === Modal), undefined)
+            assert.deepEqual(navigations, [])
+          } else {
+            modal.props.onPractice()
+            assert.deepEqual(navigations, ['/app/practice?level_no=4&problem_id=practice-04-1-v1'])
+          }
+        }
+      }
+      cleanups.forEach(fn => fn())
+    }
+  } finally {
+    if (originalStorage) Object.defineProperty(global, 'localStorage', originalStorage)
+    else delete global.localStorage
+  }
 })
 
 test('mistake insight shows the AI matched practice focus and direct link', () => {
