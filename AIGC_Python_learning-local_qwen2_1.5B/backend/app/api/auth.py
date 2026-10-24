@@ -16,6 +16,7 @@ from app.models.user import AIChatRecord
 from app.models.class_selection import ClassSelection
 from app.models.learning_submission import LearningSubmission
 from app.models.learning_review import LearningReview
+from app.models.guide_progress import GuideProgress
 from app.models.settings import UserSettings, NotificationPreferences, LanguageSettings
 
 
@@ -193,6 +194,7 @@ def delete_account(request: AccountDelete, current_user: User = Depends(get_curr
         db.query(LanguageSettings).filter(LanguageSettings.user_settings_id.in_(settings_ids)).delete(synchronize_session=False)
     db.query(UserSettings).filter(UserSettings.user_id == user_id).delete(synchronize_session=False)
     db.query(LearningReview).filter(LearningReview.user_id == user_id).delete(synchronize_session=False)
+    db.query(GuideProgress).filter(GuideProgress.user_id == user_id).delete(synchronize_session=False)
     db.query(LearningSubmission).filter(LearningSubmission.user_id == user_id).delete(synchronize_session=False)
     db.query(AIChatRecord).filter(AIChatRecord.user_id == user_id).delete(synchronize_session=False)
     db.query(ClassSelection).filter(ClassSelection.user_id == user_id).delete(synchronize_session=False)
