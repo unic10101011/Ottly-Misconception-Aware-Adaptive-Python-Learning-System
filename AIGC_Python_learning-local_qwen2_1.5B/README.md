@@ -20,23 +20,39 @@
 
 ## AI 模型
 
-本机演示使用 Ollama 运行 qwen2.5-coder:3b-instruct。先在 Windows 安装 Ollama，重新打开 PowerShell，再运行 `ollama pull qwen2.5-coder:3b-instruct`。模型权重保存在本机，不包含在仓库或 Docker 镜像中。
+本机演示使用 Ollama 运行 `qwen2.5-coder:7b-instruct-q4_K_M`（7B，Q4_K_M 量化）。先在 Windows 安装 Ollama，重新打开 PowerShell，再运行 `ollama pull qwen2.5-coder:7b-instruct-q4_K_M`。模型权重保存在本机，不包含在仓库或 Docker 镜像中。
 
-如果 Ollama 模型仓库下载失败，可从 [Qwen 官方 ModelScope 仓库](https://modelscope.cn/models/Qwen/Qwen2.5-Coder-3B-Instruct-GGUF) 下载 3B Instruct 的 Q4_K_M GGUF 文件。复制本仓库 `ollama/Modelfile`，把 FROM 改成 GGUF 的实际绝对路径，再用该文件运行 `ollama create qwen2.5-coder:3b-instruct -f 你的Modelfile路径`。保留文件中的角色对话模板与 stop 参数，不要只写 FROM。当前本机已导入并配置此模板。导入后运行 `ollama list` 检查模型；已有同名模型可在本项目目录用 `ollama create qwen2.5-coder:3b-instruct -f ollama/Modelfile` 更新模板。该模型页面标注 Qwen Research License；使用或分发权重前请查看官方许可条款，商业用途需另行确认授权。
+运行 `ollama list` 检查已下载的模型，配置中的模型名称必须与列表中的完整名称一致。本仓库 `ollama/Modelfile` 保留的是旧 3B 手动导入模板，当前 7B 模型直接使用 Ollama 下载的版本，无需执行该模板。
 
-.env 中的 LOCAL_LLM_URL 默认设为 http://host.docker.internal:11434/api/chat，OLLAMA_MODEL 默认设为 qwen2.5-coder:3b-instruct。Docker 后端通过 host.docker.internal 访问 Windows 上的 Ollama。修改配置后运行 docker compose up --build -d。若模型服务未运行，AI 聊天会显示调用失败；其他页面仍可使用。
+.env 中的 LOCAL_LLM_URL 默认设为 http://host.docker.internal:11434/api/chat，OLLAMA_MODEL 默认设为 `qwen2.5-coder:7b-instruct-q4_K_M`。错因分析与 AI 聊天共用此模型配置。Docker 后端通过 host.docker.internal 访问 Windows 上的 Ollama。修改配置后运行 `docker compose up -d --build --no-deps backend`。若模型服务未运行，AI 聊天会显示调用失败；其他页面仍可使用。
+
+### 体验编辑页 AI 错因分析
+
+登录后在任意已解锁关卡输入 `print(message)`，点击“运行”或“提交判题”。运行报错后自动分析本次输入；提交失败时先显示判题结果，再自动生成分析。点击编辑器旁的“查看错因分析”查看原因、真实执行证据和相关知识点。“我的错题”复习编辑器也显示运行报错分析。运行成功不判断答案是否符合题目，正式判题仍使用“提交判题”。
+
+错因由真实模型根据当前代码、实际输入、公开输出或异常生成。所有题目共用同一诊断服务，分析不混入历史提交；未来题库题目只需注册为标准题目并复用运行、提交接口。抽题功能本身尚未实现。
+
+关卡编辑器运行出错时先显示真实执行结果，再等待 AI 分析，模型分析期限为 90 秒；等待期间“提交判题”旁显示“Ottly正在分析错因”。不会再次执行代码，也不会把运行写入错题本或通关记录。模型不可用或分析未通过检查时保留真实执行结果，并明确标记基础提示或分析不可用；语法错误还可依据解释器报错提供基础说明。模型仍可能误判，`ready` 不代表语义必然正确。
+
+所有错因分析入口（关卡、错题重练及历史记录）仅展示错因、分析依据和相关知识点，直接展开分析详情；不再展示 AI 学习提示、三级提示及查看提示按钮。后端历史数据及提示接口保留兼容。
+
+错因消息入口和展开窗口固定在关卡视图右上角，页面滚动后仍可查看；每条新消息到达时入口强调两秒，随后恢复常态。通关后“前往下一关”位于“提交判题”右侧，最后一关不显示下一关按钮。
+
+分析向模型提供字符差异、逐行是否匹配及本次诊断范围，避免把正确输出也当成错误。全关卡及运行错误的真实接口记录见 [全局分析验收](docs/live-global-analysis.json)，可用 `python backend/tests/live_global_analysis.py` 重新执行；自动检查来源与接口，语义仍须逐项人工核对。旧降级结果不会自动重算，请刷新页面并重新提交。通关复盘、参考解和下一关入口位于右侧编辑器的判题结果下方。
+
+本轮人工复核仍发现边界条件、最大值更新等语义误判，同模型审核未全部拦截。逐项问题和可确认的接入范围见 [全局分析验收说明](docs/global-analysis-validation.md)。
 
 ## 当前边界
 
 本演示只监听本机 127.0.0.1:3000。运行与提交接口要求登录，复用原沙箱，在短生命周期子进程中执行；提交限 6000 字符、每用例 3 秒、输出上限 8000 字符。超时会终止执行进程，并明确标记输出未采集。此举解决卡死与输出串扰，并不构成针对恶意代码的操作系统安全隔离；目前只供团队本机演示。
 
-12 关已统一为第 2 关的完整学习页面：情境、知识讲解、任务、样例、代码编辑、运行输入输出、三级提示、判题与学习记录，以及通关后查看参考解。第 1 关无需输入；第 2～12 关使用受控输入及公开、隐藏多测试。失败优先使用原有模型分析；模型不可用或分析不合格时，活跃关卡提供有来源标识的基础提示。逐关通过后解锁下一关，第 12 关通关后显示课程完成。第 11 关检查列表、for 及常见最大值和排序函数限制，第 12 关额外检查函数重复调用、整数返回值与输入列表不变。旧 `level2` 循环题保留供历史复习，不计为新版第 2 关通关。本轮新增内容与验收见 [12 关接入与验收](docs/07-12关接入与验收.md)。
+12 关已统一为第 2 关的完整学习页面：情境、知识讲解、任务、样例、代码编辑、运行输入输出、错因分析、判题与学习记录，以及通关后查看参考解。第 1 关无需输入；第 2～12 关使用受控输入及公开、隐藏多测试。失败优先使用原有模型分析；模型不可用或分析不合格时，活跃关卡提供有来源标识的基础错因分析。逐关通过后解锁下一关，第 12 关通关后显示课程完成。第 11 关检查列表、for 及常见最大值和排序函数限制，第 12 关额外检查函数重复调用、整数返回值与输入列表不变。旧 `level2` 循环题保留供历史复习，不计为新版第 2 关通关。本轮新增内容与验收见 [12 关接入与验收](docs/07-12关接入与验收.md)。
 
 设置页面的护眼模式和语言暂存在当前浏览器，昵称按钮尚未保存到账号；逐步回放与 AI 出题尚未接入。.env、Docker 命名卷和 AI 模型服务不在 Git 仓库内。第 2 关的内容位置和验收步骤见 [第 2 关接入与验收](docs/04-第2关接入与验收.md)。
 
-学习接口采用 schema_version=1.0.0，题库校验知识点、难度、题目版本和前置引用；解锁由 prerequisite_problem_ids 决定。提交保存元数据快照，提供规范英文错误码和 failed_tests；历史记录缺失的元数据不推断。模型调用和提示生成流程保持原样，分析知识点编号由后端精确映射。队友对接见 [实施契约](docs/05-契约v1实施与迁移.md) 与 [响应样例](docs/contract-v1-examples.json)。
+学习接口采用 schema_version=1.0.0，题库校验知识点、难度、题目版本和前置引用；解锁由 prerequisite_problem_ids 决定。提交保存元数据快照，提供规范英文错误码和 failed_tests；历史记录缺失的元数据不推断。分析知识点编号由后端精确映射。队友对接见 [实施契约](docs/05-契约v1实施与迁移.md) 与 [响应样例](docs/contract-v1-examples.json)。
 
-详细接口、文件职责、三种错误示例、错误处理和测试步骤见 [提交判题与三级提示说明](docs/submission-flow.md)。真实模型验收数据见 [live-submission.json](docs/live-submission.json)。
+旧版接口、文件职责、三种错误示例、错误处理和测试步骤见 [提交判题与提示接口说明](docs/submission-flow.md)。真实模型验收数据见 [live-submission.json](docs/live-submission.json)。
 
 ## 开发检查
 

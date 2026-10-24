@@ -22,7 +22,7 @@ services:
       DATABASE_URL: mysql+pymysql://ottly:${DB_PASSWORD:?Set DB_PASSWORD}@db:3306/ai_coding_platform
       JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET}
       LOCAL_LLM_URL: ${LOCAL_LLM_URL:-}
-      OLLAMA_MODEL: ${OLLAMA_MODEL:-qwen2.5-coder:3b-instruct}
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-qwen2.5-coder:7b-instruct-q4_K_M}
     depends_on:
       db:
         condition: service_healthy

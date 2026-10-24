@@ -128,14 +128,13 @@ def test_wrong_answer_fallback_checks_one_accumulation_step():
     "int sum = 0\nfor i in range(1,100):\n    sum += i\nprint(sum)",
     "for i in range(1, 101)\n    print(i)",
 ])
-def test_syntax_error_uses_fast_grounded_hints_without_model(client, monkeypatch, code):
+def test_offline_syntax_error_keeps_grounded_compiler_hints(client, monkeypatch, code):
     from app.services import error_analysis
 
-    monkeypatch.setattr(error_analysis, "LOCAL_LLM_URL", "http://ollama.test/api/chat")
+    monkeypatch.setattr(error_analysis, "LOCAL_LLM_URL", "")
     monkeypatch.setattr(error_analysis.httpx, "AsyncClient",
                         lambda **kwargs: pytest.fail("Syntax errors must not call Ollama"))
-    data = client.post("/api/v1/code/submit", headers=login(client),
-                       json={"problem_id": "level2", "code": code}).json()["data"]
+    data = submit_and_analyze(client, login(client), json={"problem_id": "level2", "code": code})
     assert data["judge"]["status"] == "execution_error"
     assert data["judge"]["cases"][0]["errors"][0]["type"] == "SYNTAX_ERROR"
     analysis = data["analysis"]
@@ -191,7 +190,7 @@ def test_unknown_model_tag_is_downgraded_to_other(client, monkeypatch):
     assert result['analysis']['content']['misconception_tag'] == 'other'
 
 
-def test_related_history_reaches_model_as_summary_and_status_is_saved(client, monkeypatch):
+def test_diagnosis_ignores_related_history_and_saves_current_status(client, monkeypatch):
     drafts = []
 
     def handler(request):
@@ -204,12 +203,9 @@ def test_related_history_reaches_model_as_summary_and_status_is_saved(client, mo
     first = submit_and_analyze(client, headers, json={'problem_id': 'level2', 'code': OVERWRITE})
     assert first['analysis']['personalization'] == {'used': False, 'related_history_count': 0}
     second = submit_and_analyze(client, headers, json={'problem_id': 'level2', 'code': OVERWRITE})
-    assert second['analysis']['personalization'] == {'used': True, 'related_history_count': 1}
+    assert second['analysis']['personalization'] == {'used': False, 'related_history_count': 0}
     history = drafts[1]['related_history']
-    assert len(history) == 1
-    assert history[0]['misconception_tag'] == 'accumulation_error'
-    assert history[0]['knowledge_ids'] == ['K08']
-    assert history[0]['problem_id'] == 'level2'
+    assert history == []
     assert OVERWRITE not in json.dumps(history)
     assert 'analysis_json' not in json.dumps(history)
     path = f"/api/v1/code/submissions/{second['submission_id']}/analysis"
@@ -247,7 +243,7 @@ def test_current_name_error_cannot_inherit_a_past_range_tag(client, monkeypatch,
     first = submit_and_analyze(client, headers, json={'problem_id': 'level2', 'code': range_code})
     assert first['analysis']['content']['misconception_tag'] == 'range_boundary'
     second = submit_and_analyze(client, headers, json={'problem_id': 'level2', 'code': 'print(missing_total)'})
-    assert observed[1]['related_history'][0]['misconception_tag'] == 'range_boundary'
+    assert observed[1]['related_history'] == []
     assert second['judge']['status'] == 'execution_error'
     assert second['analysis']['content']['misconception_tag'] == expected_tag
 
@@ -360,6 +356,53 @@ def test_greeting_undefined_username_uses_public_error_for_variable_tag(client, 
                for case in result['judge']['cases'] if case['visibility'] == 'hidden')
 
 
+@pytest.mark.parametrize('weak_hint', [False, True])
+def test_greeting_missing_punctuation_sends_public_input_to_generation_and_review(client, monkeypatch, weak_hint):
+    observed = []
+
+    def draft(request):
+        facts = model_facts(json.loads(request.content))
+        observed.append(facts)
+        content = sample_analysis()
+        content.update(misconception_tag='other', suspected_cause='疑似问候语末尾缺少感叹号。',
+                       knowledge_points=['字符串拼接与输出格式'])
+        content['evidence'][0].update(case_id='sample-1', quote='Hello, Ottly',
+                                     explanation='输出语句连接了问候前缀和姓名，但末尾没有题目要求的标点。')
+        content['hints'].update(level2='检查输出语句中前缀、姓名和末尾标点的连接方式。',
+                                level3='逐字对照实际输出和样例，记录末尾缺少的标点，再修改并运行。')
+        if weak_hint:
+            content['hints']['level3'] = '检查格式是否正确。'
+        return httpx.Response(200, json={'done': True, 'message': {'content': json.dumps(content)}})
+
+    def review(request):
+        observed.append(json.loads(request.content)['messages'][-1]['content'])
+        return httpx.Response(200, json={'done': True, 'message': {
+            'content': json.dumps({'tag_supported': True, 'issues': []})}})
+
+    mock_model(monkeypatch, draft, review)
+    headers = login(client)
+    assert client.post('/api/v1/code/submit', headers=headers, json={
+        'problem_id': 'level1', 'code': 'print("Hello, World!")',
+    }).json()['data']['judge']['passed']
+    code = '# 读取朋友的姓名，再输出问候语\nfriend=input()\nprint("Hello, "+friend)'
+    result = submit_and_analyze(client, headers, json={'problem_id': 'greeting-v1', 'code': code})
+    assert result['analysis']['source'] == 'ai'
+    assert '感叹号' in result['analysis']['content']['suspected_cause']
+    # The second attempt has related AI history, but formatting analysis must
+    # still see only current facts rather than copying a previous diagnosis.
+    again = submit_and_analyze(client, headers, json={'problem_id': 'greeting-v1', 'code': code})
+    assert again['analysis']['source'] == 'ai'
+    assert again['analysis']['personalization'] == {'used': False, 'related_history_count': 0}
+    for facts in (json.loads(item) if isinstance(item, str) else item for item in observed):
+        assert facts['judge_status'] == 'wrong_answer'
+        assert facts['related_history'] == []
+        assert len(facts['failed_cases']) == 1
+        case = facts['failed_cases'][0]
+        assert case['case_id'] == 'sample-1'
+        assert case['stdin'] == 'Ottly\n'
+        assert case['output_differences'] == [{'actual': '', 'expected': '!'}]
+
+
 def mock_model(monkeypatch, handler, review_handler=None):
     from app.services import error_analysis
     factory = httpx.AsyncClient
@@ -371,7 +414,20 @@ def mock_model(monkeypatch, handler, review_handler=None):
                 "done": True, "message": {"content": json.dumps({"issues": [], "tag_supported": True})}})
         else:
             result = handler(request)
-        return await result if asyncio.iscoroutine(result) else result
+        result = await result if asyncio.iscoroutine(result) else result
+        # Public response fixtures include trusted hints; the model now returns
+        # only the diagnosis draft, and the service supplies reviewed hints.
+        if payload.get('format', {}).get('title') == 'DiagnosisDraft':
+            try:
+                body = result.json()
+                draft = json.loads(body['message']['content'])
+                draft.pop('hints', None)
+                draft.setdefault('code_observation', '核对本次代码及公开执行结果。')
+                body['message']['content'] = json.dumps(draft)
+                return httpx.Response(result.status_code, json=body)
+            except (ValueError, KeyError, TypeError, AttributeError):
+                pass
+        return result
 
     monkeypatch.setattr(error_analysis.httpx, "AsyncClient", lambda **kwargs: factory(transport=httpx.MockTransport(dispatch), **kwargs))
 
@@ -410,7 +466,7 @@ def test_three_error_types_return_real_judge_evidence_before_ai(client, monkeypa
         assert public_case['actual_output'] == evidence
     else:
         assert evidence in json.dumps(public_case, ensure_ascii=False)
-    assert data['analysis']['status'] == ('ready' if evidence == 'SYNTAX_ERROR' else 'preparing')
+    assert data['analysis']['status'] == 'preparing'
 
 
 def test_model_timings_are_saved_and_repeat_analysis_does_not_recall_model(client, monkeypatch):
@@ -445,6 +501,68 @@ def test_model_timings_are_saved_and_repeat_analysis_does_not_recall_model(clien
     assert history['analysis']['timings'] == second['timings']
 
 
+@pytest.mark.parametrize('other_issue,expected_status', [
+    (None, 'ready'),
+    ('unsupported_claim', 'invalid_response'),
+    ('answer_leak', 'invalid_response'),
+])
+def test_review_cannot_reject_server_owned_opening_question(client, monkeypatch, other_issue, expected_status):
+    from app.services.error_analysis import opening_question
+    from app.services.submission import PROBLEMS, judge_submission
+
+    def draft(request):
+        return httpx.Response(200, json={'done': True, 'message': {'content': json.dumps(sample_analysis())}})
+
+    def review(request):
+        issues = [{'code': 'level1_leak', 'reason': '误判服务端概念问题'}]
+        if other_issue:
+            issues.append({'code': other_issue, 'reason': '其他分析内容仍需拦截'})
+        return httpx.Response(200, json={'done': True, 'message': {
+            'content': json.dumps({'issues': issues, 'tag_supported': True})}})
+
+    mock_model(monkeypatch, draft, review)
+    data = submit_and_analyze(client, login(client), json={'problem_id': 'level2', 'code': OVERWRITE})
+    assert data['analysis']['status'] == expected_status
+    assert data['judge']['status'] == 'wrong_answer'
+    if expected_status == 'ready':
+        problem = PROBLEMS['level2']
+        assert data['analysis']['content']['hints']['level1'] == opening_question(
+            problem, judge_submission(problem, OVERWRITE))
+        assert data['analysis']['content']['suspected_cause'] == sample_analysis()['suspected_cause']
+
+
+@pytest.mark.parametrize('issue_codes,expected_status', [
+    (['weak_level2'], 'ready'),
+    (['weak_level3', 'repetition'], 'ready'),
+    (['weak_level2', 'unsupported_claim'], 'invalid_response'),
+    (['weak_level3', 'answer_leak'], 'invalid_response'),
+])
+def test_review_of_weak_hints_keeps_grounded_diagnosis(client, monkeypatch, issue_codes, expected_status):
+    from app.services.error_analysis import safe_hints
+    from app.services.submission import PROBLEMS, judge_submission
+
+    def draft(request):
+        return httpx.Response(200, json={'done': True, 'message': {'content': json.dumps(sample_analysis())}})
+
+    def review(request):
+        return httpx.Response(200, json={'done': True, 'message': {'content': json.dumps({
+            'tag_supported': True,
+            'issues': [{'code': code, 'reason': '审核发现问题'} for code in issue_codes],
+        })}})
+
+    mock_model(monkeypatch, draft, review)
+    data = submit_and_analyze(client, login(client), json={'problem_id': 'level2', 'code': OVERWRITE})
+    assert data['analysis']['status'] == expected_status
+    if expected_status == 'ready':
+        content = data['analysis']['content']
+        assert data['analysis']['source'] == 'ai'
+        assert content['suspected_cause'] == sample_analysis()['suspected_cause']
+        assert content['evidence'][0]['quote'] == '100'
+        hints = safe_hints(PROBLEMS['level2'], judge_submission(PROBLEMS['level2'], OVERWRITE))
+        assert content['hints'] == hints.model_dump()
+        assert '基础提示' in data['analysis']['message']
+
+
 def test_analysis_can_resume_older_record_without_saved_analysis(client, monkeypatch):
     from main import app
     from app.api import coding
@@ -472,7 +590,7 @@ def test_analysis_can_resume_older_record_without_saved_analysis(client, monkeyp
     assert response.json()['data']['analysis']['status'] == 'unavailable'
 
 
-def test_unhelpful_second_hint_uses_reviewed_fallback(client, monkeypatch):
+def test_model_generates_only_diagnosis_and_service_supplies_reviewed_hints(client, monkeypatch):
     calls = []
 
     def handler(request):
@@ -488,8 +606,8 @@ def test_unhelpful_second_hint_uses_reviewed_fallback(client, monkeypatch):
     assert len(calls) == 1
     assert "前两轮" in data["analysis"]["content"]["hints"]["level3"]
     assert "基础提示" in data["analysis"]["message"]
-    # Avoid the Ollama 0.40.3 grammar failure; keep the question check in Pydantic.
-    assert calls[0]["format"]["$defs"]["Hints"]["properties"]["level1"]["pattern"].endswith("*$")
+    assert 'hints' not in calls[0]['format']['properties']
+    assert 'Hints' not in calls[0]['format']['$defs']
 
 
 def test_invalid_analysis_is_not_retried(client, monkeypatch):
@@ -657,9 +775,9 @@ def test_analysis_failure_preserves_judging(client, monkeypatch, failure, expect
         if failure == "invented_evidence":
             content["evidence"][0]["quote"] = "99999"
         if failure == "solution":
-            content["hints"]["level3"] = "```python\n" + CORRECT + "\n```"
+            content["suspected_cause"] = "```python\n" + CORRECT + "\n```"
         if failure == "wrong_schema":
-            content.pop("hints")
+            content.pop("suspected_cause")
         if failure == "false_pass":
             content["suspected_cause"] = "判题已经通过所有测试。"
         return httpx.Response(200, json={"done": True, "done_reason": "length" if failure == "truncated" else "stop",
@@ -689,7 +807,57 @@ def test_request_preserves_student_indentation():
     assert SubmissionRequest(problem_id="level1", code=code).code == code
 
 
-def test_teaching_fields_are_prose_only_even_when_student_code_is_quoted(client, monkeypatch):
+def test_output_analysis_receives_verdict_and_real_character_differences(client, monkeypatch):
+    observed = []
+
+    def draft(request):
+        facts = model_facts(json.loads(request.content))
+        observed.append(facts)
+        content = sample_analysis()
+        content.update(misconception_tag='other', suspected_cause='疑似输出文本的大小写和标点不符合要求。')
+        content['evidence'][0].update(quote='Hello, world', explanation='实际输出与题目要求的文本不同。')
+        return httpx.Response(200, json={'done': True, 'message': {'content': json.dumps(content)}})
+
+    mock_model(monkeypatch, draft)
+    code = '# 请让 Ottly 说出她的第一句话\nprint("Hello, world")'
+    result = submit_and_analyze(client, login(client), json={'problem_id': 'level1', 'code': code})
+    assert result['analysis']['status'] == 'ready'
+    assert result['analysis']['source'] == 'ai'
+    assert observed[0]['student_code'] == code
+    assert observed[0]['judge_status'] == 'wrong_answer'
+    assert observed[0]['failed_cases'][0]['errors'] == []
+    assert observed[0]['failed_cases'][0]['output_differences'] == [
+        {'actual': 'w', 'expected': 'W'}, {'actual': '', 'expected': '!'},
+    ]
+
+
+@pytest.mark.parametrize('comparison,actual,expected_diff', [
+    ('legacy_trim', '  Hello, World!\r\n', []),
+    ('exact', 'Hello, World!\r\n', [{'actual': '\n', 'expected': ''}]),
+])
+def test_output_differences_follow_judge_whitespace_rules(comparison, actual, expected_diff):
+    from app.services.error_analysis import output_differences
+    from app.services.submission import CaseResult, PROBLEMS
+    case = CaseResult(case_id='stdout-1', passed=False, expected_output='Hello, World!',
+                      actual_output=actual, errors=[], execution_time=0)
+    problem = PROBLEMS['level1'].model_copy(update={'comparison': comparison})
+    assert output_differences(problem, case) == expected_diff
+
+
+@pytest.mark.parametrize('updates', [
+    {'visibility': 'hidden'}, {'output_available': False}, {'passed': True},
+    {'errors': [{'type': 'NameError', 'message': 'missing name'}]},
+    {'actual_output': 'x' * 1001},
+])
+def test_output_differences_exclude_private_missing_or_error_results(updates):
+    from app.services.error_analysis import output_differences
+    from app.services.submission import CaseResult, PROBLEMS
+    case = CaseResult.model_validate(dict(case_id='stdout-1', passed=False, expected_output='Hello, World!',
+                                         actual_output='Hello, world', errors=[], execution_time=0) | updates)
+    assert output_differences(PROBLEMS['level1'], case) == []
+
+
+def test_diagnosis_can_quote_the_students_existing_expression(client, monkeypatch):
     def handler(request):
         facts = model_facts(json.loads(request.content))
         content = sample_analysis()
@@ -698,7 +866,7 @@ def test_teaching_fields_are_prose_only_even_when_student_code_is_quoted(client,
         return httpx.Response(200, json={"done": True, "message": {"content": json.dumps(content)}})
     mock_model(monkeypatch, handler)
     data = submit_and_analyze(client, login(client), json={"problem_id": "level2", "code": "print(missing_total)"})
-    assert data["analysis"]["status"] == "invalid_response"
+    assert data["analysis"]["status"] == "ready"
 
 
 @pytest.mark.parametrize("code,quote", [("total = 0", ""), ("print('x' * 1001)", "x" * 1000),

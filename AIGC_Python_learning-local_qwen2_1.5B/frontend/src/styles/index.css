@@ -449,6 +449,64 @@ body.eye-protection {
 .code-dot.yellow { background: #ffbd2e; }
 .code-dot.green { background: #27c93f; }
 
+.ottly-notification {
+  position: fixed; top: 24px; right: max(clamp(18px, 3vw, 42px), calc((100vw - 1558px) / 2 + 42px));
+  z-index: 40; min-width: 0; max-width: calc(100vw - 270px);
+}
+.ottly-diagnosis { position: relative; }
+.ottly-diagnosis-trigger {
+  display: flex; align-items: center; gap: 9px; padding: 5px 10px 5px 5px;
+  border-radius: 30px; background: #e5f6fc; color: #193c50; cursor: pointer;
+  list-style: none; font-size: 14px; line-height: 1.4;
+  border: 1px solid #a8d3e5; box-shadow: 0 6px 20px #193c5026;
+  animation: ottly-message-arrival 2s ease-out 1;
+}
+.ottly-diagnosis-trigger::-webkit-details-marker { display: none; }
+.ottly-diagnosis-trigger:hover { background: #cceef9; }
+.ottly-diagnosis-trigger:focus-visible { outline: 3px solid #ffcb66; outline-offset: 3px; }
+.ottly-diagnosis-trigger img, .ottly-message-heading img {
+  width: 44px; height: 44px; flex-shrink: 0; object-fit: cover; border-radius: 50%;
+}
+.ottly-diagnosis-trigger span, .ottly-message-heading div { display: grid; gap: 2px; }
+.ottly-diagnosis-trigger small { font-size: 11px; color: #456477; }
+.ottly-diagnosis-chat {
+  position: absolute; z-index: 10; top: calc(100% + 12px); right: 0;
+  width: min(440px, calc(100vw - 290px)); max-height: min(620px, calc(100dvh - 112px));
+  overflow-y: auto; overscroll-behavior: contain; padding: 16px;
+  border: 1px solid #b5dae9; border-radius: 18px; background: #f1faff;
+  box-shadow: 0 12px 32px #193c5033; color: #193c50;
+}
+.ottly-message-heading { display: flex; gap: 10px; align-items: center; }
+.ottly-message-heading small { font-size: 12px; }
+.ottly-message-heading button {
+  margin-left: auto; align-self: flex-start; border: 0; border-radius: 50%;
+  background: transparent; color: #193c50; min-width: 32px; min-height: 32px;
+  font-size: 24px; cursor: pointer;
+}
+.ottly-diagnosis-chat .submission-feedback { margin: 12px 0 0; padding: 14px; background: white; }
+.ottly-diagnosis-chat .ai-feedback > h4 { margin-top: 0; }
+
+@keyframes ottly-message-arrival {
+  0%, 45% { background: #fff1c7; box-shadow: 0 0 0 7px #ffcb6666, 0 8px 24px #193c5033; transform: translateY(-3px); }
+  25%, 70% { transform: translateY(0); }
+  100% { background: #e5f6fc; box-shadow: 0 6px 20px #193c5026; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ottly-diagnosis-trigger { animation-name: ottly-message-highlight; }
+}
+@keyframes ottly-message-highlight { from { background: #fff1c7; } to { background: #e5f6fc; } }
+@media (max-width: 760px) {
+  .ottly-notification { top: 112px; right: 12px; max-width: calc(100vw - 24px); }
+  .ottly-diagnosis-chat { width: min(440px, calc(100vw - 24px)); max-height: calc(100dvh - 195px); }
+}
+
+@media (max-width: 480px) {
+  .code-header-bar .code-file-label { display: none; }
+  .ottly-diagnosis-trigger { gap: 6px; font-size: 12px; }
+  .ottly-diagnosis-trigger img { width: 36px; height: 36px; }
+  .ottly-diagnosis-chat { padding: 10px; }
+}
+
 .code-editor-box {
   background: #2d2d2d;
   border-radius: 0 0 8px 8px;
@@ -744,7 +802,6 @@ body.eye-protection {
 .judge-output-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 8px; }
 .submission-feedback pre { margin: 4px 0; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 13px; }
 .analysis-status { color: #596d7a; font-size: 13px; }
-.hint-card { border-left: 3px solid #4a90e2; background: #eff6ff; margin: 12px 0; padding: 10px 12px; border-radius: 4px; }
 .btn-hint { border: 1px solid #357abd; background: #fff; color: #2468a9; padding: 8px 14px; border-radius: 8px; cursor: pointer; }
 .btn-hint:hover { background: #eff6ff; }
 .btn-hint:focus-visible, .analysis-details summary:focus-visible { outline: 3px solid #83b9ed; outline-offset: 3px; }
@@ -1024,6 +1081,10 @@ button:disabled { cursor: not-allowed; }
 .btn-run:hover:not(:disabled) { background: #def1fa; box-shadow: none; transform: none; }
 .btn-submit { border: 1px solid #176caa; background: #176caa; color: #fff; box-shadow: 0 6px 13px rgba(23, 108, 170, .16); }
 .btn-submit:hover:not(:disabled) { background: #115884; box-shadow: 0 8px 16px rgba(23, 108, 170, .2); transform: none; }
+.btn-next-level { border: 1px solid #80b6a6; background: #eaf7f1; color: #256651; }
+.btn-next-level:hover:not(:disabled) { background: #d9eee4; }
+.ottly-analysis-pending { display: inline-flex; align-items: center; gap: 7px; color: #456477; font-size: 13px; }
+.ottly-analysis-pending > span { width: 8px; height: 8px; border-radius: 50%; background: #2996bd; box-shadow: 0 0 0 4px #e4f5fb; }
 .code-buttons button:active:not(:disabled) { transform: scale(.96); }
 .code-action-note { text-align: left; }
 .otter-footer { position: fixed; right: clamp(14px, 2vw, 30px); bottom: max(14px, env(safe-area-inset-bottom)); z-index: 50; display: block; width: auto; padding: 0; background: transparent; }
@@ -1052,6 +1113,7 @@ button:disabled { cursor: not-allowed; }
   .code-editor-box { height: 240px; }
   .code-buttons { display: grid; grid-template-columns: 1fr 1fr; }
   .code-buttons button { min-width: 0; padding: 8px; }
+  .code-buttons .btn-next-level, .ottly-analysis-pending { grid-column: 1 / -1; }
   .otter-footer { right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); }
   .otter-help { width: 58px; height: 58px; min-height: 0; justify-content: center; padding: 5px; border-radius: 50%; }
   .otter-help img { width: 46px; height: 46px; }

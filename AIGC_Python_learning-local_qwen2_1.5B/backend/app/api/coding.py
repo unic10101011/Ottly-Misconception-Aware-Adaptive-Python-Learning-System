@@ -1,7 +1,9 @@
 import logging
+import json
 from time import perf_counter
 
 from fastapi import APIRouter, Depends, Header, HTTPException, Query
+from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
 from starlette.concurrency import run_in_threadpool
 from app.core.auth import get_current_user
@@ -11,11 +13,11 @@ from app.models.learning_review import LearningReview
 from app.models.user import User
 from pydantic import BaseModel, Field
 from app.services.sandbox.runner import run_code_process
-from app.services.submission import PROBLEMS, JudgeResult, SubmissionRequest, judge_submission, public_judge
-from app.services.error_analysis import AnalysisResult, analyze_failure, fixed_syntax_analysis
+from app.services.submission import CaseResult, PROBLEMS, JudgeResult, SubmissionRequest, judge_submission, public_judge
+from app.services.error_analysis import AnalysisResult, analyze_failure
 from app.services.lesson_feedback import with_lesson_hints
 from app.services.personalized_history import select_related_history
-from app.services.problem_catalog import SCHEMA_VERSION, LEVELS, KNOWLEDGE
+from app.services.problem_catalog import SCHEMA_VERSION, LEVELS, KNOWLEDGE, Problem, TestCase
 from app.services.learning_contract import (
     ContractJudge, ContractAnalysis, contract_judge, contract_analysis,
     submission_error, analysis_knowledge_scope, error_code, history_analysis, utc_iso,
@@ -29,6 +31,7 @@ class CodeRunRequest(BaseModel):
     code: str = Field(..., min_length=1, max_length=20000, description="Python code to execute")
     timeout: int = Field(default=10, ge=1, le=10, description="Execution timeout in seconds")
     stdin: str = Field(default='', max_length=8000)
+    problem_id: str | None = Field(default=None, max_length=100)
 
 
 class CodeRunResponse(BaseModel):
@@ -39,22 +42,57 @@ class CodeRunResponse(BaseModel):
 
 
 @router.post("/code/run")
-def execute_code(request: CodeRunRequest):
-    result = run_code_process(request.code, timeout=request.timeout, stdin=request.stdin)
+async def execute_code(request: CodeRunRequest, current_user: User = Depends(get_current_user),
+                       db: Session = Depends(get_db), stream_analysis: bool = False):
+    lesson = (require_lesson(request.problem_id, passed_problem_ids(db, current_user.id))
+              if request.problem_id else None)
+    result = await run_in_threadpool(run_code_process, request.code, timeout=request.timeout, stdin=request.stdin)
     if any(error['type'] == 'RunnerError' for error in result['errors']):
         raise HTTPException(status_code=503, detail='执行器暂不可用，请稍后重试')
 
-    return CodeRunResponse(
-        code=200,
-        msg="执行成功" if result["success"] else "代码有错误",
-        data={
+    data = {
             "success": result["success"],
             "output": result["output"],
             "output_available": result["output_available"],
             "errors": [{**error, 'type': error_code(error['type'], code=request.code)} for error in result['errors']],
             "execution_time": result["execution_time"],
-        },
-    )
+    }
+    if not result['success']:
+        # Analyze this actual execution once, without creating a submission.
+        test = TestCase(case_id='run', stdin=request.stdin, expected_output='')
+        problem = (lesson.execution_problem().model_copy(update={'tests': [test]}) if lesson else Problem(
+            problem_id='python-run', title='Python 代码运行', description='解释当前输入下的实际运行错误。',
+            tests=[test], comparison='exact'))
+        judge = JudgeResult(
+            status='timeout' if any(error['type'] == '超时警告' for error in result['errors']) else 'execution_error',
+            passed=False, passed_cases=0, total_cases=1,
+            cases=[CaseResult(case_id='run', passed=False, expected_output='', actual_output=result['output'],
+                              output_available=result['output_available'], errors=result['errors'],
+                              execution_time=result['execution_time'])],
+        )
+        data['judge'] = contract_judge(judge, code=request.code).model_dump(mode='json')
+        scope = analysis_knowledge_scope(lesson) if lesson else []
+
+        async def finish_analysis():
+            try:
+                analysis = await analyze_failure(problem, request.code, judge, execution_mode='run')
+            except Exception:
+                logger.exception('Run analysis failed; execution result remains available')
+                analysis = AnalysisResult(status='unavailable', message='AI 分析暂不可用，运行结果已保留。')
+            data['analysis'] = contract_analysis(analysis, scope).model_dump(mode='json')
+
+        if stream_analysis:
+            async def progress():
+                data['analysis'] = contract_analysis(AnalysisResult(status='preparing', message='Ottly正在分析错因'), scope).model_dump(mode='json')
+                yield json.dumps({'code': 200, 'data': data}, ensure_ascii=False) + '\n'
+                await finish_analysis()
+                yield json.dumps({'code': 200, 'data': data}, ensure_ascii=False) + '\n'
+
+            return StreamingResponse(progress(), media_type='application/x-ndjson', headers={
+                'X-Accel-Buffering': 'no', 'Cache-Control': 'no-store',
+            })
+        await finish_analysis()
+    return CodeRunResponse(msg="执行成功" if result["success"] else "代码有错误", data=data)
 
 
 class SubmissionData(BaseModel):
@@ -203,8 +241,7 @@ async def submit_code(request: SubmissionRequest, current_user: User = Depends(g
     model_judge = public_judge(judge)
     judge = contract_judge(model_judge, code=request.code)
     raw_analysis = (AnalysisResult(status='skipped', message='测试已通过，无需 AI 分析。') if judge.passed
-                    else fixed_syntax_analysis(problem.execution_problem(), request.code, model_judge)
-                    or AnalysisResult(status='preparing', message='正在准备提示'))
+                    else AnalysisResult(status='preparing', message='正在准备提示'))
     analysis = contract_analysis(raw_analysis, analysis_knowledge_scope(problem))
     timings = {'judge_ms': judge_ms, 'model_load_ms': 0.0, 'hint_generation_ms': 0.0}
     analysis.timings = timings

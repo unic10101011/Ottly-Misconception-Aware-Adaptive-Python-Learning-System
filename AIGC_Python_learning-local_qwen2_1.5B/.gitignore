@@ -49,6 +49,7 @@ desktop.ini
 
 # Testing
 .pytest_cache/
+.pytest_tmp*/
 .coverage
 htmlcov/
 
@@ -56,3 +57,12 @@ htmlcov/
 *.egg-info/
 .tox/
 .cache/
+
+# Local AI experiments and intermediate reports (keep files on this machine)
+/experiments/
+/backend/tests/live_two_stage_diagnosis*
+/backend/tests/data/two_stage_diagnosis_cases.json
+/backend/tests/data/build_diagnosis_dataset_50.py
+/backend/tests/data/diagnosis_cases_50*
+/docs/two-stage-diagnosis-experiment.md
+/docs/live-ai-*.json

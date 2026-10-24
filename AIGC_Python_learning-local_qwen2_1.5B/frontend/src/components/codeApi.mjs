@@ -5,11 +5,12 @@ export async function requestCode(action, payload, token, options = {}) {
     throw error
   }
   const controller = new AbortController()
-  const timeout = setTimeout(() => controller.abort(), action === 'submit' ? 180000 : 30000)
+  const timeout = setTimeout(() => controller.abort(), ['submit', 'run'].includes(action) ? 180000 : 30000)
   try {
     let response
     try {
-      response = await fetch(`/api/v1/code/${action}`, {
+      const stream = action === 'run' && options.onExecution
+      response = await fetch(`/api/v1/code/${action}${stream ? '?stream_analysis=true' : ''}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json', Authorization: `Bearer ${token}`,
@@ -30,6 +31,27 @@ export async function requestCode(action, payload, token, options = {}) {
     }
     let result
     try {
+      if (response.ok && response.headers.get('content-type')?.includes('application/x-ndjson')) {
+        const reader = response.body.getReader()
+        const decoder = new TextDecoder()
+        let buffer = ''
+        while (true) {
+          const { value, done } = await reader.read()
+          buffer += decoder.decode(value, { stream: !done })
+          const lines = buffer.split('\n')
+          buffer = lines.pop()
+          for (const line of lines) {
+            if (!line.trim()) continue
+            result = JSON.parse(line)
+            if (result.code !== 200 || !result.data) throw new Error('Invalid run result')
+            if (result.data.analysis?.status === 'preparing') options.onExecution?.(result.data)
+          }
+          if (done) break
+        }
+        if (!result || buffer.trim()) throw new Error('Incomplete run result')
+        if (result.data.analysis?.status === 'preparing') throw new Error('Incomplete analysis')
+        return result.data
+      }
       result = await response.json()
     } catch (error) {
       if (error.name === 'AbortError') throw new Error('请求超时，请稍后重试。')

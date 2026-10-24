@@ -61,6 +61,18 @@ function Lesson({ levelNo, userId, navigate }) {
     }
   }
 
+  const completionPanel = completed && <section className="lesson-complete" aria-label="通关复盘">
+    <h3>第 {levelNo} 关已通过，进度已保存</h3>
+    {next && <p>{next.published ? `可以继续挑战第 ${next.id} 关：${next.name}。` : `第 ${next.id} 关内容待开放。`}</p>}
+    {!next && levelNo === 12 && <p>恭喜完成全部 12 关！可以查看参考详解，或到学习记录复习。</p>}
+    {!solution && <button type="button" className="btn-hint" onClick={revealSolution} disabled={solutionBusy}>
+      {solutionBusy ? '正在加载...' : '查看参考解与解析'}
+    </button>}
+    {solutionError && <p role="alert">{solutionError}</p>}
+    {solution && <><pre>{solution.reference_solution}</pre><p style={{ whiteSpace: 'pre-wrap' }}>{solution.solution_explanation}</p></>}
+    <button type="button" className="btn-hint" onClick={() => navigate('/app/history')}>查看学习记录</button>
+  </section>
+
   return <div className="lesson-page">
     <button type="button" className="btn-hint" onClick={() => navigate('/app/levels')}>← 返回关卡选择</button>
     {error && <p role="alert">{error}</p>}
@@ -71,7 +83,9 @@ function Lesson({ levelNo, userId, navigate }) {
         sampleInput={lesson.examples[0]?.stdin || ''} onAccepted={() => setCompleted(true)}
         teaching={lesson.teaching.map(item => <section className="lesson-teaching" key={item.title}>
           <h4>{item.title}</h4><p>{item.text}</p><pre>{item.example}</pre>
-        </section>)}>
+        </section>)}
+        nextAction={completed && next?.published ? () => navigate(`/app/levels/${next.id}`) : undefined}
+        completionPanel={completionPanel}>
         <h3>情境</h3><p>{lesson.story}</p>
         {lessonIllustrations[levelNo] && <figure className="lesson-illustration">
           <img src={`/lesson-illustrations/${lessonIllustrations[levelNo]}`}
@@ -87,18 +101,6 @@ function Lesson({ levelNo, userId, navigate }) {
       <button type="button" className="btn-hint" onClick={() => navigate(`/app/practice?level_no=${levelNo}`)}>
         练习第 {levelNo} 关知识点
       </button>
-      {completed && <section className="lesson-complete" aria-label="通关复盘">
-        <h3>第 {levelNo} 关已通过，进度已保存</h3>
-        {next && <p>{next.published ? `可以继续挑战第 ${next.id} 关：${next.name}。` : `第 ${next.id} 关内容待开放。`}</p>}
-        {!next && levelNo === 12 && <p>恭喜完成全部 12 关！可以查看参考详解，或到学习记录复习。</p>}
-        {!solution && <button type="button" className="btn-hint" onClick={revealSolution} disabled={solutionBusy}>
-          {solutionBusy ? '正在加载...' : '查看参考解与解析'}
-        </button>}
-        {solutionError && <p role="alert">{solutionError}</p>}
-        {solution && <><pre>{solution.reference_solution}</pre><p style={{ whiteSpace: 'pre-wrap' }}>{solution.solution_explanation}</p></>}
-        {next?.published && <button type="button" className="btn-hint" onClick={() => navigate(`/app/levels/${next.id}`)}>进入第 {next.id} 关</button>}
-        <button type="button" className="btn-hint" onClick={() => navigate('/app/history')}>查看学习记录</button>
-      </section>}
     </>}
   </div>
 }

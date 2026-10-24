@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import SubmissionFeedback from './SubmissionFeedback.jsx'
-import { requestCode, requestAnalysis, saveHintView } from './codeApi.mjs'
+import { requestCode, requestAnalysis } from './codeApi.mjs'
 import { readCodeDraft, saveCodeDraft } from './codeDraft.mjs'
 
-function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, title, children, teaching, acceptsInput = false, persistentOutput = acceptsInput, sampleInput = '', allowReset = false }) {
+function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, title, children, teaching, completionPanel, nextAction, acceptsInput = false, persistentOutput = acceptsInput, sampleInput = '', allowReset = false }) {
   const navigate = useNavigate()
   const [code, setCode] = useState(() => readCodeDraft(userId, problemId)?.code ?? initialCode)
   const [stdin, setStdin] = useState(() => readCodeDraft(userId, problemId)?.stdin ?? sampleInput)
@@ -15,9 +15,6 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, tit
   const [running, setRunning] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [submission, setSubmission] = useState(null)
-  const [visibleHintCount, setVisibleHintCount] = useState(0)
-  const [hintBusy, setHintBusy] = useState(false)
-  const [hintError, setHintError] = useState('')
   const [authRequired, setAuthRequired] = useState(false)
   const [modal, setModal] = useState({ show: false, type: 'info', title: '', message: '' })
   const [lineCount, setLineCount] = useState(1)
@@ -31,11 +28,12 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, tit
   const particlesRef = useRef([])
   const cannonRef = useRef(null)
   const busyRef = useRef(false)
-  const hintBusyRef = useRef(false)
   const submissionRef = useRef(null)
   const mountedRef = useRef(false)
   const successTimerRef = useRef(null)
-  const busy = running || submitting || hintBusy
+  const busy = running || submitting
+  const diagnosisReady = submission && !submission.judge.passed && submission.analysis?.status === 'ready' && submission.analysis.content
+  const analysisPending = submission && !submission.judge.passed && submission.analysis?.status === 'preparing'
 
   // Update line numbers
   useEffect(() => {
@@ -50,14 +48,12 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, tit
   }
 
   const updateCode = (value) => {
-    if (busyRef.current || hintBusyRef.current) return
+    if (busyRef.current) return
     setCode(value)
     persistDraft(value, stdin)
     setRunOutput(null)
     setSubmission(null)
     submissionRef.current = null
-    setVisibleHintCount(0)
-    setHintError('')
     setOutputType('hidden')
     clearTimeout(successTimerRef.current)
   }
@@ -68,16 +64,20 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, tit
   }
 
   const updateInput = (value) => {
-    if (busyRef.current || hintBusyRef.current) return
+    if (busyRef.current) return
     setStdin(value)
     persistDraft(code, value)
     setOutputType('hidden')
     setRunOutput(null)
+    if (submissionRef.current?.origin === 'run') {
+      setSubmission(null)
+      submissionRef.current = null
+    }
   }
 
   // Tab key handler
   const handleKeyDown = (e) => {
-    if (busyRef.current || hintBusyRef.current) return
+    if (busyRef.current) return
     if (e.key === 'Tab') {
       e.preventDefault()
       const start = e.target.selectionStart
@@ -98,7 +98,7 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, tit
   }
 
   const runCode = async () => {
-    if (busyRef.current || hintBusyRef.current) return
+    if (busyRef.current) return
     const showRunOutput = (text, type) => {
       if (persistentOutput) {
         setRunOutput({ text, type })
@@ -116,12 +116,19 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, tit
     busyRef.current = true
     setRunning(true)
     setAuthRequired(false)
-    showRunOutput('代码正在执行，请稍候...', 'info')
+    setSubmission(null)
+    submissionRef.current = null
+    showRunOutput('正在运行代码；若出现错误，将继续生成 AI 分析，请稍候...', 'info')
     clearTimeout(successTimerRef.current)
 
-    try {
-      const result = await requestCode('run', { code, timeout: 3, ...(acceptsInput ? { stdin } : {}) }, localStorage.getItem('access_token'))
-      if (!mountedRef.current) return
+    let executionResult = null
+    const displayExecution = result => {
+      executionResult = result
+      if (!result.success && result.analysis && result.judge) {
+        const feedback = { origin: 'run', judge: result.judge, analysis: result.analysis }
+        submissionRef.current = feedback
+        setSubmission(feedback)
+      }
       let display = ''
       if (result.output) {
         display += '程序输出:\n' + result.output + '\n'
@@ -144,9 +151,22 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, tit
         display += `执行时间: ${result.execution_time} 秒`
       }
       showRunOutput(display.trim() || '程序运行结束，没有输出。', result.success ? 'success' : 'error')
+    }
+    try {
+      const result = await requestCode('run', { code, timeout: 3, ...(problemId ? { problem_id: problemId } : {}), ...(acceptsInput ? { stdin } : {}) }, localStorage.getItem('access_token'), {
+        onExecution: result => { if (mountedRef.current) displayExecution(result) },
+      })
+      if (!mountedRef.current) return
+      displayExecution(result)
     } catch (error) {
       if (mountedRef.current) {
-        showRunOutput(error.message || '请求失败，请稍后重试。', 'error')
+        if (executionResult) {
+          const feedback = { origin: 'run', judge: executionResult.judge, analysis: {
+            status: 'unavailable', message: `AI 分析暂不可用：${error.message} 运行结果已保留。`, content: null,
+          } }
+          submissionRef.current = feedback
+          setSubmission(feedback)
+        } else showRunOutput(error.message || '请求失败，请稍后重试。', 'error')
         setAuthRequired(error.status === 401)
       }
     } finally {
@@ -156,7 +176,7 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, tit
   }
 
   const submitCode = async () => {
-    if (busyRef.current || hintBusyRef.current) return
+    if (busyRef.current) return
     if (!code.trim()) {
       setOutput('请先输入代码')
       setOutputType('error')
@@ -168,8 +188,6 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, tit
     setAuthRequired(false)
     setSubmission(null)
     submissionRef.current = null
-    setVisibleHintCount(0)
-    setHintError('')
     setModal(current => ({ ...current, show: false }))
     clearTimeout(successTimerRef.current)
     setOutput('正在运行测试用例...')
@@ -191,7 +209,7 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, tit
           .catch(error => {
             if (!mountedRef.current || submissionRef.current !== result) return
             const updated = { ...result, analysis: {
-              status: 'unavailable', message: `提示暂时无法生成：${error.message} 判题结果已保留。`, content: null,
+              status: 'unavailable', message: `错因分析暂时无法生成：${error.message} 判题结果已保留。`, content: null,
             } }
             submissionRef.current = updated
             setSubmission(updated)
@@ -210,27 +228,6 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, tit
     } finally {
       busyRef.current = false
       if (mountedRef.current) setSubmitting(false)
-    }
-  }
-
-  const revealHint = async () => {
-    const current = submissionRef.current
-    if (hintBusyRef.current || !current?.submission_id || visibleHintCount >= 3) return
-    hintBusyRef.current = true
-    setHintBusy(true)
-    setHintError('')
-    try {
-      const saved = await saveHintView(current.submission_id, visibleHintCount + 1, localStorage.getItem('access_token'))
-      if (mountedRef.current && submissionRef.current === current) {
-        setVisibleHintCount(saved.hints_viewed_max)
-      }
-    } catch (error) {
-      if (mountedRef.current && submissionRef.current === current) {
-        setHintError(`提示查看记录暂未保存：${error.message} 请重试。`)
-      }
-    } finally {
-      hintBusyRef.current = false
-      if (mountedRef.current) setHintBusy(false)
     }
   }
 
@@ -396,6 +393,32 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, tit
 
   return (
     <div className="level-detail-page">
+      <div className="ottly-notification" role="status" aria-live="polite">
+        {diagnosisReady && <details className="ottly-diagnosis" key={submission.submission_id}>
+          <summary className="ottly-diagnosis-trigger">
+            <img src={new URL('../pages/images/ottly-message.png', import.meta.url).href} alt="" />
+            <span><strong>查看错因分析</strong><small>Ottly有话要说！</small></span>
+          </summary>
+          <div className="ottly-diagnosis-chat" onKeyDown={event => {
+            if (event.key === 'Escape') {
+              const details = event.currentTarget.closest('details')
+              details.open = false
+              details.querySelector('summary').focus()
+            }
+          }}>
+            <div className="ottly-message-heading">
+              <img src={new URL('../pages/images/ottly-message.png', import.meta.url).href} alt="Ottly头像" />
+              <div><strong>Ottly</strong><small>来看看这次测试，我发现了这些线索。</small></div>
+              <button type="button" aria-label="收起错因分析" onClick={event => {
+                const details = event.currentTarget.closest('details')
+                details.open = false
+                details.querySelector('summary').focus()
+              }}>×</button>
+            </div>
+            <SubmissionFeedback result={submission} showJudge={false} />
+          </div>
+        </details>}
+      </div>
       <div className="level-detail-card">
         <div className="problem-section">
           <h2>{title}</h2>
@@ -491,18 +514,19 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, tit
             <button className="btn-submit" onClick={submitCode} disabled={busy}>
               {submitting ? '提交中...' : '提交判题'}
             </button>
+            {nextAction && <button type="button" className="btn-next-level" onClick={nextAction} disabled={busy}>前往下一关 →</button>}
+            {analysisPending && <span className="ottly-analysis-pending" role="status"><span aria-hidden="true" />Ottly正在分析错因</span>}
           </div>
-          <p className="code-action-note">“运行”只检查代码执行结果；“提交判题”会测试题目要求，失败后才记入错题本。</p>
+          <p className="code-action-note">“运行”报错后自动分析本次输入；“提交判题”会检查题目要求并分析失败原因，失败提交才记入错题本。</p>
           {submission && (
             <SubmissionFeedback
               result={submission}
-              visibleHintCount={visibleHintCount}
-              onRevealHint={revealHint}
-              hintBusy={hintBusy}
-              hintError={hintError}
+              showJudge={submission.origin !== 'run'}
+              showAnalysis={!diagnosisReady}
             />
           )}
-          {submission && !submission.judge.passed && (
+          {completionPanel}
+          {submission && submission.origin !== 'run' && !submission.judge.passed && (
             <button type="button" className="btn-hint" onClick={() => navigate('/app/history')}>
               查看这道题的错题记录
             </button>

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import SubmissionFeedback from '../components/SubmissionFeedback.jsx'
 import ProblemMetadata from '../components/ProblemMetadata.jsx'
 import MisconceptionOverview from '../components/MisconceptionOverview.jsx'
-import { getLearningHistory, getMistakeQuestions, getMisconceptions, getKnowledge, requestAnalysis, requestCode, saveHintView } from '../components/codeApi.mjs'
+import { getLearningHistory, getMistakeQuestions, getMisconceptions, getKnowledge, requestAnalysis, requestCode } from '../components/codeApi.mjs'
 
 const HISTORY_PAGE_SIZE = 10
 const formatDate = value => new Date(value).toLocaleString('zh-CN')
@@ -22,9 +22,6 @@ function LearningHistory() {
   const [submitting, setSubmitting] = useState(false)
   const [runResult, setRunResult] = useState(null)
   const [submission, setSubmission] = useState(null)
-  const [visibleHintCount, setVisibleHintCount] = useState(0)
-  const [savingHintId, setSavingHintId] = useState(null)
-  const [hintErrors, setHintErrors] = useState({})
   const [history, setHistory] = useState([])
   const [historyTotal, setHistoryTotal] = useState(0)
   const [historyOffset, setHistoryOffset] = useState(0)
@@ -40,7 +37,7 @@ function LearningHistory() {
   const latestSubmissionRef = useRef(null)
   const pendingHistoryRef = useRef(new Set())
   const mountedRef = useRef(false)
-  const busy = running || submitting || savingHintId !== null
+  const busy = running || submitting
   const selected = questions.find(item => item.problem_id === selectedId)
 
   useEffect(() => {
@@ -83,7 +80,6 @@ function LearningHistory() {
     setRunResult(null)
     setSubmission(null)
     latestSubmissionRef.current = null
-    setVisibleHintCount(0)
     setActionError('')
     setStdin('')
   }, [selectedId])
@@ -134,22 +130,27 @@ function LearningHistory() {
     setRunResult(null)
     setSubmission(null)
     latestSubmissionRef.current = null
-    setVisibleHintCount(0)
     setActionError('')
   }
 
   const runCode = async () => {
     if (busy || !code.trim()) return
+    const problemId = selectedId
     setRunning(true)
     setActionError('')
+    setRunResult(null)
+    setSubmission(null)
+    latestSubmissionRef.current = null
     try {
-      const result = await requestCode('run', { code, timeout: 3, stdin }, localStorage.getItem('access_token'))
+      const result = await requestCode('run', { code, timeout: 3, stdin, problem_id: problemId }, localStorage.getItem('access_token'))
+      if (!mountedRef.current || selectedRef.current !== problemId) return
       setRunResult(result)
     } catch (error) {
+      if (!mountedRef.current) return
       setActionError(error.message)
       if (error.status === 401) navigate('/auth')
     } finally {
-      setRunning(false)
+      if (mountedRef.current) setRunning(false)
     }
   }
 
@@ -157,10 +158,10 @@ function LearningHistory() {
     if (busy || !code.trim() || !selected) return
     const problemId = selected.problem_id
     setSubmitting(true)
+    setRunResult(null)
     setActionError('')
     setSubmission(null)
     latestSubmissionRef.current = null
-    setVisibleHintCount(0)
     try {
       const result = await requestCode('submit', { problem_id: problemId, code },
         localStorage.getItem('access_token'), { reviewSourceId: selected.first_wrong_submission_id })
@@ -179,7 +180,7 @@ function LearningHistory() {
           .catch(error => {
             if (!mountedRef.current || latestSubmissionRef.current !== result.submission_id) return
             setSubmission({ ...result, analysis: { status: 'unavailable',
-              message: `提示暂时无法生成：${error.message} 判题结果已保留。`, content: null } })
+              message: `错因分析暂时无法生成：${error.message} 判题结果已保留。`, content: null } })
           })
           .finally(() => pendingHistoryRef.current.delete(result.submission_id))
       }
@@ -208,29 +209,9 @@ function LearningHistory() {
         if (!mountedRef.current) return
         setHistory(current => current.map(row => row.id === item.id
           ? { ...row, analysis: { status: 'unavailable',
-            message: `提示暂时无法生成：${error.message} 判题结果已保留。`, content: null } } : row))
+            message: `错因分析暂时无法生成：${error.message} 判题结果已保留。`, content: null } } : row))
       })
       .finally(() => pendingHistoryRef.current.delete(item.id))
-  }
-
-  const revealHint = async (item, currentResult = false) => {
-    if (savingHintId !== null) return
-    const id = currentResult ? submission?.submission_id : item.id
-    const level = (currentResult ? visibleHintCount : item.hints_viewed_max) + 1
-    if (!id || level > 3) return
-    setSavingHintId(id)
-    setHintErrors(current => ({ ...current, [id]: '' }))
-    try {
-      const saved = await saveHintView(id, level, localStorage.getItem('access_token'))
-      if (currentResult) setVisibleHintCount(saved.hints_viewed_max)
-      setHistory(current => current.map(row => row.id === id
-        ? { ...row, hints_viewed_max: saved.hints_viewed_max } : row))
-    } catch (error) {
-      setHintErrors(current => ({ ...current, [id]: `提示查看记录暂未保存：${error.message} 请重试。` }))
-      if (error.status === 401) navigate('/auth')
-    } finally {
-      setSavingHintId(null)
-    }
   }
 
   return (
@@ -295,15 +276,15 @@ function LearningHistory() {
                 <button type="button" className="mistake-primary-button" disabled={busy || !code.trim()}
                   onClick={submitReview}>{submitting ? '正在判题...' : '提交并记录复习'}</button>
               </div>
+              {running && <p role="status">正在运行代码；若出现错误，将继续生成 AI 分析，请稍候...</p>}
               {actionError && <p className="mistake-alert" role="alert">{actionError}</p>}
               {runResult && <div className="mistake-run-result" role="status"><strong>运行结果</strong>
                 <pre>{runResult.output || '（无输出）'}</pre>
                 {runResult.errors?.map((error, index) =>
                   <p key={index}>{error.type}：{error.message}</p>)}</div>}
-              {submission && <SubmissionFeedback result={submission} visibleHintCount={visibleHintCount}
-                onRevealHint={() => revealHint(null, true)}
-                hintBusy={savingHintId === submission.submission_id}
-                hintError={hintErrors[submission.submission_id] || ''} />}
+              {runResult?.analysis && <SubmissionFeedback
+                result={{ judge: runResult.judge, analysis: runResult.analysis }} showJudge={false} />}
+              {submission && <SubmissionFeedback result={submission} />}
             </div>
           </div>}
 
@@ -346,9 +327,7 @@ function LearningHistory() {
                   <ProblemMetadata version={item.version} difficulty={item.difficulty}
                     knowledgeIds={item.knowledge_ids} knowledgeNames={knowledgeNames} />
                   {!item.passed && <p>错误分类：{item.error_type || '历史记录未提供'}</p>}
-                  <SubmissionFeedback result={{ judge: item.judge, analysis: item.analysis }}
-                    visibleHintCount={item.hints_viewed_max} onRevealHint={() => revealHint(item)}
-                    hintBusy={savingHintId === item.id} hintError={hintErrors[item.id] || ''} />
+                  <SubmissionFeedback result={{ judge: item.judge, analysis: item.analysis }} />
                 </div>
               </details>)}
             {historyTotal > HISTORY_PAGE_SIZE && <div className="mistake-pagination">

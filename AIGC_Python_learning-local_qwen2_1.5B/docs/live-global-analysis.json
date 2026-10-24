@@ -1,0 +1,1530 @@
+{
+  "tested_at": "2026-10-22T12:38:41.482495+00:00",
+  "cases": [
+    {
+      "name": "level1",
+      "code": "print(\"Hello, world\")",
+      "expected_cause": "小写 w 与大写 W 不同，并缺少末尾感叹号",
+      "seconds": 10.61,
+      "judge": {
+        "status": "wrong_answer",
+        "passed": false,
+        "passed_cases": 0,
+        "total_cases": 1,
+        "cases": [
+          {
+            "case_id": "stdout-1",
+            "passed": false,
+            "expected_output": "Hello, World!",
+            "actual_output": "Hello, world\n",
+            "output_available": true,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "public"
+          }
+        ],
+        "failed_tests": [
+          "stdout-1"
+        ]
+      },
+      "analysis": {
+        "status": "ready",
+        "message": "错因分析由 AI 根据本次执行生成；三级提示采用已审核的基础提示。",
+        "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+        "content": {
+          "misconception_tag": "other",
+          "suspected_cause": "代码中的字符串 'Hello, world' 中的 'W' 和 '!' 与预期的 'Hello, World!' 不匹配。实际输出为 'Hello, world\n'，其中 'w' 和 '!' 与预期的 'W' 和 '!' 不同。",
+          "evidence": [
+            {
+              "case_id": "stdout-1",
+              "field": "actual_output",
+              "quote": "Hello, world",
+              "explanation": "实际输出为 'Hello, world'，其中 'w' 和 '!' 与预期的 'W' 和 '!' 不匹配。"
+            }
+          ],
+          "knowledge_points": [
+            "字符串输出",
+            "大小写敏感"
+          ],
+          "hints": {
+            "level1": "比较程序输出与题目要求时，应关注哪些格式细节？",
+            "level2": "结合输出格式要求，观察输出语句中的文本与符号。",
+            "level3": "逐字对照实际输出和题目要求，记录字母大小写、标点及空格的差异后再修改。"
+          },
+          "knowledge_ids": [
+            "K01"
+          ]
+        },
+        "source": "ai",
+        "model_load_ms": 6026.099999999999,
+        "personalization": {
+          "used": false,
+          "related_history_count": 0
+        },
+        "timings": {
+          "judge_ms": 47.03,
+          "model_load_ms": 6026.099999999999,
+          "hint_generation_ms": 10465.38
+        }
+      }
+    },
+    {
+      "name": "greeting-v1",
+      "code": "friend=input()\nprint(\"Hello, \"+friend)",
+      "expected_cause": "缺少问候语末尾的感叹号",
+      "seconds": 16.98,
+      "judge": {
+        "status": "wrong_answer",
+        "passed": false,
+        "passed_cases": 0,
+        "total_cases": 4,
+        "cases": [
+          {
+            "case_id": "sample-1",
+            "passed": false,
+            "expected_output": "Hello, Ottly!\n",
+            "actual_output": "Hello, Ottly\n",
+            "output_available": true,
+            "errors": [],
+            "execution_time": 0.0,
+            "visibility": "public"
+          },
+          {
+            "case_id": "hidden-1",
+            "passed": false,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "hidden"
+          },
+          {
+            "case_id": "hidden-2",
+            "passed": false,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.0,
+            "visibility": "hidden"
+          },
+          {
+            "case_id": "hidden-3",
+            "passed": false,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "hidden"
+          }
+        ],
+        "failed_tests": [
+          "sample-1",
+          "hidden-1",
+          "hidden-2",
+          "hidden-3"
+        ]
+      },
+      "analysis": {
+        "status": "ready",
+        "message": "错因分析由 AI 根据本次执行生成；三级提示采用已审核的基础提示。",
+        "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+        "content": {
+          "misconception_tag": "other",
+          "suspected_cause": "在第 1 行输出中缺少一个感叹号。实际输出为 'Hello, Ottly'，而预期输出为 'Hello, Ottly!'。",
+          "evidence": [
+            {
+              "case_id": "sample-1",
+              "field": "actual_output",
+              "quote": "Hello, Ottly",
+              "explanation": "在输入 'Ottly' 后，程序输出 'Hello, Ottly'，但预期输出应为 'Hello, Ottly!'。缺少一个感叹号。"
+            }
+          ],
+          "knowledge_points": [
+            "字符串拼接",
+            "输出格式"
+          ],
+          "hints": {
+            "level1": "问候语中哪部分会随输入变化？",
+            "level2": "查看变量是否真正接收了输入，打印时有没有把变量名加上引号。",
+            "level3": "把输出分成固定前缀、姓名和标点三部分，逐字对照样例，记录连接处的空格和末尾标点。"
+          },
+          "knowledge_ids": [
+            "K02",
+            "K01"
+          ]
+        },
+        "source": "ai",
+        "model_load_ms": 11989.130000000001,
+        "personalization": {
+          "used": false,
+          "related_history_count": 0
+        },
+        "timings": {
+          "judge_ms": 97.85,
+          "model_load_ms": 11989.130000000001,
+          "hint_generation_ms": 16806.79
+        }
+      }
+    },
+    {
+      "name": "shell-shop-v1",
+      "code": "# 依次读取单价、数量和支付金额，再计算并输出两行结果\nprice=int(input())\nquantity=int(input())\nbudget=int(input())\nprint(price+quantity)\nprint(budget-price*quantity)",
+      "expected_cause": "总价错误地把单价与数量相加，应该用乘法；差额输出已正确",
+      "seconds": 20.15,
+      "judge": {
+        "status": "wrong_answer",
+        "passed": false,
+        "passed_cases": 0,
+        "total_cases": 5,
+        "cases": [
+          {
+            "case_id": "sample-1",
+            "passed": false,
+            "expected_output": "12\n8\n",
+            "actual_output": "7\n8\n",
+            "output_available": true,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "public"
+          },
+          {
+            "case_id": "hidden-1",
+            "passed": false,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "hidden"
+          },
+          {
+            "case_id": "hidden-2",
+            "passed": false,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "hidden"
+          },
+          {
+            "case_id": "hidden-3",
+            "passed": false,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.0,
+            "visibility": "hidden"
+          },
+          {
+            "case_id": "hidden-4",
+            "passed": false,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "hidden"
+          }
+        ],
+        "failed_tests": [
+          "sample-1",
+          "hidden-1",
+          "hidden-2",
+          "hidden-3",
+          "hidden-4"
+        ]
+      },
+      "analysis": {
+        "status": "ready",
+        "message": "错因分析由 AI 根据本次执行生成；三级提示采用已审核的基础提示。",
+        "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+        "content": {
+          "misconception_tag": "other",
+          "suspected_cause": "代码中第 1 行的计算错误。\n- 代码中计算总价的行是 `print(price+quantity)`，但应该是 `print(price * quantity)`。\n- 代码中计算差额的行是 `print(budget-price*quantity)`，这部分是正确的。\n- 本次输入和结果说明：\n  - 读取的单价、数量和支付金额分别是 4、3 和 20。\n  - 正确的总价应该是 12，但代码输出了 7。\n  - 差额计算正确，输出了 8。",
+          "evidence": [
+            {
+              "case_id": "sample-1",
+              "field": "actual_output",
+              "quote": "7\n8",
+              "explanation": "代码中第 1 行的计算错误导致总价输出不正确。正确的总价应该是 12，但代码输出了 7。"
+            }
+          ],
+          "knowledge_points": [
+            "整数乘法的正确使用"
+          ],
+          "hints": {
+            "level1": "怎样把题目要求拆成可以逐步核对的步骤？",
+            "level2": "结合输入、计算和输出的关系，查看产生公开结果的代码操作。",
+            "level3": "对照题目要求，找出公开结果里的第一处不同，再回到产生它的代码位置检查。"
+          },
+          "knowledge_ids": []
+        },
+        "source": "ai",
+        "model_load_ms": 11986.970000000001,
+        "personalization": {
+          "used": false,
+          "related_history_count": 0
+        },
+        "timings": {
+          "judge_ms": 114.54,
+          "model_load_ms": 11986.970000000001,
+          "hint_generation_ms": 19961.79
+        }
+      }
+    },
+    {
+      "name": "shell-groups-v1",
+      "code": "n = int(input())\nk = int(input())\ngroups = n / k\nleft = n % k\nprint(groups)\nprint(left)\n",
+      "expected_cause": "普通除法代替整除，得到小数而不是完整组数",
+      "seconds": 22.12,
+      "judge": {
+        "status": "wrong_answer",
+        "passed": false,
+        "passed_cases": 0,
+        "total_cases": 5,
+        "cases": [
+          {
+            "case_id": "sample-1",
+            "passed": false,
+            "expected_output": "3\n2\n",
+            "actual_output": "3.4\n2\n",
+            "output_available": true,
+            "errors": [],
+            "execution_time": 0.0,
+            "visibility": "public"
+          },
+          {
+            "case_id": "hidden-1",
+            "passed": false,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.0,
+            "visibility": "hidden"
+          },
+          {
+            "case_id": "hidden-2",
+            "passed": false,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.0,
+            "visibility": "hidden"
+          },
+          {
+            "case_id": "hidden-3",
+            "passed": false,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.0,
+            "visibility": "hidden"
+          },
+          {
+            "case_id": "hidden-4",
+            "passed": false,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.0,
+            "visibility": "hidden"
+          }
+        ],
+        "failed_tests": [
+          "sample-1",
+          "hidden-1",
+          "hidden-2",
+          "hidden-3",
+          "hidden-4"
+        ]
+      },
+      "analysis": {
+        "status": "ready",
+        "message": "错因分析由 AI 根据本次执行生成；三级提示采用已审核的基础提示。",
+        "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+        "content": {
+          "misconception_tag": "other",
+          "suspected_cause": "代码中使用了整数除法 `/`，导致结果是浮点数。正确的做法是使用整数除法 `//` 来得到完整袋数，然后使用取余 `%` 来得到剩余贝壳数。\n- evidence.explanation: 输入 n = 17, k = 5 时，计算 groups = n / k = 17 / 5 = 3.4，这导致了第 1 行输出不正确。正确的做法是使用整数除法 groups = n // k = 17 // 5 = 3。",
+          "evidence": [
+            {
+              "case_id": "sample-1",
+              "field": "actual_output",
+              "quote": "3.4\n2",
+              "explanation": "输入 n = 17, k = 5 时，计算 groups = n / k = 17 / 5 = 3.4，这导致了第 1 行输出不正确。正确的做法是使用整数除法 groups = n // k = 17 // 5 = 3。"
+            }
+          ],
+          "knowledge_points": [
+            "整数除法和浮点数除法的区别",
+            "使用整数除法 `//` 和取余 `%` 来计算完整袋数和剩余贝壳数"
+          ],
+          "hints": {
+            "level1": "怎样把题目要求拆成可以逐步核对的步骤？",
+            "level2": "结合输入、计算和输出的关系，查看产生公开结果的代码操作。",
+            "level3": "对照题目要求，找出公开结果里的第一处不同，再回到产生它的代码位置检查。"
+          },
+          "knowledge_ids": []
+        },
+        "source": "ai",
+        "model_load_ms": 12181.26,
+        "personalization": {
+          "used": false,
+          "related_history_count": 0
+        },
+        "timings": {
+          "judge_ms": 113.02,
+          "model_load_ms": 12181.26,
+          "hint_generation_ms": 21932.17
+        }
+      }
+    },
+    {
+      "name": "badge-v1",
+      "code": "score = int(input())\nif score >= 90:\n    print('GOLD')\nelif score >= 80:\n    print('SILVER')\nelse:\n    print('TRY_AGAIN')\n",
+      "expected_cause": "SILVER 分支门槛被写成八十分，七十五分被分到错误类别",
+      "seconds": 18.24,
+      "judge": {
+        "status": "wrong_answer",
+        "passed": false,
+        "passed_cases": 5,
+        "total_cases": 7,
+        "cases": [
+          {
+            "case_id": "sample-1",
+            "passed": false,
+            "expected_output": "SILVER\n",
+            "actual_output": "TRY_AGAIN\n",
+            "output_available": true,
+            "errors": [],
+            "execution_time": 0.0,
+            "visibility": "public"
+          },
+          {
+            "case_id": "hidden-1",
+            "passed": true,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "hidden"
+          },
+          {
+            "case_id": "hidden-2",
+            "passed": true,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "hidden"
+          },
+          {
+            "case_id": "hidden-3",
+            "passed": false,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "hidden"
+          },
+          {
+            "case_id": "hidden-4",
+            "passed": true,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "hidden"
+          },
+          {
+            "case_id": "hidden-5",
+            "passed": true,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "hidden"
+          },
+          {
+            "case_id": "hidden-6",
+            "passed": true,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "hidden"
+          }
+        ],
+        "failed_tests": [
+          "sample-1",
+          "hidden-3"
+        ]
+      },
+      "analysis": {
+        "status": "ready",
+        "message": "错因分析由 AI 根据本次执行生成；三级提示采用已审核的基础提示。",
+        "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+        "content": {
+          "misconception_tag": "other",
+          "suspected_cause": "在第 1 行，实际输出 'TRY_AGAIN' 而预期输出 'SILVER'。原因是在 `elif score >= 80:` 条件下，没有正确处理 75 的情况。正确的逻辑应该是 `elif score >= 80:` 和 `elif score >= 60:` 之间缺少一个条件来处理 75 的情况。",
+          "evidence": [
+            {
+              "case_id": "sample-1",
+              "field": "actual_output",
+              "quote": "TRY_AGAIN",
+              "explanation": "输入 '75' 时，程序没有正确处理 75 的情况，导致输出 'TRY_AGAIN' 而不是预期的 'SILVER'。"
+            }
+          ],
+          "knowledge_points": [
+            "if-elif-else 结构的正确使用",
+            "条件判断的逻辑顺序"
+          ],
+          "hints": {
+            "level1": "怎样把题目要求拆成可以逐步核对的步骤？",
+            "level2": "结合输入、计算和输出的关系，查看产生公开结果的代码操作。",
+            "level3": "对照题目要求，找出公开结果里的第一处不同，再回到产生它的代码位置检查。"
+          },
+          "knowledge_ids": []
+        },
+        "source": "ai",
+        "model_load_ms": 11258.37,
+        "personalization": {
+          "used": false,
+          "related_history_count": 0
+        },
+        "timings": {
+          "judge_ms": 154.5,
+          "model_load_ms": 11258.37,
+          "hint_generation_ms": 18009.56
+        }
+      }
+    },
+    {
+      "name": "safe-sailing-v1",
+      "code": "tide = int(input())\nwind = int(input())\nif tide < 2 and wind <= 3:\n    print('YES')\nelse:\n    print('NO')\n",
+      "expected_cause": "潮汐比较遗漏等于边界，潮汐为二时也应该允许",
+      "seconds": 19.01,
+      "judge": {
+        "status": "wrong_answer",
+        "passed": false,
+        "passed_cases": 6,
+        "total_cases": 7,
+        "cases": [
+          {
+            "case_id": "sample-1",
+            "passed": false,
+            "expected_output": "YES\n",
+            "actual_output": "NO\n",
+            "output_available": true,
+            "errors": [],
+            "execution_time": 0.0,
+            "visibility": "public"
+          },
+          {
+            "case_id": "hidden-1",
+            "passed": true,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "hidden"
+          },
+          {
+            "case_id": "hidden-2",
+            "passed": true,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "hidden"
+          },
+          {
+            "case_id": "hidden-3",
+            "passed": true,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.0,
+            "visibility": "hidden"
+          },
+          {
+            "case_id": "hidden-4",
+            "passed": true,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.0,
+            "visibility": "hidden"
+          },
+          {
+            "case_id": "hidden-5",
+            "passed": true,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.0,
+            "visibility": "hidden"
+          },
+          {
+            "case_id": "hidden-6",
+            "passed": true,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "hidden"
+          }
+        ],
+        "failed_tests": [
+          "sample-1"
+        ]
+      },
+      "analysis": {
+        "status": "ready",
+        "message": "错因分析由 AI 根据本次执行生成；三级提示采用已审核的基础提示。",
+        "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+        "content": {
+          "misconception_tag": "other",
+          "suspected_cause": "在第 1 行输出中，程序输出了 'NO'，而预期的输出是 'YES'。原因在于条件判断 `tide < 2 and wind <= 3` 没有正确执行。根据输入 '2\n3'，tide 确实小于 2，但 wind 不是小于等于 3，而是等于 3。因此，条件判断结果为 False，程序输出了 'NO'。",
+          "evidence": [
+            {
+              "case_id": "sample-1",
+              "field": "actual_output",
+              "quote": "NO",
+              "explanation": "输入 '2\n3' 时，程序输出了 'NO'，而预期的输出是 'YES'。因为 tide 不是小于等于 3，所以条件判断结果为 False，程序输出了 'NO'。"
+            }
+          ],
+          "knowledge_points": [
+            "条件判断的逻辑错误",
+            "输入输出的处理"
+          ],
+          "hints": {
+            "level1": "怎样把题目要求拆成可以逐步核对的步骤？",
+            "level2": "结合输入、计算和输出的关系，查看产生公开结果的代码操作。",
+            "level3": "对照题目要求，找出公开结果里的第一处不同，再回到产生它的代码位置检查。"
+          },
+          "knowledge_ids": []
+        },
+        "source": "ai",
+        "model_load_ms": 11967.8,
+        "personalization": {
+          "used": false,
+          "related_history_count": 0
+        },
+        "timings": {
+          "judge_ms": 150.79,
+          "model_load_ms": 11967.8,
+          "hint_generation_ms": 18801.09
+        }
+      }
+    },
+    {
+      "name": "coastal-markers-v1",
+      "code": "n = int(input())\nfor i in range(1, n):\n    print(i)\n",
+      "expected_cause": "循环范围遗漏终点 n",
+      "seconds": 17.56,
+      "judge": {
+        "status": "wrong_answer",
+        "passed": false,
+        "passed_cases": 1,
+        "total_cases": 5,
+        "cases": [
+          {
+            "case_id": "sample-1",
+            "passed": false,
+            "expected_output": "1\n2\n3\n",
+            "actual_output": "1\n2\n",
+            "output_available": true,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "public"
+          },
+          {
+            "case_id": "sample-2",
+            "passed": true,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": true,
+            "errors": [],
+            "execution_time": 0.0,
+            "visibility": "public"
+          },
+          {
+            "case_id": "hidden-1",
+            "passed": false,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "hidden"
+          },
+          {
+            "case_id": "hidden-2",
+            "passed": false,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "hidden"
+          },
+          {
+            "case_id": "hidden-3",
+            "passed": false,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.0,
+            "visibility": "hidden"
+          }
+        ],
+        "failed_tests": [
+          "sample-1",
+          "hidden-1",
+          "hidden-2",
+          "hidden-3"
+        ]
+      },
+      "analysis": {
+        "status": "ready",
+        "message": "错因分析由 AI 根据本次执行生成；三级提示采用已审核的基础提示。",
+        "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+        "content": {
+          "misconception_tag": "other",
+          "suspected_cause": "代码中没有在循环结束后输出 n 的值。在第 3 行，循环结束后没有输出 n 的值，导致缺少了预期的输出 '3'。",
+          "evidence": [
+            {
+              "case_id": "sample-1",
+              "field": "actual_output",
+              "quote": "1\n2",
+              "explanation": "在输入 '3' 时，预期的输出是 '1\n2\n3'，但实际输出是 '1\n2'，缺少了 '3'。"
+            }
+          ],
+          "knowledge_points": [
+            "for 循环的使用",
+            "循环结束后输出结果"
+          ],
+          "hints": {
+            "level1": "怎样把题目要求拆成可以逐步核对的步骤？",
+            "level2": "结合输入、计算和输出的关系，查看产生公开结果的代码操作。",
+            "level3": "对照题目要求，找出公开结果里的第一处不同，再回到产生它的代码位置检查。"
+          },
+          "knowledge_ids": []
+        },
+        "source": "ai",
+        "model_load_ms": 12224.3,
+        "personalization": {
+          "used": false,
+          "related_history_count": 0
+        },
+        "timings": {
+          "judge_ms": 113.08,
+          "model_load_ms": 12224.3,
+          "hint_generation_ms": 17372.38
+        }
+      }
+    },
+    {
+      "name": "shell-total-v1",
+      "code": "n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    total = i\nprint(total)\n",
+      "expected_cause": "循环内覆盖总数，未保留累计结果",
+      "seconds": 19.15,
+      "judge": {
+        "status": "wrong_answer",
+        "passed": false,
+        "passed_cases": 2,
+        "total_cases": 5,
+        "cases": [
+          {
+            "case_id": "sample-1",
+            "passed": false,
+            "expected_output": "10\n",
+            "actual_output": "4\n",
+            "output_available": true,
+            "errors": [],
+            "execution_time": 0.0,
+            "visibility": "public"
+          },
+          {
+            "case_id": "hidden-1",
+            "passed": true,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "hidden"
+          },
+          {
+            "case_id": "hidden-2",
+            "passed": true,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "hidden"
+          },
+          {
+            "case_id": "hidden-3",
+            "passed": false,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "hidden"
+          },
+          {
+            "case_id": "hidden-4",
+            "passed": false,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.0,
+            "visibility": "hidden"
+          }
+        ],
+        "failed_tests": [
+          "sample-1",
+          "hidden-3",
+          "hidden-4"
+        ]
+      },
+      "analysis": {
+        "status": "ready",
+        "message": "错因分析由 AI 根据本次执行生成；三级提示采用已审核的基础提示。",
+        "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+        "content": {
+          "misconception_tag": "other",
+          "suspected_cause": "在第 4 行，循环变量 `i` 的值在每次迭代中都被重新赋值为当前的 `i`，而不是累加到 `total` 上。因此，`total` 最终只等于最后一次循环的 `i` 值，即 4。",
+          "evidence": [
+            {
+              "case_id": "sample-1",
+              "field": "actual_output",
+              "quote": "4",
+              "explanation": "在输入 '4' 后，程序的输出应该是 '10'，但实际输出是 '4'。这是因为循环变量 `i` 的值在每次迭代中都被重新赋值为当前的 `i`，而不是累加到 `total` 上。因此，`total` 最终只等于最后一次循环的 `i` 值，即 4。"
+            }
+          ],
+          "knowledge_points": [
+            "for 循环的累加逻辑错误"
+          ],
+          "hints": {
+            "level1": "怎样把题目要求拆成可以逐步核对的步骤？",
+            "level2": "结合输入、计算和输出的关系，查看产生公开结果的代码操作。",
+            "level3": "对照题目要求，找出公开结果里的第一处不同，再回到产生它的代码位置检查。"
+          },
+          "knowledge_ids": []
+        },
+        "source": "ai",
+        "model_load_ms": 11952.17,
+        "personalization": {
+          "used": false,
+          "related_history_count": 0
+        },
+        "timings": {
+          "judge_ms": 111.1,
+          "model_load_ms": 11952.17,
+          "hint_generation_ms": 18941.43
+        }
+      }
+    },
+    {
+      "name": "shell-savings-v1",
+      "code": "target = int(input())\nsaved = 0\ndays = 0\nwhile saved < target:\n    saved = saved + 3\n    days = days + 2\nprint(days)\n",
+      "expected_cause": "每轮天数增加两天而非一天，导致天数翻倍",
+      "seconds": 19.9,
+      "judge": {
+        "status": "wrong_answer",
+        "passed": false,
+        "passed_cases": 1,
+        "total_cases": 5,
+        "cases": [
+          {
+            "case_id": "sample-1",
+            "passed": false,
+            "expected_output": "3\n",
+            "actual_output": "6\n",
+            "output_available": true,
+            "errors": [],
+            "execution_time": 0.0,
+            "visibility": "public"
+          },
+          {
+            "case_id": "hidden-1",
+            "passed": true,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "hidden"
+          },
+          {
+            "case_id": "hidden-2",
+            "passed": false,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "hidden"
+          },
+          {
+            "case_id": "hidden-3",
+            "passed": false,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.0,
+            "visibility": "hidden"
+          },
+          {
+            "case_id": "hidden-4",
+            "passed": false,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.0,
+            "visibility": "hidden"
+          }
+        ],
+        "failed_tests": [
+          "sample-1",
+          "hidden-2",
+          "hidden-3",
+          "hidden-4"
+        ]
+      },
+      "analysis": {
+        "status": "ready",
+        "message": "错因分析由 AI 根据本次执行生成；三级提示采用已审核的基础提示。",
+        "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+        "content": {
+          "misconception_tag": "other",
+          "suspected_cause": "在第 4 行，循环条件是 `saved < target`，但在每次循环中，`days` 增加了 2 而不是 1。因此，当 `saved` 达到或超过 `target` 时，`days` 的值是 `target / 3 * 2`，而不是 `target / 3`。",
+          "evidence": [
+            {
+              "case_id": "sample-1",
+              "field": "actual_output",
+              "quote": "6",
+              "explanation": "当输入为 7 时，程序计算出需要 6 天才能存够 7 枚贝壳。因为每次循环 `days` 增加 2，所以当 `saved` 达到 6 时，`days` 为 6。"
+            }
+          ],
+          "knowledge_points": [
+            "while 循环的条件应该是 `saved < target`，每次循环 `days` 应该增加 1 而不是 2。"
+          ],
+          "hints": {
+            "level1": "怎样把题目要求拆成可以逐步核对的步骤？",
+            "level2": "结合输入、计算和输出的关系，查看产生公开结果的代码操作。",
+            "level3": "对照题目要求，找出公开结果里的第一处不同，再回到产生它的代码位置检查。"
+          },
+          "knowledge_ids": []
+        },
+        "source": "ai",
+        "model_load_ms": 12570.59,
+        "personalization": {
+          "used": false,
+          "related_history_count": 0
+        },
+        "timings": {
+          "judge_ms": 134.46,
+          "model_load_ms": 12570.59,
+          "hint_generation_ms": 19679.82
+        }
+      }
+    },
+    {
+      "name": "radio-text-v1",
+      "code": "text = input()\ntarget = input()\ncount = 1\nfor char in text:\n    if char == target:\n        count = count + 1\nprint(len(text))\nprint(count)\n",
+      "expected_cause": "计数初始值为一导致匹配次数多计一次；文本长度输出已正确",
+      "seconds": 21.11,
+      "judge": {
+        "status": "wrong_answer",
+        "passed": false,
+        "passed_cases": 0,
+        "total_cases": 6,
+        "cases": [
+          {
+            "case_id": "sample-1",
+            "passed": false,
+            "expected_output": "6\n3\n",
+            "actual_output": "6\n4\n",
+            "output_available": true,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "public"
+          },
+          {
+            "case_id": "hidden-1",
+            "passed": false,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.0,
+            "visibility": "hidden"
+          },
+          {
+            "case_id": "hidden-2",
+            "passed": false,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "hidden"
+          },
+          {
+            "case_id": "hidden-3",
+            "passed": false,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.0,
+            "visibility": "hidden"
+          },
+          {
+            "case_id": "hidden-4",
+            "passed": false,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "hidden"
+          },
+          {
+            "case_id": "hidden-5",
+            "passed": false,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.0,
+            "visibility": "hidden"
+          }
+        ],
+        "failed_tests": [
+          "sample-1",
+          "hidden-1",
+          "hidden-2",
+          "hidden-3",
+          "hidden-4",
+          "hidden-5"
+        ]
+      },
+      "analysis": {
+        "status": "ready",
+        "message": "错因分析由 AI 根据本次执行生成；三级提示采用已审核的基础提示。",
+        "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+        "content": {
+          "misconception_tag": "other",
+          "suspected_cause": "代码中 count 初始化为 1，但在遍历 text 时，如果字符等于 target，count 增加 1。由于 target 'a' 在 'banana' 中出现了 3 次，所以 count 最终为 4。正确的做法是将 count 初始化为 0，然后在遍历过程中遇到 target 时才增加 count。",
+          "evidence": [
+            {
+              "case_id": "sample-1",
+              "field": "actual_output",
+              "quote": "6\n4",
+              "explanation": "在输入 'banana' 和 'a' 时，代码中 count 初始化为 1，遍历过程中遇到 'a' 时 count 增加 1，最终输出 '6\n4'。正确的做法是将 count 初始化为 0，遍历过程中遇到 'a' 时才增加 count，这样输出应该是 '6\n3'。"
+            }
+          ],
+          "knowledge_points": [
+            "循环遍历字符串并计数",
+            "初始化计数器"
+          ],
+          "hints": {
+            "level1": "怎样把题目要求拆成可以逐步核对的步骤？",
+            "level2": "结合输入、计算和输出的关系，查看产生公开结果的代码操作。",
+            "level3": "对照题目要求，找出公开结果里的第一处不同，再回到产生它的代码位置检查。"
+          },
+          "knowledge_ids": []
+        },
+        "source": "ai",
+        "model_load_ms": 11967.029999999999,
+        "personalization": {
+          "used": false,
+          "related_history_count": 0
+        },
+        "timings": {
+          "judge_ms": 132.56,
+          "model_load_ms": 11967.029999999999,
+          "hint_generation_ms": 20875.02
+        }
+      }
+    },
+    {
+      "name": "temperature-max-v1",
+      "code": "n = int(input())\nvalues = []\nfor i in range(n):\n    values.append(int(input()))\nlargest = values[0]\nfor value in values:\n    if value < largest:\n        largest = value\nprint(largest)\n",
+      "expected_cause": "更新比较方向反了，找成最小值而不是最大值",
+      "seconds": 20.44,
+      "judge": {
+        "status": "wrong_answer",
+        "passed": false,
+        "passed_cases": 2,
+        "total_cases": 6,
+        "cases": [
+          {
+            "case_id": "sample-1",
+            "passed": false,
+            "expected_output": "9\n",
+            "actual_output": "2\n",
+            "output_available": true,
+            "errors": [],
+            "execution_time": 0.0,
+            "visibility": "public"
+          },
+          {
+            "case_id": "hidden-1",
+            "passed": false,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "hidden"
+          },
+          {
+            "case_id": "hidden-2",
+            "passed": true,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "hidden"
+          },
+          {
+            "case_id": "hidden-3",
+            "passed": false,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.0,
+            "visibility": "hidden"
+          },
+          {
+            "case_id": "hidden-4",
+            "passed": false,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "hidden"
+          },
+          {
+            "case_id": "hidden-5",
+            "passed": true,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.0,
+            "visibility": "hidden"
+          }
+        ],
+        "failed_tests": [
+          "sample-1",
+          "hidden-1",
+          "hidden-3",
+          "hidden-4"
+        ]
+      },
+      "analysis": {
+        "status": "ready",
+        "message": "错因分析由 AI 根据本次执行生成；三级提示采用已审核的基础提示。",
+        "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+        "content": {
+          "misconception_tag": "other",
+          "suspected_cause": "在第 1 行输出的产生原因。代码中存在逻辑错误。在比较过程中，如果发现当前值小于已知的最大值，应该更新最大值，而不是继续比较。当前代码在发现当前值小于已知的最大值时，没有更新最大值，而是继续比较，导致最终输出的不是最大值。例如，输入为 4\n2\n9\n3\n7，代码在比较 2 和 9 时，发现 2 小于 9，但没有更新最大值，最终输出的是 2，而不是 9。",
+          "evidence": [
+            {
+              "case_id": "sample-1",
+              "field": "actual_output",
+              "quote": "2",
+              "explanation": "在输入 4\n2\n9\n3\n7 时，代码在比较 2 和 9 时，发现 2 小于 9，但没有更新最大值，最终输出的是 2，而不是 9。"
+            }
+          ],
+          "knowledge_points": [
+            "比较逻辑错误",
+            "最大值更新错误"
+          ],
+          "hints": {
+            "level1": "怎样把题目要求拆成可以逐步核对的步骤？",
+            "level2": "结合输入、计算和输出的关系，查看产生公开结果的代码操作。",
+            "level3": "对照题目要求，找出公开结果里的第一处不同，再回到产生它的代码位置检查。"
+          },
+          "knowledge_ids": []
+        },
+        "source": "ai",
+        "model_load_ms": 12099.54,
+        "personalization": {
+          "used": false,
+          "related_history_count": 0
+        },
+        "timings": {
+          "judge_ms": 127.39,
+          "model_load_ms": 12099.54,
+          "hint_generation_ms": 20253.8
+        }
+      }
+    },
+    {
+      "name": "count-at-least-v1",
+      "code": "def count_at_least(scores, threshold):\n    count = 0\n    for score in scores:\n        if score >= threshold:\n            count = count + 2\n    return count\n\n\nn = int(input())\nthreshold = int(input())\nscores = []\nfor i in range(n):\n    scores.append(int(input()))\n\nprint(count_at_least(scores, threshold))\n",
+      "expected_cause": "每个达标成绩被计数两次",
+      "seconds": 19.96,
+      "judge": {
+        "status": "wrong_answer",
+        "passed": false,
+        "passed_cases": 2,
+        "total_cases": 7,
+        "cases": [
+          {
+            "case_id": "sample-1",
+            "passed": false,
+            "expected_output": "3\n",
+            "actual_output": "6\n",
+            "output_available": true,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "public"
+          },
+          {
+            "case_id": "hidden-1",
+            "passed": true,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "hidden"
+          },
+          {
+            "case_id": "hidden-2",
+            "passed": true,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "hidden"
+          },
+          {
+            "case_id": "hidden-3",
+            "passed": false,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "hidden"
+          },
+          {
+            "case_id": "hidden-4",
+            "passed": false,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.0,
+            "visibility": "hidden"
+          },
+          {
+            "case_id": "hidden-function-1",
+            "passed": false,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.0,
+            "visibility": "hidden"
+          },
+          {
+            "case_id": "hidden-function-2",
+            "passed": false,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": false,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "hidden"
+          }
+        ],
+        "failed_tests": [
+          "sample-1",
+          "hidden-3",
+          "hidden-4",
+          "hidden-function-1",
+          "hidden-function-2"
+        ]
+      },
+      "analysis": {
+        "status": "ready",
+        "message": "错因分析由 AI 根据本次执行生成；三级提示采用已审核的基础提示。",
+        "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+        "content": {
+          "misconception_tag": "other",
+          "suspected_cause": "在第 1 行输出的产生原因：\n- 错误原因：在循环中，每当找到一个大于或等于阈值的分数时，计数器 `count` 增加了 2，而不是 1。\n- 具体错误：`count = count + 2` 应该改为 `count = count + 1`。\n- 证据：实际输出为 6，期望输出为 3，说明计数器每次增加了 2 而不是 1。",
+          "evidence": [
+            {
+              "case_id": "sample-1",
+              "field": "actual_output",
+              "quote": "6",
+              "explanation": "在输入 4 个分数时，程序错误地将每个符合条件的分数计数为 2，导致最终计数为 6，而期望的计数为 3。"
+            }
+          ],
+          "knowledge_points": [
+            "循环中的计数逻辑错误",
+            "条件判断的逻辑错误"
+          ],
+          "hints": {
+            "level1": "怎样把题目要求拆成可以逐步核对的步骤？",
+            "level2": "结合输入、计算和输出的关系，查看产生公开结果的代码操作。",
+            "level3": "对照题目要求，找出公开结果里的第一处不同，再回到产生它的代码位置检查。"
+          },
+          "knowledge_ids": []
+        },
+        "source": "ai",
+        "model_load_ms": 11991.220000000001,
+        "personalization": {
+          "used": false,
+          "related_history_count": 0
+        },
+        "timings": {
+          "judge_ms": 153.28,
+          "model_load_ms": 11991.220000000001,
+          "hint_generation_ms": 19725.73
+        }
+      }
+    },
+    {
+      "name": "run-invalid-input",
+      "code": "price=int(input())",
+      "stdin": "abc\n",
+      "seconds": 23.8,
+      "judge": {
+        "status": "execution_error",
+        "passed": false,
+        "passed_cases": 0,
+        "total_cases": 1,
+        "cases": [
+          {
+            "case_id": "run",
+            "passed": false,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": true,
+            "errors": [
+              {
+                "type": "VALUE_ERROR",
+                "line": 1,
+                "message": "不能把 'abc' 转换成数字"
+              }
+            ],
+            "execution_time": 0.001,
+            "visibility": "public"
+          }
+        ],
+        "failed_tests": [
+          "run"
+        ]
+      },
+      "analysis": {
+        "status": "ready",
+        "message": "错因分析由 AI 根据本次执行生成；三级提示采用已审核的基础提示。",
+        "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+        "content": {
+          "misconception_tag": "other",
+          "suspected_cause": "代码在尝试将输入转换为整数时，输入了 'abc'，这导致了 ValueError。evidence.explanation 用本次输入和结果说明：输入 'abc' 不能被转换为数字，因此引发了 ValueError。",
+          "evidence": [
+            {
+              "case_id": "run",
+              "field": "error_message",
+              "quote": "不能把 'abc' 转换成数字",
+              "explanation": "输入 'abc' 不能被转换为数字，因此引发了 ValueError。"
+            }
+          ],
+          "knowledge_points": [
+            "输入验证",
+            "异常处理"
+          ],
+          "hints": {
+            "level1": "怎样把题目要求拆成可以逐步核对的步骤？",
+            "level2": "结合报错信息，查看出错操作使用的数据类型、输入内容和执行条件。",
+            "level3": "用本次输入逐步推演报错前的操作，记录相关变量的值和类型，修改后重新运行。"
+          },
+          "knowledge_ids": []
+        },
+        "source": "ai",
+        "model_load_ms": 11100.56,
+        "personalization": {
+          "used": false,
+          "related_history_count": 0
+        },
+        "timings": {}
+      }
+    },
+    {
+      "name": "run-free-practice",
+      "code": "print(missing_value)",
+      "stdin": "",
+      "seconds": 16.73,
+      "judge": {
+        "status": "execution_error",
+        "passed": false,
+        "passed_cases": 0,
+        "total_cases": 1,
+        "cases": [
+          {
+            "case_id": "run",
+            "passed": false,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": true,
+            "errors": [
+              {
+                "type": "NAME_ERROR",
+                "line": 1,
+                "message": "变量 'missing_value' 没有定义，请先赋值或检查拼写"
+              }
+            ],
+            "execution_time": 0.001,
+            "visibility": "public"
+          }
+        ],
+        "failed_tests": [
+          "run"
+        ]
+      },
+      "analysis": {
+        "status": "ready",
+        "message": "错因分析由 AI 根据本次执行生成；三级提示采用已审核的基础提示。",
+        "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+        "content": {
+          "misconception_tag": "other",
+          "suspected_cause": "变量 'missing_value' 没有定义，请先赋值或检查拼写。在代码中，尝试打印一个未定义的变量，导致 NameError。",
+          "evidence": [
+            {
+              "case_id": "run",
+              "field": "error_message",
+              "quote": "变量 'missing_value' 没有定义，请先赋值或检查拼写",
+              "explanation": "在代码中尝试打印一个未定义的变量 'missing_value'，导致 NameError。"
+            }
+          ],
+          "knowledge_points": [
+            "变量定义",
+            "NameError"
+          ],
+          "hints": {
+            "level1": "使用一个名字前，要先给它一个值吗？",
+            "level2": "报错说找不到这个名字。检查报错行之前，名字的拼写是否一致。",
+            "level3": "把报错中的名字与前面写过的名字逐字对照；若拼写不同，先改成一致再运行。"
+          },
+          "knowledge_ids": []
+        },
+        "source": "ai",
+        "model_load_ms": 12058.55,
+        "personalization": {
+          "used": false,
+          "related_history_count": 0
+        },
+        "timings": {}
+      }
+    },
+    {
+      "name": "run-syntax-error",
+      "code": "if True\n    print(1)",
+      "stdin": "",
+      "seconds": 15.69,
+      "judge": {
+        "status": "execution_error",
+        "passed": false,
+        "passed_cases": 0,
+        "total_cases": 1,
+        "cases": [
+          {
+            "case_id": "run",
+            "passed": false,
+            "expected_output": "",
+            "actual_output": "",
+            "output_available": true,
+            "errors": [
+              {
+                "type": "SYNTAX_ERROR",
+                "line": 1,
+                "message": "expected ':' (<unknown>, line 1)"
+              }
+            ],
+            "execution_time": 0.0,
+            "visibility": "public"
+          }
+        ],
+        "failed_tests": [
+          "run"
+        ]
+      },
+      "analysis": {
+        "status": "ready",
+        "message": "错因分析由 AI 根据本次执行生成；三级提示采用已审核的基础提示。",
+        "model": "qwen2.5-coder:7b-instruct-q4_K_M",
+        "content": {
+          "misconception_tag": "other",
+          "suspected_cause": "代码中缺少冒号。在 Python 中，条件语句后面需要跟一个冒号来表示代码块的开始。正确的代码应该是：\nif True:\n    print(1)",
+          "evidence": [
+            {
+              "case_id": "run",
+              "field": "error_message",
+              "quote": "expected ':' (<unknown>, line 1)",
+              "explanation": "错误信息表明在第1行缺少冒号。"
+            }
+          ],
+          "knowledge_points": [
+            "Python 语法",
+            "条件语句"
+          ],
+          "hints": {
+            "level1": "Python 写一行代码时，需要遵守哪些基本格式？",
+            "level2": "先看报错行和上一行，检查标点、括号或缩进是否符合 Python 的写法。",
+            "level3": "从报错行开始逐字对照示例，先修改一处可疑写法并重新运行；语法通过后再检查结果。"
+          },
+          "knowledge_ids": []
+        },
+        "source": "ai",
+        "model_load_ms": 11230.14,
+        "personalization": {
+          "used": false,
+          "related_history_count": 0
+        },
+        "timings": {}
+      }
+    }
+  ]
+}

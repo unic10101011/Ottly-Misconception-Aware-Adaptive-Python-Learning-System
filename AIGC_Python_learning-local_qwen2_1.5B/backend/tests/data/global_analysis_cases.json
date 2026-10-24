@@ -1,0 +1,14 @@
+[
+  {"problem_id":"level1","code":"print(\"Hello, world\")","expected_cause":"小写 w 与大写 W 不同，并缺少末尾感叹号"},
+  {"problem_id":"greeting-v1","code":"friend=input()\nprint(\"Hello, \"+friend)","expected_cause":"缺少问候语末尾的感叹号"},
+  {"problem_id":"shell-shop-v1","code":"# 依次读取单价、数量和支付金额，再计算并输出两行结果\nprice=int(input())\nquantity=int(input())\nbudget=int(input())\nprint(price+quantity)\nprint(budget-price*quantity)","expected_cause":"总价错误地把单价与数量相加，应该用乘法；差额输出已正确"},
+  {"problem_id":"shell-groups-v1","replace":["groups = n // k","groups = n / k"],"expected_cause":"普通除法代替整除，得到小数而不是完整组数"},
+  {"problem_id":"badge-v1","replace":["elif score >= 60:","elif score >= 80:"],"expected_cause":"SILVER 分支门槛被写成八十分，七十五分被分到错误类别"},
+  {"problem_id":"safe-sailing-v1","replace":["tide <= 2","tide < 2"],"expected_cause":"潮汐比较遗漏等于边界，潮汐为二时也应该允许"},
+  {"problem_id":"coastal-markers-v1","replace":["range(1, n + 1)","range(1, n)"],"expected_cause":"循环范围遗漏终点 n"},
+  {"problem_id":"shell-total-v1","replace":["total = total + i","total = i"],"expected_cause":"循环内覆盖总数，未保留累计结果"},
+  {"problem_id":"shell-savings-v1","replace":["days = days + 1","days = days + 2"],"expected_cause":"每轮天数增加两天而非一天，导致天数翻倍"},
+  {"problem_id":"radio-text-v1","replace":["count = 0","count = 1"],"expected_cause":"计数初始值为一导致匹配次数多计一次；文本长度输出已正确"},
+  {"problem_id":"temperature-max-v1","replace":["if value > largest:","if value < largest:"],"expected_cause":"更新比较方向反了，找成最小值而不是最大值"},
+  {"problem_id":"count-at-least-v1","replace":["count = count + 1","count = count + 2"],"expected_cause":"每个达标成绩被计数两次"}
+]

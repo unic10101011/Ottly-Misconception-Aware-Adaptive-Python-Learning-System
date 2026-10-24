@@ -104,6 +104,31 @@ test('HTTP auth and invalid responses return readable errors instead of crashing
   } finally { global.fetch = originalFetch }
 })
 
+test('streamed run preserves split Unicode and exposes execution before analysis', async () => {
+  const { requestCode } = await import('../src/components/codeApi.mjs')
+  const originalFetch = global.fetch
+  const prepared = { success: false, errors: [{ message: '变量未定义' }], judge: failure.judge,
+    analysis: { status: 'preparing', content: null } }
+  const final = { ...prepared, analysis: failure.analysis }
+  const bytes = new TextEncoder().encode([prepared, final].map(data => JSON.stringify({ code: 200, data }) + '\n').join(''))
+  const firstUnicode = bytes.findIndex(byte => byte > 127)
+  const updates = []
+  global.fetch = async url => {
+    assert.equal(url, '/api/v1/code/run?stream_analysis=true')
+    return new Response(new ReadableStream({ start(controller) {
+      controller.enqueue(bytes.slice(0, firstUnicode + 1))
+      controller.enqueue(bytes.slice(firstUnicode + 1, firstUnicode + 2))
+      controller.enqueue(bytes.slice(firstUnicode + 2))
+      controller.close()
+    } }), { headers: { 'Content-Type': 'application/x-ndjson' } })
+  }
+  try {
+    const result = await requestCode('run', { code: 'print(missing)' }, 'token', { onExecution: data => updates.push(data) })
+    assert.deepEqual(updates, [prepared])
+    assert.deepEqual(result, final)
+  } finally { global.fetch = originalFetch }
+})
+
 test('history requests use the current account token and record hint level', async () => {
   const { getLearningHistory, saveHintView } = await import('../src/components/codeApi.mjs')
   const originalFetch = global.fetch
@@ -193,30 +218,19 @@ test('review submission carries its source and mistake questions load with auth'
   } finally { global.fetch = originalFetch }
 })
 
-test('hints start hidden and are revealed in order without showing later hints', () => {
+test('diagnosis is visible immediately and legacy hint counts never expose learning hints', () => {
   const Feedback = loadJsx('../src/components/SubmissionFeedback.jsx')
-  const render = (visibleHintCount) => renderToStaticMarkup(React.createElement(Feedback, {
-    result: failure, visibleHintCount, onRevealHint() {},
-  }))
-  const initial = render(0)
-  assert.match(initial, /100/)
-  assert.match(initial, /查看第 1 级提示/)
-  assert.doesNotMatch(initial, /HINT_ONE|HINT_TWO|HINT_THREE/)
-  assert.doesNotMatch(initial, /<details|Repeated replacement|Only the last value remains/)
-  const first = render(1)
-  assert.match(first, /HINT_ONE/)
-  assert.doesNotMatch(first, /HINT_TWO|HINT_THREE/)
-  assert.match(first, /查看第 2 级提示/)
-  const second = render(2)
-  assert.match(second, /HINT_TWO/)
-  assert.doesNotMatch(second, /HINT_THREE/)
-  assert.doesNotMatch(second, /Repeated replacement|Only the last value remains/)
-  const third = render(3)
-  assert.match(third, /HINT_THREE/)
-  assert.match(third, /Repeated replacement/)
-  assert.match(third, /<details[^>]*>/)
-  assert.doesNotMatch(third, /<details[^>]*open/)
-  assert.doesNotMatch(third, /查看第 4 级提示/)
+  for (const visibleHintCount of [0, 1, 2, 3]) {
+    const html = renderToStaticMarkup(React.createElement(Feedback, {
+      result: failure, visibleHintCount,
+    }))
+    assert.match(html, /AI 错因分析/)
+    assert.match(html, /Repeated replacement/)
+    assert.match(html, /Only the last value remains/)
+    assert.match(html, /accumulation/)
+    assert.match(html, /<details[^>]*open/)
+    assert.doesNotMatch(html, /HINT_ONE|HINT_TWO|HINT_THREE|AI 学习提示|查看第|逐级|progressive-hints|hint-card/)
+  }
 })
 
 test('model outage keeps deterministic judge evidence visible and shows recovery guidance', () => {
@@ -235,28 +249,31 @@ test('personalization note appears only for a ready AI analysis that used histor
     result: { ...failure, analysis }, visibleHintCount: 0,
   }))
   const used = { ...failure.analysis, personalization: { used: true, related_history_count: 2 } }
-  assert.match(render(used), /本次提示参考了你的相关练习记录/)
-  assert.doesNotMatch(render({ ...used, personalization: { used: false, related_history_count: 0 } }), /本次提示参考了/)
-  assert.doesNotMatch(render({ ...used, source: 'fixed' }), /本次提示参考了/)
-  assert.doesNotMatch(render({ ...used, status: 'timeout', content: null }), /本次提示参考了/)
+  assert.match(render(used), /本次分析参考了你的相关练习记录/)
+  assert.doesNotMatch(render({ ...used, personalization: { used: false, related_history_count: 0 } }), /本次分析参考了/)
+  assert.doesNotMatch(render({ ...used, source: 'fixed' }), /本次分析参考了/)
+  assert.doesNotMatch(render({ ...used, status: 'timeout', content: null }), /本次分析参考了/)
 })
 
-test('reviewed fallback tells the student why the wording changed', () => {
+test('legacy ready messages cannot restore removed learning hint wording', () => {
   const Feedback = loadJsx('../src/components/SubmissionFeedback.jsx')
-  const result = { ...failure, analysis: { ...failure.analysis, message: '原提示未通过分层检查，已采用保守教学提示。' } }
-  const html = renderToStaticMarkup(React.createElement(Feedback, { result, visibleHintCount: 0 }))
-  assert.match(html, /保守教学提示/)
-  assert.doesNotMatch(html, /HINT_ONE/)
+  for (const source of ['ai', 'fixed']) {
+    const result = { ...failure, analysis: { ...failure.analysis, source,
+      message: '错因分析由 AI 根据本次执行生成；三级提示采用已审核的基础提示。' } }
+    const html = renderToStaticMarkup(React.createElement(Feedback, { result }))
+    assert.match(html, source === 'fixed' ? /基础错因分析/ : /AI 错因分析/)
+    assert.match(html, /Repeated replacement/)
+    assert.doesNotMatch(html, /三级提示|基础提示|HINT_ONE/)
+  }
 })
 
-test('hint button waits for saved view and shows a sync error', () => {
+test('diagnosis renders without any hint data', () => {
   const Feedback = loadJsx('../src/components/SubmissionFeedback.jsx')
-  const html = renderToStaticMarkup(React.createElement(Feedback, {
-    result: failure, visibleHintCount: 1, hintBusy: true, hintError: '提示查看记录暂未保存',
-  }))
-  assert.match(html, /提示查看记录暂未保存/)
-  assert.match(html, /<button[^>]*disabled/)
-  assert.doesNotMatch(html, /HINT_TWO/)
+  const { hints, ...content } = failure.analysis.content
+  const result = { ...failure, analysis: { ...failure.analysis, content } }
+  const html = renderToStaticMarkup(React.createElement(Feedback, { result }))
+  assert.match(html, /Repeated replacement|Only the last value remains/)
+  assert.doesNotMatch(html, /查看第|提示查看记录|<button/)
 })
 
 
@@ -338,7 +355,7 @@ test('requirement failures explain that execution has not started', () => {
   assert.doesNotMatch(html, /执行已终止/)
 })
 
-test('private cases never render outputs or errors and fixed hints are labelled honestly', () => {
+test('private cases never render outputs or errors and fixed analysis is labelled honestly', () => {
   const Feedback = loadJsx('../src/components/SubmissionFeedback.jsx')
   const result = { ...failure,
     judge: { ...failure.judge, cases: [{ ...failure.judge.cases[0], visibility: 'hidden',
@@ -349,8 +366,8 @@ test('private cases never render outputs or errors and fixed hints are labelled 
   const html = renderToStaticMarkup(React.createElement(Feedback, { result, visibleHintCount: 1 }))
   assert.doesNotMatch(html, /PRIVATE_EXPECTED|PRIVATE_ACTUAL|PRIVATE_ERROR|AI 学习提示/)
   assert.match(html, /隐藏测试仅展示通过状态/)
-  assert.match(html, /本关基础提示/)
-  assert.match(html, /HINT_ONE/)
+  assert.match(html, /基础错因分析/)
+  assert.doesNotMatch(html, /HINT_ONE|基础提示/)
 })
 
 test('input lesson sends run input but submission uses only the server problem id and current code', async () => {
@@ -383,7 +400,7 @@ test('input lesson sends run input but submission uses only the server problem i
     await find(tree, node => node.props.className === 'btn-run').props.onClick()
     await find(tree, node => node.props.className === 'btn-submit').props.onClick()
     assert.deepEqual(calls, [
-      { action: 'run', payload: { code, timeout: 3, stdin: 'Sea Otter\n' } },
+      { action: 'run', payload: { code, timeout: 3, problem_id: 'greeting-v1', stdin: 'Sea Otter\n' } },
       { action: 'submit', payload: { problem_id: 'greeting-v1', code } },
     ])
     cleanups.forEach(fn => fn())
@@ -392,6 +409,74 @@ test('input lesson sends run input but submission uses only the server problem i
     else delete global.localStorage
   }
 })
+test('run errors open AI feedback without a submission or saved hint views', async () => {
+  const values = [], refs = [], effects = []
+  let finishRun
+  let stateIndex = 0, refIndex = 0, collectEffects = true
+  const hooks = { ...React,
+    useState: initial => {
+      const slot = stateIndex++
+      if (!(slot in values)) values[slot] = typeof initial === 'function' ? initial() : initial
+      return [values[slot], next => { values[slot] = typeof next === 'function' ? next(values[slot]) : next }]
+    },
+    useRef: initial => refs[refIndex++] ||= { current: initial },
+    useEffect: effect => { if (collectEffects) effects.push(effect) }, useCallback: callback => callback,
+  }
+  const Feedback = loadJsx('../src/components/SubmissionFeedback.jsx')
+  const Editor = loadJsx('../src/components/CodeEditor.jsx', {
+    react: hooks, 'react-router-dom': { useNavigate: () => () => {} },
+    './SubmissionFeedback.jsx': Feedback,
+    './codeDraft.mjs': { readCodeDraft: () => null, saveCodeDraft: () => true },
+    './codeApi.mjs': {
+      requestCode: async (action, payload, token, options) => {
+        assert.equal(action, 'run')
+        assert.equal(payload.problem_id, 'shell-shop-v1')
+        assert.equal(payload.stdin, 'abc\n')
+        const result = { success: false, output: '', errors: [{ type: 'VALUE_ERROR', message: 'not an integer' }],
+          judge: { ...failure.judge, status: 'execution_error' },
+          analysis: { ...failure.analysis, content: { ...failure.analysis.content, suspected_cause: '输入包含非数字' } } }
+        options.onExecution({ ...result, analysis: { status: 'preparing', content: null } })
+        return new Promise(resolve => { finishRun = () => resolve(result) })
+      },
+      saveHintView: () => assert.fail('a run must not save submission hint views'),
+    },
+  })
+  const originalStorage = Object.getOwnPropertyDescriptor(global, 'localStorage')
+  Object.defineProperty(global, 'localStorage', { configurable: true, value: { getItem: () => 'token' } })
+  const render = () => {
+    stateIndex = 0; refIndex = 0
+    return Editor({ initialCode: 'int(input())', problemId: 'shell-shop-v1', acceptsInput: true, sampleInput: 'abc\n' })
+  }
+  const find = (node, predicate) => {
+    if (!React.isValidElement(node)) return null
+    if (predicate(node)) return node
+    return React.Children.toArray(node.props.children).map(child => find(child, predicate)).find(Boolean)
+  }
+  try {
+    const tree = render()
+    const cleanups = effects.map(effect => effect()).filter(fn => typeof fn === 'function')
+    collectEffects = false
+    const running = find(tree, node => node.props.className === 'btn-run').props.onClick()
+    const pending = render()
+    assert.match(renderToStaticMarkup(pending), /not an integer|Ottly正在分析错因/)
+    const actions = find(pending, node => node.props.className === 'code-buttons')
+    assert.ok(find(actions, node => node.props.className === 'ottly-analysis-pending'))
+    finishRun()
+    await running
+    const updated = render()
+    const html = renderToStaticMarkup(updated)
+    assert.match(html, /查看错因分析|输入包含非数字/)
+    assert.doesNotMatch(html, /测试通过：|查看这道题的错题记录/)
+    assert.doesNotMatch(html, /Ottly正在分析错因/)
+    assert.equal(find(updated, node => node.type === Feedback).props.onRevealHint, undefined)
+    assert.doesNotMatch(html, /HINT_ONE|HINT_TWO|HINT_THREE|查看第/)
+    cleanups.forEach(cleanup => cleanup())
+  } finally {
+    if (originalStorage) Object.defineProperty(global, 'localStorage', originalStorage)
+    else delete global.localStorage
+  }
+})
+
 test('analysis request uses the owning token and a model sized timeout', async () => {
   const { requestAnalysis } = await import('../src/components/codeApi.mjs')
   const originalFetch = global.fetch
@@ -413,14 +498,104 @@ test('analysis request uses the owning token and a model sized timeout', async (
   }
 })
 
-test('pending analysis renders real judge evidence before hints arrive', () => {
+test('pending analysis renders real judge evidence before diagnosis arrives', () => {
   const Feedback = loadJsx('../src/components/SubmissionFeedback.jsx')
   const result = { ...failure, analysis: { status: 'preparing', message: '正在准备提示', content: null } }
   const html = renderToStaticMarkup(React.createElement(Feedback, { result, visibleHintCount: 0 }))
   assert.match(html, /5050/)
   assert.match(html, /100/)
-  assert.match(html, /正在准备提示/)
+  assert.match(html, /Ottly正在分析错因/)
   assert.doesNotMatch(html, /查看第 1 级提示|HINT_ONE/)
+})
+
+test('Ottly message shows only this diagnosis and judge visibility remains independent', () => {
+  const Feedback = loadJsx('../src/components/SubmissionFeedback.jsx')
+  const html = renderToStaticMarkup(React.createElement(Feedback, {
+    result: failure, showJudge: false,
+  }))
+  assert.match(html, /Repeated replacement|Only the last value remains/)
+  assert.match(html, /<details[^>]*open/)
+  assert.doesNotMatch(html, /查看第 1 级提示|AI 学习提示/)
+  assert.doesNotMatch(html, /测试通过：|预期输出|HINT_ONE|HINT_TWO|HINT_THREE/)
+  const judge = renderToStaticMarkup(React.createElement(Feedback, {
+    result: failure, showAnalysis: false,
+  }))
+  assert.match(judge, /预期输出/)
+  assert.doesNotMatch(judge, /AI 错因分析|Repeated replacement|查看第 1 级提示/)
+})
+
+test('Ottly entry waits for diagnosis, opens on demand, and ignores results after code edits', async () => {
+  const values = [], refs = [], effects = [], pending = []
+  let stateIndex = 0, refIndex = 0, collectEffects = true
+  const hooks = { ...React,
+    useState: initial => {
+      const slot = stateIndex++
+      if (!(slot in values)) values[slot] = typeof initial === 'function' ? initial() : initial
+      return [values[slot], next => { values[slot] = typeof next === 'function' ? next(values[slot]) : next }]
+    },
+    useRef: initial => refs[refIndex++] ||= { current: initial },
+    useEffect: effect => { if (collectEffects) effects.push(effect) },
+    useCallback: callback => callback,
+  }
+  const Feedback = loadJsx('../src/components/SubmissionFeedback.jsx')
+  const prepared = { ...failure, submission_id: 71, analysis: { status: 'preparing', content: null } }
+  const Editor = loadJsx('../src/components/CodeEditor.jsx', {
+    react: hooks, 'react-router-dom': { useNavigate: () => () => {} },
+    './SubmissionFeedback.jsx': Feedback,
+    './codeDraft.mjs': { readCodeDraft: () => null, saveCodeDraft: () => true },
+    './codeApi.mjs': {
+      requestCode: async () => ({ ...prepared, submission_id: 71 + pending.length }),
+      requestAnalysis: () => new Promise(resolve => pending.push(resolve)),
+    },
+  })
+  const originalStorage = Object.getOwnPropertyDescriptor(global, 'localStorage')
+  Object.defineProperty(global, 'localStorage', { configurable: true, value: { getItem: () => 'token' } })
+  const render = () => {
+    stateIndex = 0; refIndex = 0
+    return Editor({ initialCode: 'print(100)', problemId: 'level2' })
+  }
+  const find = (node, className) => {
+    if (!React.isValidElement(node)) return null
+    if (node.props.className === className) return node
+    return React.Children.toArray(node.props.children).map(child => find(child, className)).find(Boolean)
+  }
+  try {
+    let tree = render()
+    const cleanups = effects.map(effect => effect()).filter(fn => typeof fn === 'function')
+    collectEffects = false
+    assert.equal(find(tree, 'ottly-diagnosis'), undefined)
+    await find(tree, 'btn-submit').props.onClick()
+    tree = render()
+    assert.equal(find(tree, 'ottly-diagnosis'), undefined)
+    assert.ok(find(tree, 'ottly-analysis-pending'))
+    pending[0]({ analysis: failure.analysis })
+    await new Promise(resolve => setImmediate(resolve))
+    tree = render()
+    const entry = find(tree, 'ottly-diagnosis')
+    assert.ok(entry)
+    assert.equal(find(tree, 'ottly-analysis-pending'), undefined)
+    assert.equal(entry.props.open, undefined, 'native details starts collapsed')
+    assert.match(renderToStaticMarkup(tree), /查看错因分析|Ottly有话要说！|ottly-message.png/)
+    const summary = find(tree, 'ottly-diagnosis-trigger')
+    assert.equal(summary.type, 'summary', 'native summary supports mouse and keyboard activation')
+    const close = find(tree, 'ottly-message-heading').props.children[2]
+    let focused = false
+    const details = { open: true, querySelector: () => ({ focus: () => { focused = true } }) }
+    close.props.onClick({ currentTarget: { closest: () => details } })
+    assert.equal(details.open, false)
+    assert.equal(focused, true)
+    await find(tree, 'btn-submit').props.onClick()
+    tree = render()
+    assert.equal(find(tree, 'ottly-diagnosis'), undefined)
+    find(tree, 'code-textarea').props.onChange({ target: { value: 'print(5050)' } })
+    pending[1]({ analysis: failure.analysis })
+    await new Promise(resolve => setImmediate(resolve))
+    assert.equal(find(render(), 'ottly-diagnosis'), undefined, 'late diagnosis cannot reappear after an edit')
+    cleanups.forEach(fn => fn())
+  } finally {
+    if (originalStorage) Object.defineProperty(global, 'localStorage', originalStorage)
+    else delete global.localStorage
+  }
 })
 test('editor shows the judge before analysis resolves and keeps the verdict', async () => {
   const effects = []
@@ -461,7 +636,7 @@ test('editor shows the judge before analysis resolves and keeps the verdict', as
     await Promise.resolve()
     await Promise.resolve()
     const completed = updates.find(value => value?.analysis?.status === 'ready' && value?.submission_id === 71)
-    assert.ok(completed, 'later update should contain the hints')
+    assert.ok(completed, 'later update should contain the diagnosis')
     assert.deepEqual(completed.judge, prepared.judge)
     cleanups.forEach(fn => fn())
   } finally {
@@ -469,14 +644,66 @@ test('editor shows the judge before analysis resolves and keeps the verdict', as
     else delete global.localStorage
   }
 })
-test('review submission also shows the judge before its hint request finishes', async () => {
+test('review run errors display diagnosis only with current question context', async () => {
+  const effects = [], updates = [], calls = []
+  const question = { problem_id: 'level2', last_wrong_code: 'print(missing)',
+    title: '求和', description: '求和', source: '系统关卡' }
+  const states = [[question], {}, 'level2', 'practice', false, '', 'print(missing)', 'abc',
+    false, false, null, null, [], 0, 0, 0, 0, false, '', '']
+  let stateIndex = 0
+  const hooks = { ...React,
+    useState: initial => {
+      const index = stateIndex++
+      return [index < states.length ? states[index] : initial, next => updates.push({ index, next })]
+    },
+    useRef: value => ({ current: value }), useEffect: effect => effects.push(effect),
+  }
+  const Feedback = loadJsx('../src/components/SubmissionFeedback.jsx')
+  const runtime = { success: false, output: '', errors: [], judge: failure.judge, analysis: failure.analysis }
+  const History = loadJsx('../src/pages/LearningHistory.jsx', {
+    react: hooks, 'react-router-dom': { useNavigate: () => () => {} },
+    '../components/ProblemMetadata.jsx': () => null,
+    '../components/MisconceptionOverview.jsx': () => null,
+    '../components/SubmissionFeedback.jsx': Feedback,
+    '../components/codeApi.mjs': { requestCode: async (...args) => { calls.push(args); return runtime } },
+  })
+  const find = (node, predicate) => !React.isValidElement(node) ? null : predicate(node) ? node
+    : React.Children.toArray(node.props.children).map(child => find(child, predicate)).find(Boolean)
+  const originalStorage = Object.getOwnPropertyDescriptor(global, 'localStorage')
+  Object.defineProperty(global, 'localStorage', { configurable: true, value: { getItem: () => 'owner-token' } })
+  try {
+    const tree = History()
+    const cleanup = effects[0]()
+    effects[3]()
+    await find(tree, node => node.props.className === 'mistake-secondary-button').props.onClick()
+    assert.deepEqual(calls, [['run', { code: 'print(missing)', timeout: 3, stdin: 'abc', problem_id: 'level2' }, 'owner-token']])
+    assert.ok(updates.some(update => update.index === 10 && update.next === runtime))
+    states[10] = runtime
+    stateIndex = 0
+    const updated = History()
+    const feedback = find(updated, node => node.type === Feedback)
+    assert.equal(feedback.props.showJudge, false)
+    assert.equal(feedback.props.result.analysis, runtime.analysis)
+    assert.equal(feedback.props.onRevealHint, undefined)
+    assert.equal(calls.length, 1)
+    const html = renderToStaticMarkup(updated)
+    assert.match(html, /AI 错因分析|Repeated replacement/)
+    assert.doesNotMatch(html, /HINT_ONE|HINT_TWO|HINT_THREE|AI 学习提示|查看第/)
+    cleanup()
+  } finally {
+    if (originalStorage) Object.defineProperty(global, 'localStorage', originalStorage)
+    else delete global.localStorage
+  }
+})
+
+test('review submission also shows the judge before its analysis request finishes', async () => {
   const effects = []
   const updates = []
   let finishAnalysis
   const question = { problem_id: 'level2', first_wrong_submission_id: 5,
     last_wrong_code: 'print(100)', title: '求和', description: '求和', source: '系统关卡' }
   const states = [[question], {}, 'level2', 'practice', false, '', 'print(100)', '', false, false,
-    null, null, 0, null, {}, [], 0, 0, 0, 0, false, '', '']
+    null, null, [], 0, 0, 0, 0, false, '', '']
   let stateIndex = 0
   const hooks = {
     ...React,
@@ -530,14 +757,14 @@ test('opening an unfinished history entry resumes only that analysis', async () 
   let finishAnalysis
   const item = { id: 81, code: 'print(100)', judge: failure.judge,
     analysis: { status: 'preparing', message: '正在准备提示' },
-    hints_viewed_max: 0, passed: false, created_at: '2026-10-16T00:00:00Z' }
+    hints_viewed_max: 3, passed: false, created_at: '2026-10-16T00:00:00Z' }
   const question = { problem_id: 'level2', first_wrong_submission_id: 5,
     last_wrong_code: 'print(100)', title: '求和', description: '求和', source: '系统关卡',
     first_wrong_at: '2026-10-16T00:00:00Z', latest_suspected_cause: null,
     review_count: 0, review_rate_percent: null, recent_review_passed: 0,
     recent_review_total: 0, related_questions: [] }
   const states = [[question], {}, 'level2', 'insight', false, '', 'print(100)', '', false, false,
-    null, null, 0, null, {}, [item], 1, 0, 0, 0, false, '', '']
+    null, null, [item], 1, 0, 0, 0, false, '', '']
   let stateIndex = 0
   const hooks = {
     ...React,
@@ -550,7 +777,7 @@ test('opening an unfinished history entry resumes only that analysis', async () 
     'react-router-dom': { useNavigate: () => () => {} },
     '../components/ProblemMetadata.jsx': () => null,
     '../components/MisconceptionOverview.jsx': () => null,
-    '../components/SubmissionFeedback.jsx': () => null,
+    '../components/SubmissionFeedback.jsx': loadJsx('../src/components/SubmissionFeedback.jsx'),
     '../components/codeApi.mjs': {
       requestAnalysis: async id => { assert.equal(id, 81); return new Promise(resolve => { finishAnalysis = resolve }) },
     },
@@ -569,8 +796,13 @@ test('opening an unfinished history entry resumes only that analysis', async () 
     assert.equal(typeof finishAnalysis, 'function')
     finishAnalysis({ analysis: failure.analysis })
     await new Promise(resolve => setImmediate(resolve))
-    const changed = updates.find(update => update.index === 15 && typeof update.next === 'function')
-    assert.equal(changed.next([item])[0].analysis.status, 'ready')
+    const changed = updates.find(update => update.index === 12 && typeof update.next === 'function')
+    states[12] = changed.next([item])
+    assert.equal(states[12][0].analysis.status, 'ready')
+    stateIndex = 0
+    const html = renderToStaticMarkup(History())
+    assert.match(html, /AI 错因分析|Repeated replacement/)
+    assert.doesNotMatch(html, /HINT_ONE|HINT_TWO|HINT_THREE|AI 学习提示|查看第/)
     cleanup()
   } finally {
     if (originalStorage) Object.defineProperty(global, 'localStorage', originalStorage)
@@ -600,7 +832,7 @@ for (const levelNo of [7, 12]) test(`shared lesson ${levelNo} loads content and 
       useNavigate: () => () => {}, useParams: () => ({ levelId: String(levelNo) }),
       useOutletContext: () => ({ userId: 12 }),
     },
-    '../components/CodeEditor.jsx': props => { editorProps = props; return React.createElement('div', null, props.children) },
+    '../components/CodeEditor.jsx': props => { editorProps = props; return React.createElement('div', null, props.children, props.completionPanel) },
     '../components/codeApi.mjs': {
       getLevels: async () => ({ items: [{ id: levelNo, problem_id: lesson.problem_id, published: true }, ...(levelNo === 7 ? [{ id: 8, published: false }] : [])] }),
       getLesson: async id => { calls.push(['lesson', id]); return { ...lesson, completed: false } },
@@ -635,9 +867,7 @@ for (const levelNo of [7, 12]) test(`shared lesson ${levelNo} loads content and 
       assert.match(html, /恭喜完成全部 12 关/)
       assert.doesNotMatch(html, /第 13 关/)
     }
-    const referenceButton = React.Children.toArray(tree.props.children).flatMap(child =>
-      React.isValidElement(child) ? React.Children.toArray(child.props.children) : []).flatMap(child =>
-      React.isValidElement(child) ? React.Children.toArray(child.props.children) : []).find(child =>
+    const referenceButton = React.Children.toArray(editorProps.completionPanel.props.children).find(child =>
       React.isValidElement(child) && child.type === 'button' && child.props.children === '查看参考解与解析')
     assert.ok(referenceButton)
     await referenceButton.props.onClick()
@@ -807,11 +1037,13 @@ test('mistake insight shows the AI matched practice focus and direct link', () =
     recent_review_total: 0, related_questions: [{ problem_id: 'practice-01-2-v1',
       title: '加练二', practice_focus: '练习字符串输出', matched_knowledge_ids: ['K01'],
       url: '/app/practice?level_no=1&problem_id=practice-01-2-v1' }] }
-  const states = [[question], { K01: '字符串与输出' }, 'level1', 'insight', false, '',
-    'print(1)', '', false, false, null, null, 0, null, {}, [], 0, 0, 0, 0, false, '', '']
+  const selectedStates = { 0: [question], 1: { K01: '字符串与输出' }, 2: 'level1', 3: 'insight' }
   let index = 0
   const History = loadJsx('../src/pages/LearningHistory.jsx', {
-    react: { ...React, useState: () => [states[index++], () => {}],
+    react: { ...React, useState: initial => {
+      const slot = index++
+      return [slot in selectedStates ? selectedStates[slot] : typeof initial === 'function' ? initial() : initial, () => {}]
+    },
       useRef: value => ({ current: value }), useEffect: () => {} },
     'react-router-dom': { useNavigate: () => () => {} },
     '../components/ProblemMetadata.jsx': () => null,
