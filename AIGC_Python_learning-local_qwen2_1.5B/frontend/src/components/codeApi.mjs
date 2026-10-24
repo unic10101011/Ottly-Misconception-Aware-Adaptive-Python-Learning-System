@@ -150,3 +150,11 @@ export function getSolution(problemId, token) {
 export function getKnowledge(token) {
   return requestLearningHistory('/code/knowledge', 'GET', token)
 }
+
+export function getGuide(problemId, token) {
+  return requestLearningHistory(`/code/guides/${encodeURIComponent(problemId)}`, 'GET', token)
+}
+
+export function completeGuide(problemId, version, heard, answers, token) {
+  return requestLearningHistory(`/code/guides/${encodeURIComponent(problemId)}/complete`, 'POST', token, { version, heard, answers })
+}

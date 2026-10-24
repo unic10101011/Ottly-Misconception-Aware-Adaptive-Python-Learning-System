@@ -833,6 +833,7 @@ for (const levelNo of [7, 12]) test(`shared lesson ${levelNo} loads content and 
   }
   let editorProps
   const Page = loadJsx('../src/pages/LessonPage.jsx', {
+    '../components/story/LessonIntro.jsx': () => null,
     react: hooks,
     'react-router-dom': {
       useNavigate: () => () => {}, useParams: () => ({ levelId: String(levelNo) }),
@@ -935,16 +936,19 @@ test('late practice solution response is not shown under another question', asyn
   }
 })
 
-test('practice reset restores starter code in the saved draft without removing completion', async () => {
+for (const problemId of ['practice-12-2-v1', 'level1', 'count-at-least-v1']) test(`reset ${problemId} preserves draft isolation, input and fixed framework`, async () => {
   const { readCodeDraft, saveCodeDraft } = await import('../src/components/codeDraft.mjs')
   const entries = new Map()
   const originalStorage = Object.getOwnPropertyDescriptor(global, 'localStorage')
+  const originalWindow = global.window
+  let confirmed = false
+  global.window = { confirm: message => { assert.equal(message, '确定清空当前代码吗？'); return confirmed } }
   Object.defineProperty(global, 'localStorage', { configurable: true, value: {
     getItem: key => entries.get(key) ?? null,
     setItem: (key, value) => entries.set(key, value),
   } })
   try {
-    saveCodeDraft(7, 'practice-12-2-v1', 'old answer', '5\n2\n')
+    saveCodeDraft(7, problemId, 'old answer', '5\n2\n')
     const values = []
     let index = 0
     const hooks = { ...React,
@@ -960,20 +964,31 @@ test('practice reset restores starter code in the saved draft without removing c
       'react-router-dom': { useNavigate: () => () => {} },
       './SubmissionFeedback.jsx': { default: () => null },
     })
-    const starter = 'def can_sail(wind, wave):\n    pass\n'
-    const tree = Editor({ initialCode: starter, problemId: 'practice-12-2-v1', userId: 7,
-      title: '练习', allowReset: true })
+    const starter = problemId === 'count-at-least-v1'
+      ? JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../backend/app/data/count-at-least-v1.json'), 'utf8')).starter_code
+      : 'def can_sail(wind, wave):\n    pass\n'
+    const formal = problemId !== 'practice-12-2-v1'
+    const tree = Editor({ initialCode: starter, problemId, userId: 7,
+      title: '练习', allowReset: true, resetMode: formal ? 'clear' : 'template' })
     const findReset = node => {
       if (!React.isValidElement(node)) return null
-      if (node.props['aria-label'] === '清除代码痕迹，恢复初始代码') return node
+      if (node.props['aria-label'] === (formal ? '清空当前代码' : '清除代码痕迹，恢复初始代码')) return node
       return React.Children.toArray(node.props.children).map(findReset).find(Boolean)
     }
     const reset = findReset(tree)
     assert.ok(reset)
+    if (formal) {
+      reset.props.onClick()
+      assert.equal(values[0], 'old answer', 'cancel leaves code untouched')
+      assert.equal(readCodeDraft(7, problemId).code, 'old answer')
+      confirmed = true
+    }
     reset.props.onClick()
-    assert.equal(values[0], starter)
-    assert.deepEqual(readCodeDraft(7, 'practice-12-2-v1'), { code: starter, stdin: '5\n2\n' })
+    const expected = problemId === 'level1' ? '' : starter
+    assert.equal(values[0], expected)
+    assert.deepEqual(readCodeDraft(7, problemId), { code: expected, stdin: '5\n2\n' })
   } finally {
+    if (originalWindow === undefined) delete global.window; else global.window = originalWindow
     if (originalStorage) Object.defineProperty(global, 'localStorage', originalStorage)
     else delete global.localStorage
   }

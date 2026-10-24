@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useOutletContext, useParams } from 'react-router-dom'
 import CodeEditor from '../components/CodeEditor.jsx'
+import LessonIntro from '../components/story/LessonIntro.jsx'
 import { getLevels, getLesson, getSolution } from '../components/codeApi.mjs'
 
 const lessonIllustrations = [null,
@@ -25,6 +26,7 @@ function Lesson({ levelNo, userId, navigate }) {
   const [solution, setSolution] = useState(null)
   const [solutionError, setSolutionError] = useState('')
   const [solutionBusy, setSolutionBusy] = useState(false)
+  const [guideReady, setGuideReady] = useState(false)
 
   useEffect(() => {
     let active = true
@@ -74,11 +76,17 @@ function Lesson({ levelNo, userId, navigate }) {
   </section>
 
   return <div className="lesson-page">
-    <button type="button" className="btn-hint" onClick={() => navigate('/app/levels')}>← 返回关卡选择</button>
+    <div className="lesson-tools" aria-label="关卡工具">
+      <button type="button" className="lesson-tool-icon" title="返回关卡" aria-label="返回关卡选择" onClick={() => navigate('/app/levels')}>
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><path d="m14 5-7 7 7 7M7 12h14" /></svg>
+      </button>
+      {lesson && <LessonIntro problemId={lesson.problem_id} onReady={setGuideReady} onExit={() => navigate('/app/levels')} />}
+    </div>
     {error && <p role="alert">{error}</p>}
     {!lesson && !error && <p role="status">正在加载第 {levelNo} 关...</p>}
-    {lesson && <>
+    {lesson && <div inert={guideReady ? undefined : ''}>
       <CodeEditor userId={userId} initialCode={lesson.starter_code} problemId={lesson.problem_id}
+        allowReset resetMode="clear"
         title={`第 ${levelNo} 关 · ${lesson.title}`} acceptsInput={levelNo !== 1} persistentOutput
         sampleInput={lesson.examples[0]?.stdin || ''} onAccepted={() => setCompleted(true)}
         teaching={lesson.teaching.map(item => <section className="lesson-teaching" key={item.title}>
@@ -101,6 +109,6 @@ function Lesson({ levelNo, userId, navigate }) {
       <button type="button" className="btn-hint" onClick={() => navigate(`/app/practice?level_no=${levelNo}`)}>
         练习第 {levelNo} 关知识点
       </button>
-    </>}
+    </div>}
   </div>
 }

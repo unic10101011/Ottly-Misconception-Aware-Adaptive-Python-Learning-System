@@ -1,0 +1,101 @@
+.lesson-tools { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; min-height: 42px; }
+.lesson-page .lesson-tools .lesson-tool-icon { display: inline-flex; align-items: center; justify-content: center; width: 42px; height: 42px; padding: 0; border: 1.5px solid #214c7a; border-radius: 5px; background: #f7fcff; color: #214c7a; cursor: pointer; }
+.lesson-tool-icon:hover:not(:disabled) { background: #dce8fc; }
+.lesson-tool-icon:focus-visible { outline: 3px solid #6ba6ed; outline-offset: 3px; }
+.lesson-tool-icon:disabled { opacity: .45; cursor: wait; }
+.guide-load-status { font-size: 13px; color: #365c80; }
+.story-dialog {
+  position: fixed; inset: 0; width: 100vw; max-width: none; height: 100dvh;
+  max-height: none; margin: 0; padding: 0; border: 0; background: transparent;
+  color: #16375f; overflow: hidden; font-family: inherit;
+}
+.story-dialog::backdrop { background: rgba(0, 0, 0, .56); }
+.story-dialog button, .story-history button {
+  min-height: 44px; padding: 9px 18px; border: 2px solid #214c7a;
+  border-radius: 0; background: #f8fcff; color: #173d6a; font: inherit;
+  font-weight: 600; cursor: pointer;
+}
+.story-dialog button:hover:not(:disabled), .story-history button:hover { background: #e0ecff; }
+.story-dialog button:focus-visible, .story-history button:focus-visible { outline: 3px solid #ffcd5b; outline-offset: 4px; }
+.story-dialog button:disabled { opacity: .55; cursor: not-allowed; }
+.story-toolbar { display: flex; justify-content: space-between; gap: 16px; padding: 22px 3vw; }
+.story-toolbar > div:first-child { display: flex; gap: 12px; align-items: flex-start; }
+.story-skip { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+.story-skip span { color: white; font-size: 13px; text-shadow: 0 1px 3px black; }
+.story-stage { position: absolute; left: 3vw; right: calc(3vw + 12px); bottom: 4vh; height: clamp(235px, 30dvh, 340px); }
+.story-portrait {
+  position: absolute; left: clamp(24px, 7vw, 160px); bottom: calc(100% - 38px);
+  width: clamp(230px, 24vw, 365px); height: auto; max-height: 46dvh;
+  object-fit: contain; object-position: bottom; z-index: 1; pointer-events: none;
+}
+.story-frame-shadow { position: absolute; inset: 0; transform: translate(12px, 12px); border: 3px solid #183d6a; background: #8eafe9; }
+.story-frame {
+  position: relative; z-index: 2; height: 100%; box-sizing: border-box; border: 3px solid #183d6a;
+  background: #f9ffff; padding: 24px 30px 32px; display: flex; flex-direction: column;
+  box-shadow: inset 0 0 0 5px white;
+}
+.story-frame::before { content: ''; position: absolute; inset: 12px; background: #dce8fc; z-index: -1; }
+.story-corner-squares { position: absolute; left: 20px; top: -23px; display: flex; gap: 13px; }
+.story-corner-squares i { width: 34px; height: 34px; border: 3px solid #183d6a; background: #f7ffff; box-shadow: 5px 5px 0 #b5ccef, 5px 5px 0 2px #183d6a; }
+.story-nameplate { position: absolute; top: -23px; left: 130px; min-width: 110px; padding: 3px 20px; border: 3px solid #183d6a; background: #f7ffff; font-size: 20px; font-weight: 750; letter-spacing: 1px; }
+.story-heading { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; color: #4e6c91; margin-bottom: 12px; }
+.story-content { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-color: #8caed8 transparent; }
+.story-copy { margin: 0; font-size: clamp(18px, 1.5vw, 23px); line-height: 1.85; white-space: pre-wrap; overflow-wrap: anywhere; min-height: 1.85em; }
+.story-footer { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding-top: 12px; }
+.story-footer > span { font-size: 13px; color: #4e6c91; }
+.story-footer button { flex-shrink: 0; background: #f8fcff; box-shadow: 3px 3px 0 #94b2dd; }
+.story-pixels { position: absolute; bottom: 7px; right: 24px; display: flex; gap: 7px; }
+.story-pixels i { width: 13px; height: 13px; border: 2px solid #214c7a; background: #f7ffff; }
+.story-floating-options { position: absolute; z-index: 4; left: 60%; transform: translateX(-50%); top: clamp(100px, 21dvh, 250px); width: min(610px, 49vw); max-height: calc(66dvh - 125px); overflow-y: auto; overflow-x: hidden; padding: 10px 13px 12px 3px; display: flex; flex-direction: column; gap: 17px; overscroll-behavior: contain; }
+.story-dialog .story-option-strip { position: relative; isolation: isolate; min-height: 60px; flex-shrink: 0; padding: 15px 45px 15px 30px; border: 1.5px solid #17417d; border-radius: 8px; background: #f9fcff; box-shadow: 6px 6px 0 -1px #edf4ff, 6px 6px 0 0 #17417d; font-weight: 500; text-align: left; white-space: pre-wrap; line-height: 1.55; overflow-wrap: anywhere; }
+.story-option-dots { position: absolute; left: 9px; top: 3px; color: #17417d; font-size: 11px; letter-spacing: 2px; line-height: 1; }
+.story-option-corners { position: absolute; right: 11px; top: -7px; display: flex; gap: 5px; }
+.story-option-corners i { width: 14px; height: 14px; border: 1.5px solid #17417d; border-radius: 1px; background: #f9fcff; box-shadow: 3px 3px 0 #d6e5fc, 3px 3px 0 1px #17417d; }
+.story-dialog .has-feedback .story-option-strip:disabled { opacity: 1; cursor: default; }
+.story-dialog .story-option-strip.is-correct { color: #17643c; border-color: #288451; background: #e8f7ed; box-shadow: 6px 6px 0 -1px #f1fbf4, 6px 6px 0 0 #288451; }
+.story-dialog .story-option-strip.is-incorrect { color: #9c3037; border-color: #bd4c56; background: #fff0f1; box-shadow: 6px 6px 0 -1px #fff7f7, 6px 6px 0 0 #bd4c56; }
+.story-option-verdict { display: block; margin-top: 5px; font-size: 12px; font-weight: 650; }
+.story-feedback-actions { display: flex; gap: 10px; }
+.story-save-error { color: #9e3030; font-size: 14px; margin: 10px 0 0; }
+.story-sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.story-history { width: min(680px, calc(100vw - 36px)); max-height: 78dvh; padding: 24px; border: 3px solid #183d6a; border-radius: 0; color: #16375f; background: #f2f7ff; box-shadow: 10px 10px 0 #8eafe9; }
+.story-history::backdrop { background: rgba(0, 0, 0, .4); }
+.story-history header { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.story-history h2 { margin: 0; font-size: 22px; }
+.story-history ol { list-style: none; padding: 0; margin: 24px 0 0; }
+.story-history li { border-top: 1px solid #bfd0e9; padding: 16px 0; }
+.story-history p { margin: 8px 0 0; line-height: 1.8; }
+.story-history-self { color: #426d4a; }
+@media (max-width: 720px) {
+  .story-toolbar { padding: 14px 16px; gap: 8px; }
+  .story-toolbar > div:first-child { gap: 7px; }
+  .story-toolbar button { padding: 8px 10px; font-size: 13px; }
+  .story-skip span { font-size: 11px; }
+  .story-stage { left: 16px; right: 28px; bottom: 26px; height: max(265px, 38dvh); }
+  .story-portrait { left: 18px; width: 155px; max-height: 22dvh; }
+  .story-frame { padding: 27px 20px 30px; }
+  .story-heading { font-size: 11px; gap: 8px; }
+  .story-copy { font-size: 17px; line-height: 1.75; }
+  .story-floating-options { left: 50%; top: 100px; width: calc(100vw - 50px); max-height: calc(60dvh - 150px); gap: 13px; }
+  .story-dialog .story-option-strip { min-height: 48px; padding: 12px 23px; font-size: 14px; }
+  .story-footer { gap: 8px; }
+  .story-footer > span { font-size: 11px; max-width: 47%; }
+  .story-footer button { font-size: 14px; padding: 8px 12px; }
+  .story-feedback-actions { flex-wrap: wrap; justify-content: flex-end; gap: 7px; }
+  .story-feedback-actions button { min-height: 36px; font-size: 12px; }
+  .story-history { padding: 18px; }
+}
+@media (max-height: 600px) {
+  .story-stage { height: 44dvh; min-height: 170px; bottom: 20px; }
+  .story-floating-options { top: 64px; max-height: calc(56dvh - 90px); gap: 12px; }
+  .story-dialog .story-option-strip { min-height: 44px; padding-top: 10px; padding-bottom: 10px; font-size: 13px; }
+  .story-portrait { width: 130px; max-height: 24dvh; left: 24px; }
+  .story-toolbar { padding-top: 10px; }
+  .story-skip span { display: none; }
+  .story-heading { margin-bottom: 5px; }
+  .story-frame { padding-top: 23px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .story-stage { animation: story-enter 180ms ease-out; }
+  @keyframes story-enter { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+}

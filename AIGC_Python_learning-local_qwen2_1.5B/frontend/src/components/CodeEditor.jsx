@@ -4,7 +4,7 @@ import SubmissionFeedback from './SubmissionFeedback.jsx'
 import { requestCode, requestAnalysis } from './codeApi.mjs'
 import { readCodeDraft, saveCodeDraft } from './codeDraft.mjs'
 
-function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, title, children, teaching, completionPanel, nextAction, acceptsInput = false, persistentOutput = acceptsInput, sampleInput = '', allowReset = false }) {
+function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, title, children, teaching, completionPanel, nextAction, acceptsInput = false, persistentOutput = acceptsInput, sampleInput = '', allowReset = false, resetMode = 'template' }) {
   const navigate = useNavigate()
   const [code, setCode] = useState(() => readCodeDraft(userId, problemId)?.code ?? initialCode)
   const [stdin, setStdin] = useState(() => readCodeDraft(userId, problemId)?.stdin ?? sampleInput)
@@ -447,8 +447,14 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, tit
             <span className="code-dot green"></span>
             <span className="code-file-label">main.py</span>
             {allowReset && <button type="button" className="code-reset-button"
-              aria-label="清除代码痕迹，恢复初始代码" title="清除代码痕迹，恢复初始代码"
-              disabled={busy} onClick={() => updateCode(initialCode)}>
+              aria-label={resetMode === 'clear' ? '清空当前代码' : '清除代码痕迹，恢复初始代码'}
+              title={resetMode === 'clear' ? '清空当前代码' : '清除代码痕迹，恢复初始代码'}
+              style={resetMode === 'clear' ? { order: -1, marginLeft: 0, marginRight: 8 } : undefined}
+              disabled={busy} onClick={() => {
+                if (resetMode === 'clear' && !window.confirm('确定清空当前代码吗？')) return
+                updateCode(resetMode === 'clear' && problemId !== 'count-at-least-v1' ? '' : initialCode)
+                textareaRef.current?.focus()
+              }}>
               <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
                 strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M4 7h16M9 7V4h6v3m3 0-1 13H7L6 7m4 4v6m4-6v6" />
