@@ -1,0 +1,84 @@
+{
+  "schema_version": "1.0.0",
+  "problem_id": "practice-05-4-v1",
+  "version": 1,
+  "level_no": 5,
+  "kind": "practice",
+  "practice_focus": "比较两个变量，区分大于、小于和相等；使用互斥分支保证只输出一个结果。",
+  "title": "贝壳收集赛",
+  "difficulty": 2,
+  "knowledge_ids": [
+    "K05"
+  ],
+  "prerequisite_knowledge_ids": [
+    "K03"
+  ],
+  "prerequisite_problem_ids": [
+    "shell-groups-v1"
+  ],
+  "published": true,
+  "story": "Ottly 和朋友参加贝壳收集赛。请根据两人的贝壳数量，判断谁收集得更多，或者是否打成平手。",
+  "teaching": [
+    {
+      "title": "本题练习重点",
+      "text": "比较两个变量，区分大于、小于和相等；使用互斥分支保证只输出一个结果。",
+      "example": "先运行样例，再检查零值、相等值或区间边界。"
+    }
+  ],
+  "description": "Ottly 和朋友参加贝壳收集赛。请根据两人的贝壳数量，判断谁收集得更多，或者是否打成平手。\n\n任务：依次输入两个整数，每个整数单独占一行：Ottly 收集的数量 ottly_count（0–1000）、朋友收集的数量 friend_count（0–1000）。使用 if、elif、else 输出一行：Ottly 更多输出 OTTLY，朋友更多输出 FRIEND，两人一样多输出 TIE。英文全部大写，不附其他文字。",
+  "starter_code": "# 在这里编写 Python 代码\n",
+  "examples": [
+    {
+      "stdin": "12\n9\n",
+      "stdout": "OTTLY\n"
+    }
+  ],
+  "tests": [
+    {
+      "case_id": "sample-1",
+      "stdin": "12\n9\n",
+      "expected_output": "OTTLY\n",
+      "visibility": "public"
+    },
+    {
+      "case_id": "hidden-1",
+      "stdin": "9\n12\n",
+      "expected_output": "FRIEND\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-2",
+      "stdin": "8\n8\n",
+      "expected_output": "TIE\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-3",
+      "stdin": "0\n0\n",
+      "expected_output": "TIE\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-4",
+      "stdin": "0\n1000\n",
+      "expected_output": "FRIEND\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-5",
+      "stdin": "1000\n0\n",
+      "expected_output": "OTTLY\n",
+      "visibility": "hidden"
+    }
+  ],
+  "comparison": "exact",
+  "time_limit_seconds": 3,
+  "output_limit_chars": 8000,
+  "hints": {
+    "level1": "两个人的数量可能有哪三种大小关系？",
+    "level2": "分别判断前者更多与后者更多，剩下的情况就是相等。",
+    "level3": "检查 8 和 8、0 和 0 的情况，并确认每次只输出一行。"
+  },
+  "reference_solution": "ottly_count = int(input())\nfriend_count = int(input())\n\nif ottly_count > friend_count:\n    print(\"OTTLY\")\nelif ottly_count < friend_count:\n    print(\"FRIEND\")\nelse:\n    print(\"TIE\")\n",
+  "solution_explanation": "先判断 Ottly 的数量是否更多，再判断是否更少。两者均不成立时，两个数量相等，输出 TIE。if、elif、else 只会执行其中一个分支，保证每次输出一行。"
+}

@@ -1,6 +1,7 @@
 """Practice questions are real, gated catalog entries, not extra main levels."""
 from collections import Counter
 import json
+import pytest
 
 from app.services.problem_catalog import DATA_DIR
 
@@ -10,10 +11,12 @@ from app.services.problem_catalog import LEVELS, PROBLEMS
 from app.services.submission import judge_submission, public_judge
 
 
-def test_each_level_has_three_published_practice_questions():
+def test_each_level_has_expected_published_practice_questions():
     practice = [problem for problem in PROBLEMS.values() if problem.kind == 'practice']
-    assert len(practice) == 36
-    assert Counter(problem.level_no for problem in practice) == {level: 3 for level in range(1, 13)}
+    assert len(practice) == 45
+    assert Counter(problem.level_no for problem in practice) == {
+        level: 6 if level in (3, 4, 5) else 3 for level in range(1, 13)
+    }
     assert all(problem.published and problem.practice_focus for problem in practice)
     assert all(problem.problem_id not in {slot.problem_id for slot in LEVELS} for problem in practice)
     for problem in practice:
@@ -24,13 +27,30 @@ def test_each_level_has_three_published_practice_questions():
             assert any(case.visibility == 'hidden' for case in problem.tests)
 
 
-def test_practice_reference_solutions_and_targeted_wrong_answers():
-    practice = [problem for problem in PROBLEMS.values() if problem.kind == 'practice']
+@pytest.mark.parametrize('problem_id', [
+    problem.problem_id for problem in PROBLEMS.values() if problem.kind == 'practice'
+])
+def test_practice_reference_solutions_and_targeted_wrong_answers(problem_id):
+    problem = PROBLEMS[problem_id]
     wrong_by_id = {item['problem_id']: item['wrong_solution']
                    for item in json.loads((DATA_DIR / 'practice.json').read_text(encoding='utf-8'))}
-    for problem in practice:
-        assert judge_submission(problem, problem.reference_solution).passed, problem.problem_id
-        assert not judge_submission(problem, wrong_by_id[problem.problem_id]).passed, problem.problem_id
+    mistakes = {
+        'practice-03-4-v1': ('(length + width) * 2', 'length + width * 2'),
+        'practice-03-5-v1': ('before - given', 'given - before'),
+        'practice-03-6-v1': ('per_group * groups', 'children + teachers * groups'),
+        'practice-04-4-v1': ('remaining // 60', 'total_seconds // 60'),
+        'practice-04-5-v1': ('number // 10 % 10', 'number // 10'),
+        'practice-04-6-v1': ('(number - 1) % seats_per_row + 1', 'number % seats_per_row'),
+        'practice-05-4-v1': ('ottly_count > friend_count', 'ottly_count >= friend_count'),
+        'practice-05-5-v1': ('height <= 100', 'height < 100'),
+        'practice-05-6-v1': ('print(current - target)', 'print(target - current)'),
+    }
+    wrong_by_id.update({
+        problem_id: PROBLEMS[problem_id].reference_solution.replace(before, after, 1)
+        for problem_id, (before, after) in mistakes.items()
+    })
+    assert judge_submission(problem, problem.reference_solution).passed, problem.problem_id
+    assert not judge_submission(problem, wrong_by_id[problem.problem_id]).passed, problem.problem_id
 
 
 def test_function_practice_checks_return_type_not_only_printed_text():

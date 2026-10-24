@@ -1,0 +1,84 @@
+{
+  "schema_version": "1.0.0",
+  "problem_id": "practice-04-6-v1",
+  "version": 1,
+  "level_no": 4,
+  "kind": "practice",
+  "practice_focus": "从 1 开始编号时先减 1，再整除和取余，最后加 1；处理一排末尾和下一排开头。",
+  "title": "小剧场找座位",
+  "difficulty": 2,
+  "knowledge_ids": [
+    "K04"
+  ],
+  "prerequisite_knowledge_ids": [
+    "K03"
+  ],
+  "prerequisite_problem_ids": [
+    "shell-shop-v1"
+  ],
+  "published": true,
+  "story": "海边小剧场每排座位数相同。座位从第一排最左边开始，按从左到右、从前到后的顺序连续编号，编号从 1 开始。请帮 Ottly 找到座位。",
+  "teaching": [
+    {
+      "title": "本题练习重点",
+      "text": "从 1 开始编号时先减 1，再整除和取余，最后加 1；处理一排末尾和下一排开头。",
+      "example": "先运行样例，再检查零值、相等值或区间边界。"
+    }
+  ],
+  "description": "海边小剧场每排座位数相同。座位从第一排最左边开始，按从左到右、从前到后的顺序连续编号，编号从 1 开始。请帮 Ottly 找到座位。\n\n任务：依次输入两个整数，每个整数单独占一行：座位编号 number（1–10000）、每排座位数 seats_per_row（1–100）。第一行输出从 1 开始的排号，第二行输出从 1 开始的排内位置。保证剧场有足够多的排。不附提示语、标签或单位。",
+  "starter_code": "# 在这里编写 Python 代码\n",
+  "examples": [
+    {
+      "stdin": "13\n5\n",
+      "stdout": "3\n3\n"
+    }
+  ],
+  "tests": [
+    {
+      "case_id": "sample-1",
+      "stdin": "13\n5\n",
+      "expected_output": "3\n3\n",
+      "visibility": "public"
+    },
+    {
+      "case_id": "hidden-1",
+      "stdin": "1\n5\n",
+      "expected_output": "1\n1\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-2",
+      "stdin": "5\n5\n",
+      "expected_output": "1\n5\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-3",
+      "stdin": "6\n5\n",
+      "expected_output": "2\n1\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-4",
+      "stdin": "10000\n100\n",
+      "expected_output": "100\n100\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-5",
+      "stdin": "7\n1\n",
+      "expected_output": "7\n1\n",
+      "visibility": "hidden"
+    }
+  ],
+  "comparison": "exact",
+  "time_limit_seconds": 3,
+  "output_limit_chars": 8000,
+  "hints": {
+    "level1": "每排 5 个座位时，编号 5 和编号 6 分别在哪里？",
+    "level2": "先把编号改成从零开始，再分别用整除与取余求位置。",
+    "level3": "将计算结果改回从 1 开始，重点检查编号恰好是每排座位数的倍数时的结果。"
+  },
+  "reference_solution": "number = int(input())\nseats_per_row = int(input())\n\nrow = (number - 1) // seats_per_row + 1\nposition = (number - 1) % seats_per_row + 1\n\nprint(row)\nprint(position)\n",
+  "solution_explanation": "先将座位编号减 1，变成从零开始的编号。整除每排座位数得到从零开始的排号，取余得到从零开始的排内位置；两个结果各加 1。这样每排最后一个座位不会得到位置 0。"
+}

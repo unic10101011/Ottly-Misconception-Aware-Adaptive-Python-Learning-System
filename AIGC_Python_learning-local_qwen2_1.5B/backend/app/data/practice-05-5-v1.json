@@ -1,0 +1,90 @@
+{
+  "schema_version": "1.0.0",
+  "problem_id": "practice-05-5-v1",
+  "version": 1,
+  "level_no": 5,
+  "kind": "practice",
+  "practice_focus": "按顺序判断连续区间，正确处理 0 和 100 两个边界；支持负整数。",
+  "title": "潮位提示牌",
+  "difficulty": 2,
+  "knowledge_ids": [
+    "K05"
+  ],
+  "prerequisite_knowledge_ids": [
+    "K03"
+  ],
+  "prerequisite_problem_ids": [
+    "shell-groups-v1"
+  ],
+  "published": true,
+  "story": "Ottly 在码头安装了一块潮位提示牌。潮位用相对于基准面的厘米数表示，因此可能是负数。提示牌根据潮位显示低潮、正常或高潮。",
+  "teaching": [
+    {
+      "title": "本题练习重点",
+      "text": "按顺序判断连续区间，正确处理 0 和 100 两个边界；支持负整数。",
+      "example": "先运行样例，再检查零值、相等值或区间边界。"
+    }
+  ],
+  "description": "Ottly 在码头安装了一块潮位提示牌。潮位用相对于基准面的厘米数表示，因此可能是负数。提示牌根据潮位显示低潮、正常或高潮。\n\n任务：输入一个整数 height（-100–200）。使用 if、elif、else 输出一行：低于 0 输出 LOW；0–100（包含两端）输出 NORMAL；高于 100 输出 HIGH。英文全部大写，不附其他文字。",
+  "starter_code": "# 在这里编写 Python 代码\n",
+  "examples": [
+    {
+      "stdin": "35\n",
+      "stdout": "NORMAL\n"
+    }
+  ],
+  "tests": [
+    {
+      "case_id": "sample-1",
+      "stdin": "35\n",
+      "expected_output": "NORMAL\n",
+      "visibility": "public"
+    },
+    {
+      "case_id": "hidden-1",
+      "stdin": "-100\n",
+      "expected_output": "LOW\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-2",
+      "stdin": "-1\n",
+      "expected_output": "LOW\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-3",
+      "stdin": "0\n",
+      "expected_output": "NORMAL\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-4",
+      "stdin": "100\n",
+      "expected_output": "NORMAL\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-5",
+      "stdin": "101\n",
+      "expected_output": "HIGH\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-6",
+      "stdin": "200\n",
+      "expected_output": "HIGH\n",
+      "visibility": "hidden"
+    }
+  ],
+  "comparison": "exact",
+  "time_limit_seconds": 3,
+  "output_limit_chars": 8000,
+  "hints": {
+    "level1": "潮位恰好为 0 或 100 时，题目要求显示什么？",
+    "level2": "先处理负数；如果不是负数，再判断是否超过正常范围的上限。",
+    "level3": "分别检查 -1、0、100、101，确认两个边界都归入正常区间，且只输出一行。"
+  },
+  "reference_solution": "height = int(input())\n\nif height < 0:\n    print(\"LOW\")\nelif height <= 100:\n    print(\"NORMAL\")\nelse:\n    print(\"HIGH\")\n",
+  "solution_explanation": "先排除低于 0 的情况。能进入 elif 时，潮位已经至少为 0，只需继续判断是否不超过 100。其余情况一定高于 100。0 和 100 都属于 NORMAL。"
+}

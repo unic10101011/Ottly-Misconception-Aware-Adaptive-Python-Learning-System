@@ -1,0 +1,78 @@
+{
+  "schema_version": "1.0.0",
+  "problem_id": "practice-03-6-v1",
+  "version": 1,
+  "level_no": 3,
+  "kind": "practice",
+  "practice_focus": "区分每组数量和总数量；先将每组小朋友与老师人数相加，再乘以小组数量。",
+  "title": "野餐餐盒",
+  "difficulty": 1,
+  "knowledge_ids": [
+    "K03"
+  ],
+  "prerequisite_knowledge_ids": [
+    "K02"
+  ],
+  "prerequisite_problem_ids": [
+    "greeting-v1"
+  ],
+  "published": true,
+  "story": "Ottly 为野餐小组准备餐盒。所有小组的小朋友人数相同，老师人数也相同，每人需要一个餐盒。请计算每组及所有小组需要的餐盒数。",
+  "teaching": [
+    {
+      "title": "本题练习重点",
+      "text": "区分每组数量和总数量；先将每组小朋友与老师人数相加，再乘以小组数量。",
+      "example": "先运行样例，再检查零值、相等值或区间边界。"
+    }
+  ],
+  "description": "Ottly 为野餐小组准备餐盒。所有小组的小朋友人数相同，老师人数也相同，每人需要一个餐盒。请计算每组及所有小组需要的餐盒数。\n\n任务：依次输入三个整数，每个整数单独占一行：每组小朋友人数 children（1–30）、每组老师人数 teachers（1–5）、小组数量 groups（0–100）。第一行输出每组需要的餐盒数，第二行输出所有小组需要的餐盒总数。不附提示语、标签或单位。",
+  "starter_code": "# 在这里编写 Python 代码\n",
+  "examples": [
+    {
+      "stdin": "6\n2\n3\n",
+      "stdout": "8\n24\n"
+    }
+  ],
+  "tests": [
+    {
+      "case_id": "sample-1",
+      "stdin": "6\n2\n3\n",
+      "expected_output": "8\n24\n",
+      "visibility": "public"
+    },
+    {
+      "case_id": "hidden-1",
+      "stdin": "1\n1\n1\n",
+      "expected_output": "2\n2\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-2",
+      "stdin": "6\n2\n0\n",
+      "expected_output": "8\n0\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-3",
+      "stdin": "3\n2\n4\n",
+      "expected_output": "5\n20\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-4",
+      "stdin": "30\n5\n100\n",
+      "expected_output": "35\n3500\n",
+      "visibility": "hidden"
+    }
+  ],
+  "comparison": "exact",
+  "time_limit_seconds": 3,
+  "output_limit_chars": 8000,
+  "hints": {
+    "level1": "每组里哪些人需要餐盒？",
+    "level2": "先算一组的总人数，再计算相同配置的多个小组。",
+    "level3": "检查老师人数是否也随组数一起计算；组数为零时，总餐盒数应为零。"
+  },
+  "reference_solution": "children = int(input())\nteachers = int(input())\ngroups = int(input())\n\nper_group = children + teachers\ntotal = per_group * groups\n\nprint(per_group)\nprint(total)\n",
+  "solution_explanation": "每组餐盒数为 children + teachers，总数为 per_group * groups。老师和小朋友都属于每组人数，不能只把其中一种人数乘以组数。即使小组数量为零，第一行仍输出给定的每组配置人数。"
+}

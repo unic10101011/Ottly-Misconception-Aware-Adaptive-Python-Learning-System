@@ -1,0 +1,90 @@
+{
+  "schema_version": "1.0.0",
+  "problem_id": "practice-05-6-v1",
+  "version": 1,
+  "level_no": 5,
+  "kind": "practice",
+  "practice_focus": "相等判断使用 ==；将算术与条件分支结合，根据差值方向输出非负调整量。",
+  "title": "补给箱配重",
+  "difficulty": 2,
+  "knowledge_ids": [
+    "K05"
+  ],
+  "prerequisite_knowledge_ids": [
+    "K03"
+  ],
+  "prerequisite_problem_ids": [
+    "shell-groups-v1"
+  ],
+  "published": true,
+  "story": "Ottly 要把一个补给箱调整到指定重量。箱子可能偏轻、刚好合适或偏重。请告诉她应该增加或取出多少重量。",
+  "teaching": [
+    {
+      "title": "本题练习重点",
+      "text": "相等判断使用 ==；将算术与条件分支结合，根据差值方向输出非负调整量。",
+      "example": "先运行样例，再检查零值、相等值或区间边界。"
+    }
+  ],
+  "description": "Ottly 要把一个补给箱调整到指定重量。箱子可能偏轻、刚好合适或偏重。请告诉她应该增加或取出多少重量。\n\n任务：依次输入两个整数，每个整数单独占一行：当前重量 current（0–1000）、目标重量 target（0–1000）。使用 if、elif、else 输出两行：第一行是操作名称，当前重量等于目标重量输出 OK，小于目标重量输出 ADD，大于目标重量输出 REMOVE；第二行输出需要调整的重量，始终为非负整数，无需调整时输出 0。不附其他文字或单位。",
+  "starter_code": "# 在这里编写 Python 代码\n",
+  "examples": [
+    {
+      "stdin": "7\n10\n",
+      "stdout": "ADD\n3\n"
+    }
+  ],
+  "tests": [
+    {
+      "case_id": "sample-1",
+      "stdin": "7\n10\n",
+      "expected_output": "ADD\n3\n",
+      "visibility": "public"
+    },
+    {
+      "case_id": "hidden-1",
+      "stdin": "14\n10\n",
+      "expected_output": "REMOVE\n4\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-2",
+      "stdin": "10\n10\n",
+      "expected_output": "OK\n0\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-3",
+      "stdin": "0\n0\n",
+      "expected_output": "OK\n0\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-4",
+      "stdin": "0\n1000\n",
+      "expected_output": "ADD\n1000\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-5",
+      "stdin": "1000\n0\n",
+      "expected_output": "REMOVE\n1000\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-6",
+      "stdin": "9\n10\n",
+      "expected_output": "ADD\n1\n",
+      "visibility": "hidden"
+    }
+  ],
+  "comparison": "exact",
+  "time_limit_seconds": 3,
+  "output_limit_chars": 8000,
+  "hints": {
+    "level1": "当前重量与目标重量可能有哪三种关系？",
+    "level2": "每个分支都要输出操作和调整量，比较相等时使用两个等号。",
+    "level3": "偏轻和偏重时减法的顺序不同；用 7、10 和 14、10 检查调整量是否都是正数。"
+  },
+  "reference_solution": "current = int(input())\ntarget = int(input())\n\nif current == target:\n    print(\"OK\")\n    print(0)\nelif current < target:\n    print(\"ADD\")\n    print(target - current)\nelse:\n    print(\"REMOVE\")\n    print(current - target)\n",
+  "solution_explanation": "用 == 判断两个重量是否相等。偏轻时用目标重量减当前重量，偏重时用当前重量减目标重量，使调整量始终非负。相等时仍要输出第二行 0。"
+}

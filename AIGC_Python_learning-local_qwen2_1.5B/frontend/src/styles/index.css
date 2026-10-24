@@ -986,8 +986,8 @@ body.eye-protection {
 .practice-map-level { padding: 0 0 44px; scroll-margin-top: 24px; }
 .practice-map-level + .practice-map-level { padding-top: 18px; }
 .practice-map-level h2 { margin: 0 0 28px; color: #17394f; font-size: 23px; font-weight: 700; }
-.practice-map-questions { display: grid; grid-template-columns: repeat(3, 56px); gap: 40px; margin: 0; padding: 0; list-style: none; }
-.practice-map-question { display: flex; flex-direction: column; align-items: center; gap: 6px; min-width: 0; }
+.practice-map-questions { display: flex; flex-wrap: wrap; gap: 40px; margin: 0; padding: 0; list-style: none; }
+.practice-map-question { display: flex; flex: 0 0 56px; flex-direction: column; align-items: center; gap: 6px; min-width: 0; }
 .practice-circle { display: grid; place-items: center; width: 56px; height: 56px; margin: 0 0 5px; padding: 0; border: 0; border-radius: 50%; color: #fff; font: inherit; font-size: 20px; font-weight: 700; cursor: pointer; transition: transform .16s ease-out, box-shadow .16s ease-out; }
 .practice-circle.is-pending { background: #08a9d9; }
 .practice-circle.is-completed { background: #22ad56; }
@@ -1012,7 +1012,8 @@ body.eye-protection {
 .practice-recommendation-action:hover { background: #115884; }
 @media (max-width: 600px) {
   .practice-map { padding: 26px 18px 0; }
-  .practice-map-questions { grid-template-columns: repeat(3, 48px); gap: 32px; }
+  .practice-map-questions { gap: 32px; }
+  .practice-map-question { flex-basis: 48px; }
   .practice-circle { width: 48px; height: 48px; font-size: 18px; }
   .practice-map-level h2 { font-size: 20px; }
   .practice-recommendation-modal { padding: 44px 20px 24px; }

@@ -1,0 +1,78 @@
+{
+  "schema_version": "1.0.0",
+  "problem_id": "practice-04-5-v1",
+  "version": 1,
+  "level_no": 4,
+  "kind": "practice",
+  "practice_focus": "使用整除与取余提取十进制数位；保留中间和末尾的零。",
+  "title": "储物柜密码拆分",
+  "difficulty": 1,
+  "knowledge_ids": [
+    "K04"
+  ],
+  "prerequisite_knowledge_ids": [
+    "K03"
+  ],
+  "prerequisite_problem_ids": [
+    "shell-shop-v1"
+  ],
+  "published": true,
+  "story": "Ottly 的储物柜使用三位数密码。维修时，需要把密码的百位、十位和个位分别显示出来。请帮她完成拆分。",
+  "teaching": [
+    {
+      "title": "本题练习重点",
+      "text": "使用整除与取余提取十进制数位；保留中间和末尾的零。",
+      "example": "先运行样例，再检查零值、相等值或区间边界。"
+    }
+  ],
+  "description": "Ottly 的储物柜使用三位数密码。维修时，需要把密码的百位、十位和个位分别显示出来。请帮她完成拆分。\n\n任务：输入一个三位整数 number（100–999）。依次输出三行整数：百位数字、十位数字、个位数字。中间或末尾的零也需要输出。请使用整数运算完成，不使用字符串索引。不附提示语、标签或单位。",
+  "starter_code": "# 在这里编写 Python 代码\n",
+  "examples": [
+    {
+      "stdin": "472\n",
+      "stdout": "4\n7\n2\n"
+    }
+  ],
+  "tests": [
+    {
+      "case_id": "sample-1",
+      "stdin": "472\n",
+      "expected_output": "4\n7\n2\n",
+      "visibility": "public"
+    },
+    {
+      "case_id": "hidden-1",
+      "stdin": "100\n",
+      "expected_output": "1\n0\n0\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-2",
+      "stdin": "305\n",
+      "expected_output": "3\n0\n5\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-3",
+      "stdin": "980\n",
+      "expected_output": "9\n8\n0\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-4",
+      "stdin": "999\n",
+      "expected_output": "9\n9\n9\n",
+      "visibility": "hidden"
+    }
+  ],
+  "comparison": "exact",
+  "time_limit_seconds": 3,
+  "output_limit_chars": 8000,
+  "hints": {
+    "level1": "除去某个数位右侧的数字，可以考虑哪种整数运算？",
+    "level2": "个位可用取余 10 得到；十位需要先去掉个位，再取最后一位。",
+    "level3": "用 305 和 980 检查，确认零没有丢失，且十位没有混入百位。"
+  },
+  "reference_solution": "number = int(input())\n\nhundreds = number // 100\ntens = number // 10 % 10\nones = number % 10\n\nprint(hundreds)\nprint(tens)\nprint(ones)\n",
+  "solution_explanation": "整除 100 去掉十位与个位，得到百位。整除 10 去掉个位后，再取余 10 得到十位。直接取余 10 得到个位。每个数位都要输出，包括零。"
+}

@@ -1,0 +1,78 @@
+{
+  "schema_version": "1.0.0",
+  "problem_id": "practice-03-4-v1",
+  "version": 1,
+  "level_no": 3,
+  "kind": "practice",
+  "practice_focus": "整数转换、加法与乘法的运算顺序；使用括号先计算长与宽之和，再乘以 2。",
+  "title": "海边相框",
+  "difficulty": 1,
+  "knowledge_ids": [
+    "K03"
+  ],
+  "prerequisite_knowledge_ids": [
+    "K02"
+  ],
+  "prerequisite_problem_ids": [
+    "greeting-v1"
+  ],
+  "published": true,
+  "story": "Ottly 想用彩绳围住一个长方形相框。请计算沿四条边围一圈需要多少厘米彩绳，不考虑打结和损耗。",
+  "teaching": [
+    {
+      "title": "本题练习重点",
+      "text": "整数转换、加法与乘法的运算顺序；使用括号先计算长与宽之和，再乘以 2。",
+      "example": "先运行样例，再检查零值、相等值或区间边界。"
+    }
+  ],
+  "description": "Ottly 想用彩绳围住一个长方形相框。请计算沿四条边围一圈需要多少厘米彩绳，不考虑打结和损耗。\n\n任务：依次输入两个整数，每个整数单独占一行：长 length（1–100）、宽 width（1–100）。输出一行整数，表示相框周长，计算公式为（长 + 宽）× 2。不附提示语、标签或单位。",
+  "starter_code": "# 在这里编写 Python 代码\n",
+  "examples": [
+    {
+      "stdin": "8\n5\n",
+      "stdout": "26\n"
+    }
+  ],
+  "tests": [
+    {
+      "case_id": "sample-1",
+      "stdin": "8\n5\n",
+      "expected_output": "26\n",
+      "visibility": "public"
+    },
+    {
+      "case_id": "hidden-1",
+      "stdin": "1\n1\n",
+      "expected_output": "4\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-2",
+      "stdin": "3\n7\n",
+      "expected_output": "20\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-3",
+      "stdin": "10\n10\n",
+      "expected_output": "40\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-4",
+      "stdin": "100\n100\n",
+      "expected_output": "400\n",
+      "visibility": "hidden"
+    }
+  ],
+  "comparison": "exact",
+  "time_limit_seconds": 3,
+  "output_limit_chars": 8000,
+  "hints": {
+    "level1": "围一圈会经过几条长边、几条宽边？",
+    "level2": "先把长和宽相加，再考虑这个和需要取几份。",
+    "level3": "检查输入是否转为整数，以及括号是否让加法先于乘法执行。"
+  },
+  "reference_solution": "length = int(input())\nwidth = int(input())\n\nperimeter = (length + width) * 2\nprint(perimeter)\n",
+  "solution_explanation": "长方形有两条长和两条宽，所以周长为（长 + 宽）× 2。括号保证先相加再相乘；没有括号会只把宽乘以 2。样例中（8 + 5）× 2 = 26。"
+}

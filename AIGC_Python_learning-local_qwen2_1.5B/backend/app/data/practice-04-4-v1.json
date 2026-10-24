@@ -1,0 +1,84 @@
+{
+  "schema_version": "1.0.0",
+  "problem_id": "practice-04-4-v1",
+  "version": 1,
+  "level_no": 4,
+  "kind": "practice",
+  "practice_focus": "连续使用整除与取余拆分时间；分钟必须从不足一小时的剩余秒数中计算。",
+  "title": "潜水计时器",
+  "difficulty": 1,
+  "knowledge_ids": [
+    "K04"
+  ],
+  "prerequisite_knowledge_ids": [
+    "K03"
+  ],
+  "prerequisite_problem_ids": [
+    "shell-shop-v1"
+  ],
+  "published": true,
+  "story": "Ottly 的潜水计时器只记录总秒数。请把总秒数转换成完整小时数、不足一小时的完整分钟数，以及最后剩余的秒数。",
+  "teaching": [
+    {
+      "title": "本题练习重点",
+      "text": "连续使用整除与取余拆分时间；分钟必须从不足一小时的剩余秒数中计算。",
+      "example": "先运行样例，再检查零值、相等值或区间边界。"
+    }
+  ],
+  "description": "Ottly 的潜水计时器只记录总秒数。请把总秒数转换成完整小时数、不足一小时的完整分钟数，以及最后剩余的秒数。\n\n任务：输入一个整数 total_seconds（0–1000000）。依次输出三行整数：小时数、分钟数、秒数。一小时为 3600 秒，一分钟为 60 秒。分钟数与秒数均为 0–59，小时数不按天折算。不附提示语、标签或单位。",
+  "starter_code": "# 在这里编写 Python 代码\n",
+  "examples": [
+    {
+      "stdin": "3675\n",
+      "stdout": "1\n1\n15\n"
+    }
+  ],
+  "tests": [
+    {
+      "case_id": "sample-1",
+      "stdin": "3675\n",
+      "expected_output": "1\n1\n15\n",
+      "visibility": "public"
+    },
+    {
+      "case_id": "hidden-1",
+      "stdin": "0\n",
+      "expected_output": "0\n0\n0\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-2",
+      "stdin": "59\n",
+      "expected_output": "0\n0\n59\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-3",
+      "stdin": "60\n",
+      "expected_output": "0\n1\n0\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-4",
+      "stdin": "3600\n",
+      "expected_output": "1\n0\n0\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-5",
+      "stdin": "1000000\n",
+      "expected_output": "277\n46\n40\n",
+      "visibility": "hidden"
+    }
+  ],
+  "comparison": "exact",
+  "time_limit_seconds": 3,
+  "output_limit_chars": 8000,
+  "hints": {
+    "level1": "先取出完整小时后，还剩多少秒？",
+    "level2": "分钟数应从不足一小时的剩余秒数中计算，不能直接使用总分钟数。",
+    "level3": "检查小时、分钟、秒的输出顺序，并确认分钟和秒都小于 60。"
+  },
+  "reference_solution": "total_seconds = int(input())\n\nhours = total_seconds // 3600\nremaining = total_seconds % 3600\nminutes = remaining // 60\nseconds = remaining % 60\n\nprint(hours)\nprint(minutes)\nprint(seconds)\n",
+  "solution_explanation": "总秒数整除 3600 得到小时数，取余 3600 得到不足一小时的剩余秒数。再将剩余秒数整除 60 得到分钟数，取余 60 得到秒数。样例中 3675 = 1 × 3600 + 1 × 60 + 15。"
+}

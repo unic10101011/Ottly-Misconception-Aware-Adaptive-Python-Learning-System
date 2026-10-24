@@ -1,0 +1,78 @@
+{
+  "schema_version": "1.0.0",
+  "problem_id": "practice-03-5-v1",
+  "version": 1,
+  "level_no": 3,
+  "kind": "practice",
+  "practice_focus": "整数加减、计算结果赋值；先合并原有和新收集的贝壳，再减去送出数量。",
+  "title": "贝壳库存更新",
+  "difficulty": 1,
+  "knowledge_ids": [
+    "K03"
+  ],
+  "prerequisite_knowledge_ids": [
+    "K02"
+  ],
+  "prerequisite_problem_ids": [
+    "greeting-v1"
+  ],
+  "published": true,
+  "story": "Ottly 的仓库里原来存放着一些贝壳。上午又收集了一批，下午送出一部分。请计算送出前和送出后的数量。",
+  "teaching": [
+    {
+      "title": "本题练习重点",
+      "text": "整数加减、计算结果赋值；先合并原有和新收集的贝壳，再减去送出数量。",
+      "example": "先运行样例，再检查零值、相等值或区间边界。"
+    }
+  ],
+  "description": "Ottly 的仓库里原来存放着一些贝壳。上午又收集了一批，下午送出一部分。请计算送出前和送出后的数量。\n\n任务：依次输入三个整数，每个整数单独占一行：原有数量 original（0–1000）、新收集数量 collected（0–1000）、送出数量 given（0–（original + collected））。第一行输出送出前的数量，第二行输出送出后的数量，均为整数，不附提示语、标签或单位。",
+  "starter_code": "# 在这里编写 Python 代码\n",
+  "examples": [
+    {
+      "stdin": "12\n8\n5\n",
+      "stdout": "20\n15\n"
+    }
+  ],
+  "tests": [
+    {
+      "case_id": "sample-1",
+      "stdin": "12\n8\n5\n",
+      "expected_output": "20\n15\n",
+      "visibility": "public"
+    },
+    {
+      "case_id": "hidden-1",
+      "stdin": "0\n0\n0\n",
+      "expected_output": "0\n0\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-2",
+      "stdin": "0\n9\n4\n",
+      "expected_output": "9\n5\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-3",
+      "stdin": "15\n0\n15\n",
+      "expected_output": "15\n0\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-4",
+      "stdin": "1000\n1000\n1\n",
+      "expected_output": "2000\n1999\n",
+      "visibility": "hidden"
+    }
+  ],
+  "comparison": "exact",
+  "time_limit_seconds": 3,
+  "output_limit_chars": 8000,
+  "hints": {
+    "level1": "上午收集后，原有贝壳和新贝壳应该怎样合并？",
+    "level2": "先保存送出前的数量，再从这个数量中减去送出的贝壳。",
+    "level3": "按送出前、送出后的顺序输出两行；全部送出时，第二行应为零。"
+  },
+  "reference_solution": "original = int(input())\ncollected = int(input())\ngiven = int(input())\n\nbefore = original + collected\nafter = before - given\n\nprint(before)\nprint(after)\n",
+  "solution_explanation": "用 original + collected 得到送出前的数量，保存为 before；再用 before - given 得到送出后的数量，保存为 after。分别输出两个变量。样例中先有 20 颗，再送出 5 颗，剩 15 颗。"
+}

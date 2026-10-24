@@ -169,4 +169,8 @@ def test_each_of_the_twelve_main_lessons_can_recommend_after_a_correction(client
         result = recommendation(client, headers, accepted['submission_id']).json()['data']
         assert result['status'] == 'ready', result
         assert result['recommendation']['level_no'] == lesson.level_no
+        if lesson.level_no in (3, 4, 5):
+            new_ids = {f'practice-{lesson.level_no:02d}-{number}-v1' for number in (4, 5, 6)}
+            assert new_ids.issubset({item['problem_id'] for item in calls[-1]['candidates']})
+            assert result['recommendation']['problem_id'] in new_ids
     assert len(calls) == 12
