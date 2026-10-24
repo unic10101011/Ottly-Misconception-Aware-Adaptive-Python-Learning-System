@@ -1,346 +1,93 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import SubmissionFeedback from '../components/SubmissionFeedback.jsx'
-import ProblemMetadata from '../components/ProblemMetadata.jsx'
+import React, { useEffect, useState } from 'react'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import MisconceptionOverview from '../components/MisconceptionOverview.jsx'
-import { getLearningHistory, getMistakeQuestions, getMisconceptions, getKnowledge, requestAnalysis, requestCode } from '../components/codeApi.mjs'
+import StatusStamp from '../components/StatusStamp.jsx'
+import { groupMistakes, mistakeDetailUrl, mistakeOverviewUrl } from '../components/mistakeGrouping.mjs'
+import { getMistakeQuestions, getKnowledge, getMisconceptions } from '../components/codeApi.mjs'
 
-const HISTORY_PAGE_SIZE = 10
-const formatDate = value => new Date(value).toLocaleString('zh-CN')
+const difficultyLabels = { 1: '基础', 2: '巩固', 3: '综合' }
 
-function LearningHistory() {
+export default function LearningHistory() {
   const navigate = useNavigate()
+  const [params] = useSearchParams()
   const [questions, setQuestions] = useState([])
   const [knowledgeNames, setKnowledgeNames] = useState({})
-  const [selectedId, setSelectedId] = useState(null)
-  const [tab, setTab] = useState('practice')
   const [loading, setLoading] = useState(true)
-  const [listError, setListError] = useState('')
-  const [code, setCode] = useState('')
-  const [stdin, setStdin] = useState('')
-  const [running, setRunning] = useState(false)
-  const [submitting, setSubmitting] = useState(false)
-  const [runResult, setRunResult] = useState(null)
-  const [submission, setSubmission] = useState(null)
-  const [history, setHistory] = useState([])
-  const [historyTotal, setHistoryTotal] = useState(0)
-  const [historyOffset, setHistoryOffset] = useState(0)
-  const [summaryReload, setSummaryReload] = useState(0)
-  const [historyReload, setHistoryReload] = useState(0)
-  const [historyLoading, setHistoryLoading] = useState(false)
-  const [historyError, setHistoryError] = useState('')
-  const [actionError, setActionError] = useState('')
+  const [error, setError] = useState('')
   const [misconceptions, setMisconceptions] = useState([])
   const [misconceptionLoading, setMisconceptionLoading] = useState(true)
   const [misconceptionError, setMisconceptionError] = useState('')
-  const selectedRef = useRef(null)
-  const latestSubmissionRef = useRef(null)
-  const pendingHistoryRef = useRef(new Set())
-  const mountedRef = useRef(false)
-  const busy = running || submitting
-  const selected = questions.find(item => item.problem_id === selectedId)
-
-  useEffect(() => {
-    mountedRef.current = true
-    return () => { mountedRef.current = false }
-  }, [])
 
   useEffect(() => {
     let active = true
-    getKnowledge(localStorage.getItem('access_token')).then(data => {
+    const token = localStorage.getItem('access_token')
+    getMistakeQuestions(token).then(data => {
+      if (active) setQuestions(data.items)
+    }).catch(cause => {
+      if (!active) return
+      setError(cause.message)
+      if (cause.status === 401) navigate('/auth')
+    }).finally(() => { if (active) setLoading(false) })
+    getKnowledge(token).then(data => {
       if (active) setKnowledgeNames(Object.fromEntries(data.items.map(item => [item.knowledge_id, item.name])))
-    }).catch(() => {}) // IDs still identify the snapshot if the dictionary is unavailable.
-    return () => { active = false }
-  }, [])
-
-  useEffect(() => {
-    let active = true
-    const load = () => {
-      setLoading(true)
-      setListError('')
-      getMistakeQuestions(localStorage.getItem('access_token')).then(data => {
-        if (!active) return
-        setQuestions(data.items)
-        setSelectedId(current => current || data.items[0]?.problem_id || null)
-      }).catch(error => {
-        if (!active) return
-        setListError(error.message)
-        if (error.status === 401) navigate('/auth')
-      }).finally(() => { if (active) setLoading(false) })
-    }
-    load()
-    return () => { active = false }
-  }, [navigate, summaryReload])
-
-  useEffect(() => {
-    selectedRef.current = selectedId
-    if (!selectedId) return
-    const question = questions.find(item => item.problem_id === selectedId)
-    if (question) setCode(question.last_wrong_code)
-    setRunResult(null)
-    setSubmission(null)
-    latestSubmissionRef.current = null
-    setActionError('')
-    setStdin('')
-  }, [selectedId])
-
-  useEffect(() => {
-    if (!selectedId) return
-    let active = true
-    setHistoryLoading(true)
-    setHistoryError('')
-    getLearningHistory(false, HISTORY_PAGE_SIZE, historyOffset,
-      localStorage.getItem('access_token'), selectedId).then(data => {
-      if (!active) return
-      setHistory(data.items)
-      setHistoryTotal(data.total)
-    }).catch(error => {
-      if (!active) return
-      setHistoryError(error.message)
-      if (error.status === 401) navigate('/auth')
-    }).finally(() => { if (active) setHistoryLoading(false) })
-    return () => { active = false }
-  }, [selectedId, historyOffset, historyReload, navigate])
-
-  useEffect(() => {
-    let active = true
-    setMisconceptionLoading(true)
-    setMisconceptionError('')
-    getMisconceptions(localStorage.getItem('access_token')).then(data => {
+    }).catch(() => {})
+    getMisconceptions(token).then(data => {
       if (active) setMisconceptions(data.items)
-    }).catch(error => {
-      if (!active) return
-      setMisconceptionError(error.message)
-      if (error.status === 401) navigate('/auth')
+    }).catch(cause => {
+      if (active) setMisconceptionError(cause.message)
     }).finally(() => { if (active) setMisconceptionLoading(false) })
     return () => { active = false }
-  }, [navigate, summaryReload])
+  }, [navigate])
 
-  const chooseQuestion = problemId => {
-    if (busy) return
-    selectedRef.current = problemId
-    setSelectedId(problemId)
-    setHistoryOffset(0)
-    setTab('practice')
-  }
+  const groups = groupMistakes(questions, knowledgeNames)
+  const activeGroup = params.get('knowledge') || 'all'
+  const visibleGroups = activeGroup === 'all' ? groups : groups.filter(group => group.id === activeGroup)
+  const remaining = questions.filter(question => question.latest_passed === false).length
 
-  const editCode = value => {
-    if (busy) return
-    setCode(value)
-    setRunResult(null)
-    setSubmission(null)
-    latestSubmissionRef.current = null
-    setActionError('')
-  }
+  return <div className="mistake-page mistake-overview">
+    <header className="mistake-page-header">
+      <div><span className="mistake-eyebrow">OTTLY · 复习小站</span><h1>我的错题</h1>
+        <p>{remaining ? `还有 ${remaining} 道题最近未通过，选一个知识点，再试一次。` : '沿着知识点回顾，每一次重做都是新的进步。'}</p></div>
+      <span className="mistake-total"><strong>{questions.length}</strong>道题待回顾</span>
+    </header>
+    {loading && <p role="status">正在整理你的错题...</p>}
+    {error && <p className="mistake-alert" role="alert">{error}</p>}
+    {!loading && !error && questions.length === 0 && <div className="mistake-empty">
+      <h2>你的复习小站，还在等第一道题</h2>
+      <p>提交中遇到的错题会留在这里，随时回来再试一次。</p>
+      <Link to="/app/levels">去学习地图 →</Link>
+    </div>}
 
-  const runCode = async () => {
-    if (busy || !code.trim()) return
-    const problemId = selectedId
-    setRunning(true)
-    setActionError('')
-    setRunResult(null)
-    setSubmission(null)
-    latestSubmissionRef.current = null
-    try {
-      const result = await requestCode('run', { code, timeout: 3, stdin, problem_id: problemId }, localStorage.getItem('access_token'))
-      if (!mountedRef.current || selectedRef.current !== problemId) return
-      setRunResult(result)
-    } catch (error) {
-      if (!mountedRef.current) return
-      setActionError(error.message)
-      if (error.status === 401) navigate('/auth')
-    } finally {
-      if (mountedRef.current) setRunning(false)
-    }
-  }
+    {questions.length > 0 && <>
+      <nav className="mistake-knowledge-nav" aria-label="按知识点查看错题">
+        <Link to="/app/history" aria-current={activeGroup === 'all' ? 'page' : undefined}>全部知识点<span>{questions.length}</span></Link>
+        {groups.map(group => <Link key={group.id} to={mistakeOverviewUrl(group.id)}
+          aria-current={activeGroup === group.id ? 'page' : undefined}>{group.name}<span>{group.questions.length}</span></Link>)}
+      </nav>
+      {!visibleGroups.length && <div className="mistake-empty">
+        <p>这个知识点下暂时没有错题。</p><Link to="/app/history">查看全部知识点</Link>
+      </div>}
+      <div className={`mistake-groups ${activeGroup !== 'all' ? 'is-filtered' : ''}`}>
+      {visibleGroups.map(group => <section className="mistake-knowledge-group" key={group.id}
+        id={`knowledge-${group.id}`} aria-labelledby={`heading-${group.id}`}>
+        <div className="mistake-group-heading"><h2 id={`heading-${group.id}`}>{group.name}</h2>
+          <span>{group.questions.length} 道题</span></div>
+        <div className="mistake-card-grid">
+          {group.questions.map(question => <Link className="mistake-question-card" key={question.problem_id}
+            to={mistakeDetailUrl(question.problem_id, group.id)}>
+            <div className="mistake-card-copy"><small>{difficultyLabels[question.difficulty] || '难度待补充'}</small>
+              <h3>{question.title}</h3></div>
+            <div className="mistake-card-stamp"><StatusStamp passed={question.latest_passed} /></div>
+            <div className="mistake-card-footer"><span>最近提交 · {question.latest_passed === true ? '已通过' : question.latest_passed === false ? '未通过' : '待尝试'}</span><strong>进入复习 <span aria-hidden="true">↗</span></strong></div>
+          </Link>)}
+        </div>
+      </section>)}
+      </div>
+    </>}
 
-  const submitReview = async () => {
-    if (busy || !code.trim() || !selected) return
-    const problemId = selected.problem_id
-    setSubmitting(true)
-    setRunResult(null)
-    setActionError('')
-    setSubmission(null)
-    latestSubmissionRef.current = null
-    try {
-      const result = await requestCode('submit', { problem_id: problemId, code },
-        localStorage.getItem('access_token'), { reviewSourceId: selected.first_wrong_submission_id })
-      if (selectedRef.current !== problemId) return
-      latestSubmissionRef.current = result.submission_id
-      setSubmission(result)
-      if (result.analysis?.status === 'preparing') {
-        pendingHistoryRef.current.add(result.submission_id)
-        requestAnalysis(result.submission_id, localStorage.getItem('access_token'))
-          .then(data => {
-            if (!mountedRef.current || latestSubmissionRef.current !== result.submission_id) return
-            setSubmission({ ...result, analysis: data.analysis, timings: data.timings })
-            setHistoryReload(value => value + 1)
-            setSummaryReload(value => value + 1)
-          })
-          .catch(error => {
-            if (!mountedRef.current || latestSubmissionRef.current !== result.submission_id) return
-            setSubmission({ ...result, analysis: { status: 'unavailable',
-              message: `错因分析暂时无法生成：${error.message} 判题结果已保留。`, content: null } })
-          })
-          .finally(() => pendingHistoryRef.current.delete(result.submission_id))
-      }
-      setHistoryOffset(0)
-      setSummaryReload(value => value + 1)
-      setHistoryReload(value => value + 1)
-    } catch (error) {
-      setActionError(error.message)
-      if (error.status === 401) navigate('/auth')
-    } finally {
-      setSubmitting(false)
-    }
-  }
-
-  const prepareHistoryAnalysis = item => {
-    if (item.analysis?.status !== 'preparing' || pendingHistoryRef.current.has(item.id)) return
-    pendingHistoryRef.current.add(item.id)
-    requestAnalysis(item.id, localStorage.getItem('access_token'))
-      .then(data => {
-        if (!mountedRef.current) return
-        setHistory(current => current.map(row => row.id === item.id
-          ? { ...row, analysis: data.analysis } : row))
-        setSummaryReload(value => value + 1)
-      })
-      .catch(error => {
-        if (!mountedRef.current) return
-        setHistory(current => current.map(row => row.id === item.id
-          ? { ...row, analysis: { status: 'unavailable',
-            message: `错因分析暂时无法生成：${error.message} 判题结果已保留。`, content: null } } : row))
-      })
-      .finally(() => pendingHistoryRef.current.delete(item.id))
-  }
-
-  return (
-    <main className="mistake-page">
-      <header className="mistake-page-header">
-        <div><span className="mistake-eyebrow">个人学习记录</span><h1>我的错题</h1>
-          <p>选择一道题重新练习，也可以查看它的复习轨迹。</p></div>
-        <span className="mistake-count">{questions.length} 道错题</span>
-      </header>
-
+    <details className="mistake-misconception-fold">
+      <summary>查看疑似误区记录</summary>
       <MisconceptionOverview items={misconceptions} loading={misconceptionLoading} error={misconceptionError} />
-
-      {loading && <p role="status">正在加载错题...</p>}
-      {listError && <p className="mistake-alert" role="alert">{listError}</p>}
-      {!loading && !listError && questions.length === 0 &&
-        <div className="mistake-empty">还没有错题记录。完成关卡提交后，错题会出现在这里。</div>}
-
-      {questions.length > 0 && <>
-        <nav className="mistake-question-list" aria-label="选择错题">
-          {questions.map(question => <button key={question.problem_id} type="button"
-            className={`mistake-question-chip ${question.problem_id === selectedId ? 'active' : ''}`}
-            aria-current={question.problem_id === selectedId ? 'true' : undefined}
-            disabled={busy} onClick={() => chooseQuestion(question.problem_id)}>
-            <span>{question.title}</span><small>{question.latest_passed ? '最近已通过' : '待复习'}</small>
-          </button>)}
-        </nav>
-
-        {selected && <section className="mistake-workbench">
-          <div className="mistake-workbench-heading">
-            <div><span className="mistake-eyebrow">{selected.source}</span><h2>{selected.title}</h2></div>
-            <span className={`mistake-status ${selected.latest_passed ? 'is-passed' : ''}`}>
-              {selected.latest_passed ? '最近已通过' : '继续巩固'}</span>
-          </div>
-          <ProblemMetadata version={selected.version} difficulty={selected.difficulty}
-            knowledgeIds={selected.knowledge_ids} knowledgeNames={knowledgeNames} />
-          <div className="mistake-tabs" role="tablist" aria-label="错题页面">
-            <button type="button" role="tab" aria-selected={tab === 'practice'}
-              className={tab === 'practice' ? 'active' : ''} onClick={() => setTab('practice')}>重新做题</button>
-            <button type="button" role="tab" aria-selected={tab === 'insight'}
-              className={tab === 'insight' ? 'active' : ''} onClick={() => setTab('insight')}>我的情况</button>
-          </div>
-
-          {tab === 'practice' && <div className="mistake-practice-grid" role="tabpanel">
-            <div className="mistake-problem-pane">
-              <span className="mistake-pane-label">题目</span>
-              <p>{selected.description}</p>
-              <button type="button" className="mistake-text-link" onClick={() => setTab('insight')}>
-                查看这道题的个人详情 →</button>
-            </div>
-            <div className="mistake-code-pane">
-              <div className="mistake-code-title"><span>Python 代码</span><small>已填入最近一次错误代码</small></div>
-              <textarea aria-label="复习代码编辑器" className="mistake-code-input" spellCheck={false}
-                value={code} readOnly={busy} maxLength={6000} onChange={event => editCode(event.target.value)} />
-              <div className="lesson-input">
-                <label htmlFor="review-stdin">运行输入（每次 input 读取一行）</label>
-                <textarea id="review-stdin" value={stdin} readOnly={busy} maxLength={8000} rows={3}
-                  onChange={event => { setStdin(event.target.value); setRunResult(null) }} />
-              </div>
-              <div className="mistake-actions">
-                <button type="button" className="mistake-secondary-button" disabled={busy || !code.trim()}
-                  onClick={runCode}>{running ? '运行中...' : '运行代码'}</button>
-                <button type="button" className="mistake-primary-button" disabled={busy || !code.trim()}
-                  onClick={submitReview}>{submitting ? '正在判题...' : '提交并记录复习'}</button>
-              </div>
-              {running && <p role="status">正在运行代码；若出现错误，将继续生成 AI 分析，请稍候...</p>}
-              {actionError && <p className="mistake-alert" role="alert">{actionError}</p>}
-              {runResult && <div className="mistake-run-result" role="status"><strong>运行结果</strong>
-                <pre>{runResult.output || '（无输出）'}</pre>
-                {runResult.errors?.map((error, index) =>
-                  <p key={index}>{error.type}：{error.message}</p>)}</div>}
-              {runResult?.analysis && <SubmissionFeedback
-                result={{ judge: runResult.judge, analysis: runResult.analysis }} showJudge={false} />}
-              {submission && <SubmissionFeedback result={submission} />}
-            </div>
-          </div>}
-
-          {tab === 'insight' && <div className="mistake-insight" role="tabpanel">
-            <div className="mistake-metrics">
-              <div><span>首次出错</span><strong>{formatDate(selected.first_wrong_at)}</strong></div>
-              <div><span>题目来源</span><strong>{selected.source}</strong></div>
-              <div><span>复习提交</span><strong>{selected.review_count} 次</strong></div>
-              <div><span>最近复习表现</span><strong>{selected.review_rate_percent === null
-                ? '样本较少' : `${selected.review_rate_percent}%`}</strong>
-                <small>{selected.recent_review_passed} / {selected.recent_review_total} 次通过</small></div>
-            </div>
-            <div className="mistake-insight-grid">
-              <article className="mistake-info-card">
-                <h3>最近一次疑似错因</h3>
-                <p>{selected.latest_suspected_cause || '暂无可靠的 AI 错因分析，可查看下方真实判题记录。'}</p>
-                <small>AI 推测仅供复习参考，正确与否以判题结果为准。</small>
-              </article>
-              <article className="mistake-info-card">
-                <h3>根据 AI 知识点推荐</h3>
-                {selected.related_questions.length ? selected.related_questions.map(question =>
-                  <a className="mistake-practice-link" key={question.problem_id} href={question.url}>
-                    <strong>{question.title}</strong><span>{question.practice_focus}</span>
-                    {question.completed && <small>已练过，可再次练习</small>}
-                  </a>)
-                  : <p>暂无可直接练习的推荐题；AI 分析可能还没有可靠知识点，或对应加练尚未解锁。</p>}
-              </article>
-            </div>
-            <div className="mistake-history-heading"><h3>提交与复习记录</h3>
-              <span>共 {historyTotal} 次提交，错误与通过记录都会保留</span></div>
-            {historyLoading && <p role="status">正在加载记录...</p>}
-            {historyError && <p className="mistake-alert" role="alert">{historyError}</p>}
-            {!historyLoading && !historyError && history.map(item =>
-              <details className="mistake-history-item" key={item.id}
-                onToggle={event => { if (event.currentTarget.open) prepareHistoryAnalysis(item) }}>
-                <summary><span className={item.passed ? 'judge-passed' : 'judge-failed'}>
-                  {item.passed ? '通过' : '未通过'}</span><strong>{formatDate(item.created_at)}</strong>
-                  <small>{item.judge.passed_cases} / {item.judge.total_cases} 个测试通过</small></summary>
-                <div className="mistake-history-body"><strong>当时提交的代码</strong><pre>{item.code}</pre>
-                  <ProblemMetadata version={item.version} difficulty={item.difficulty}
-                    knowledgeIds={item.knowledge_ids} knowledgeNames={knowledgeNames} />
-                  {!item.passed && <p>错误分类：{item.error_type || '历史记录未提供'}</p>}
-                  <SubmissionFeedback result={{ judge: item.judge, analysis: item.analysis }} />
-                </div>
-              </details>)}
-            {historyTotal > HISTORY_PAGE_SIZE && <div className="mistake-pagination">
-              <button type="button" disabled={historyOffset === 0} onClick={() => setHistoryOffset(value => value - HISTORY_PAGE_SIZE)}>上一页</button>
-              <span>{Math.floor(historyOffset / HISTORY_PAGE_SIZE) + 1} / {Math.ceil(historyTotal / HISTORY_PAGE_SIZE)}</span>
-              <button type="button" disabled={historyOffset + HISTORY_PAGE_SIZE >= historyTotal}
-                onClick={() => setHistoryOffset(value => value + HISTORY_PAGE_SIZE)}>下一页</button>
-            </div>}
-          </div>}
-        </section>}
-      </>}
-    </main>
-  )
+    </details>
+  </div>
 }
-
-export default LearningHistory

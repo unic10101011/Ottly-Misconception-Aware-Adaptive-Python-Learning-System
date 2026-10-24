@@ -648,7 +648,7 @@ test('review run errors display diagnosis only with current question context', a
   const effects = [], updates = [], calls = []
   const question = { problem_id: 'level2', last_wrong_code: 'print(missing)',
     title: '求和', description: '求和', source: '系统关卡' }
-  const states = [[question], {}, 'level2', 'practice', false, '', 'print(missing)', 'abc',
+  const states = [[question], {}, 'practice', false, '', 'print(missing)', 'abc',
     false, false, null, null, [], 0, 0, 0, 0, false, '', '']
   let stateIndex = 0
   const hooks = { ...React,
@@ -660,8 +660,9 @@ test('review run errors display diagnosis only with current question context', a
   }
   const Feedback = loadJsx('../src/components/SubmissionFeedback.jsx')
   const runtime = { success: false, output: '', errors: [], judge: failure.judge, analysis: failure.analysis }
-  const History = loadJsx('../src/pages/LearningHistory.jsx', {
-    react: hooks, 'react-router-dom': { useNavigate: () => () => {} },
+  const History = loadJsx('../src/pages/MistakeDetail.jsx', {
+    react: hooks, 'react-router-dom': { useNavigate: () => () => {}, useParams: () => ({ problemId: 'level2' }), useSearchParams: () => [new URLSearchParams('knowledge=K08'), () => {}], Link: ({ to, children, ...props }) => React.createElement('a', { ...props, href: to }, children) },
+    '../components/StatusStamp.jsx': loadJsx('../src/components/StatusStamp.jsx'),
     '../components/ProblemMetadata.jsx': () => null,
     '../components/MisconceptionOverview.jsx': () => null,
     '../components/SubmissionFeedback.jsx': Feedback,
@@ -677,8 +678,8 @@ test('review run errors display diagnosis only with current question context', a
     effects[3]()
     await find(tree, node => node.props.className === 'mistake-secondary-button').props.onClick()
     assert.deepEqual(calls, [['run', { code: 'print(missing)', timeout: 3, stdin: 'abc', problem_id: 'level2' }, 'owner-token']])
-    assert.ok(updates.some(update => update.index === 10 && update.next === runtime))
-    states[10] = runtime
+    assert.ok(updates.some(update => update.index === 9 && update.next === runtime))
+    states[9] = runtime
     stateIndex = 0
     const updated = History()
     const feedback = find(updated, node => node.type === Feedback)
@@ -701,8 +702,8 @@ test('review submission also shows the judge before its analysis request finishe
   const updates = []
   let finishAnalysis
   const question = { problem_id: 'level2', first_wrong_submission_id: 5,
-    last_wrong_code: 'print(100)', title: '求和', description: '求和', source: '系统关卡' }
-  const states = [[question], {}, 'level2', 'practice', false, '', 'print(100)', '', false, false,
+    last_wrong_code: 'print(100)', title: '求和', description: '求和', source: '系统关卡', latest_passed: true }
+  const states = [[question], {}, 'practice', false, '', 'print(100)', '', false, false,
     null, null, [], 0, 0, 0, 0, false, '', '']
   let stateIndex = 0
   const hooks = {
@@ -714,9 +715,10 @@ test('review submission also shows the judge before its analysis request finishe
     useRef: value => ({ current: value }),
     useEffect: effect => effects.push(effect),
   }
-  const History = loadJsx('../src/pages/LearningHistory.jsx', {
+  const History = loadJsx('../src/pages/MistakeDetail.jsx', {
     react: hooks,
-    'react-router-dom': { useNavigate: () => () => {} },
+    'react-router-dom': { useNavigate: () => () => {}, useParams: () => ({ problemId: 'level2' }), useSearchParams: () => [new URLSearchParams('knowledge=K08'), () => {}], Link: ({ to, children, ...props }) => React.createElement('a', { ...props, href: to }, children) },
+    '../components/StatusStamp.jsx': loadJsx('../src/components/StatusStamp.jsx'),
     '../components/ProblemMetadata.jsx': () => null,
     '../components/MisconceptionOverview.jsx': () => null,
     '../components/SubmissionFeedback.jsx': { default: () => null },
@@ -739,12 +741,15 @@ test('review submission also shows the judge before its analysis request finishe
       return React.Children.toArray(node.props.children).map(find).find(Boolean)
     }
     await find(tree).props.onClick()
-    assert.ok(updates.some(update => update.index === 11 && update.next === prepared))
+    assert.ok(updates.some(update => update.index === 10 && update.next === prepared))
+    const verdictUpdate = updates.find(update => update.index === 0 && typeof update.next === 'function')
+    assert.ok(verdictUpdate, 'the saved latest verdict must survive editing away the visible feedback')
+    assert.equal(verdictUpdate.next([question])[0].latest_passed, false)
     assert.equal(typeof finishAnalysis, 'function')
     finishAnalysis({ analysis: failure.analysis, timings: { judge_ms: 12 } })
     await Promise.resolve()
     await Promise.resolve()
-    assert.ok(updates.some(update => update.index === 11 && update.next?.analysis?.status === 'ready'))
+    assert.ok(updates.some(update => update.index === 10 && update.next?.analysis?.status === 'ready'))
     cleanup()
   } finally {
     if (originalStorage) Object.defineProperty(global, 'localStorage', originalStorage)
@@ -763,7 +768,7 @@ test('opening an unfinished history entry resumes only that analysis', async () 
     first_wrong_at: '2026-10-16T00:00:00Z', latest_suspected_cause: null,
     review_count: 0, review_rate_percent: null, recent_review_passed: 0,
     recent_review_total: 0, related_questions: [] }
-  const states = [[question], {}, 'level2', 'insight', false, '', 'print(100)', '', false, false,
+  const states = [[question], {}, 'insight', false, '', 'print(100)', '', false, false,
     null, null, [item], 1, 0, 0, 0, false, '', '']
   let stateIndex = 0
   const hooks = {
@@ -772,9 +777,10 @@ test('opening an unfinished history entry resumes only that analysis', async () 
     useRef: value => ({ current: value }),
     useEffect: effect => effects.push(effect),
   }
-  const History = loadJsx('../src/pages/LearningHistory.jsx', {
+  const History = loadJsx('../src/pages/MistakeDetail.jsx', {
     react: hooks,
-    'react-router-dom': { useNavigate: () => () => {} },
+    'react-router-dom': { useNavigate: () => () => {}, useParams: () => ({ problemId: 'level2' }), useSearchParams: () => [new URLSearchParams('knowledge=K08'), () => {}], Link: ({ to, children, ...props }) => React.createElement('a', { ...props, href: to }, children) },
+    '../components/StatusStamp.jsx': loadJsx('../src/components/StatusStamp.jsx'),
     '../components/ProblemMetadata.jsx': () => null,
     '../components/MisconceptionOverview.jsx': () => null,
     '../components/SubmissionFeedback.jsx': loadJsx('../src/components/SubmissionFeedback.jsx'),
@@ -796,9 +802,9 @@ test('opening an unfinished history entry resumes only that analysis', async () 
     assert.equal(typeof finishAnalysis, 'function')
     finishAnalysis({ analysis: failure.analysis })
     await new Promise(resolve => setImmediate(resolve))
-    const changed = updates.find(update => update.index === 12 && typeof update.next === 'function')
-    states[12] = changed.next([item])
-    assert.equal(states[12][0].analysis.status, 'ready')
+    const changed = updates.find(update => update.index === 11 && typeof update.next === 'function')
+    states[11] = changed.next([item])
+    assert.equal(states[11][0].analysis.status, 'ready')
     stateIndex = 0
     const html = renderToStaticMarkup(History())
     assert.match(html, /AI 错因分析|Repeated replacement/)
@@ -1037,15 +1043,16 @@ test('mistake insight shows the AI matched practice focus and direct link', () =
     recent_review_total: 0, related_questions: [{ problem_id: 'practice-01-2-v1',
       title: '加练二', practice_focus: '练习字符串输出', matched_knowledge_ids: ['K01'],
       url: '/app/practice?level_no=1&problem_id=practice-01-2-v1' }] }
-  const selectedStates = { 0: [question], 1: { K01: '字符串与输出' }, 2: 'level1', 3: 'insight' }
+  const selectedStates = { 0: [question], 1: { K01: '字符串与输出' }, 2: 'insight' }
   let index = 0
-  const History = loadJsx('../src/pages/LearningHistory.jsx', {
+  const History = loadJsx('../src/pages/MistakeDetail.jsx', {
     react: { ...React, useState: initial => {
       const slot = index++
       return [slot in selectedStates ? selectedStates[slot] : typeof initial === 'function' ? initial() : initial, () => {}]
     },
       useRef: value => ({ current: value }), useEffect: () => {} },
-    'react-router-dom': { useNavigate: () => () => {} },
+    'react-router-dom': { useNavigate: () => () => {}, useParams: () => ({ problemId: 'level1' }), useSearchParams: () => [new URLSearchParams('knowledge=K08'), () => {}], Link: ({ to, children, ...props }) => React.createElement('a', { ...props, href: to }, children) },
+    '../components/StatusStamp.jsx': loadJsx('../src/components/StatusStamp.jsx'),
     '../components/ProblemMetadata.jsx': () => null,
     '../components/MisconceptionOverview.jsx': () => null,
     '../components/SubmissionFeedback.jsx': { default: () => null },
@@ -1055,4 +1062,87 @@ test('mistake insight shows the AI matched practice focus and direct link', () =
   assert.match(html, /根据 AI 知识点推荐/)
   assert.match(html, /练习字符串输出/)
   assert.match(html, /href="\/app\/practice\?level_no=1&amp;problem_id=practice-01-2-v1"/)
+})
+
+test('mistake overview groups cards and links to an independent review page without an editor', () => {
+  const questions = [{ problem_id: 'loop-sum', title: '循环求和', difficulty: 2,
+    knowledge_ids: ['K07', 'K08'], latest_passed: false, description: 'FULL_DESCRIPTION_HIDDEN' }]
+  let index = 0
+  const Overview = loadJsx('../src/pages/LearningHistory.jsx', {
+    react: { ...React, useState: initial => [index++ === 0 ? questions : index === 2
+      ? { K07: 'for 循环与 range', K08: '累加器与变量更新' } : initial, () => {}],
+      useEffect: () => {}, useRef: value => ({ current: value }) },
+    'react-router-dom': { useNavigate: () => () => {},
+      useSearchParams: () => [new URLSearchParams(), () => {}],
+      Link: ({ to, children, ...props }) => React.createElement('a', { ...props, href: to }, children) },
+    '../components/StatusStamp.jsx': () => null,
+    '../components/ProblemMetadata.jsx': () => null,
+    '../components/MisconceptionOverview.jsx': () => null,
+    '../components/SubmissionFeedback.jsx': { default: () => null },
+    '../components/codeApi.mjs': {},
+  })
+  const html = renderToStaticMarkup(Overview())
+  assert.match(html, /for 循环与 range/)
+  assert.match(html, /累加器与变量更新/)
+  assert.match(html, /href="\/app\/history\/loop-sum\?knowledge=K07"/)
+  assert.match(html, /href="\/app\/history\/loop-sum\?knowledge=K08"/)
+  assert.doesNotMatch(html, /textarea|FULL_DESCRIPTION_HIDDEN|运行输入/)
+})
+
+test('stamp distinguishes the latest passed, failed and unavailable verdicts', () => {
+  const Stamp = loadJsx('../src/components/StatusStamp.jsx')
+  const html = passed => renderToStaticMarkup(React.createElement(Stamp, { passed }))
+  assert.match(html(true), /is-passed/)
+  assert.match(html(true), /已通过/)
+  assert.match(html(false), /is-failed/)
+  assert.match(html(false), /未通过/)
+  for (const unknown of [undefined, null, 'false']) {
+    assert.match(html(unknown), /待尝试/)
+    assert.doesNotMatch(html(unknown), /is-failed|is-passed/)
+  }
+})
+
+test('detail loads the requested question after refresh and preserves edits when its summary reloads', () => {
+  const states = [], refs = [], effects = []
+  let stateIndex = 0, refIndex = 0
+  const Review = loadJsx('../src/pages/MistakeDetail.jsx', {
+    react: { ...React, useState: initial => {
+      const slot = stateIndex++
+      if (!(slot in states)) states[slot] = initial
+      return [states[slot], next => { states[slot] = typeof next === 'function' ? next(states[slot]) : next }]
+    }, useRef: initial => {
+      const slot = refIndex++
+      return refs[slot] ||= { current: initial }
+    }, useEffect: effect => effects.push(effect) },
+    'react-router-dom': { useNavigate: () => () => {}, useParams: () => ({ problemId: 'second' }),
+      useSearchParams: () => [new URLSearchParams('knowledge=K08'), () => {}],
+      Link: ({ to, children, ...props }) => React.createElement('a', { ...props, href: to }, children) },
+    '../components/StatusStamp.jsx': loadJsx('../src/components/StatusStamp.jsx'),
+    '../components/ProblemMetadata.jsx': () => null,
+    '../components/SubmissionFeedback.jsx': () => null,
+    '../components/codeApi.mjs': {},
+  })
+  const render = () => { stateIndex = 0; refIndex = 0; effects.length = 0; return Review() }
+  render()
+  effects[3]()
+  states[0] = [{ problem_id: 'first', title: 'FIRST_QUESTION', last_wrong_code: 'FIRST_CODE' },
+    { problem_id: 'second', title: 'SECOND_QUESTION', last_wrong_code: 'SECOND_CODE', knowledge_ids: ['K07', 'K08'] }]
+  states[1] = { K08: '累加器与变量更新' }
+  states[3] = false
+  let tree = render()
+  effects[3]()
+  assert.equal(states[5], 'SECOND_CODE')
+  const html = renderToStaticMarkup(tree)
+  assert.match(html, /SECOND_QUESTION/)
+  assert.doesNotMatch(html, /FIRST_QUESTION|FIRST_CODE/)
+  assert.match(html, /href="\/app\/history\?knowledge=K08#knowledge-K08"/)
+  states[5] = 'MY_NEW_DRAFT'
+  states[0] = states[0].map(question => ({ ...question, latest_passed: true }))
+  render()
+  effects[3]()
+  assert.equal(states[5], 'MY_NEW_DRAFT')
+  states[0] = []
+  const missing = renderToStaticMarkup(render())
+  assert.match(missing, /暂时找不到这道错题/)
+  assert.doesNotMatch(missing, /复习代码编辑器/)
 })
