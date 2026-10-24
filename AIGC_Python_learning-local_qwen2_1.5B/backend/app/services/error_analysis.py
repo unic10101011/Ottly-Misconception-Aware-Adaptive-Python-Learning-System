@@ -12,10 +12,15 @@ from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
 from app.services.submission import CaseResult, JudgeResult, Problem, GREETING, GREETING_ID
 from app.services.hint_quality import quality_issues
+from app.services.problem_catalog import KNOWLEDGE
 
 
 LOCAL_LLM_URL = os.getenv("LOCAL_LLM_URL", "")
 OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "qwen2.5-coder:7b-instruct-q4_K_M")
+ANALYSIS_PROVIDER = os.getenv("ANALYSIS_PROVIDER", "ollama").strip().lower()
+DEEPSEEK_API_KEY = os.getenv("DEEPSEEK_API_KEY", "").strip()
+DEEPSEEK_BASE_URL = os.getenv("DEEPSEEK_BASE_URL", "https://api.deepseek.com").rstrip('/')
+DEEPSEEK_MODEL = os.getenv("DEEPSEEK_MODEL", "deepseek-flash")
 ANALYSIS_TIMEOUT = 90
 logger = logging.getLogger(__name__)
 MisconceptionTag = Literal[
@@ -182,6 +187,56 @@ def model_load_ms(response: httpx.Response) -> float:
     return round(duration / 1_000_000, 2) if isinstance(duration, (int, float)) and duration > 0 else 0.0
 
 
+def analysis_model() -> str:
+    return DEEPSEEK_MODEL if ANALYSIS_PROVIDER == 'deepseek' else OLLAMA_MODEL
+
+
+def analysis_configuration_error() -> str | None:
+    if ANALYSIS_PROVIDER == 'deepseek':
+        if not DEEPSEEK_API_KEY:
+            return 'DeepSeek API Key 尚未配置，请在项目 .env 中设置 DEEPSEEK_API_KEY 并更新后端；判题结果已保留。'
+    elif ANALYSIS_PROVIDER != 'ollama':
+        return '编程助教的 ANALYSIS_PROVIDER 配置无效，请选择 deepseek 或 ollama；判题结果已保留。'
+    elif not LOCAL_LLM_URL:
+        return 'AI 模型尚未配置，判题结果已保留。'
+    return None
+
+
+async def request_diagnosis(client: httpx.AsyncClient, messages: list[dict], schema: dict,
+                            reply_tokens: int, context_tokens: int) -> tuple[str, float]:
+    if ANALYSIS_PROVIDER == 'deepseek':
+        # JSON mode does not enforce a schema. Supply it in the prompt and keep
+        # the same local schema, evidence and teaching-quality validation below.
+        messages = [*messages[:-1], {**messages[-1], 'content': messages[-1]['content']
+                    + '\n只返回符合以下 JSON Schema 的 JSON 对象：\n' + json.dumps(schema, ensure_ascii=False)}]
+        response = await client.post(DEEPSEEK_BASE_URL + '/chat/completions',
+                                     headers={'Authorization': 'Bearer ' + DEEPSEEK_API_KEY}, json={
+            'model': DEEPSEEK_MODEL, 'messages': messages, 'stream': False,
+            'response_format': {'type': 'json_object'},
+            'thinking': {'type': 'enabled'}, 'reasoning_effort': 'high',
+            # Thinking tokens share the output budget; leave room for the JSON.
+            'max_tokens': 8192,
+        })
+        response.raise_for_status()
+        result = response.json()
+        choices = result.get('choices') if isinstance(result, dict) else None
+        if not isinstance(choices, list) or not choices or not isinstance(choices[0], dict):
+            raise ValueError('Missing DeepSeek completion')
+        choice = choices[0]
+        if choice.get('finish_reason') != 'stop' or not isinstance(choice.get('message'), dict):
+            raise ValueError('Incomplete DeepSeek completion')
+        content = choice['message'].get('content')
+        if not isinstance(content, str) or not content.strip():
+            raise ValueError('Empty DeepSeek completion')
+        # Never expose reasoning_content as a student-facing diagnosis.
+        return content, 0.0
+    response = await client.post(LOCAL_LLM_URL, json={
+        'model': OLLAMA_MODEL, 'messages': messages, 'stream': False, 'format': schema,
+        'options': {'temperature': 0, 'num_predict': reply_tokens, 'num_ctx': context_tokens},
+    })
+    return model_content(response), model_load_ms(response)
+
+
 async def review_hints(client: httpx.AsyncClient, facts: dict, content: AnalysisContent,
                        load_times: list[float]) -> list[str]:
     review_facts = {key: facts[key] for key in ("execution_mode", "judge_status", "diagnosis_scope", "problem", "student_code", "failed_cases")}
@@ -191,14 +246,12 @@ async def review_hints(client: httpx.AsyncClient, facts: dict, content: Analysis
     review_schema['$defs']['ReviewIssue']['properties']['code']['enum'] = [
         'unrelated_claim', 'unsupported_claim', 'answer_leak', 'misconception_mismatch',
     ]
-    response = await client.post(LOCAL_LLM_URL, json={
-        "model": OLLAMA_MODEL, "stream": False, "format": review_schema,
-        "messages": [{"role": "system", "content": REVIEW_PROMPT},
-                     {"role": "user", "content": json.dumps(review_facts, ensure_ascii=False)}],
-        "options": {"temperature": 0, "num_predict": 700, "num_ctx": 4096},
-    })
-    load_times.append(model_load_ms(response))
-    review = HintReview.model_validate_json(model_content(response))
+    raw, load_ms = await request_diagnosis(client, [
+        {'role': 'system', 'content': REVIEW_PROMPT},
+        {'role': 'user', 'content': json.dumps(review_facts, ensure_ascii=False)},
+    ], review_schema, 700, 4096)
+    load_times.append(load_ms)
+    review = HintReview.model_validate_json(raw)
     if not review.tag_supported or any(issue.code == 'misconception_mismatch' for issue in review.issues):
         content.misconception_tag = 'other'
     # level1 was replaced with the server-owned opening question before review.
@@ -210,7 +263,7 @@ async def review_hints(client: httpx.AsyncClient, facts: dict, content: Analysis
 def evidence_options(judge: JudgeResult) -> list[dict]:
     options = []
     for case in judge.cases:
-        if case.passed:
+        if case.passed or case.visibility != 'public':
             continue
         if case.errors:
             options.extend({"case_id": case.case_id, "field": "error_message", "quote": error.message.strip()[:1000].strip()}
@@ -358,10 +411,11 @@ async def _analyze_failure(problem: Problem, code: str, judge: JudgeResult,
                            related_history: list[dict] | None = None, *, execution_mode: str = 'submit') -> AnalysisResult:
     if judge.passed:
         return AnalysisResult(status="skipped", message="测试已通过，无需 AI 分析。")
-    if not LOCAL_LLM_URL:
-        return AnalysisResult(status="unavailable", message="AI 模型尚未配置，判题结果已保留。", model=OLLAMA_MODEL)
+    model = analysis_model()
+    if configuration_error := analysis_configuration_error():
+        return AnalysisResult(status='unavailable', message=configuration_error, model=model)
     if any(error.type == "RunnerError" for case in judge.cases for error in case.errors):
-        return AnalysisResult(status="unavailable", message="执行器暂不可用，无法分析学生代码，请稍后重试。", model=OLLAMA_MODEL)
+        return AnalysisResult(status="unavailable", message="执行器暂不可用，无法分析学生代码，请稍后重试。", model=model)
     schema = DiagnosisDraft.model_json_schema()
     # Explain the observed failure before selecting a tag, rather than guessing
     # a syntax category first and inventing an explanation to fit it.
@@ -378,6 +432,10 @@ async def _analyze_failure(problem: Problem, code: str, judge: JudgeResult,
         'description': '本次提交的疑似误区；证据不足选择 other',
     }
     schema['required'] = list(dict.fromkeys([*schema.get('required', []), 'misconception_tag']))
+    if ANALYSIS_PROVIDER == 'deepseek':
+        # Exact catalog terms keep the existing knowledge-ID and practice matching reliable.
+        schema['properties']['knowledge_points']['items']['enum'] = [item.name for item in KNOWLEDGE.values()]
+        schema['properties']['knowledge_points']['description'] = '原样选择相关知识点名称，不写定义或解释句。'
     allowed = evidence_options(judge)
     # Narrow model-generated citations to facts observed in this submission.
     for field in ("case_id", "field", "quote"):
@@ -403,24 +461,25 @@ async def _analyze_failure(problem: Problem, code: str, judge: JudgeResult,
         "related_history": history,
     }
     if not allowed or len(json.dumps(facts, ensure_ascii=False)) > 10000:
-        return AnalysisResult(status="invalid_response", message="本次代码或执行证据过长，无法可靠生成 AI 分析；判题结果已保留，请缩短代码或输出后重试。", model=OLLAMA_MODEL)
-    payload = {
-        "model": OLLAMA_MODEL,
-        "messages": [
-            {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user", "content": json.dumps(facts, ensure_ascii=False) + "\n" + RESPONSE_INSTRUCTIONS},
-        ],
-        "stream": False,
-        "format": schema,
-        "options": {"temperature": 0, "num_predict": 1000, "num_ctx": 8192},
-    }
+        return AnalysisResult(status="invalid_response", message="本次代码或执行证据过长，无法可靠生成 AI 分析；判题结果已保留，请缩短代码或输出后重试。", model=model)
+    messages = [
+        {'role': 'system', 'content': SYSTEM_PROMPT},
+        {'role': 'user', 'content': json.dumps(facts, ensure_ascii=False) + '\n' + RESPONSE_INSTRUCTIONS},
+    ]
     load_times: list[float] = []
     try:
         async with asyncio.timeout(ANALYSIS_TIMEOUT):
             async with httpx.AsyncClient(timeout=httpx.Timeout(ANALYSIS_TIMEOUT, connect=5)) as client:
-                response = await client.post(LOCAL_LLM_URL, json=payload)
-                load_times.append(model_load_ms(response))
-                diagnosis = parse_analysis_content(model_content(response))
+                raw, load_ms = await request_diagnosis(client, messages, schema, 1000, 8192)
+                load_times.append(load_ms)
+                diagnosis = parse_analysis_content(raw)
+                if diagnosis.misconception_tag not in allowed_tags:
+                    diagnosis.misconception_tag = 'other'
+                if ANALYSIS_PROVIDER == 'deepseek' and any(
+                    point not in schema['properties']['knowledge_points']['items']['enum']
+                    for point in diagnosis.knowledge_points
+                ):
+                    raise ValueError('Unknown diagnosis knowledge point')
                 content = AnalysisContent(**diagnosis.model_dump(exclude={'code_observation'}), hints=safe_hints(problem, judge))
                 validate_grounding(content, judge, problem_id=problem.problem_id, code=code)
                 issues = quality_issues(content.model_dump(), code, [case.expected_output for case in judge.cases])
@@ -430,26 +489,34 @@ async def _analyze_failure(problem: Problem, code: str, judge: JudgeResult,
                 if issues:
                     raise TeachingQualityError(issues)
                 message = '错因分析由 AI 根据本次执行生成；三级提示采用已审核的基础提示。'
-                return AnalysisResult(status="ready", message=message, model=OLLAMA_MODEL,
+                return AnalysisResult(status="ready", message=message, model=model,
                                       content=content, model_load_ms=sum(load_times),
                                       personalization=Personalization(
                                           used=bool(history), related_history_count=len(history)))
     except (TimeoutError, httpx.TimeoutException):
-        return AnalysisResult(status="timeout", message="提示准备超时，判题结果已保留。", model=OLLAMA_MODEL,
+        return AnalysisResult(status="timeout", message="错因分析超时，判题结果已保留，请稍后重新提交。", model=model,
                               model_load_ms=sum(load_times))
-    except httpx.HTTPError:
-        return AnalysisResult(status="unavailable", message="提示暂时无法生成，判题结果已保留。", model=OLLAMA_MODEL,
+    except httpx.HTTPError as error:
+        message = '错因分析暂时无法生成，判题结果已保留。'
+        if ANALYSIS_PROVIDER == 'deepseek':
+            status = error.response.status_code if isinstance(error, httpx.HTTPStatusError) else None
+            message = {
+                401: 'DeepSeek API Key 无效，请检查后端密钥配置；判题结果已保留。',
+                402: 'DeepSeek 账户余额不足，请检查账户额度；判题结果已保留。',
+                429: 'DeepSeek 请求繁忙或受到限流，请稍后重新提交；判题结果已保留。',
+            }.get(status, 'DeepSeek 服务暂不可用，请检查网络或稍后重试；判题结果已保留。')
+        return AnalysisResult(status="unavailable", message=message, model=model,
                               model_load_ms=sum(load_times))
     except (ValueError, ValidationError, KeyError, TypeError) as error:
         reason = error.errors(include_input=False, include_url=False) if isinstance(error, ValidationError) else str(error)
         logger.warning('AI analysis rejected problem_id=%s reason=%s', problem.problem_id, str(reason)[:700])
-        return AnalysisResult(status="invalid_response", message="提示未通过内容检查，判题结果已保留。请先对照实际输出或报错。", model=OLLAMA_MODEL,
+        return AnalysisResult(status="invalid_response", message="错因分析未通过内容检查，判题结果已保留。请先对照实际输出或报错。", model=model,
                               model_load_ms=sum(load_times))
 
 
 async def analyze_failure(problem: Problem, code: str, judge: JudgeResult,
                           related_history: list[dict] | None = None, *, execution_mode: str = 'submit') -> AnalysisResult:
     result = await _analyze_failure(problem, code, judge, related_history, execution_mode=execution_mode)
-    if judge.passed or result.status == 'ready':
+    if judge.passed or result.status == 'ready' or ANALYSIS_PROVIDER == 'deepseek':
         return result
     return fixed_syntax_analysis(problem, code, judge) or result

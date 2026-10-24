@@ -21,12 +21,25 @@ router = APIRouter()
 LOCAL_LLM_URL = os.getenv("LOCAL_LLM_URL")
 OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "qwen2.5-coder:7b-instruct-q4_K_M")
 MAX_TOKENS = 450
+CHAT_CONTEXT_TOKENS = 8192
+CHAT_MAX_TURNS = 20
+CHAT_RUNTIME_ID = str(uuid.uuid4())
+active_chat_sessions: dict[int, str] = {}
+pending_chats: dict[tuple[int, str], dict] = {}
 TEMPERATURE = 0.3
 CHAT_SYSTEM_PROMPT = (
-    "你是面向 Python 初学者的中文编程辅导助手。先直接回答学生当前问题，"
-    "用简短段落解释原因和下一步。只有确实需要时才给一个简短代码示例，"
-    "代码放在标注 python 的 Markdown 代码块中。不要无关地列举大量例子；"
-    "未实际运行的代码不要声称已验证输出。学生问题不明确时先问一个澄清问题。"
+    "你叫 Ottly，是一只住在宁静海湾旁的虚拟小海獭，也是陪伴小朋友学习 Python 的 AI 助手。"
+    "当小朋友问你的名字或你是谁时，自然地介绍自己是 Ottly，可以简短提到海湾和陪学的身份。"
+    "用温暖、耐心、平等的语气，以中文交流；鼓励尝试和提问，不责备、不嘲笑，也不过度夸奖。"
+    "偶尔用海湾生活中的小比喻帮助理解，但不让角色故事盖过问题，不必每次重复自我介绍或刻意卖萌。"
+    "先直接回答当前问题，再用简短段落说明原因和下一步；使用小朋友能理解的词语，必要时解释编程术语。"
+    "讲解 Python 时一次推进一个小步骤，帮助学生理解思路；需要代码时给简短、相关的示例，"
+    "代码放在标注 python 的 Markdown 代码块中，不无关地列举大量例子。"
+    "学生的问题或代码不完整时，先问一个具体的澄清问题；分析报错要根据给出的代码和执行信息，"
+    "缺少依据就明确说明，不编造输出、运行结果或错误原因。未实际运行的代码不要声称已验证。"
+    "不确定的知识要坦诚说明；你是虚拟角色，不假装是真实动物或人类。"
+    f"仅在被问及技术来源时说明：本对话由本地 Ollama 服务中的 {OLLAMA_MODEL} 模型生成，"
+    "不要编造开发方或其他模型身份。"
 )
 
 
@@ -37,6 +50,11 @@ class AIChatRequest(BaseModel):
     question: str = Field(max_length=1000)
     question_type: str = "text"
     stream: bool = True
+    session_id: Optional[str] = None
+    runtime_id: Optional[str] = None
+
+
+class ChatSessionRequest(BaseModel):
     session_id: Optional[str] = None
 
 
@@ -72,7 +90,7 @@ async def get_session_history(db: Session, session_id: str, user_id: int):
     history = db.query(AIChatRecord).filter(
         AIChatRecord.session_id == session_id,
         AIChatRecord.user_id == user_id
-    ).order_by(AIChatRecord.response_time.asc()).all()
+    ).order_by(AIChatRecord.response_time.asc(), AIChatRecord.record_id.asc()).all()
 
     messages = []
     for record in history:
@@ -82,18 +100,80 @@ async def get_session_history(db: Session, session_id: str, user_id: int):
     return messages
 
 
+def current_chat_id(user_id: int) -> str:
+    # This pointer lasts for one backend process; stored history is never deleted.
+    return active_chat_sessions.setdefault(user_id, str(uuid.uuid4()))
+
+
+def context_has_space(history: list[dict], question: str = '') -> bool:
+    messages = [{'role': 'system', 'content': CHAT_SYSTEM_PROMPT}, *history,
+                {'role': 'user', 'content': question}]
+    # UTF-8 bytes conservatively budget input tokens; reserve reply/template space.
+    estimated_tokens = sum(len(item['content'].encode('utf-8')) + 16 for item in messages)
+    return len(history) // 2 < CHAT_MAX_TURNS and estimated_tokens + MAX_TOKENS + 256 <= CHAT_CONTEXT_TOKENS
+
+
+async def chat_session_snapshot(db: Session, user_id: int) -> dict:
+    session_id = current_chat_id(user_id)
+    history = await get_session_history(db, session_id, user_id)
+    pending = pending_chats.get((user_id, session_id))
+    messages = [{'content': item['content'], 'isUser': item['role'] == 'user'} for item in history]
+    if pending:
+        messages.extend([{'content': pending['question'], 'isUser': True},
+                         {'content': pending['answer'], 'isUser': False}])
+    return {'session_id': session_id, 'runtime_id': CHAT_RUNTIME_ID, 'messages': messages,
+            'pending': pending is not None, 'context_full': not context_has_space(history)}
+
+
+@router.get('/ai/session')
+async def current_chat_session(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    return AIChatResponse(data=await chat_session_snapshot(db, current_user.id))
+
+
+@router.post('/ai/session')
+async def change_chat_session(request: ChatSessionRequest, db: Session = Depends(get_db),
+                              current_user: User = Depends(get_current_user)):
+    if any(owner == current_user.id for owner, _ in pending_chats):
+        raise HTTPException(status_code=409, detail={'code': 'CHAT_BUSY', 'message': '小海獭正在回复，请稍后新建或切换对话。'})
+    if request.session_id and request.session_id != current_chat_id(current_user.id):
+        owned = db.query(AIChatRecord).filter_by(user_id=current_user.id, session_id=request.session_id).first()
+        if owned is None:
+            raise HTTPException(status_code=404, detail='会话不存在')
+    active_chat_sessions[current_user.id] = request.session_id or str(uuid.uuid4())
+    return AIChatResponse(data=await chat_session_snapshot(db, current_user.id))
+
+
+async def prepare_chat(chat_data: AIChatRequest, db: Session, user_id: int):
+    if chat_data.runtime_id and chat_data.runtime_id != CHAT_RUNTIME_ID:
+        raise HTTPException(status_code=409, detail={'code': 'CHAT_RUNTIME_CHANGED', 'message': '项目已重启，已开启新对话，请重新发送问题。'})
+    if any(owner == user_id for owner, _ in pending_chats):
+        raise HTTPException(status_code=409, detail={'code': 'CHAT_BUSY', 'message': '小海獭正在回复上一条问题，请稍候。'})
+    session_id = chat_data.session_id or current_chat_id(user_id)
+    if session_id != current_chat_id(user_id):
+        owned = db.query(AIChatRecord).filter_by(user_id=user_id, session_id=session_id).first()
+        if owned is None:
+            raise HTTPException(status_code=404, detail='会话不存在')
+    history = await get_session_history(db, session_id, user_id)
+    if not context_has_space(history, chat_data.question):
+        raise HTTPException(status_code=409, detail={'code': 'CHAT_CONTEXT_FULL', 'message': '本次对话已接近上下文上限，请新开一个对话继续。'})
+    active_chat_sessions[user_id] = session_id
+    pending_chats[(user_id, session_id)] = {'question': chat_data.question, 'answer': ''}
+    return session_id, [{'role': 'system', 'content': CHAT_SYSTEM_PROMPT}, *history,
+                        {'role': 'user', 'content': chat_data.question}]
+
+
 def ollama_payload(messages: list[dict], stream: bool) -> dict:
     return {
         "model": OLLAMA_MODEL,
         "messages": messages,
         "stream": stream,
-        "options": {"num_predict": MAX_TOKENS, "temperature": TEMPERATURE},
+        "options": {"num_predict": MAX_TOKENS, "temperature": TEMPERATURE, "num_ctx": CHAT_CONTEXT_TOKENS},
     }
 
 
-def sse_event(content: str, session_id: str) -> str:
+def sse_event(content: str, session_id: str, **extra) -> str:
     return "data: " + json.dumps(
-        {"content": content, "session_id": session_id}, ensure_ascii=False
+        {"content": content, "session_id": session_id, **extra}, ensure_ascii=False
     ) + "\n\n"
 
 
@@ -109,33 +189,68 @@ def save_chat_if_active(db: Session, user_id: int, record: AIChatRecord) -> bool
 
 
 async def stream_chat_response(chat_data: AIChatRequest, db: Session, user_id: int):
-    session_id = chat_data.session_id or str(uuid.uuid4())
-    history_messages = await get_session_history(db, session_id, user_id)
-    messages = [{"role": "system", "content": CHAT_SYSTEM_PROMPT}] + history_messages[-8:] + [{"role": "user", "content": chat_data.question}]
+    session_id, messages = await prepare_chat(chat_data, db, user_id)
     payload = ollama_payload(messages, stream=True)
 
     async def generate():
-        full_content = ""
+        try:
+            full_content = ""
+            try:
+                async with httpx.AsyncClient(timeout=120.0) as client:
+                    async with client.stream("POST", LOCAL_LLM_URL, json=payload) as response:
+                        response.raise_for_status()
+                        async for line in response.aiter_lines():
+                            if not line:
+                                continue
+                            data = json.loads(line)
+                            token = data.get("message", {}).get("content", "")
+                            if token:
+                                full_content += token
+                                pending_chats[(user_id, session_id)]['answer'] = full_content
+                                yield sse_event(token, session_id)
+                            if data.get("done"):
+                                break
+                if not full_content:
+                    raise ValueError("Empty model response")
+            except (httpx.HTTPError, ValueError):
+                yield sse_event("模型调用失败，请稍后重试。", session_id, error=True)
+                yield sse_event("[END]", session_id)
+                return
+
+            saved = save_chat_if_active(db, user_id, AIChatRecord(
+                user_id=user_id,
+                conversation_id=1,
+                session_id=session_id,
+                question=chat_data.question,
+                question_type=chat_data.question_type,
+                answer=full_content,
+                is_stream=True,
+            ))
+            pending_chats.pop((user_id, session_id), None)
+            if not saved:
+                yield sse_event("账号已注销，本次对话未保存。", session_id)
+            yield sse_event("[END]", session_id)
+
+        finally:
+            pending_chats.pop((user_id, session_id), None)
+
+    return StreamingResponse(generate(), media_type="text/event-stream")
+
+
+async def normal_chat_response(chat_data: AIChatRequest, db: Session, user_id: int):
+    session_id, messages = await prepare_chat(chat_data, db, user_id)
+    payload = ollama_payload(messages, stream=False)
+
+    try:
         try:
             async with httpx.AsyncClient(timeout=120.0) as client:
-                async with client.stream("POST", LOCAL_LLM_URL, json=payload) as response:
-                    response.raise_for_status()
-                    async for line in response.aiter_lines():
-                        if not line:
-                            continue
-                        data = json.loads(line)
-                        token = data.get("message", {}).get("content", "")
-                        if token:
-                            full_content += token
-                            yield sse_event(token, session_id)
-                        if data.get("done"):
-                            break
-            if not full_content:
+                response = await client.post(LOCAL_LLM_URL, json=payload)
+                response.raise_for_status()
+                full_answer = response.json().get("message", {}).get("content", "").strip()
+            if not full_answer:
                 raise ValueError("Empty model response")
         except (httpx.HTTPError, ValueError):
-            yield sse_event("模型调用失败，请稍后重试。", session_id)
-            yield sse_event("[END]", session_id)
-            return
+            return AIChatResponse(code=400, msg="模型调用失败，请检查 Ollama 服务和模型。", data={})
 
         saved = save_chat_if_active(db, user_id, AIChatRecord(
             user_id=user_id,
@@ -143,53 +258,23 @@ async def stream_chat_response(chat_data: AIChatRequest, db: Session, user_id: i
             session_id=session_id,
             question=chat_data.question,
             question_type=chat_data.question_type,
-            answer=full_content,
-            is_stream=True,
+            answer=full_answer,
+            is_stream=False,
         ))
         if not saved:
-            yield sse_event("账号已注销，本次对话未保存。", session_id)
-        yield sse_event("[END]", session_id)
-
-    return StreamingResponse(generate(), media_type="text/event-stream")
-
-
-async def normal_chat_response(chat_data: AIChatRequest, db: Session, user_id: int):
-    session_id = chat_data.session_id or str(uuid.uuid4())
-    history_messages = await get_session_history(db, session_id, user_id)
-    messages = [{"role": "system", "content": CHAT_SYSTEM_PROMPT}] + history_messages[-8:] + [{"role": "user", "content": chat_data.question}]
-    payload = ollama_payload(messages, stream=False)
-
-    try:
-        async with httpx.AsyncClient(timeout=120.0) as client:
-            response = await client.post(LOCAL_LLM_URL, json=payload)
-            response.raise_for_status()
-            full_answer = response.json().get("message", {}).get("content", "").strip()
-        if not full_answer:
-            raise ValueError("Empty model response")
-    except (httpx.HTTPError, ValueError):
-        return AIChatResponse(code=400, msg="模型调用失败，请检查 Ollama 服务和模型。", data={})
-
-    saved = save_chat_if_active(db, user_id, AIChatRecord(
-        user_id=user_id,
-        conversation_id=1,
-        session_id=session_id,
-        question=chat_data.question,
-        question_type=chat_data.question_type,
-        answer=full_answer,
-        is_stream=False,
-    ))
-    if not saved:
-        raise HTTPException(status_code=401, detail="账号已注销，本次对话未保存")
-    return AIChatResponse(
-        code=200,
-        msg="响应成功",
-        data={
-            "question": chat_data.question,
-            "answer": full_answer,
-            "response_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-            "session_id": session_id,
-        },
-    )
+            raise HTTPException(status_code=401, detail="账号已注销，本次对话未保存")
+        return AIChatResponse(
+            code=200,
+            msg="响应成功",
+            data={
+                "question": chat_data.question,
+                "answer": full_answer,
+                "response_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "session_id": session_id,
+            },
+        )
+    finally:
+        pending_chats.pop((user_id, session_id), None)
 
 
 # ==================== 以下接口完全保持不变（仅修改了注释） ====================
@@ -231,7 +316,7 @@ async def get_chat_history(
         query = query.filter(AIChatRecord.session_id == session_id)
 
     total = query.count()
-    records = query.order_by(AIChatRecord.response_time.desc()).offset(
+    records = query.order_by(AIChatRecord.response_time.desc(), AIChatRecord.record_id.desc()).offset(
         (page - 1) * page_size
     ).limit(page_size).all()
 

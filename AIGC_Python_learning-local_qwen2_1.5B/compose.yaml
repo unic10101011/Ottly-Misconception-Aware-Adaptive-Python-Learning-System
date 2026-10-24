@@ -23,6 +23,10 @@ services:
       JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET}
       LOCAL_LLM_URL: ${LOCAL_LLM_URL:-}
       OLLAMA_MODEL: ${OLLAMA_MODEL:-qwen2.5-coder:7b-instruct-q4_K_M}
+      ANALYSIS_PROVIDER: ${ANALYSIS_PROVIDER:-ollama}
+      DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY:-}
+      DEEPSEEK_BASE_URL: ${DEEPSEEK_BASE_URL:-https://api.deepseek.com}
+      DEEPSEEK_MODEL: ${DEEPSEEK_MODEL:-deepseek-flash}
     depends_on:
       db:
         condition: service_healthy

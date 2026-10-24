@@ -1,4 +1,6 @@
-﻿$ErrorActionPreference = 'Stop'
+﻿param([switch]$NoBrowser)
+
+$ErrorActionPreference = 'Stop'
 Set-Location -LiteralPath $PSScriptRoot
 
 function New-HexSecret {
@@ -12,16 +14,24 @@ function New-HexSecret {
     return ([System.BitConverter]::ToString($bytes)).Replace('-', '').ToLowerInvariant()
 }
 
-if (-not (Get-Command docker -ErrorAction SilentlyContinue)) {
+$dockerCommand = Get-Command docker -CommandType Application -ErrorAction SilentlyContinue | Select-Object -First 1
+$dockerExe = if ($dockerCommand) { $dockerCommand.Source } else {
+    @(
+        (Join-Path $env:LOCALAPPDATA 'Programs\DockerDesktop\resources\bin\docker.exe')
+        (Join-Path $env:LOCALAPPDATA 'Programs\Docker\Docker\resources\bin\docker.exe')
+        (Join-Path $env:ProgramFiles 'Docker\Docker\resources\bin\docker.exe')
+    ) | Where-Object { Test-Path -LiteralPath $_ } | Select-Object -First 1
+}
+if (-not $dockerExe) {
     throw '未找到 Docker。请先安装 Docker Desktop。'
 }
 try {
-    docker info --format '{{.ServerVersion}}' 2>$null | Out-Null
+    & $dockerExe info --format '{{.ServerVersion}}' 2>$null | Out-Null
     if ($LASTEXITCODE -ne 0) {
         throw 'Docker 引擎不可用'
     }
 } catch {
-    throw 'Docker Desktop 尚未启动。请启动后再运行此脚本。'
+    throw 'Docker 引擎尚未就绪。请先打开 Docker Desktop 并等待引擎启动；若显示 WSL is unresponsive，请重启 WSL 或 Windows 后重试。'
 }
 
 $envFile = Join-Path $PSScriptRoot '.env'
@@ -48,7 +58,7 @@ if (Test-Path -LiteralPath $ollamaExe) {
 } else {
     Write-Warning '未安装 Ollama，AI 聊天暂不可用。'
 }
-docker compose up --build -d
+& $dockerExe compose --progress plain up --build -d
 if ($LASTEXITCODE -ne 0) {
     throw '镜像下载、构建或容器启动失败。先查看上方错误；若容器已创建，再运行 docker compose logs。'
 }
@@ -70,4 +80,6 @@ if (-not $ready) {
 }
 
 Write-Host '演示版已启动：http://127.0.0.1:3000'
-Start-Process 'http://127.0.0.1:3000'
+if (-not $NoBrowser) {
+    Start-Process 'http://127.0.0.1:3000'
+}

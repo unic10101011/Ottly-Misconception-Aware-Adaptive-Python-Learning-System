@@ -17,6 +17,7 @@ from app.services.submission import CaseResult, PROBLEMS, JudgeResult, Submissio
 from app.services.error_analysis import AnalysisResult, analyze_failure
 from app.services.lesson_feedback import with_lesson_hints
 from app.services.personalized_history import select_related_history
+from app.services.practice_recommendation import RecommendationResult, recommend_practice
 from app.services.problem_catalog import SCHEMA_VERSION, LEVELS, KNOWLEDGE, Problem, TestCase
 from app.services.learning_contract import (
     ContractJudge, ContractAnalysis, contract_judge, contract_analysis,
@@ -104,6 +105,7 @@ class SubmissionData(BaseModel):
     judge: ContractJudge
     analysis: ContractAnalysis
     timings: dict[str, float]
+    practice_recommendation_eligible: bool = False
 
 
 class SubmissionResponse(BaseModel):
@@ -116,6 +118,17 @@ def passed_problem_ids(db: Session, user_id: int) -> set[str]:
     return {row[0] for row in db.query(LearningSubmission.problem_id).filter(
         LearningSubmission.user_id == user_id, LearningSubmission.passed.is_(True),
     ).distinct().all()}
+
+
+def preceding_failure(db: Session, record: LearningSubmission) -> LearningSubmission | None:
+    if not record.passed or not any(slot.problem_id == record.problem_id for slot in LEVELS):
+        return None
+    previous = db.query(LearningSubmission).filter(
+        LearningSubmission.user_id == record.user_id,
+        LearningSubmission.problem_id == record.problem_id,
+        LearningSubmission.id < record.id,
+    ).order_by(LearningSubmission.id.desc()).first()
+    return previous if previous is not None and not previous.passed else None
 
 
 def require_lesson(problem_id, passed, *, review=False):
@@ -262,6 +275,7 @@ async def submit_code(request: SubmissionRequest, current_user: User = Depends(g
     )
     db.add(record)
     db.flush()
+    recommendation_eligible = preceding_failure(db, record) is not None
     if review_source_id is not None:
         db.add(LearningReview(user_id=user_id, submission_id=record.id,
                               source_submission_id=review_source_id))
@@ -273,7 +287,67 @@ async def submit_code(request: SubmissionRequest, current_user: User = Depends(g
         submission_id=record.id, problem_id=problem.problem_id, version=record.problem_version,
         created_at=utc_iso(record.created_at), error_type=record.error_type,
         judge=judge, analysis=analysis, timings=timings,
+        practice_recommendation_eligible=recommendation_eligible,
     ))
+
+
+@router.post('/code/submissions/{submission_id}/practice-recommendation')
+async def prepare_practice_recommendation(submission_id: int, current_user: User = Depends(get_current_user),
+                                          db: Session = Depends(get_db)):
+    user_id = current_user.id
+    record = db.query(LearningSubmission).filter_by(id=submission_id, user_id=user_id).first()
+    if record is None:
+        raise HTTPException(status_code=404, detail='提交记录不存在')
+    cached = (record.analysis_json or {}).get('practice_recommendation')
+    if cached:
+        return {'schema_version': SCHEMA_VERSION, 'code': 200, 'data': cached}
+    failure = preceding_failure(db, record)
+    if failure is None:
+        return {'schema_version': SCHEMA_VERSION, 'code': 200,
+                'data': RecommendationResult(status='skipped').model_dump(mode='json')}
+    lesson = PROBLEMS.get(record.problem_id)
+    if lesson is None:
+        raise HTTPException(status_code=404, detail='题目不存在')
+    passed = passed_problem_ids(db, user_id)
+    feedback = history_analysis(failure, contract_judge(failure.judge_json, code=failure.code))
+    knowledge_ids = (set(feedback.content.knowledge_ids) if feedback and feedback.status == 'ready'
+                     and feedback.source == 'ai' and feedback.content else set())
+    knowledge_ids &= set(analysis_knowledge_scope(lesson))
+    knowledge_ids = knowledge_ids or set(lesson.knowledge_ids)
+    candidates = [item for item in PROBLEMS.values()
+                  if item.kind == 'practice' and item.published and item.problem_id not in passed
+                  and knowledge_ids.intersection(item.knowledge_ids)
+                  and set(item.prerequisite_problem_ids).issubset(passed)]
+    candidates.sort(key=lambda item: (abs(item.level_no - lesson.level_no), item.problem_id))
+    failure_facts = {
+        'problem_id': failure.problem_id, 'title': failure.problem_title,
+        'description': failure.problem_description, 'code': failure.code,
+        'error_type': failure.error_type,
+        'suspected_cause': feedback.content.suspected_cause if feedback and feedback.content else None,
+        'knowledge_points': [KNOWLEDGE[key].name for key in sorted(knowledge_ids)],
+        'public_cases': [case.model_dump() for case in contract_judge(failure.judge_json).cases
+                         if case.visibility == 'public'],
+    }
+    # The model call is independent of judging and holds no database locks.
+    db.rollback()
+    result = await recommend_practice(failure_facts, candidates[:12])
+    owner = db.query(User).filter(User.id == user_id, User.status == 'enabled').with_for_update().first()
+    if owner is None:
+        db.rollback()
+        raise HTTPException(status_code=401, detail='账号已注销，本次推荐未保存')
+    saved = db.query(LearningSubmission).filter_by(id=submission_id, user_id=user_id).with_for_update().first()
+    if saved is None:
+        db.rollback()
+        raise HTTPException(status_code=404, detail='提交记录不存在')
+    if result.recommendation:
+        item = PROBLEMS.get(result.recommendation.problem_id)
+        current_passed = passed_problem_ids(db, user_id)
+        if not item or not item.published or item.problem_id in current_passed or not set(item.prerequisite_problem_ids).issubset(current_passed):
+            result = RecommendationResult(status='skipped')
+    data = (saved.analysis_json or {}).get('practice_recommendation') or result.model_dump(mode='json')
+    saved.analysis_json = {**(saved.analysis_json or {}), 'practice_recommendation': data}
+    db.commit()
+    return {'schema_version': SCHEMA_VERSION, 'code': 200, 'data': data}
 
 
 @router.post('/code/submissions/{submission_id}/analysis')

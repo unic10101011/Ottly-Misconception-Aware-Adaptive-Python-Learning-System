@@ -5,18 +5,18 @@ import chathaita from './images/chathaita.png';
 import yonghu from './images/yonghu.png';
 import chatbeijing from './images/chatbeijing.png'; // 背景图
 
+const welcomeMessage = { content: "你好呀，我是小海獭，请问有什么可以帮助你的呢？", isUser: false };
+
 const AIchat = () => {
   const navigate = useNavigate();
   const [currentSessionId, setCurrentSessionId] = useState(null);
   const [sessions, setSessions] = useState([]);
-  const [messages, setMessages] = useState([
-    { content: "你好呀，我是小海獭，请问有什么可以帮助你的呢？", isUser: false },
-  ]);
+  const [messages, setMessages] = useState([welcomeMessage]);
   const [history, setHistory] = useState([]);
   const [historyError, setHistoryError] = useState('');
   const [sessionsError, setSessionsError] = useState('');
   const [sessionHistoryError, setSessionHistoryError] = useState('');
-  const [sessionHistoryLoading, setSessionHistoryLoading] = useState(false);
+  const [sessionHistoryLoading, setSessionHistoryLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [typing, setTyping] = useState(false);
@@ -27,12 +27,32 @@ const AIchat = () => {
   const chatBodyRef = useRef(null);
   const questionInputRef = useRef(null);
   const sendingRef = useRef(false);
+  const mountedRef = useRef(false);
+  const sessionRequestRef = useRef(0);
+  const runtimeRef = useRef(null);
+  const [contextFull, setContextFull] = useState(false);
+  const [sessionNotice, setSessionNotice] = useState('');
   const pageSize = 10;
 
   useEffect(() => {
+    mountedRef.current = true;
+    loadSessionHistory();
     loadSessions();
     loadHistory();
+    const restoreOnFocus = () => loadSessionHistory(undefined, true);
+    window.addEventListener('focus', restoreOnFocus);
+    return () => {
+      mountedRef.current = false;
+      sessionRequestRef.current++;
+      window.removeEventListener('focus', restoreOnFocus);
+    };
   }, []);
+
+  useEffect(() => {
+    if (!sending || sendingRef.current) return;
+    const timer = setInterval(() => loadSessionHistory(undefined, true), 1500);
+    return () => clearInterval(timer);
+  }, [sending]);
 
   const loadSessions = async () => {
     setSessionsError('');
@@ -70,80 +90,98 @@ const AIchat = () => {
     }
   };
 
-  const loadSessionHistory = async (sessionId) => {
+  const loadSessionHistory = async (sessionId = undefined, quiet = false) => {
+    if (sendingRef.current) return;
+    const requestVersion = ++sessionRequestRef.current;
+    if (!quiet) setSessionHistoryLoading(true);
     setSessionHistoryError('');
-    setSessionHistoryLoading(true);
-    setMessages([]);
     try {
-      const response = await fetch(
-        `/api/v1/ai/history?session_id=${sessionId}&page=1&page_size=100`,
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` },
-        }
-      );
-      if (!response.ok) throw new Error("获取会话历史失败");
-      const data = await response.json();
-      if (data.code === 200) {
-        const records = data.data;
-        const newMessages = [];
-        records.reverse().forEach((record) => {
-          newMessages.push({ content: record.question, isUser: true });
-          newMessages.push({ content: record.answer, isUser: false });
-        });
-        if (records.length === 0) {
-          newMessages.push({
-            content: "你好呀，我是小海獭，请问有什么可以帮助你的呢？",
-            isUser: false,
-          });
-        }
-        setMessages(newMessages);
+      const response = await fetch('/api/v1/ai/session', {
+        method: sessionId === undefined ? 'GET' : 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+        ...(sessionId === undefined ? {} : { body: JSON.stringify({ session_id: sessionId }) }),
+      });
+      const result = await response.json();
+      if (!response.ok || result.code !== 200) throw new Error(result.detail?.message || result.detail || '获取当前会话失败');
+      if (!mountedRef.current || requestVersion !== sessionRequestRef.current) return;
+      const data = result.data;
+      if (runtimeRef.current && runtimeRef.current !== data.runtime_id) {
+        setSessionNotice('项目已重启，已为你开启新对话。旧记录仍可在历史记录中查看。');
       }
+      runtimeRef.current = data.runtime_id;
+      setCurrentSessionId(data.session_id);
+      setMessages([welcomeMessage, ...data.messages]);
+      setContextFull(data.context_full);
+      setSending(data.pending);
+      setTyping(data.pending && !data.messages.at(-1)?.content);
     } catch (error) {
-      console.error("加载会话历史失败:", error);
-      setSessionHistoryError('这段会话暂时无法打开，请稍后重试。');
+      if (mountedRef.current && requestVersion === sessionRequestRef.current) {
+        setSessionHistoryError(`会话暂时无法加载：${error.message}。请重试后继续。`);
+      }
     } finally {
-      setSessionHistoryLoading(false);
+      if (mountedRef.current && requestVersion === sessionRequestRef.current) setSessionHistoryLoading(false);
     }
   };
 
   const selectSession = (sessionId) => {
-    setCurrentSessionId(sessionId);
+    setSessionNotice('');
     loadSessionHistory(sessionId);
   };
 
   const createNewSession = () => {
-    setCurrentSessionId(null);
-    setSessionHistoryError('');
-    setMessages([{ content: "你好呀，我是小海獭，请问有什么可以帮助你的呢？", isUser: false }]);
+    setSessionNotice('');
+    loadSessionHistory(null);
   };
 
   const sendMessage = async (e) => {
     e.preventDefault();
-    if (sendingRef.current || !question.trim()) return;
+    if (sendingRef.current || sending || sessionHistoryLoading || sessionHistoryError || contextFull || !question.trim()) return;
     sendingRef.current = true;
+    sessionRequestRef.current++;
     setSending(true);
+    setSessionNotice('');
 
     const newMessages = [...messages, { content: question, isUser: true }, { content: "", isUser: false }];
     setMessages(newMessages);
     setQuestion("");
     setTyping(true);
 
+    let restoreAfterSend = false;
+    let streamFailed = false;
     try {
       const response = await fetch("/api/v1/ai/chat", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("access_token")}` },
-        body: JSON.stringify({ question, stream: true, session_id: currentSessionId }),
+        body: JSON.stringify({ question, stream: true, session_id: currentSessionId, runtime_id: runtimeRef.current }),
       });
 
-      if (!response.ok) throw new Error("API请求失败");
+      if (!response.ok) {
+        const result = await response.json().catch(() => ({}));
+        const detail = result.detail;
+        if (['CHAT_CONTEXT_FULL', 'CHAT_RUNTIME_CHANGED', 'CHAT_BUSY'].includes(detail?.code)) {
+          if (mountedRef.current) {
+            setMessages(messages);
+            setQuestion(question);
+            setSessionNotice(detail.message);
+            if (detail.code === 'CHAT_CONTEXT_FULL') setContextFull(true);
+          }
+          restoreAfterSend = detail.code !== 'CHAT_CONTEXT_FULL';
+          return;
+        }
+        throw new Error(typeof detail === 'string' ? detail : 'AI 服务请求失败');
+      }
 
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
       let fullAnswer = "";
       let sessionIdFromResponse = currentSessionId;
       let pending = "";
+      let ended = false;
 
       while (true) {
         const { done, value } = await reader.read();
@@ -158,10 +196,16 @@ const AIchat = () => {
               try {
                 const json = JSON.parse(data);
                 if (json.content) {
-                  if (json.content === "[END]") break;
+                  if (json.content === "[END]") { ended = true; continue; }
+                  if (json.error) {
+                    streamFailed = true;
+                    if (mountedRef.current) { setSessionNotice(json.content); setQuestion(question); }
+                  }
                   fullAnswer += json.content;
-                  setTyping(false);
-                  setMessages((prev) => [...prev.slice(0, -1), { content: fullAnswer, isUser: false }]);
+                  if (mountedRef.current) {
+                    setTyping(false);
+                    setMessages((prev) => [...prev.slice(0, -1), { content: fullAnswer, isUser: false }]);
+                  }
                 }
                 if (json.session_id) sessionIdFromResponse = json.session_id;
               } catch (e) {
@@ -172,17 +216,26 @@ const AIchat = () => {
         }
       }
 
-      if (!currentSessionId && sessionIdFromResponse) {
-        setCurrentSessionId(sessionIdFromResponse);
+      if (!ended) throw new Error('回复连接中断，请稍后重试');
+      if (mountedRef.current) {
+        if (sessionIdFromResponse) setCurrentSessionId(sessionIdFromResponse);
         loadSessions();
       }
+      restoreAfterSend = !streamFailed;
     } catch (error) {
       console.error("错误:", error);
-      setTyping(false);
-      setMessages((prev) => [...prev.slice(0, -1), { content: "抱歉，AI服务暂时不可用，请稍后再试。", isUser: false }]);
+      if (mountedRef.current) {
+        setQuestion(question);
+        setSessionNotice(error.message || 'AI 服务暂时不可用，请稍后重试。');
+        setMessages((prev) => [...prev.slice(0, -1), { content: '本次回复未完成，请重试。', isUser: false }]);
+      }
     } finally {
       sendingRef.current = false;
-      setSending(false);
+      if (mountedRef.current) {
+        setTyping(false);
+        setSending(false);
+        if (restoreAfterSend) await loadSessionHistory();
+      }
     }
   };
 
@@ -222,13 +275,12 @@ const AIchat = () => {
   return (
     <div className="ai-chat-page">
       <div className="ai-chat-layout">
-        <header className="chat-heading">
-          <div><span className="level-eyebrow">OTTLY · 学习伙伴</span><h1>和小海獭聊聊</h1><p>问题可以慢慢想，我们一起找到思路。</p></div>
+        <div className="chat-toolbar">
+          <div className="chat-tabs" role="tablist" aria-label="AI 对话页面">
+            <button type="button" role="tab" aria-selected={activeTab === 'chat'} className={activeTab === 'chat' ? 'active' : ''} onClick={() => setActiveTab('chat')}>对话</button>
+            <button type="button" role="tab" aria-selected={activeTab === 'history'} className={activeTab === 'history' ? 'active' : ''} onClick={() => setActiveTab('history')}>历史记录</button>
+          </div>
           <button type="button" className="chat-back-button" onClick={() => navigate('/app/levels')}>← 返回学习地图</button>
-        </header>
-        <div className="chat-tabs" role="tablist" aria-label="AI 对话页面">
-          <button type="button" role="tab" aria-selected={activeTab === 'chat'} className={activeTab === 'chat' ? 'active' : ''} onClick={() => setActiveTab('chat')}>对话</button>
-          <button type="button" role="tab" aria-selected={activeTab === 'history'} className={activeTab === 'history' ? 'active' : ''} onClick={() => setActiveTab('history')}>历史记录</button>
         </div>
 
         {activeTab === "chat" && (
@@ -236,13 +288,17 @@ const AIchat = () => {
             <div className="chat-session-bar">
               <label htmlFor="chat-session-select">当前会话</label>
               <select id="chat-session-select" value={currentSessionId || ''} disabled={sending || sessionHistoryLoading} onChange={event => event.target.value ? selectSession(event.target.value) : createNewSession()}>
-                <option value="">新对话</option>
+                <option value={currentSessionId && !sessions.some(session => session.session_id === currentSessionId) ? currentSessionId : ''}>新对话</option>
                 {sessions.map(session => <option key={session.session_id} value={session.session_id}>会话 {session.session_id.slice(0, 8)} · {formatDateTime(session.last_message_time)}</option>)}
               </select>
               <button type="button" disabled={sending || sessionHistoryLoading} onClick={createNewSession}>＋ 新对话</button>
             </div>
             {sessionsError && <p className="chat-load-error" role="alert">{sessionsError} <button type="button" onClick={loadSessions}>重试</button></p>}
-            {sessionHistoryError && <p className="chat-load-error" role="alert">{sessionHistoryError} <button type="button" onClick={() => loadSessionHistory(currentSessionId)}>重试</button></p>}
+            {sessionHistoryError && <p className="chat-load-error" role="alert">{sessionHistoryError} <button type="button" onClick={() => loadSessionHistory()}>重试</button></p>}
+            {(contextFull || sessionNotice) && <p className="chat-session-notice" role="status">
+              {contextFull ? '本次对话已接近上下文上限，请新开一个对话继续。' : sessionNotice}
+              {contextFull && <button type="button" disabled={sending || sessionHistoryLoading} onClick={createNewSession}>新开一个对话</button>}
+            </p>}
             <div
               ref={chatBodyRef}
               className="chat-body"
@@ -262,7 +318,7 @@ const AIchat = () => {
                   )}
                 </div>
               ))}
-              {messages.length === 1 && !currentSessionId && <div className="chat-suggestions">
+              {messages.length === 1 && !sessionHistoryLoading && <div className="chat-suggestions">
                 <span>可以从这些问题开始</span>
                 {['print() 是做什么的？', '我的代码报错了，怎么排查？', '可以给我一点解题提示吗？'].map(prompt =>
                   <button type="button" key={prompt} onClick={() => { setQuestion(prompt); questionInputRef.current?.focus() }}>{prompt}</button>)}
@@ -287,10 +343,11 @@ const AIchat = () => {
                   onChange={(e) => setQuestion(e.target.value)}
                   placeholder="把你的问题告诉小海獭..."
                   maxLength={1000}
+                  disabled={sending || sessionHistoryLoading || !!sessionHistoryError || contextFull}
                 />
                 <button
                   type="submit"
-                  disabled={sending || !question.trim()}
+                  disabled={sending || sessionHistoryLoading || !!sessionHistoryError || contextFull || !question.trim()}
                 >
                   {sending ? '回复中...' : '发送'}
                 </button>

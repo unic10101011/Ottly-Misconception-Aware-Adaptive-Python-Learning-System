@@ -106,9 +106,9 @@ function Lesson({ levelNo, userId, navigate }) {
           <div><span>输出</span><pre>{example.stdout || '（无输出，不打印空行）'}</pre></div>
         </div>)}
       </CodeEditor>
-      <button type="button" className="btn-hint" onClick={() => navigate(`/app/practice?level_no=${levelNo}`)}>
+      {completed && <button type="button" className="btn-hint" onClick={() => navigate(`/app/practice?level_no=${levelNo}`)}>
         练习第 {levelNo} 关知识点
-      </button>
+      </button>}
     </div>}
   </div>
 }
