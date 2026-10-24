@@ -855,6 +855,7 @@ for (const levelNo of [7, 12]) test(`shared lesson ${levelNo} loads content and 
     assert.equal(editorProps.title, `第 ${levelNo} 关 · ${lesson.title}`)
     if (levelNo === 7) assert.match(html, /无输出，不打印空行/)
     assert.doesNotMatch(html, /查看参考解与解析|关已通过/)
+    assert.doesNotMatch(html, /练习第/)
     assert.equal(editorProps.problemId, lesson.problem_id)
     assert.equal(editorProps.acceptsInput, true)
     assert.equal(editorProps.persistentOutput, true)
@@ -862,6 +863,7 @@ for (const levelNo of [7, 12]) test(`shared lesson ${levelNo} loads content and 
     tree = render()
     html = renderToStaticMarkup(tree)
     assert.match(html, new RegExp(`第 ${levelNo} 关已通过`))
+    assert.match(html, new RegExp(`练习第 ${levelNo} 关知识点`))
     if (levelNo === 7) assert.match(html, /第 8 关内容待开放/)
     else {
       assert.match(html, /恭喜完成全部 12 关/)
