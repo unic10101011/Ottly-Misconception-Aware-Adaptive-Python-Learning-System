@@ -8,7 +8,7 @@ export default function PracticePage() {
   const { userId } = useOutletContext()
   const [params, setParams] = useSearchParams()
   const requestedLevel = Number(params.get('level_no'))
-  const levelNo = Number.isInteger(requestedLevel) && requestedLevel >= 1 && requestedLevel <= 12 ? requestedLevel : 1
+  const hasRequestedLevel = Number.isInteger(requestedLevel) && requestedLevel >= 1 && requestedLevel <= 12
   const [items, setItems] = useState([])
   const [lesson, setLesson] = useState(null)
   const [solution, setSolution] = useState(null)
@@ -29,10 +29,11 @@ export default function PracticePage() {
     return () => { active = false }
   }, [navigate])
 
-  const visible = items.filter(item => item.level_no === levelNo)
   const requestedId = params.get('problem_id')
-  const activeId = visible.find(item => item.problem_id === requestedId && item.available)?.problem_id
-    || visible.find(item => item.available)?.problem_id || null
+  const activeItem = items.find(item => item.problem_id === requestedId && item.available
+    && (!hasRequestedLevel || item.level_no === requestedLevel))
+  const activeId = activeItem?.problem_id || null
+  const levelNo = activeItem?.level_no
   const activeIdRef = useRef(activeId)
   activeIdRef.current = activeId
   const currentSolution = solution?.problem_id === activeId ? solution : null
@@ -56,6 +57,12 @@ export default function PracticePage() {
     return () => { active = false }
   }, [activeId, navigate])
 
+  useEffect(() => {
+    if (!activeId && !busy && hasRequestedLevel) {
+      document.getElementById(`practice-level-${requestedLevel}`)?.scrollIntoView({ block: 'start' })
+    }
+  }, [activeId, busy, hasRequestedLevel, requestedLevel])
+
   const showSolution = async () => {
     const requestedId = activeId
     try {
@@ -67,22 +74,38 @@ export default function PracticePage() {
   }
 
   return <div className="lesson-page practice-page">
-    <label className="practice-level-label" htmlFor="practice-level">选择关卡</label>
-    <select id="practice-level" value={levelNo} onChange={event => { setError(''); setParams({ level_no: event.target.value }) }}>
-      {Array.from({ length: 12 }, (_, index) => <option key={index + 1} value={index + 1}>第 {index + 1} 关</option>)}
-    </select>
+    {activeId && <button type="button" className="btn-hint practice-back-button"
+      onClick={() => setParams({ level_no: String(levelNo) })}>← 返回加练题库</button>}
     {busy && <p role="status">正在读取加练题库...</p>}
     {error && <p role="alert">{error}</p>}
-    <div className="practice-list" aria-label={`第 ${levelNo} 关加练题`}>
-      {visible.map(item => <button type="button" key={item.problem_id}
-        className="practice-item" disabled={!item.available}
-        aria-pressed={activeId === item.problem_id}
-        onClick={() => setParams({ level_no: String(levelNo), problem_id: item.problem_id })}>
-        <strong>{item.title}</strong>
-        <span>{item.practice_focus}</span>
-        <small>{item.completed ? '已完成' : item.available ? '可练习' : '完成前置关卡后解锁'}</small>
-      </button>)}
-    </div>
+    {!busy && requestedId && !activeId && <p role="alert">这道加练尚未解锁或不存在，请选择其他练习。</p>}
+    {!activeId && items.length > 0 && <div className="practice-map" aria-label="加练题库">
+      <div className="practice-map-legend" aria-label="通关状态说明">
+        <span><i className="practice-legend-dot is-pending" aria-hidden="true" />蓝色：未通关</span>
+        <span><i className="practice-legend-dot is-completed" aria-hidden="true" />绿色：已通关</span>
+      </div>
+      {Array.from({ length: 12 }, (_, index) => index + 1).map(number =>
+        <section className="practice-map-level" id={`practice-level-${number}`} key={number}
+          aria-labelledby={`practice-heading-${number}`}>
+          <h2 id={`practice-heading-${number}`}>第 {number} 关</h2>
+          <ol className="practice-map-questions">
+            {items.filter(item => item.level_no === number).map((item, index) =>
+              <li className="practice-map-question" key={item.problem_id}>
+                <button type="button" className={`practice-circle ${item.completed ? 'is-completed' : 'is-pending'}`}
+                  disabled={!item.available}
+                  aria-label={`第 ${number} 关，练习 ${index + 1}，${item.completed ? '已通过' : item.available ? '未通过' : '完成前置关卡后解锁'}`}
+                  onClick={() => { setError(''); setParams({ level_no: String(number), problem_id: item.problem_id }) }}>
+                  <span aria-hidden="true">{!item.available
+                    ? <svg viewBox="0 0 24 24" width="25" height="25" fill="none" stroke="currentColor" strokeWidth="2">
+                      <rect x="5" y="10" width="14" height="11" rx="3" /><path d="M8 10V7a4 4 0 0 1 8 0v3" />
+                    </svg>
+                    : item.completed ? '✓' : index + 1}</span>
+                </button>
+                <span className="practice-circle-caption">练习 {index + 1}</span>
+              </li>)}
+          </ol>
+        </section>)}
+    </div>}
     {activeId && !lesson && !error && <p role="status">正在加载题目...</p>}
     {lesson?.problem_id === activeId && <>
       <CodeEditor key={lesson.problem_id} userId={userId} initialCode={lesson.starter_code}

@@ -997,6 +997,74 @@ test('practice direct link opens the recommended question instead of the first o
   assert.match(renderToStaticMarkup(Page()), /B_DIRECT_DETAIL/)
 })
 
+test('practice map groups all twelve levels and opens only the clicked circle, preserving completion on return', async () => {
+  const items = Array.from({ length: 12 }, (_, level) => Array.from({ length: 3 }, (_, index) => ({
+    problem_id: `practice-${level + 1}-${index + 1}`, level_no: level + 1,
+    title: 'QUESTION_TITLE_ONLY_IN_DETAIL', practice_focus: 'FOCUS_ONLY_IN_DETAIL',
+    available: index !== 2, completed: level === 0 && index === 0,
+  }))).flat()
+  const values = [items, null, null, '', false]
+  const refs = [], effects = [], calls = []
+  let index = 0, refIndex = 0, params = new URLSearchParams(), editorProps
+  const hooks = { ...React,
+    useState: () => {
+      const slot = index++
+      return [values[slot], next => { values[slot] = typeof next === 'function' ? next(values[slot]) : next }]
+    },
+    useRef: value => refs[refIndex++] ||= { current: value },
+    useEffect: effect => effects.push(effect),
+  }
+  const Page = loadJsx('../src/pages/PracticePage.jsx', {
+    react: hooks,
+    'react-router-dom': { useNavigate: () => () => {}, useOutletContext: () => ({ userId: 1 }),
+      useSearchParams: () => [params, next => { params = new URLSearchParams(next) }] },
+    '../components/CodeEditor.jsx': props => { editorProps = props; return React.createElement('div', null, props.children) },
+    '../components/codeApi.mjs': {
+      getPractice: async () => ({ items }),
+      getLesson: async id => { calls.push(id); return { problem_id: id, title: '选中题目', description: 'SELECTED_DETAIL',
+        starter_code: '', completed: false, examples: [], teaching: [] } },
+    },
+  })
+  const render = () => { index = 0; refIndex = 0; effects.length = 0; return Page() }
+  const find = (node, predicate) => !React.isValidElement(node) ? null : predicate(node) ? node
+    : React.Children.toArray(node.props.children).map(child => find(child, predicate)).find(Boolean)
+  const circle = (tree, exercise) => find(tree, node => node.props['aria-label']?.startsWith(`第 1 关，练习 ${exercise}，`))
+  const originalStorage = Object.getOwnPropertyDescriptor(global, 'localStorage')
+  Object.defineProperty(global, 'localStorage', { configurable: true, value: { getItem: () => 'token' } })
+  try {
+    let tree = render()
+    effects[1]()
+    assert.deepEqual(calls, [], 'the overview must not automatically fetch the first question')
+    const html = renderToStaticMarkup(tree)
+    assert.equal((html.match(/class="practice-map-level"/g) || []).length, 12)
+    assert.equal((html.match(/class="practice-circle /g) || []).length, 36)
+    assert.doesNotMatch(html, /QUESTION_TITLE_ONLY_IN_DETAIL|FOCUS_ONLY_IN_DETAIL|SELECTED_DETAIL/)
+    assert.match(circle(tree, 1).props.className, /is-completed/)
+    assert.match(circle(tree, 2).props.className, /is-pending/)
+    assert.equal(circle(tree, 3).props.disabled, true)
+    params = new URLSearchParams('level_no=12')
+    assert.doesNotMatch(renderToStaticMarkup(render()), /SELECTED_DETAIL/)
+    tree = render()
+    circle(tree, 2).props.onClick()
+    render()
+    effects[1]()
+    await new Promise(resolve => setImmediate(resolve))
+    tree = render()
+    assert.deepEqual(calls, ['practice-1-2'])
+    assert.match(renderToStaticMarkup(tree), /SELECTED_DETAIL/)
+    assert.doesNotMatch(renderToStaticMarkup(tree), /class="practice-map"/)
+    editorProps.onAccepted()
+    tree = render()
+    find(tree, node => node.props.className === 'btn-hint practice-back-button').props.onClick()
+    tree = render()
+    assert.match(circle(tree, 2).props.className, /is-completed/)
+    assert.doesNotMatch(renderToStaticMarkup(tree), /SELECTED_DETAIL/)
+  } finally {
+    if (originalStorage) Object.defineProperty(global, 'localStorage', originalStorage)
+    else delete global.localStorage
+  }
+})
+
 test('lesson information tabs switch between task and teaching', () => {
   const values = []
   let index = 0

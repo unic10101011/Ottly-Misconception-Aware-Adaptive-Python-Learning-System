@@ -1,11 +1,13 @@
 """Reviewed lesson guidance when the unchanged AI pipeline cannot provide hints."""
 from app.services.error_analysis import AnalysisContent, AnalysisResult, Evidence, Hints, safe_hints
+from app.services import error_analysis
 from app.services.problem_catalog import KNOWLEDGE, LEVELS, Lesson
 from app.services.submission import JudgeResult
 
 
 def with_lesson_hints(lesson: Lesson, analysis: AnalysisResult, judge: JudgeResult) -> AnalysisResult:
-    if judge.passed or analysis.status == 'ready':
+    # Preserve cloud setup/service errors instead of disguising them as a ready diagnosis.
+    if judge.passed or analysis.status == 'ready' or error_analysis.ANALYSIS_PROVIDER == 'deepseek':
         return analysis
     if not any(slot.problem_id == lesson.problem_id for slot in LEVELS):
         return analysis

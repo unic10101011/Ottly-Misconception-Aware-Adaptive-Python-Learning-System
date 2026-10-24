@@ -275,13 +275,12 @@ const AIchat = () => {
   return (
     <div className="ai-chat-page">
       <div className="ai-chat-layout">
-        <header className="chat-heading">
-          <div><span className="level-eyebrow">OTTLY · 学习伙伴</span><h1>和小海獭聊聊</h1><p>问题可以慢慢想，我们一起找到思路。</p></div>
+        <div className="chat-toolbar">
+          <div className="chat-tabs" role="tablist" aria-label="AI 对话页面">
+            <button type="button" role="tab" aria-selected={activeTab === 'chat'} className={activeTab === 'chat' ? 'active' : ''} onClick={() => setActiveTab('chat')}>对话</button>
+            <button type="button" role="tab" aria-selected={activeTab === 'history'} className={activeTab === 'history' ? 'active' : ''} onClick={() => setActiveTab('history')}>历史记录</button>
+          </div>
           <button type="button" className="chat-back-button" onClick={() => navigate('/app/levels')}>← 返回学习地图</button>
-        </header>
-        <div className="chat-tabs" role="tablist" aria-label="AI 对话页面">
-          <button type="button" role="tab" aria-selected={activeTab === 'chat'} className={activeTab === 'chat' ? 'active' : ''} onClick={() => setActiveTab('chat')}>对话</button>
-          <button type="button" role="tab" aria-selected={activeTab === 'history'} className={activeTab === 'history' ? 'active' : ''} onClick={() => setActiveTab('history')}>历史记录</button>
         </div>
 
         {activeTab === "chat" && (
