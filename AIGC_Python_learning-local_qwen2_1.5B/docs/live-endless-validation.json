@@ -1,0 +1,202 @@
+{
+  "run_id": "d5e8aabfe447",
+  "created_at": "2026-10-25T09:06:15.885191+00:00",
+  "provider": "deepseek-flash",
+  "database": "isolated temporary SQLite",
+  "key_loaded": true,
+  "model_mocked": false,
+  "http_status": 200,
+  "stages": [
+    {
+      "stage": "generating",
+      "message": "正在生成候选题…"
+    },
+    {
+      "stage": "structure",
+      "message": "正在检查题目结构…"
+    },
+    {
+      "stage": "executing",
+      "message": "正在执行参考答案和测试…"
+    },
+    {
+      "stage": "reviewing",
+      "message": "正在检查边界及题意一致性…"
+    },
+    {
+      "stage": "ready",
+      "message": "题目已通过验证。",
+      "problem_id": "endless-9a889a482baa4ed081fdaf1d463ad1d4-v1"
+    }
+  ],
+  "validated_lesson": {
+    "schema_version": "1.0.0",
+    "problem_id": "endless-9a889a482baa4ed081fdaf1d463ad1d4-v1",
+    "version": 1,
+    "level_no": 8,
+    "kind": "endless",
+    "practice_focus": "正确初始化累加器，并用循环和条件判断把符合条件的数累加到总和中。",
+    "target_misconception_tags": [
+      "accumulation_error"
+    ],
+    "source_url": null,
+    "title": "偶数累加能量站",
+    "difficulty": 2,
+    "knowledge_ids": [
+      "K08",
+      "K07",
+      "K05"
+    ],
+    "prerequisite_knowledge_ids": [],
+    "prerequisite_problem_ids": [
+      "level1",
+      "greeting-v1",
+      "shell-shop-v1",
+      "shell-groups-v1",
+      "badge-v1",
+      "safe-sailing-v1",
+      "coastal-markers-v1",
+      "shell-total-v1",
+      "shell-savings-v1",
+      "radio-text-v1",
+      "temperature-max-v1",
+      "count-at-least-v1"
+    ],
+    "published": true,
+    "story": "学校科技节设置了“偶数能量站”。从 1 开始经过每个整数时，只有偶数编号的灯会亮起，并把编号作为能量值加入总能量。请你帮助计算从 1 到 N（包含 N）所有偶数编号灯的能量总和。",
+    "teaching": [
+      {
+        "title": "本题考察知识点",
+        "text": "累加器与变量更新、for 循环与 range、比较与条件分支",
+        "example": "正确初始化累加器，并用循环和条件判断把符合条件的数累加到总和中。"
+      }
+    ],
+    "description": "给定一个正整数 N，计算 1 到 N（包含 N）中所有偶数的和，并输出这个和。例如 N=10 时，偶数为 2、4、6、8、10，总和是 30。\n\n输入格式：输入只有一行，包含一个整数 N。\n\n输出格式：输出一行，包含一个整数，表示 1 到 N（包含 N）中所有偶数的和。\n\n数据范围：1 ≤ N ≤ 1000；N 是整数。",
+    "starter_code": "# 在这里编写 Python 代码\n",
+    "examples": [
+      {
+        "stdin": "10\n",
+        "stdout": "30\n"
+      },
+      {
+        "stdin": "7\n",
+        "stdout": "12\n"
+      }
+    ],
+    "tests": [
+      {
+        "case_id": "public-1",
+        "expected_output": "30\n",
+        "stdin": "10\n",
+        "visibility": "public"
+      },
+      {
+        "case_id": "public-2",
+        "expected_output": "12\n",
+        "stdin": "7\n",
+        "visibility": "public"
+      },
+      {
+        "case_id": "hidden-1",
+        "expected_output": "0\n",
+        "stdin": "1\n",
+        "visibility": "hidden"
+      },
+      {
+        "case_id": "hidden-2",
+        "expected_output": "2\n",
+        "stdin": "2\n",
+        "visibility": "hidden"
+      },
+      {
+        "case_id": "hidden-3",
+        "expected_output": "249500\n",
+        "stdin": "999\n",
+        "visibility": "hidden"
+      },
+      {
+        "case_id": "hidden-4",
+        "expected_output": "250500\n",
+        "stdin": "1000\n",
+        "visibility": "hidden"
+      },
+      {
+        "case_id": "hidden-5",
+        "expected_output": "12\n",
+        "stdin": "6\n",
+        "visibility": "hidden"
+      },
+      {
+        "case_id": "hidden-6",
+        "expected_output": "2550\n",
+        "stdin": "100\n",
+        "visibility": "hidden"
+      },
+      {
+        "case_id": "boundary-2",
+        "expected_output": "2\n",
+        "stdin": "3\n",
+        "visibility": "hidden"
+      }
+    ],
+    "assessment": "output",
+    "function_tests": [],
+    "direct_function_tests": [],
+    "comparison": "exact",
+    "time_limit_seconds": 3,
+    "output_limit_chars": 8000,
+    "hints": {
+      "level1": "先核对题目要求的输入和输出。",
+      "level2": "正确初始化累加器，并用循环和条件判断把符合条件的数累加到总和中。",
+      "level3": "用小规模输入检查变量变化和边界条件。"
+    },
+    "reference_solution": "n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    if i % 2 == 0:\n        total += i\nprint(total)\n",
+    "solution_explanation": "先把总和 total 初始化为 0。然后用 for 循环依次取出 1 到 N 的每个整数，因为 range(1, n + 1) 包含 n。若当前整数 i 能被 2 整除，就用 total += i 把 i 累加到总和中。循环结束后输出 total。N=1 时没有偶数，所以输出 0，这是需要特别注意的边界情况。"
+  },
+  "public_private_fields_absent": true,
+  "sample_execution_success": true,
+  "reference_submission": {
+    "passed": true,
+    "total_cases": 9
+  },
+  "reference_unlocked_after_pass": true,
+  "catalog_mode_ready": true,
+  "status": "passed",
+  "semantic_review": {
+    "statement_reference_consistent": true,
+    "independent_oracle": "For 1 <= N <= 1000, m=N//2; even-number sum=m*(m+1).",
+    "all_saved_expected_outputs_verified": 9,
+    "boundary_coverage": [
+      "minimum N=1",
+      "first even N=2",
+      "near maximum N=999",
+      "maximum N=1000"
+    ],
+    "targeted_wrong_programs": [
+      {
+        "mistake": "accumulation_overwrite",
+        "rejected": true,
+        "failed_cases": [
+          "public-1",
+          "public-2",
+          "hidden-3",
+          "hidden-4",
+          "hidden-5",
+          "hidden-6"
+        ]
+      },
+      {
+        "mistake": "excluded_upper_bound",
+        "rejected": true,
+        "failed_cases": [
+          "public-1",
+          "hidden-2",
+          "hidden-4",
+          "hidden-5",
+          "hidden-6"
+        ]
+      }
+    ],
+    "scope": "One generated question; not a general guarantee of generation quality."
+  }
+}

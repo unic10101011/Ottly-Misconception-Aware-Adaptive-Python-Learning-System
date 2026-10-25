@@ -25,3 +25,11 @@ class AIChatRecord(Base):
     answer = Column(String(5000), nullable=False)
     response_time = Column(DateTime(timezone=True), server_default=func.now())
     is_stream = Column(Integer, default=0)
+
+
+class UserProfile(Base):
+    __tablename__ = 'user_profiles'
+
+    user_id = Column(Integer, ForeignKey('users.id'), primary_key=True)
+    nickname = Column(String(50), nullable=False, default='')
+    signature = Column(String(200), nullable=False, default='')

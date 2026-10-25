@@ -24,7 +24,9 @@ def requirement_error(lesson, code: str) -> dict | None:
                 and isinstance(node.func, ast.Name) and node.func.id == 'list') for node in nodes):
             message = '本关请先用列表保存记录，再使用 for 循环逐个比较。'
     elif mode in {'count_at_least', 'practice_function'}:
-        reference = ast.parse(lesson.starter_code)
+        # A blank function exercise need not be syntactically complete yet.
+        # The validated solution has the same provided frame and a parseable body.
+        reference = ast.parse(lesson.reference_solution if mode == 'count_at_least' else lesson.starter_code)
         function_name = ('count_at_least' if mode == 'count_at_least'
                          else lesson.direct_function_tests[0].function_name)
 

@@ -144,6 +144,72 @@ export function getPractice(token) {
   return requestLearningHistory('/code/practice', 'GET', token)
 }
 
+export async function startEndlessChallenge(mode, token, { signal, onProgress } = {}) {
+  if (!token) {
+    const error = new Error('登录已过期，请重新登录。')
+    error.status = 401
+    throw error
+  }
+  const controller = new AbortController()
+  const cancel = () => controller.abort()
+  signal?.addEventListener('abort', cancel, { once: true })
+  if (signal?.aborted) controller.abort()
+  const timeout = setTimeout(cancel, 190000)
+  try {
+    const response = await fetch('/api/v1/code/endless', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ mode }), signal: controller.signal,
+    })
+    if (!response.ok) {
+      const body = await response.json()
+      const error = new Error(typeof body.detail === 'string' ? body.detail : '题目准备失败，请重试。')
+      error.status = response.status
+      throw error
+    }
+    let result
+    const accept = body => {
+      if (body.code !== 200 || !body.data) throw new Error('出题服务响应异常，请重试。')
+      result = body.data
+      if (result.stage === 'error') throw new Error(result.message || '题目验证失败，请重试。')
+      onProgress?.(result)
+    }
+    if (response.headers.get('content-type')?.includes('application/x-ndjson')) {
+      const reader = response.body.getReader()
+      const decoder = new TextDecoder()
+      let buffer = ''
+      try {
+        while (true) {
+          const { value, done } = await reader.read()
+          buffer += decoder.decode(value, { stream: !done })
+          const lines = buffer.split('\n')
+          buffer = lines.pop()
+          for (const line of lines) if (line.trim()) accept(JSON.parse(line))
+          if (done) break
+        }
+        if (buffer.trim()) accept(JSON.parse(buffer))
+      } finally {
+        await reader.cancel().catch(() => {})
+        reader.releaseLock()
+      }
+    } else {
+      accept(await response.json())
+    }
+    if (result?.stage !== 'ready' || typeof result.problem_id !== 'string' || !result.problem_id) {
+      throw new Error('题目准备尚未完成，请重试。')
+    }
+    return result
+  } catch (error) {
+    if (error.name === 'AbortError') throw new Error('出题等待已结束，请重试或从题库中抽题。')
+    if (error instanceof SyntaxError) throw new Error('出题服务响应异常，请重试。')
+    if (error instanceof TypeError) throw new Error('无法连接出题服务，请检查网络后重试。')
+    throw error
+  } finally {
+    clearTimeout(timeout)
+    signal?.removeEventListener('abort', cancel)
+  }
+}
+
 export function getLesson(problemId, token) {
   return requestLearningHistory(`/code/problems/${encodeURIComponent(problemId)}`, 'GET', token)
 }

@@ -4,6 +4,7 @@ import yunduo from './images/yunduo.png'
 import xingxing from './images/xingxing.png'
 import chathaita from './images/chathaita.png'
 import { getLevels } from '../components/codeApi.mjs'
+import EndlessChallengeModal from '../components/EndlessChallengeModal.jsx'
 
 const ROUTE_START = 82
 const ROUTE_STEP = 150
@@ -18,6 +19,7 @@ function LevelSelection() {
   const navigate = useNavigate()
   const [levels, setLevels] = useState([])
   const [error, setError] = useState('')
+  const [showEndless, setShowEndless] = useState(false)
 
   useEffect(() => {
     let active = true
@@ -40,27 +42,25 @@ function LevelSelection() {
   const completedCount = levels.filter(level => level.published && level.status === 'completed').length
   const nextLevel = levels.find(level => level.published && level.status !== 'locked' && level.status !== 'completed')
   const progress = publishedCount ? Math.round(completedCount / publishedCount * 100) : 0
-  const routePoints = levels.map((level, index) => ({
+  const endlessUnlocked = levels.length === 12 && levels.every(level => level.published && level.status === 'completed')
+  const mapStops = [...levels, { id: 'endless', name: '无尽挑战', published: true,
+    status: endlessUnlocked ? 'available' : 'locked' }]
+  const routePoints = mapStops.map((level, index) => ({
     ...level,
     x: ROUTE_X[index % 2],
     y: ROUTE_START + index * ROUTE_STEP,
   }))
-  const routeHeight = Math.max(220, ROUTE_START * 2 + (levels.length - 1) * ROUTE_STEP)
+  const routeHeight = Math.max(220, ROUTE_START * 2 + (mapStops.length - 1) * ROUTE_STEP)
 
   return (
     <div className="level-page">
       <img src={xingxing} alt="" className="level-decoration level-star" />
       <img src={yunduo} alt="" className="level-decoration level-cloud" />
-      <header className="level-intro">
-        <div>
-          <span className="level-eyebrow">OTTLY · 学习地图</span>
-          <h1>和小海獭继续探索 Python</h1>
-          <p>沿着海岸一步步前进，完成练习后解锁下一站。</p>
-        </div>
-        {nextLevel && <button type="button" className="level-continue" onClick={() => openLevel(nextLevel)}>
+      {nextLevel && <header className="level-intro">
+        <button type="button" className="level-continue" onClick={() => openLevel(nextLevel)}>
           继续学习 · {nextLevel.name} <span aria-hidden="true">→</span>
-        </button>}
-      </header>
+        </button>
+      </header>}
 
       {error && <p className="level-load-error" role="alert">{error}</p>}
       {!error && levels.length === 0 && <p className="level-loading" role="status">正在读取学习进度...</p>}
@@ -87,12 +87,14 @@ function LevelSelection() {
               const statusText = !level.published ? '待开放' : level.status === 'completed' ? '已通关' : level.status === 'current' ? '当前关卡' : level.status === 'available' ? '可以挑战' : '尚未解锁'
               return <li key={level.id} className="level-route-stop"
                 style={{ left: `${level.x / 4}%`, top: level.y }}>
-                <button type="button" className={'level-circle ' + level.status} disabled={disabled} onClick={() => openLevel(level)}
+                <button type="button" className={'level-circle ' + level.status} disabled={disabled}
+                  onClick={() => level.id === 'endless' ? setShowEndless(true) : openLevel(level)}
                   aria-current={level.status === 'current' ? 'step' : undefined}
-                  aria-label={'第 ' + (index + 1) + ' 关，' + level.name + '，' + statusText}>
+                  aria-label={level.id === 'endless' ? '无尽挑战，' + (endlessUnlocked ? '可以挑战' : '完成全部 12 关后解锁')
+                    : '第 ' + (index + 1) + ' 关，' + level.name + '，' + statusText}>
                   {level.status === 'current' && <span className="current-arrow" aria-hidden="true">▲</span>}
                   {level.status === 'completed' && <span className="check-mark" aria-hidden="true">✓</span>}
-                  <span className="level-icon" aria-hidden="true">{!level.published || level.status === 'locked' ? '🔒' : index === 0 ? '🦦' : '👋'}</span>
+                  <span className="level-icon" aria-hidden="true">{!level.published || level.status === 'locked' ? '🔒' : level.id === 'endless' ? '∞' : index === 0 ? '🦦' : '👋'}</span>
                   <span className="level-name">{level.name}</span>
                   <span className="level-label">{statusText}</span>
                 </button>
@@ -109,6 +111,7 @@ function LevelSelection() {
         </button>
       </div>
       <div className="level-wave" aria-hidden="true" />
+      {showEndless && <EndlessChallengeModal onClose={() => setShowEndless(false)} />}
     </div>
   )
 }

@@ -32,6 +32,7 @@ function App() {
           <Route path="history" element={<LearningHistory />} />
           <Route path="history/:problemId" element={<MistakeDetailRoute />} />
           <Route path="practice" element={<PracticePage />} />
+          <Route path="endless" element={<PracticePage endless />} />
           <Route path="settings" element={<Settings />} />
           <Route path="ai-chat" element={<AIchat />} />
         </Route>
