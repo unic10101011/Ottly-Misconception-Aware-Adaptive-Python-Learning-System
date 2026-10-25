@@ -2,6 +2,8 @@ import React, { useState, useRef, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import SubmissionFeedback from './SubmissionFeedback.jsx'
 import PracticeRecommendationModal from './PracticeRecommendationModal.jsx'
+import ExecutionReplay from './ExecutionReplay.jsx'
+import { executionReplayLessons } from './executionReplayConfig.mjs'
 import PythonEditor from './PythonEditor.jsx'
 import { requestCode, requestAnalysis, requestPracticeRecommendation } from './codeApi.mjs'
 import { readCodeDraft, saveCodeDraft } from './codeDraft.mjs'
@@ -23,6 +25,7 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, onS
   const [contentTab, setContentTab] = useState('task')
   const [recommendation, setRecommendation] = useState(null)
   const [recommendationPending, setRecommendationPending] = useState(false)
+  const [replayOpen, setReplayOpen] = useState(false)
 
   const editorRef = useRef(null)
   const canvasRef = useRef(null)
@@ -484,6 +487,8 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, onS
           {authRequired && <button type="button" className="btn-hint" onClick={() => navigate('/auth')}>重新登录</button>}
 
           <div className="code-buttons">
+            {Object.hasOwn(executionReplayLessons, problemId) && <button type="button" className="btn-hint" disabled={busy || !code.trim()}
+              onClick={() => setReplayOpen(true)}>执行回放</button>}
             <button className="btn-run" data-beginner-target="run" onClick={runCode} disabled={busy}>
               {running ? '运行中...' : '运行'}
             </button>
@@ -535,6 +540,8 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, onS
           setRecommendation(null)
           navigate(`/app/practice?level_no=${recommendation.level_no}&problem_id=${encodeURIComponent(recommendation.problem_id)}`)
         }} />}
+      {replayOpen && <ExecutionReplay code={code} problemId={problemId} initialInput={stdin} submissionId={submission?.submission_id}
+        onClose={() => setReplayOpen(false)} />}
       {showConfetti && <canvas ref={canvasRef} className="confetti-canvas" />}
     </div>
   )

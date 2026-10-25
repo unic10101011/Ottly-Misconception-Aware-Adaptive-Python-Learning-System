@@ -233,3 +233,7 @@ export function askGuideQuestion(problemId, question, history, token) {
 export function completeGuide(problemId, version, heard, answers, token) {
   return requestLearningHistory(`/code/guides/${encodeURIComponent(problemId)}/complete`, 'POST', token, { version, heard, answers })
 }
+
+export function requestExecutionTrace(body, token) {
+  return requestLearningHistory('/code/execution-trace', 'POST', token, body)
+}
