@@ -9,6 +9,10 @@ import EndlessChallengeModal from '../components/EndlessChallengeModal.jsx'
 const ROUTE_START = 82
 const ROUTE_STEP = 150
 const ROUTE_X = [112, 288]
+const levelIconFiles = [null,
+  '第一关.png', '第二关.png', '第三关.png', '第四关.png', '第五关.png', '第六关.png',
+  '第七关.png', '第八关.png', '第九关.png', '第十关.png', '第十一关.png', '第十二关.png',
+]
 
 function routeCurve(from, to) {
   const middleY = (from.y + to.y) / 2
@@ -84,17 +88,20 @@ function LevelSelection() {
             <ol className="level-route-stops">
             {routePoints.map((level, index) => {
               const disabled = !level.published || level.status === 'locked'
+              const iconFile = level.id !== 'endless' && (level.status === 'completed' ? 'bingo.png' : levelIconFiles[level.id])
               const statusText = !level.published ? '待开放' : level.status === 'completed' ? '已通关' : level.status === 'current' ? '当前关卡' : level.status === 'available' ? '可以挑战' : '尚未解锁'
               return <li key={level.id} className="level-route-stop"
                 style={{ left: `${level.x / 4}%`, top: level.y }}>
-                <button type="button" className={'level-circle ' + level.status} disabled={disabled}
+                <button type="button" className={'level-circle ' + level.status + (iconFile ? ' has-image' : '')} disabled={disabled}
                   onClick={() => level.id === 'endless' ? setShowEndless(true) : openLevel(level)}
                   aria-current={level.status === 'current' ? 'step' : undefined}
                   aria-label={level.id === 'endless' ? '无尽挑战，' + (endlessUnlocked ? '可以挑战' : '完成全部 12 关后解锁')
                     : '第 ' + (index + 1) + ' 关，' + level.name + '，' + statusText}>
                   {level.status === 'current' && <span className="current-arrow" aria-hidden="true">▲</span>}
                   {level.status === 'completed' && <span className="check-mark" aria-hidden="true">✓</span>}
-                  <span className="level-icon" aria-hidden="true">{!level.published || level.status === 'locked' ? '🔒' : level.id === 'endless' ? '∞' : index === 0 ? '🦦' : '👋'}</span>
+                  {iconFile ? <img className="level-map-image" src={`/level-icons/${iconFile}`} alt="" draggable={false} decoding="async" />
+                    : <span className="level-icon" aria-hidden="true">{disabled ? '🔒' : '∞'}</span>}
+                  {iconFile && disabled && <span className="check-mark" aria-hidden="true">🔒</span>}
                   <span className="level-name">{level.name}</span>
                   <span className="level-label">{statusText}</span>
                 </button>

@@ -930,6 +930,7 @@ for (const levelNo of [1, 7, 12]) test(`shared lesson ${levelNo} loads content a
     assert.deepEqual(calls, [['lesson', lesson.problem_id]])
     assert.equal(editorProps.title, `第 ${levelNo} 关 · ${lesson.title}`)
     if (levelNo === 7) assert.match(html, /无输出，不打印空行/)
+    if (levelNo === 12) assert.match(html, /lesson-illustrations\/第十二关.png/)
     assert.doesNotMatch(html, /查看参考解与解析|关已通过/)
     assert.doesNotMatch(html, /练习第/)
     assert.equal(editorProps.problemId, lesson.problem_id)

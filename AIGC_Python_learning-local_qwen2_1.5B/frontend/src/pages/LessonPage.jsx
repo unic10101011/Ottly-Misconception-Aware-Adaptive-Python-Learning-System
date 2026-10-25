@@ -7,7 +7,7 @@ import { getLevels, getLesson, getSolution } from '../components/codeApi.mjs'
 
 const lessonIllustrations = [null,
   '第一关.png', '第二关.png', '第三关.png', '第四关.png', '第五关.png',
-  '第六关.jpg', '第七关.png', '第八关.png', '第九关.png', '第十关.png', '第十一关.png',
+  '第六关.jpg', '第七关.png', '第八关.png', '第九关.png', '第十关.png', '第十一关.png', '第十二关.png',
 ]
 
 export default function LessonPage({ levelNo: fixedLevelNo }) {

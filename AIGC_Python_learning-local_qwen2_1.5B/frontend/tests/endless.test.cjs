@@ -52,6 +52,9 @@ test('thirteenth stop unlocks only after all twelve lessons and does not change 
     assert.match(renderToStaticMarkup(tree), new RegExp(`已完成 ${complete ? 12 : 11} / 12 关`))
     const stop = find(tree, node => node.props['aria-label']?.startsWith('无尽挑战，'))
     assert.equal(stop.props.disabled, !complete)
+    const twelfth = find(tree, node => node.props['aria-label']?.startsWith('第 12 关，'))
+    assert.equal(find(twelfth, node => node.type === 'img').props.src,
+      '/level-icons/' + (complete ? 'bingo.png' : '第十二关.png'))
     if (complete) {
       stop.props.onClick()
       tree = harness.render(Page)
