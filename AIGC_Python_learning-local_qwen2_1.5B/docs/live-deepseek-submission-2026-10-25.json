@@ -1,0 +1,387 @@
+{
+  "tested_at": "2026-10-25T13:46:33.136275+00:00",
+  "url": "http://127.0.0.1:3000",
+  "username": "smoke_b08e163f91",
+  "cases": [
+    {
+      "name": "syntax_error",
+      "student_code": "total = 0\nfor i in range(1, 101)\n    total += i\nprint(total)",
+      "judge_seconds": 0.09,
+      "seconds": 4.55,
+      "contract_passed": true,
+      "response": {
+        "submission_id": 30,
+        "problem_id": "level2",
+        "version": 1,
+        "created_at": "2026-10-25T13:46:34.000Z",
+        "error_type": "SYNTAX_ERROR",
+        "judge": {
+          "status": "execution_error",
+          "passed": false,
+          "passed_cases": 0,
+          "total_cases": 1,
+          "cases": [
+            {
+              "case_id": "stdout-1",
+              "passed": false,
+              "expected_output": "5050",
+              "actual_output": "",
+              "output_available": true,
+              "errors": [
+                {
+                  "type": "SYNTAX_ERROR",
+                  "line": 2,
+                  "message": "expected ':' (<unknown>, line 2)"
+                }
+              ],
+              "execution_time": 0.0,
+              "visibility": "public"
+            }
+          ],
+          "failed_tests": [
+            "stdout-1"
+          ]
+        },
+        "analysis": {
+          "status": "ready",
+          "message": "错因分析由 AI 根据本次执行生成；三级提示采用已审核的基础提示。",
+          "model": "deepseek-flash",
+          "content": {
+            "misconception_tag": "syntax_error",
+            "suspected_cause": "for 语句第2行末尾缺少英文冒号 ':'。Python 的 for 循环头必须以冒号结束，所以报错 expected ':'；不是循环范围或累加逻辑的问题。",
+            "evidence": [
+              {
+                "case_id": "stdout-1",
+                "field": "error_message",
+                "quote": "expected ':' (<unknown>, line 2)",
+                "explanation": "本次运行在第2行 for 循环头处因缺少冒号触发语法错误，程序未运行到累加和输出。"
+              }
+            ],
+            "knowledge_points": [
+              "for 循环与 range"
+            ],
+            "hints": {
+              "level1": "Python 写一行代码时，需要遵守哪些基本格式？",
+              "level2": "先看报错行和上一行，检查标点、括号或缩进是否符合 Python 的写法。",
+              "level3": "从报错行开始逐字对照示例，先修改一处可疑写法并重新运行；语法通过后再检查结果。"
+            },
+            "knowledge_ids": [
+              "K07"
+            ]
+          },
+          "feedback_kind": "diagnosis",
+          "guidance": null,
+          "source": "ai",
+          "model_load_ms": 0.0,
+          "personalization": {
+            "used": false,
+            "related_history_count": 0
+          },
+          "timings": {
+            "judge_ms": 43.88,
+            "model_load_ms": 0.0,
+            "hint_generation_ms": 4404.76
+          }
+        },
+        "timings": {
+          "judge_ms": 43.88,
+          "model_load_ms": 0.0,
+          "hint_generation_ms": 4404.76
+        },
+        "practice_recommendation_eligible": false
+      }
+    },
+    {
+      "name": "range_boundary",
+      "student_code": "total = 0\nfor i in range(1, 100):\n    total += i\nprint(total)",
+      "judge_seconds": 0.08,
+      "seconds": 3.94,
+      "contract_passed": true,
+      "response": {
+        "submission_id": 31,
+        "problem_id": "level2",
+        "version": 1,
+        "created_at": "2026-10-25T13:46:38.000Z",
+        "error_type": "WRONG_ANSWER",
+        "judge": {
+          "status": "wrong_answer",
+          "passed": false,
+          "passed_cases": 0,
+          "total_cases": 1,
+          "cases": [
+            {
+              "case_id": "stdout-1",
+              "passed": false,
+              "expected_output": "5050",
+              "actual_output": "4950\n",
+              "output_available": true,
+              "errors": [],
+              "execution_time": 0.001,
+              "visibility": "public"
+            }
+          ],
+          "failed_tests": [
+            "stdout-1"
+          ]
+        },
+        "analysis": {
+          "status": "ready",
+          "message": "错因分析由 AI 根据本次执行生成；三级提示采用已审核的基础提示。",
+          "model": "deepseek-flash",
+          "content": {
+            "misconception_tag": "range_boundary",
+            "suspected_cause": "range(1, 100) 的结束参数 100 不会被取到，因此循环只累加到 99，漏掉了 100；应改为 range(1, 101)，或让结束值覆盖 100。",
+            "evidence": [
+              {
+                "case_id": "stdout-1",
+                "field": "actual_output",
+                "quote": "4950",
+                "explanation": "由于 range(1, 100) 不含 100，累加结果少了最后的 100，输出 4950；若包含 100，结果就是 5050。"
+              }
+            ],
+            "knowledge_points": [
+              "for 循环与 range",
+              "累加器与变量更新"
+            ],
+            "hints": {
+              "level1": "每次得到一个数后，总数应该怎样变化？",
+              "level2": "本题要把一串数相加。检查代码里有没有在每轮把新数加进总数。",
+              "level3": "拿前两轮的数算一遍，记下旧总数和新总数，再对照代码的更新方式。"
+            },
+            "knowledge_ids": [
+              "K07",
+              "K08"
+            ]
+          },
+          "feedback_kind": "diagnosis",
+          "guidance": null,
+          "source": "ai",
+          "model_load_ms": 0.0,
+          "personalization": {
+            "used": false,
+            "related_history_count": 0
+          },
+          "timings": {
+            "judge_ms": 51.33,
+            "model_load_ms": 0.0,
+            "hint_generation_ms": 3825.67
+          }
+        },
+        "timings": {
+          "judge_ms": 51.33,
+          "model_load_ms": 0.0,
+          "hint_generation_ms": 3825.67
+        },
+        "practice_recommendation_eligible": false
+      }
+    },
+    {
+      "name": "overwrite_accumulator",
+      "student_code": "total = 0\nfor i in range(1, 101):\n    total = i\nprint(total)",
+      "judge_seconds": 0.06,
+      "seconds": 4.22,
+      "contract_passed": true,
+      "response": {
+        "submission_id": 32,
+        "problem_id": "level2",
+        "version": 1,
+        "created_at": "2026-10-25T13:46:42.000Z",
+        "error_type": "WRONG_ANSWER",
+        "judge": {
+          "status": "wrong_answer",
+          "passed": false,
+          "passed_cases": 0,
+          "total_cases": 1,
+          "cases": [
+            {
+              "case_id": "stdout-1",
+              "passed": false,
+              "expected_output": "5050",
+              "actual_output": "100\n",
+              "output_available": true,
+              "errors": [],
+              "execution_time": 0.001,
+              "visibility": "public"
+            }
+          ],
+          "failed_tests": [
+            "stdout-1"
+          ]
+        },
+        "analysis": {
+          "status": "ready",
+          "message": "错因分析由 AI 根据本次执行生成；三级提示采用已审核的基础提示。",
+          "model": "deepseek-flash",
+          "content": {
+            "misconception_tag": "accumulation_error",
+            "suspected_cause": "循环体写成了赋值 total = i，覆盖了之前的累加结果；应使用累加更新（如 total += i），否则最终只保留 100 而非总和。",
+            "evidence": [
+              {
+                "case_id": "stdout-1",
+                "field": "actual_output",
+                "quote": "100",
+                "explanation": "该输出是循环最后一次赋值 total = 100 的结果，说明没有累加；正确结果应为 1 到 100 的总和 5050。"
+              }
+            ],
+            "knowledge_points": [
+              "for 循环与 range",
+              "累加器与变量更新"
+            ],
+            "hints": {
+              "level1": "每次得到一个数后，总数应该怎样变化？",
+              "level2": "本题要把一串数相加。检查代码里有没有在每轮把新数加进总数。",
+              "level3": "拿前两轮的数算一遍，记下旧总数和新总数，再对照代码的更新方式。"
+            },
+            "knowledge_ids": [
+              "K07",
+              "K08"
+            ]
+          },
+          "feedback_kind": "diagnosis",
+          "guidance": null,
+          "source": "ai",
+          "model_load_ms": 0.0,
+          "personalization": {
+            "used": false,
+            "related_history_count": 0
+          },
+          "timings": {
+            "judge_ms": 41.44,
+            "model_load_ms": 0.0,
+            "hint_generation_ms": 4123.86
+          }
+        },
+        "timings": {
+          "judge_ms": 41.44,
+          "model_load_ms": 0.0,
+          "hint_generation_ms": 4123.86
+        },
+        "practice_recommendation_eligible": false
+      }
+    },
+    {
+      "name": "undefined_name",
+      "student_code": "print(missing_total)",
+      "judge_seconds": 0.09,
+      "seconds": 2.61,
+      "contract_passed": false,
+      "response": {
+        "submission_id": 33,
+        "problem_id": "level2",
+        "version": 1,
+        "created_at": "2026-10-25T13:46:46.000Z",
+        "error_type": "NAME_ERROR",
+        "judge": {
+          "status": "execution_error",
+          "passed": false,
+          "passed_cases": 0,
+          "total_cases": 1,
+          "cases": [
+            {
+              "case_id": "stdout-1",
+              "passed": false,
+              "expected_output": "5050",
+              "actual_output": "",
+              "output_available": true,
+              "errors": [
+                {
+                  "type": "NAME_ERROR",
+                  "line": 1,
+                  "message": "变量 'missing_total' 没有定义，请先赋值或检查拼写"
+                }
+              ],
+              "execution_time": 0.001,
+              "visibility": "public"
+            }
+          ],
+          "failed_tests": [
+            "stdout-1"
+          ]
+        },
+        "analysis": {
+          "status": "invalid_response",
+          "message": "错因分析未通过内容检查，判题结果已保留。请先对照实际输出或报错。",
+          "model": "deepseek-flash",
+          "content": null,
+          "feedback_kind": "diagnosis",
+          "guidance": null,
+          "source": null,
+          "model_load_ms": 0.0,
+          "personalization": {
+            "used": false,
+            "related_history_count": 0
+          },
+          "timings": {
+            "judge_ms": 52.75,
+            "model_load_ms": 0.0,
+            "hint_generation_ms": 2497.87
+          }
+        },
+        "timings": {
+          "judge_ms": 52.75,
+          "model_load_ms": 0.0,
+          "hint_generation_ms": 2497.87
+        },
+        "practice_recommendation_eligible": false
+      }
+    },
+    {
+      "name": "correct",
+      "student_code": "total = 0\nfor i in range(1, 101):\n    total += i\nprint(total)",
+      "judge_seconds": 0.08,
+      "seconds": 0.08,
+      "contract_passed": true,
+      "response": {
+        "submission_id": 34,
+        "problem_id": "level2",
+        "version": 1,
+        "created_at": "2026-10-25T13:46:49.000Z",
+        "error_type": null,
+        "judge": {
+          "status": "accepted",
+          "passed": true,
+          "passed_cases": 1,
+          "total_cases": 1,
+          "cases": [
+            {
+              "case_id": "stdout-1",
+              "passed": true,
+              "expected_output": "5050",
+              "actual_output": "5050\n",
+              "output_available": true,
+              "errors": [],
+              "execution_time": 0.001,
+              "visibility": "public"
+            }
+          ],
+          "failed_tests": []
+        },
+        "analysis": {
+          "status": "skipped",
+          "message": "测试已通过，无需 AI 分析。",
+          "model": null,
+          "content": null,
+          "feedback_kind": "diagnosis",
+          "guidance": null,
+          "source": null,
+          "model_load_ms": 0.0,
+          "personalization": {
+            "used": false,
+            "related_history_count": 0
+          },
+          "timings": {
+            "judge_ms": 46.51,
+            "model_load_ms": 0.0,
+            "hint_generation_ms": 0.0
+          }
+        },
+        "timings": {
+          "judge_ms": 46.51,
+          "model_load_ms": 0.0,
+          "hint_generation_ms": 0.0
+        },
+        "practice_recommendation_eligible": false
+      }
+    }
+  ]
+}

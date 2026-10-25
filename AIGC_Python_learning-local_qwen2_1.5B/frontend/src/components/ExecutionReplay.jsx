@@ -3,7 +3,7 @@ import { requestExecutionTrace } from './codeApi.mjs'
 import { executionReplayLessons } from './executionReplayConfig.mjs'
 
 const statusText = {
-  completed: '采集完成', runtime_error: '运行时出错，已停在异常处', syntax_error: '语法错误，无法执行回放',
+  completed: '回放就绪', runtime_error: '运行时出错，已停在异常处', syntax_error: '语法错误，无法执行回放',
   truncated: '执行被限制，轨迹不完整', timeout: '执行超时，轨迹不完整',
   unsupported: '这段代码超出首版回放范围', unavailable: '回放执行器暂不可用',
 }
@@ -12,7 +12,7 @@ const reasonText = { step_limit: '达到300步上限', output_limit: '输出达�
   list_limit: '列表超过100项上限', call_depth_limit: '函数调用超过16层上限',
   wall_time_limit: '达到时间上限', worker_limit: '执行进程被限制或停止' }
 
-export function TracePlayer({ trace }) {
+export function TracePlayer({ trace, showContext = true }) {
   const [index, setIndex] = useState(0)
   const activeLine = useRef(null)
   useEffect(() => { activeLine.current?.scrollIntoView({ block: 'nearest' }) }, [index])
@@ -27,19 +27,19 @@ export function TracePlayer({ trace }) {
         : step?.event === 'return' ? `函数 ${step.function} 返回 ${step.return_value ?? 'None'}`
       : step?.event === 'exception' ? `第 ${line} 行发生异常` : '没有可播放的执行步骤'
   const scope = step?.function && step.function !== '<module>' ? `函数 ${step.function} · ${step.scope_id}` : '主程序'
+  const sourceTitle = trace.code_source === 'submission' ? `提交代码 #${trace.submission_id}`
+    : trace.code_source === 'demo' ? '示例代码' : '当前代码'
   return <div className="trace-player">
     <div className="trace-summary"><span className="trace-status">{statusText[trace.trace_status] || '回放状态未知'}</span>
-      <span>{trace.code_source === 'submission' ? `已提交代码 · #${trace.submission_id}`
-        : trace.code_source === 'demo' ? '示例代码 · Python 实际采集' : '打开回放时的编辑器代码快照'}</span>
-      <span>{trace.test_case_label}</span></div>
+      <div className="trace-step-label" aria-live="polite">{position}</div></div>
+    {showContext && <div className="trace-context"><span>{sourceTitle}</span><span>{trace.test_case_label}</span></div>}
     {trace.truncated && <p className="trace-warning" role="status">{reasonText[trace.truncation_reason] || '已达到执行限制'}。这里只展示停止前采集到的步骤，不能视为完整执行结果。</p>}
     {trace.exception && <p className="trace-warning" role="status">{trace.exception.type}{trace.exception.line ? ` · 第 ${trace.exception.line} 行` : ''}：{trace.exception.message}</p>}
-    <div className="trace-step-label" aria-live="polite">{position}</div>
     {step?.call_stack?.length > 1 && <div className="trace-call-stack" aria-label="调用栈">{step.call_stack.map(item =>
       item.function === '<module>' ? '主程序' : `${item.function} (${item.scope_id})`).join(' → ')}</div>}
     <div className="trace-grid">
       <section className="trace-code-pane" aria-label="回放代码，只读">
-        <div className="trace-pane-title"><strong>代码快照</strong><small>高亮表示即将执行；变量与输出来自此前步骤</small></div>
+        <div className="trace-pane-title"><strong>{sourceTitle}</strong><small>高亮行即将执行</small></div>
         <ol className="trace-code">{trace.code.split('\n').map((text, offset) => <li key={offset} ref={offset + 1 === line ? activeLine : null}
           className={`${offset + 1 === line ? 'is-current' : ''}${trace.exception?.line === offset + 1 ? ' has-error' : ''}`}
           aria-current={offset + 1 === line ? 'step' : undefined}>
@@ -97,7 +97,7 @@ export default function ExecutionReplay({ code, problemId, submissionId, initial
     try {
       const result = await requestExecutionTrace({ problem_id: problemId, stdin: settings.inputKind === 'integer' ? input + '\n' : input,
         ...(source === 'submission' ? { submission_id: submissionId } : { code: draft }) }, localStorage.getItem('access_token'))
-      if (id === generation.current) setTrace({ ...result, playbackId: id })
+      if (id === generation.current) setTrace({ ...result, replayInput: result.stdin ?? input, playbackId: id })
     } catch (error) {
       if (id === generation.current) setError(error.message)
     } finally {
@@ -125,24 +125,35 @@ export default function ExecutionReplay({ code, problemId, submissionId, initial
     }}>
     <header className="trace-header"><div><small>{settings.title}</small><h2 id="execution-replay-title">代码执行回放</h2></div>
       <button type="button" onClick={onClose} autoFocus>返回做题</button></header>
+    {trace && <p className="trace-input-overview">{settings.inputKind === 'none' ? '本题无需输入'
+      : `本次输入：${trace.replayInput.trimEnd().replace(/\r?\n/g, ' · ') || '（空）'}`}</p>}
+    {(settings.inputKind !== 'none' || submissionId) && <details className="trace-options">
+      <summary>{submissionId ? '调整输入或代码版本' : '调整输入'}</summary>
     <form className="trace-request" onSubmit={event => { event.preventDefault(); if (!loading) load() }}>
-      <label>代码版本<select value={source} disabled={loading} onChange={event => setSource(event.target.value)}>
-        <option value="draft">当前编辑器快照</option>
-        {submissionId && <option value="submission">本次已提交版本 #{submissionId}</option>}
-      </select></label>
-      {settings.inputKind === 'integer' && <label>演示输入 n<input type="number" min="0" max="100" step="1" required value={input}
+      <div className="trace-settings-bar">
+        {submissionId ? <label className="trace-source-label">回放代码<select value={source} disabled={loading} onChange={event => setSource(event.target.value)}>
+          <option value="draft">当前代码</option><option value="submission">提交代码 #{submissionId}</option>
+        </select></label> : <span className="trace-source-note">使用当前代码</span>}
+        <details className="trace-help"><summary>回放说明</summary><div>
+          <p>回放使用打开窗口时的代码，不会修改原代码。高亮行即将执行，右侧显示此前步骤的变量和输出。</p>
+          <p>这里只运行填写的输入，不代表全部判题测试；回放不会改变通关成绩。</p>
+          <p>{settings.inputKind === 'integer' ? '第8关支持整数和基本循环。' : ['temperature-max-v1', 'count-at-least-v1'].includes(problemId)
+            ? '支持基本列表和普通函数，列表最多100项、调用最多16层。' : '支持基本字符串、数值运算与输入输出。'}</p>
+        </div></details>
+      </div>
+      <div className="trace-input-row">
+      {settings.inputKind === 'integer' && <label className="trace-number-label">运行输入 n<input type="number" min="0" max="100" step="1" required value={input}
         disabled={loading} onChange={event => setInput(event.target.value)} /></label>}
-      {settings.inputKind === 'text' && <label className="trace-input-label">演示输入<textarea rows={3} maxLength={2000} value={input}
+      {settings.inputKind === 'text' && <label className={`trace-input-label${problemId === 'greeting-v1' ? ' is-single-line' : ''}`}>运行输入<textarea rows={problemId === 'greeting-v1' ? 1 : 3} maxLength={2000} value={input}
         disabled={loading} onChange={event => setInput(event.target.value)} aria-describedby="trace-input-help" />
         <small id="trace-input-help">{settings.inputHelp}</small></label>}
-      {settings.inputKind === 'none' && <span>本题无需输入</span>}
-      <button type="submit" disabled={loading}>{loading ? '正在采集真实步骤…' : '重新生成回放'}</button>
-      <p>演示不代表全部正式测试；回放不会判题、修改代码或调用 AI。{settings.inputKind === 'integer'
-        ? '第8关支持整数和基本循环语法。' : ['temperature-max-v1', 'count-at-least-v1'].includes(problemId)
-          ? '支持基本列表和普通函数，最多100项列表、16层调用。' : '支持基本字符串、数值运算与输入输出。'}</p>
-    </form>
-    {loading && <p className="trace-empty" role="status">正在独立进程中运行这份代码并采集快照，请稍候…</p>}
-    {error && <p className="trace-warning" role="alert">{error}</p>}
-    {trace && <TracePlayer key={trace.playbackId} trace={trace} />}
+      {settings.inputKind === 'none' && <span className="trace-no-input">本题无需输入</span>}
+      <div className="trace-generate"><button type="submit" disabled={loading}>{loading ? '准备中…' : '应用并重新运行'}</button></div>
+      </div>
+      <p className="trace-input-notice">只运行这里的输入，不代表全部判题测试。</p>
+    </form></details>}
+    {loading && <p className="trace-empty" role="status">正在准备回放，请稍候…</p>}
+    {error && <div className="trace-warning" role="alert"><p>{error}</p><button type="button" disabled={loading} onClick={load}>重试</button></div>}
+    {trace && <TracePlayer key={trace.playbackId} trace={trace} showContext={false} />}
   </dialog>
 }

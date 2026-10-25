@@ -9,18 +9,38 @@
 .trace-header small { color: #58778f; }
 .trace-header h2 { margin: 4px 0 0; font-size: 25px; }
 .execution-replay > .trace-header { position: sticky; top: -24px; z-index: 2; padding-block: 12px; background: #f5faff; }
-.trace-request { display: flex; align-items: end; gap: 12px; flex-wrap: wrap; padding: 14px 0; border-block: 1px solid #cfdeea; margin-bottom: 14px; }
-.trace-request label { display: flex; flex-direction: column; gap: 5px; font-size: 13px; }
-.trace-request input, .trace-request select { min-height: 38px; padding: 5px 9px; border: 1px solid #a6becf; border-radius: 5px; background: white; color: #234c67; }
-.trace-request input { width: 100px; }
-.trace-input-label { flex: 1; min-width: 220px; max-width: 420px; }
-.trace-request textarea { min-height: 78px; width: 100%; box-sizing: border-box; padding: 7px 9px; border: 1px solid #a6becf; border-radius: 5px; background: white; color: #234c67; resize: vertical; font-family: Consolas, monospace; }
-.trace-input-label small { color: #58778f; font-size: 12px; }
-.trace-request p { flex-basis: 100%; margin: 0; font-size: 12px; color: #58778f; }
-.trace-summary { display: flex; gap: 8px 18px; align-items: center; flex-wrap: wrap; font-size: 12px; margin-bottom: 12px; }
+.trace-request { padding: 16px 0; border-block: 1px solid #cfdeea; margin-bottom: 18px; }
+.trace-input-overview { margin: 0 0 10px; font-size: 13px; color: #59748c; white-space: pre-wrap; overflow-wrap: anywhere; max-height: 50px; overflow: auto; }
+.trace-options { margin-bottom: 18px; border-block: 1px solid #cfdeea; }
+.trace-options > summary { padding: 12px 0; color: #245478; font-size: 13px; cursor: pointer; }
+.trace-options .trace-request { border: 0; margin: 0; padding-top: 4px; }
+.trace-settings-bar { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+.trace-source-note { font-size: 13px; color: #59748c; }
+.trace-request label { display: flex; flex-direction: column; gap: 6px; font-size: 13px; line-height: 18px; }
+.trace-request .trace-source-label { flex-direction: row; align-items: center; gap: 10px; }
+.trace-request input, .trace-request select { min-height: 40px; padding: 6px 10px; border: 1px solid #a6becf; border-radius: 6px; background: white; color: #234c67; box-sizing: border-box; }
+.trace-request input { width: 120px; height: 44px; }
+.trace-input-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: start; gap: 16px; }
+.trace-input-label { min-width: 0; }
+.trace-request textarea { min-height: 84px; width: 100%; box-sizing: border-box; padding: 10px 12px; border: 1px solid #a6becf; border-radius: 6px; background: white; color: #234c67; resize: vertical; font: 14px/22px Consolas, monospace; }
+.trace-input-label.is-single-line textarea { min-height: 44px; height: 44px; resize: none; overflow: hidden; }
+.trace-input-label small { color: #58778f; font-size: 12px; font-weight: 400; }
+.trace-generate { padding-top: 24px; }
+.trace-generate button { min-height: 44px; padding-inline: 22px; background: #245478; color: white; border-color: #245478; }
+.trace-generate button:hover:not(:disabled) { background: #1c4565; }
+.trace-no-input { line-height: 44px; font-size: 13px; color: #59748c; }
+.trace-input-row:has(.trace-no-input) .trace-generate { padding-top: 0; }
+.trace-input-notice { margin: 10px 0 0; font-size: 12px; color: #698398; }
+.trace-help { margin-left: auto; color: #58778f; font-size: 12px; }
+.trace-help summary { cursor: pointer; padding: 5px 0; text-align: right; }
+.trace-help[open] { flex-basis: 100%; margin-left: 0; }
+.trace-help > div { padding: 10px 14px; margin-top: 6px; border: 1px solid #cfdeea; border-radius: 6px; background: white; }
+.trace-help p { margin: 4px 0; line-height: 1.7; }
+.trace-summary { display: flex; gap: 8px 12px; align-items: center; flex-wrap: wrap; font-size: 12px; margin-bottom: 12px; }
+.trace-context { display: flex; flex-wrap: wrap; gap: 8px 16px; font-size: 12px; color: #59748c; margin-bottom: 12px; }
 .trace-status { background: #deecf8; border-radius: 4px; padding: 5px 9px; color: #285675; font-weight: 650; }
 .trace-warning { padding: 10px 13px; margin: 10px 0; border: 1px solid #e6c398; background: #fff5e7; color: #805121; font-size: 13px; overflow-wrap: anywhere; }
-.trace-step-label { font-size: 14px; margin: 12px 0; font-weight: 650; }
+.trace-step-label { font-size: 14px; font-weight: 650; }
 .trace-call-stack { margin: -4px 0 12px; color: #59748c; font-size: 12px; overflow-wrap: anywhere; }
 .trace-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 16px; }
 .trace-code-pane, .trace-variables, .trace-output { min-width: 0; border: 1px solid #c4d6e5; border-radius: 8px; background: white; overflow: hidden; }
@@ -46,3 +66,4 @@
 .trace-controls input { display: block; width: 100%; margin-top: 7px; accent-color: #317db5; }
 @media (max-width: 720px) { .execution-replay { width: calc(100vw - 20px); max-height: calc(100dvh - 20px); padding: 16px; } .trace-grid { grid-template-columns: minmax(0, 1fr); } .trace-code { min-height: 150px; max-height: 26dvh; } .trace-header h2 { font-size: 21px; } .trace-summary { gap: 8px; } .trace-controls label { flex-basis: 100%; margin: 5px 0 0; } }
 @media (max-width: 720px) { .execution-replay > .trace-header { top: -16px; } .trace-controls { bottom: -16px; } }
+@media (max-width: 480px) { .trace-input-row { grid-template-columns: minmax(0, 1fr); gap: 10px; } .trace-generate { padding-top: 0; } .trace-generate button { width: 100%; } .trace-request .trace-source-label { flex-wrap: wrap; } }

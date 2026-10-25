@@ -141,3 +141,21 @@ test('function playback identifies the local scope, call stack and actual return
   tree = app.render('TracePlayer', props)
   assert.match(find(tree, node => node.props.className === 'trace-step-label').props.children, /函数 f 返回 3/)
 })
+
+test('code version selection appears only when a saved submission is available', () => {
+  const props = { code: 'print(1)', problemId: 'greeting-v1', onClose() {} }
+  let tree = setup().render('default', props)
+  assert.ok(!find(tree, node => node.type === 'select'))
+  tree = setup().render('default', { ...props, submissionId: 42 })
+  const selector = find(tree, node => node.type === 'select')
+  assert.ok(selector)
+  assert.equal(React.Children.count(selector.props.children), 2)
+})
+
+test('input settings are collapsed by default and rerun is an explicit adjustment', () => {
+  const tree = setup().render('default', { code: 'name = input()', problemId: 'greeting-v1', onClose() {} })
+  const settings = find(tree, node => node.type === 'details' && node.props.className === 'trace-options')
+  assert.ok(settings && !settings.props.open)
+  assert.ok(find(settings, node => node.type === 'button' && node.props.type === 'submit'))
+  assert.ok(!button(tree, '生成回放'))
+})
