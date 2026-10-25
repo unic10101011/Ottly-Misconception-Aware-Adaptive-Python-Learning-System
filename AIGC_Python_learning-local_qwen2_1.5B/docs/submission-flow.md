@@ -1,6 +1,6 @@
 # 提交判题与三级提示
 
-本文件保留上一轮链路验收记录；本轮三级提示质量优化和最新实测结果见 [phase1-hint-quality.md](phase1-hint-quality.md)。下方旧样例中的提示质量问题是优化前的观察。
+本文件保留上一轮链路验收记录；本轮三级提示质量优化和最新实测结果见 [phase1-hint-quality.md](archive/2026-10-25/phase1-hint-quality.md)。下方旧样例中的提示质量问题是优化前的观察。
 
 ## 当前功能和复用范围
 
