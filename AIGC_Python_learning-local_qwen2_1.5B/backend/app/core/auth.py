@@ -19,7 +19,7 @@ SECRET_KEY = os.getenv("JWT_SECRET")
 if not SECRET_KEY:
     raise RuntimeError("JWT_SECRET is required")
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+ACCESS_TOKEN_EXPIRE_MINUTES = 8 * 60
 REFRESH_TOKEN_EXPIRE_DAYS = 7
 bearer = HTTPBearer(auto_error=False)
 

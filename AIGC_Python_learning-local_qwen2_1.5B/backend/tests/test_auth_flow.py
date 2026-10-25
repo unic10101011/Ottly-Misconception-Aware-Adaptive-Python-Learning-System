@@ -1,7 +1,9 @@
 import os
+from datetime import datetime, timezone
 
 import pytest
 from fastapi.testclient import TestClient
+from jose import jwt
 
 
 @pytest.fixture(scope="module")
@@ -34,6 +36,13 @@ def register_and_login(client, username, phone):
 
 def auth(token):
     return {"Authorization": f"Bearer {token}"}
+
+
+def test_login_access_token_lasts_eight_hours(client):
+    _, token = register_and_login(client, "eight_hour_student", "13800000088")
+    payload = jwt.decode(token, os.environ["JWT_SECRET"], algorithms=["HS256"])
+    remaining_seconds = payload["exp"] - datetime.now(timezone.utc).timestamp()
+    assert 8 * 60 * 60 - 10 <= remaining_seconds <= 8 * 60 * 60 + 10
 
 
 @pytest.mark.parametrize('password', ['', '123456', 'x' * 129, ' ' * 12,
