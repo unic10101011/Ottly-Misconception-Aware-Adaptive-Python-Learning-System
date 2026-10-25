@@ -1,0 +1,162 @@
+{
+  "schema_version": "1.0.0",
+  "problem_id": "practice-12-4-v1",
+  "version": 1,
+  "level_no": 12,
+  "kind": "practice",
+  "practice_focus": "根据分支返回不同整数；区分参数与固定样例，正确处理相同上下界和边界读数。",
+  "title": "测量值限幅器",
+  "difficulty": 2,
+  "knowledge_ids": [
+    "K12",
+    "K05"
+  ],
+  "prerequisite_knowledge_ids": [
+    "K05",
+    "K08",
+    "K11"
+  ],
+  "prerequisite_problem_ids": [
+    "temperature-max-v1"
+  ],
+  "published": true,
+  "story": "传感器偶尔会记录超出显示范围的读数。Ottly 想把修正规则封装成函数：低于下限时显示下限，高于上限时显示上限，范围内的读数原样保留。这样不同页面都可以重复使用。",
+  "teaching": [
+    {
+      "title": "本题练习重点",
+      "text": "根据分支返回不同整数；区分参数与固定样例，正确处理相同上下界和边界读数。",
+      "example": "先运行样例，再检查空数据、边界值和每个分支。"
+    }
+  ],
+  "description": "补全 clamp_value(value, low, high)，返回修正后的整数：value 小于 low 时返回 low，大于 high 时返回 high，其余返回 value。主程序依次读取 value、low、high，均为 -100–100 的整数且 low≤high，每项一行，并打印函数返回值。边界值属于范围内。只补全函数体，保留函数签名与输入输出代码，使用 return 而不是在函数内打印。",
+  "starter_code": "def clamp_value(value, low, high):\n    pass\n\nvalue = int(input())\nlow = int(input())\nhigh = int(input())\nprint(clamp_value(value, low, high))\n",
+  "examples": [
+    {
+      "stdin": "15\n0\n10\n",
+      "stdout": "10\n"
+    }
+  ],
+  "tests": [
+    {
+      "case_id": "sample-1",
+      "stdin": "15\n0\n10\n",
+      "expected_output": "10\n",
+      "visibility": "public"
+    },
+    {
+      "case_id": "hidden-1",
+      "stdin": "-5\n0\n10\n",
+      "expected_output": "0\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-2",
+      "stdin": "5\n0\n10\n",
+      "expected_output": "5\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-3",
+      "stdin": "0\n0\n10\n",
+      "expected_output": "0\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-4",
+      "stdin": "10\n0\n10\n",
+      "expected_output": "10\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-5",
+      "stdin": "99\n4\n4\n",
+      "expected_output": "4\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-6",
+      "stdin": "-15\n-10\n-2\n",
+      "expected_output": "-10\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-7",
+      "stdin": "-7\n-10\n-2\n",
+      "expected_output": "-7\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-8",
+      "stdin": "100\n-100\n100\n",
+      "expected_output": "100\n",
+      "visibility": "hidden"
+    }
+  ],
+  "comparison": "exact",
+  "time_limit_seconds": 3,
+  "output_limit_chars": 8000,
+  "hints": {
+    "level1": "读数低于、位于、高于允许范围时，应该分别返回什么？",
+    "level2": "条件分支里返回整数，把打印留给提供的主程序。",
+    "level3": "检查负数范围和上下界相同的情况，确认每条分支都有返回值。"
+  },
+  "reference_solution": "def clamp_value(value, low, high):\n    if value < low:\n        return low\n    elif value > high:\n        return high\n    else:\n        return value\n\nvalue = int(input())\nlow = int(input())\nhigh = int(input())\nprint(clamp_value(value, low, high))\n",
+  "solution_explanation": "函数只根据参数比较读数与上下界，并在对应分支返回整数。读数等于上下界时原样返回；当 low 与 high 相同时，任何读数都会修正为同一个值。输入与打印由主程序负责。",
+  "assessment": "practice_function",
+  "direct_function_tests": [
+    {
+      "case_id": "hidden-function-1",
+      "function_name": "clamp_value",
+      "calls": [
+        {
+          "args": [
+            15,
+            0,
+            10
+          ],
+          "expected": 10
+        },
+        {
+          "args": [
+            -5,
+            0,
+            10
+          ],
+          "expected": 0
+        },
+        {
+          "args": [
+            5,
+            0,
+            10
+          ],
+          "expected": 5
+        },
+        {
+          "args": [
+            99,
+            4,
+            4
+          ],
+          "expected": 4
+        },
+        {
+          "args": [
+            -7,
+            -10,
+            -2
+          ],
+          "expected": -7
+        },
+        {
+          "args": [
+            100,
+            -100,
+            100
+          ],
+          "expected": 100
+        }
+      ]
+    }
+  ]
+}

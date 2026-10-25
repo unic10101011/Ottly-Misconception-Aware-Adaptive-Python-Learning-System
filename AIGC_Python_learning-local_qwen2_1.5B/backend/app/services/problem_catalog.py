@@ -159,6 +159,7 @@ class PracticeSpec(CatalogModel):
     problem_id: str = Field(pattern=r'^practice-\d{2}-[1-3]-v1$')
     level_no: int = Field(ge=1, le=12)
     title: str = Field(min_length=1)
+    story: str = Field(min_length=1)
     focus: str = Field(min_length=1)
     description: str = Field(min_length=1)
     sample: Example
@@ -190,7 +191,7 @@ def practice_lesson(spec: PracticeSpec, levels: list[LevelSlot], problems: dict[
         knowledge_ids=[f'K{spec.level_no:02d}'],
         prerequisite_knowledge_ids=main.prerequisite_knowledge_ids,
         prerequisite_problem_ids=[] if spec.level_no == 1 else [slots[spec.level_no - 1].problem_id],
-        story=f'这是第 {spec.level_no} 关的针对性加练。',
+        story=spec.story,
         teaching=[Teaching(title='本题练习重点', text=spec.focus,
                            example='先用样例运行，再检查题目中的边界条件。')],
         description=spec.description, starter_code=spec.starter_code or '# 在这里编写 Python 代码\n',

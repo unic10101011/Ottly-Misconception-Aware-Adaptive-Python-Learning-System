@@ -1,0 +1,170 @@
+{
+  "schema_version": "1.0.0",
+  "problem_id": "practice-12-6-v1",
+  "version": 1,
+  "level_no": 12,
+  "kind": "practice",
+  "practice_focus": "函数遍历相邻列表元素并返回布尔值；相等也不递增，不能在只检查第一对后过早返回成功。",
+  "title": "递增航标检查函数",
+  "difficulty": 3,
+  "knowledge_ids": [
+    "K12",
+    "K11",
+    "K05",
+    "K07"
+  ],
+  "prerequisite_knowledge_ids": [
+    "K05",
+    "K08",
+    "K11"
+  ],
+  "prerequisite_problem_ids": [
+    "temperature-max-v1"
+  ],
+  "published": true,
+  "story": "Ottly 想确认航标编号是否沿航线严格递增。只要后一个编号没有大于前一个，就需要重新核对；重复编号也不合格。请把这条检查规则写成函数，供不同航线重复使用。",
+  "teaching": [
+    {
+      "title": "本题练习重点",
+      "text": "函数遍历相邻列表元素并返回布尔值；相等也不递增，不能在只检查第一对后过早返回成功。",
+      "example": "先运行样例，再检查空数据、边界值和每个分支。"
+    }
+  ],
+  "description": "补全 is_strictly_increasing(values)，当列表中每个后一个值都严格大于前一个值时返回布尔值 True，否则返回 False。空列表或只有一个元素时返回 True。主程序先输入记录数 n（0–100），再逐行输入 n 个整数（-100–100），保存到列表并打印函数返回值。只补全函数体，保留签名及主程序，返回真正的布尔值，不在函数内打印，不排序或修改列表。",
+  "starter_code": "def is_strictly_increasing(values):\n    pass\n\nn = int(input())\nvalues = []\nfor i in range(n):\n    values.append(int(input()))\nprint(is_strictly_increasing(values))\n",
+  "examples": [
+    {
+      "stdin": "4\n-3\n-1\n0\n8\n",
+      "stdout": "True\n"
+    }
+  ],
+  "tests": [
+    {
+      "case_id": "sample-1",
+      "stdin": "4\n-3\n-1\n0\n8\n",
+      "expected_output": "True\n",
+      "visibility": "public"
+    },
+    {
+      "case_id": "hidden-1",
+      "stdin": "0\n",
+      "expected_output": "True\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-2",
+      "stdin": "1\n5\n",
+      "expected_output": "True\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-3",
+      "stdin": "2\n1\n1\n",
+      "expected_output": "False\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-4",
+      "stdin": "2\n2\n1\n",
+      "expected_output": "False\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-5",
+      "stdin": "3\n1\n3\n2\n",
+      "expected_output": "False\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-6",
+      "stdin": "3\n-100\n0\n100\n",
+      "expected_output": "True\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-7",
+      "stdin": "4\n3\n1\n2\n4\n",
+      "expected_output": "False\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-8",
+      "stdin": "100\n-50\n-49\n-48\n-47\n-46\n-45\n-44\n-43\n-42\n-41\n-40\n-39\n-38\n-37\n-36\n-35\n-34\n-33\n-32\n-31\n-30\n-29\n-28\n-27\n-26\n-25\n-24\n-23\n-22\n-21\n-20\n-19\n-18\n-17\n-16\n-15\n-14\n-13\n-12\n-11\n-10\n-9\n-8\n-7\n-6\n-5\n-4\n-3\n-2\n-1\n0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23\n24\n25\n26\n27\n28\n29\n30\n31\n32\n33\n34\n35\n36\n37\n38\n39\n40\n41\n42\n43\n44\n45\n46\n47\n48\n49\n",
+      "expected_output": "True\n",
+      "visibility": "hidden"
+    }
+  ],
+  "comparison": "exact",
+  "time_limit_seconds": 3,
+  "output_limit_chars": 8000,
+  "hints": {
+    "level1": "严格递增允许两个相邻编号相等吗？",
+    "level2": "发现一处不合格即可返回失败，但确认成功要等全部相邻元素检查完成。",
+    "level3": "检查空列表、相等元素和在列表末尾才发生下降的情况，并区分布尔值与同名字符串。"
+  },
+  "reference_solution": "def is_strictly_increasing(values):\n    for i in range(1, len(values)):\n        if values[i] <= values[i - 1]:\n            return False\n    return True\n\nn = int(input())\nvalues = []\nfor i in range(n):\n    values.append(int(input()))\nprint(is_strictly_increasing(values))\n",
+  "solution_explanation": "从第二项开始，与前一项比较。发现相等或下降时可以立即返回 False；只有所有相邻对都检查完，才能返回 True。空列表和单元素列表没有违反条件的相邻对，因此直接返回 True。不能通过排序改变待检查顺序。",
+  "assessment": "practice_function",
+  "direct_function_tests": [
+    {
+      "case_id": "hidden-function-1",
+      "function_name": "is_strictly_increasing",
+      "calls": [
+        {
+          "args": [
+            [
+              -3,
+              -1,
+              0,
+              8
+            ]
+          ],
+          "expected": true
+        },
+        {
+          "args": [
+            []
+          ],
+          "expected": true
+        },
+        {
+          "args": [
+            [
+              5
+            ]
+          ],
+          "expected": true
+        },
+        {
+          "args": [
+            [
+              1,
+              1
+            ]
+          ],
+          "expected": false
+        },
+        {
+          "args": [
+            [
+              1,
+              3,
+              2
+            ]
+          ],
+          "expected": false
+        },
+        {
+          "args": [
+            [
+              -100,
+              0,
+              100
+            ]
+          ],
+          "expected": true
+        }
+      ]
+    }
+  ]
+}

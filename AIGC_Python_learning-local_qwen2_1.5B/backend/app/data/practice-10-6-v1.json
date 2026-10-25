@@ -1,0 +1,106 @@
+{
+  "schema_version": "1.0.0",
+  "problem_id": "practice-10-6-v1",
+  "version": 1,
+  "level_no": 10,
+  "kind": "practice",
+  "practice_focus": "通过把字符添加到结果前面构建反向字符串；比较时保留大小写和空格。",
+  "title": "对称口令检查",
+  "difficulty": 3,
+  "knowledge_ids": [
+    "K10",
+    "K05",
+    "K07"
+  ],
+  "prerequisite_knowledge_ids": [
+    "K02",
+    "K05",
+    "K08"
+  ],
+  "prerequisite_problem_ids": [
+    "shell-savings-v1"
+  ],
+  "published": true,
+  "story": "灯塔设置了一种对称口令：从左往右和从右往左读，字符必须完全相同。Ottly 要检查输入的口令是否符合要求，大小写和空格也都是口令的一部分。",
+  "teaching": [
+    {
+      "title": "本题练习重点",
+      "text": "通过把字符添加到结果前面构建反向字符串；比较时保留大小写和空格。",
+      "example": "先运行样例，再检查空数据、边界值和每个分支。"
+    }
+  ],
+  "description": "输入一行长度为 0–100 的文本，只含英文字母和空格。逐字符构建反向文本，比较原文本与反向文本。完全一致输出 YES，否则输出 NO。区分大小写，保留首尾与内部空格；空字符串和单字符都视为对称。只输出一行，不附其他文字。",
+  "starter_code": "# 在这里编写 Python 代码\n",
+  "examples": [
+    {
+      "stdin": "ABBA\n",
+      "stdout": "YES\n"
+    }
+  ],
+  "tests": [
+    {
+      "case_id": "sample-1",
+      "stdin": "ABBA\n",
+      "expected_output": "YES\n",
+      "visibility": "public"
+    },
+    {
+      "case_id": "hidden-1",
+      "stdin": "\n",
+      "expected_output": "YES\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-2",
+      "stdin": "A\n",
+      "expected_output": "YES\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-3",
+      "stdin": "AB\n",
+      "expected_output": "NO\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-4",
+      "stdin": "ABA\n",
+      "expected_output": "YES\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-5",
+      "stdin": "A a\n",
+      "expected_output": "NO\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-6",
+      "stdin": " a \n",
+      "expected_output": "YES\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-7",
+      "stdin": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n",
+      "expected_output": "YES\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-8",
+      "stdin": "ABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABAB\n",
+      "expected_output": "NO\n",
+      "visibility": "hidden"
+    }
+  ],
+  "comparison": "exact",
+  "time_limit_seconds": 3,
+  "output_limit_chars": 8000,
+  "hints": {
+    "level1": "构建反向文本时，新字符应放在已有结果的前面还是后面？",
+    "level2": "先生成反向字符串，再比较两段完整文本。",
+    "level3": "检查空输入、奇数长度、偶数长度，以及大小写不同或带空格的口令。"
+  },
+  "reference_solution": "message = input()\nbackward = \"\"\n\nfor char in message:\n    backward = char + backward\n\nif message == backward:\n    print(\"YES\")\nelse:\n    print(\"NO\")\n",
+  "solution_explanation": "每次把读到的字符放在 backward 前面，就得到与原消息相反的顺序。最后比较两个字符串，完全相同才输出 YES。空字符串反向后仍为空字符串；不能忽略大小写或删去空格。"
+}

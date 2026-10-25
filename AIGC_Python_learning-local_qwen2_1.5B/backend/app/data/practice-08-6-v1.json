@@ -1,0 +1,99 @@
+{
+  "schema_version": "1.0.0",
+  "problem_id": "practice-08-6-v1",
+  "version": 1,
+  "level_no": 8,
+  "kind": "practice",
+  "practice_focus": "维护连续成功次数和累计得分两个状态；先更新连胜再计分，失败只清零连胜而保留总分。",
+  "title": "连胜奖励",
+  "difficulty": 3,
+  "knowledge_ids": [
+    "K08",
+    "K05",
+    "K07"
+  ],
+  "prerequisite_knowledge_ids": [
+    "K07",
+    "K03"
+  ],
+  "prerequisite_problem_ids": [
+    "coastal-markers-v1"
+  ],
+  "published": true,
+  "story": "Ottly 参加投球挑战，连续成功可以获得递增奖励。一段连续成功中的第 1 次成功得 1 分，第 2 次得 2 分，依此类推。失败时本轮得 0 分，连续成功次数清零，已经获得的分数保留。失败后再次成功重新从 1 分开始，请计算最终总得分。",
+  "teaching": [
+    {
+      "title": "本题练习重点",
+      "text": "维护连续成功次数和累计得分两个状态；先更新连胜再计分，失败只清零连胜而保留总分。",
+      "example": "先运行样例，再检查零值、边界和各分支的情况。"
+    }
+  ],
+  "description": "先输入挑战轮数 n（0–100），接下来 n 行每行输入一个整数，1 表示本轮成功，0 表示失败。使用循环维护连续成功次数与累计得分，最后只输出一行整数总得分。n 为 0 时输出 0。失败只重置连续成功次数，不清空累计得分，不附其他文字。",
+  "starter_code": "# 在这里编写 Python 代码\n",
+  "examples": [
+    {
+      "stdin": "6\n1\n1\n0\n1\n1\n1\n",
+      "stdout": "9\n"
+    }
+  ],
+  "tests": [
+    {
+      "case_id": "sample-1",
+      "stdin": "6\n1\n1\n0\n1\n1\n1\n",
+      "expected_output": "9\n",
+      "visibility": "public"
+    },
+    {
+      "case_id": "hidden-1",
+      "stdin": "0\n",
+      "expected_output": "0\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-2",
+      "stdin": "1\n1\n",
+      "expected_output": "1\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-3",
+      "stdin": "1\n0\n",
+      "expected_output": "0\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-4",
+      "stdin": "4\n1\n1\n1\n1\n",
+      "expected_output": "10\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-5",
+      "stdin": "5\n1\n0\n1\n0\n1\n",
+      "expected_output": "3\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-6",
+      "stdin": "4\n1\n1\n0\n1\n",
+      "expected_output": "4\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-7",
+      "stdin": "100\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n",
+      "expected_output": "5050\n",
+      "visibility": "hidden"
+    }
+  ],
+  "comparison": "exact",
+  "time_limit_seconds": 3,
+  "output_limit_chars": 8000,
+  "hints": {
+    "level1": "失败后，哪些记录需要清零，哪些记录应该保留？",
+    "level2": "用不同变量保存当前连胜与累计得分，成功时注意更新先后顺序。",
+    "level3": "用成功、成功、失败、成功检查，分数应为 4，不能清空之前获得的 3 分。"
+  },
+  "reference_solution": "n = int(input())\n\nstreak = 0\ntotal = 0\n\nfor i in range(n):\n    success = int(input())\n\n    if success == 1:\n        streak = streak + 1\n        total = total + streak\n    else:\n        streak = 0\n\nprint(total)\n",
+  "solution_explanation": "streak 保存当前连续成功次数，total 保存已获得的总分。成功时先把 streak 加一，再将新 streak 加到 total；失败时只把 streak 归零。样例得分依次为 1、2、0、1、2、3，总分为 9。"
+}

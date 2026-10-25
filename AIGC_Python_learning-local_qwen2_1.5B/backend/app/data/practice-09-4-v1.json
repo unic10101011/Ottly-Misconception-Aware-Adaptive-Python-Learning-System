@@ -1,0 +1,87 @@
+{
+  "schema_version": "1.0.0",
+  "problem_id": "practice-09-4-v1",
+  "version": 1,
+  "level_no": 9,
+  "kind": "practice",
+  "practice_focus": "未知次数的 while 输入循环；先判断结束标记，再统计记录，循环内读取下一条输入。",
+  "title": "补给登记截止",
+  "difficulty": 2,
+  "knowledge_ids": [
+    "K09",
+    "K08",
+    "K05"
+  ],
+  "prerequisite_knowledge_ids": [
+    "K08",
+    "K05"
+  ],
+  "prerequisite_problem_ids": [
+    "shell-total-v1"
+  ],
+  "published": true,
+  "story": "补给船陆续送来物资，Ottly 事先不知道会收到多少批。登记员每次输入一批物资的数量，最后输入 0 表示登记结束。结束标记本身不是一批物资，请帮她统计这次收到了多少批、多少件。",
+  "teaching": [
+    {
+      "title": "本题练习重点",
+      "text": "未知次数的 while 输入循环；先判断结束标记，再统计记录，循环内读取下一条输入。",
+      "example": "先运行样例，再检查空数据、边界值和每个分支。"
+    }
+  ],
+  "description": "逐行输入整数，每个正整数表示一批物资数量（1–100），最后以一行 0 结束。保证输入中有结束标记，正整数记录最多 100 条。使用 while 循环处理到第一个 0 为止。第一行输出物资批数，第二行输出物资总件数。结束标记不计入批数或总数；第一行输入就是 0 时输出两行 0，不附其他文字。",
+  "starter_code": "# 在这里编写 Python 代码\n",
+  "examples": [
+    {
+      "stdin": "5\n8\n0\n",
+      "stdout": "2\n13\n"
+    }
+  ],
+  "tests": [
+    {
+      "case_id": "sample-1",
+      "stdin": "5\n8\n0\n",
+      "expected_output": "2\n13\n",
+      "visibility": "public"
+    },
+    {
+      "case_id": "hidden-1",
+      "stdin": "0\n",
+      "expected_output": "0\n0\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-2",
+      "stdin": "1\n0\n",
+      "expected_output": "1\n1\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-3",
+      "stdin": "100\n0\n",
+      "expected_output": "1\n100\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-4",
+      "stdin": "1\n2\n3\n0\n",
+      "expected_output": "3\n6\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-5",
+      "stdin": "100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n100\n0\n",
+      "expected_output": "100\n10000\n",
+      "visibility": "hidden"
+    }
+  ],
+  "comparison": "exact",
+  "time_limit_seconds": 3,
+  "output_limit_chars": 8000,
+  "hints": {
+    "level1": "输入的哪个值表示结束，它是否应该计入批数？",
+    "level2": "在处理当前数量后，记得读取下一条记录供循环条件判断。",
+    "level3": "检查第一条就是结束标记和只有一批物资的情况，确保两行统计都正确。"
+  },
+  "reference_solution": "count = 0\ntotal = 0\namount = int(input())\n\nwhile amount != 0:\n    count = count + 1\n    total = total + amount\n    amount = int(input())\n\nprint(count)\nprint(total)\n",
+  "solution_explanation": "先读取一条记录，只有不是结束标记时才进入循环。每轮统计当前批次并累加件数，再读取下一条。不能把结束标记当作物资，也不能忘记更新 amount，否则循环无法按输入结束。"
+}

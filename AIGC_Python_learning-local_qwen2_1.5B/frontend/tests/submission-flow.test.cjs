@@ -1007,11 +1007,14 @@ for (const problemId of ['practice-12-2-v1', 'level1', 'count-at-least-v1']) tes
   }
 })
 
-test('practice direct link opens the recommended question instead of the first one', () => {
+for (const embeddedTask of [false, true]) {
+test(`practice direct link separates story and task (embedded task: ${embeddedTask})`, () => {
   const items = ['A', 'B'].map(id => ({ problem_id: id, level_no: 1, title: id,
     practice_focus: id, available: true, completed: false }))
   const values = [items, { problem_id: 'B', title: 'B', completed: false,
-    starter_code: '', description: 'B_DIRECT_DETAIL', examples: [], teaching: [] }, null, '', false]
+    starter_code: '', story: 'B_STORY',
+    description: embeddedTask ? 'B_STORY\n\n任务：B_DIRECT_DETAIL' : 'B_DIRECT_DETAIL',
+    examples: [], teaching: [] }, null, '', false]
   let index = 0
   const hooks = { ...React,
     useState: () => [values[index++], () => {}], useRef: value => ({ current: value }),
@@ -1026,8 +1029,15 @@ test('practice direct link opens the recommended question instead of the first o
     '../components/CodeEditor.jsx': props => React.createElement('div', null, props.children),
     '../components/codeApi.mjs': {},
   })
-  assert.match(renderToStaticMarkup(Page()), /B_DIRECT_DETAIL/)
+  const html = renderToStaticMarkup(Page())
+  assert.match(html, /B_DIRECT_DETAIL/)
+  assert.match(html, /<h3>题目<\/h3>/)
+  assert.match(html, /<h3>任务<\/h3>/)
+  assert.equal((html.match(/B_STORY/g) || []).length, 1)
+  assert.ok(html.indexOf('B_STORY') < html.indexOf('B_DIRECT_DETAIL'))
+  assert.doesNotMatch(html, /任务：/)
 })
+}
 
 test('practice map groups all twelve levels and opens only the clicked circle, preserving completion on return', async () => {
   const items = Array.from({ length: 12 }, (_, level) => Array.from({ length: 3 }, (_, index) => ({

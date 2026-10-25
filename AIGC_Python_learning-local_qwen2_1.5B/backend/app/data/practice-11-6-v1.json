@@ -1,0 +1,100 @@
+{
+  "schema_version": "1.0.0",
+  "problem_id": "practice-11-6-v1",
+  "version": 1,
+  "level_no": 11,
+  "kind": "practice",
+  "practice_focus": "循环列表位置与取余结合；轮换超过一整轮后仍正确，保留重复元素。",
+  "title": "轮换值班表",
+  "difficulty": 3,
+  "knowledge_ids": [
+    "K11",
+    "K04",
+    "K07"
+  ],
+  "prerequisite_knowledge_ids": [
+    "K03",
+    "K05",
+    "K07"
+  ],
+  "prerequisite_problem_ids": [
+    "radio-text-v1"
+  ],
+  "published": true,
+  "story": "灯塔的值班表按顺序写着队员编号。每轮换一次，就把最前面的队员移到队尾，其余队员顺序不变。Ottly 想知道连续轮换多次后，完整的值班顺序会变成什么样。",
+  "teaching": [
+    {
+      "title": "本题练习重点",
+      "text": "循环列表位置与取余结合；轮换超过一整轮后仍正确，保留重复元素。",
+      "example": "先运行样例，再检查空数据、边界值和每个分支。"
+    }
+  ],
+  "description": "第一行输入人数 n（1–100），第二行输入轮换次数 k（0–10000），接下来 n 行各输入一个队员编号（1–9999）。先把编号保存到列表，再输出向左轮换 k 次后的顺序，每行一个编号。编号可能重复，要保留全部记录及相对顺序。k 可以大于或等于 n，不附其他文字。",
+  "starter_code": "# 在这里编写 Python 代码\n",
+  "examples": [
+    {
+      "stdin": "4\n1\n10\n20\n30\n40\n",
+      "stdout": "20\n30\n40\n10\n"
+    }
+  ],
+  "tests": [
+    {
+      "case_id": "sample-1",
+      "stdin": "4\n1\n10\n20\n30\n40\n",
+      "expected_output": "20\n30\n40\n10\n",
+      "visibility": "public"
+    },
+    {
+      "case_id": "hidden-1",
+      "stdin": "4\n0\n10\n20\n30\n40\n",
+      "expected_output": "10\n20\n30\n40\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-2",
+      "stdin": "4\n4\n10\n20\n30\n40\n",
+      "expected_output": "10\n20\n30\n40\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-3",
+      "stdin": "4\n6\n10\n20\n30\n40\n",
+      "expected_output": "30\n40\n10\n20\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-4",
+      "stdin": "1\n10000\n7\n",
+      "expected_output": "7\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-5",
+      "stdin": "3\n10000\n1\n2\n3\n",
+      "expected_output": "2\n3\n1\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-6",
+      "stdin": "3\n2\n5\n5\n9\n",
+      "expected_output": "9\n5\n5\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-7",
+      "stdin": "100\n99\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23\n24\n25\n26\n27\n28\n29\n30\n31\n32\n33\n34\n35\n36\n37\n38\n39\n40\n41\n42\n43\n44\n45\n46\n47\n48\n49\n50\n51\n52\n53\n54\n55\n56\n57\n58\n59\n60\n61\n62\n63\n64\n65\n66\n67\n68\n69\n70\n71\n72\n73\n74\n75\n76\n77\n78\n79\n80\n81\n82\n83\n84\n85\n86\n87\n88\n89\n90\n91\n92\n93\n94\n95\n96\n97\n98\n99\n100\n",
+      "expected_output": "100\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23\n24\n25\n26\n27\n28\n29\n30\n31\n32\n33\n34\n35\n36\n37\n38\n39\n40\n41\n42\n43\n44\n45\n46\n47\n48\n49\n50\n51\n52\n53\n54\n55\n56\n57\n58\n59\n60\n61\n62\n63\n64\n65\n66\n67\n68\n69\n70\n71\n72\n73\n74\n75\n76\n77\n78\n79\n80\n81\n82\n83\n84\n85\n86\n87\n88\n89\n90\n91\n92\n93\n94\n95\n96\n97\n98\n99\n",
+      "visibility": "hidden"
+    }
+  ],
+  "comparison": "exact",
+  "time_limit_seconds": 3,
+  "output_limit_chars": 8000,
+  "hints": {
+    "level1": "最前面的队员移到队尾后，新第一位来自原列表哪里？",
+    "level2": "用取余把经过多轮后的索引带回列表范围。",
+    "level3": "检查零次轮换、一整轮、超过一轮及只有一名队员的情况。"
+  },
+  "reference_solution": "n = int(input())\nk = int(input())\nvalues = []\nfor i in range(n):\n    values.append(int(input()))\n\nfor i in range(n):\n    print(values[(i + k) % n])\n",
+  "solution_explanation": "向左轮换 k 次后，输出位置 i 对应原列表的索引 (i+k)%n。取余让索引回到合法范围，因此 k 为零、一整轮或多轮时都不越界。这里只改变查看顺序，不删除重复编号。"
+}

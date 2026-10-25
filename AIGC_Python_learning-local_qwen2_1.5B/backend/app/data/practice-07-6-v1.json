@@ -1,0 +1,87 @@
+{
+  "schema_version": "1.0.0",
+  "problem_id": "practice-07-6-v1",
+  "version": 1,
+  "level_no": 7,
+  "kind": "practice",
+  "practice_focus": "在 for 循环中逐次读取输入并判断复合条件；每只箱子输出一次，区分零重量与恰好达标。",
+  "title": "逐箱检查",
+  "difficulty": 3,
+  "knowledge_ids": [
+    "K07",
+    "K05",
+    "K06"
+  ],
+  "prerequisite_knowledge_ids": [
+    "K03",
+    "K05"
+  ],
+  "prerequisite_problem_ids": [
+    "safe-sailing-v1"
+  ],
+  "published": true,
+  "story": "码头要把一批补给箱搬上小船。只有箱子重量大于 0 且不超过承重限制时，才能直接搬运。重量为 0 可能漏装物品，超过限制则需要重新打包。Ottly 要按登记顺序，为每只箱子显示检查结果。",
+  "teaching": [
+    {
+      "title": "本题练习重点",
+      "text": "在 for 循环中逐次读取输入并判断复合条件；每只箱子输出一次，区分零重量与恰好达标。",
+      "example": "先运行样例，再检查零值、边界和各分支的情况。"
+    }
+  ],
+  "description": "第一行输入箱子数量 n（0–10），第二行输入承重限制 limit（1–100），接下来 n 行每行输入一个箱子重量（0–100）。使用 for 循环逐箱检查：重量大于 0 且不超过 limit 时输出 OK，否则输出 CHECK。每只箱子对应一行，顺序与输入一致。n 为 0 时，读完承重限制后无输出，不附其他文字。",
+  "starter_code": "# 在这里编写 Python 代码\n",
+  "examples": [
+    {
+      "stdin": "3\n10\n0\n10\n11\n",
+      "stdout": "CHECK\nOK\nCHECK\n"
+    }
+  ],
+  "tests": [
+    {
+      "case_id": "sample-1",
+      "stdin": "3\n10\n0\n10\n11\n",
+      "expected_output": "CHECK\nOK\nCHECK\n",
+      "visibility": "public"
+    },
+    {
+      "case_id": "hidden-1",
+      "stdin": "0\n10\n",
+      "expected_output": "",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-2",
+      "stdin": "1\n1\n1\n",
+      "expected_output": "OK\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-3",
+      "stdin": "1\n1\n0\n",
+      "expected_output": "CHECK\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-4",
+      "stdin": "4\n5\n6\n1\n5\n0\n",
+      "expected_output": "CHECK\nOK\nOK\nCHECK\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-5",
+      "stdin": "2\n100\n99\n100\n",
+      "expected_output": "OK\nOK\n",
+      "visibility": "hidden"
+    }
+  ],
+  "comparison": "exact",
+  "time_limit_seconds": 3,
+  "output_limit_chars": 8000,
+  "hints": {
+    "level1": "每只箱子的重量是否都需要单独读取和检查？",
+    "level2": "把读取重量与条件分支放进循环，限制值在循环前保存。",
+    "level3": "检查零个箱子、零重量、重量恰好等于限制以及多只箱子结果不同的情况。"
+  },
+  "reference_solution": "n = int(input())\nlimit = int(input())\n\nfor i in range(n):\n    weight = int(input())\n    if weight > 0 and weight <= limit:\n        print(\"OK\")\n    else:\n        print(\"CHECK\")\n",
+  "solution_explanation": "先读取箱子数量与固定承重限制，再在循环内读取每只箱子的重量并立即判断。重量必须同时大于零且不超限。不能只读一次重量供所有箱子使用，也不能把输出放在循环外。"
+}

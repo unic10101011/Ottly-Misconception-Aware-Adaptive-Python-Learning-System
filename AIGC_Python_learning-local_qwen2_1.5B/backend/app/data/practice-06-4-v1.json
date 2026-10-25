@@ -1,0 +1,109 @@
+{
+  "schema_version": "1.0.0",
+  "problem_id": "practice-06-4-v1",
+  "version": 1,
+  "level_no": 6,
+  "kind": "practice",
+  "practice_focus": "组合时间区间与逻辑否定；开放区间包含 9、不包含 18，午休区间包含 12、不包含 14。",
+  "title": "海洋馆开放时间",
+  "difficulty": 1,
+  "knowledge_ids": [
+    "K06",
+    "K05"
+  ],
+  "prerequisite_knowledge_ids": [
+    "K05"
+  ],
+  "prerequisite_problem_ids": [
+    "badge-v1"
+  ],
+  "published": true,
+  "story": "Ottly 来到海洋馆，发现这里每天上午 9 点开放，下午 18 点关闭。不过，中午 12 点到 14 点需要暂停接待，给海洋动物喂食。请根据到达时的整点时间，判断海洋馆是否开放。",
+  "teaching": [
+    {
+      "title": "本题练习重点",
+      "text": "组合时间区间与逻辑否定；开放区间包含 9、不包含 18，午休区间包含 12、不包含 14。",
+      "example": "先运行样例，再检查零值、边界和各分支的情况。"
+    }
+  ],
+  "description": "输入一个整数 hour（0–23），表示到达时的小时数。9 点开始开放，18 点开始关闭；12 点开始午休，14 点恢复开放。开放时输出 OPEN，其他时间输出 CLOSED，只输出一行，不附其他文字。",
+  "starter_code": "# 在这里编写 Python 代码\n",
+  "examples": [
+    {
+      "stdin": "14\n",
+      "stdout": "OPEN\n"
+    }
+  ],
+  "tests": [
+    {
+      "case_id": "sample-1",
+      "stdin": "14\n",
+      "expected_output": "OPEN\n",
+      "visibility": "public"
+    },
+    {
+      "case_id": "hidden-1",
+      "stdin": "8\n",
+      "expected_output": "CLOSED\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-2",
+      "stdin": "9\n",
+      "expected_output": "OPEN\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-3",
+      "stdin": "11\n",
+      "expected_output": "OPEN\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-4",
+      "stdin": "12\n",
+      "expected_output": "CLOSED\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-5",
+      "stdin": "13\n",
+      "expected_output": "CLOSED\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-6",
+      "stdin": "17\n",
+      "expected_output": "OPEN\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-7",
+      "stdin": "18\n",
+      "expected_output": "CLOSED\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-8",
+      "stdin": "0\n",
+      "expected_output": "CLOSED\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-9",
+      "stdin": "23\n",
+      "expected_output": "CLOSED\n",
+      "visibility": "hidden"
+    }
+  ],
+  "comparison": "exact",
+  "time_limit_seconds": 3,
+  "output_limit_chars": 8000,
+  "hints": {
+    "level1": "开放时间中，哪些时间又需要暂停接待？",
+    "level2": "把正常开放区间与午休区间分别写成条件，再组合起来。",
+    "level3": "检查 9、12、14、18 四个边界，区分包含起点与不包含终点。"
+  },
+  "reference_solution": "hour = int(input())\n\nif hour >= 9 and hour < 18 and not (hour >= 12 and hour < 14):\n    print(\"OPEN\")\nelse:\n    print(\"CLOSED\")\n",
+  "solution_explanation": "先判断是否位于 9 点到 18 点之间，再排除 12 点到 14 点的午休时段。使用 and 表示条件需要同时满足，使用 not 排除午休。14 点已经结束午休，因此样例输出 OPEN。"
+}

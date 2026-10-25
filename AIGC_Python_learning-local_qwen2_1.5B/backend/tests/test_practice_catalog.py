@@ -13,18 +13,31 @@ from app.services.submission import judge_submission, public_judge
 
 def test_each_level_has_expected_published_practice_questions():
     practice = [problem for problem in PROBLEMS.values() if problem.kind == 'practice']
-    assert len(practice) == 45
+    assert len(practice) == 66
     assert Counter(problem.level_no for problem in practice) == {
-        level: 6 if level in (3, 4, 5) else 3 for level in range(1, 13)
+        level: 6 if level >= 3 else 3 for level in range(1, 13)
     }
     assert all(problem.published and problem.practice_focus for problem in practice)
     assert all(problem.problem_id not in {slot.problem_id for slot in LEVELS} for problem in practice)
     for problem in practice:
-        assert problem.knowledge_ids == [f'K{problem.level_no:02d}']
+        assert f'K{problem.level_no:02d}' in problem.knowledge_ids
         assert problem.prerequisite_problem_ids == ([] if problem.level_no == 1 else
                                                      [LEVELS[problem.level_no - 2].problem_id])
         if problem.level_no > 1:
             assert any(case.visibility == 'hidden' for case in problem.tests)
+
+
+def test_original_practice_has_distinct_stories_and_boundary_cases():
+    specs = json.loads((DATA_DIR / 'practice.json').read_text(encoding='utf-8'))
+    for spec in specs:
+        lesson = PROBLEMS[spec['problem_id']]
+        assert lesson.story == spec['story'] and lesson.story != lesson.description
+        assert len(lesson.story) >= 40
+        if lesson.level_no == 1:
+            assert len(lesson.tests) == 1  # Fixed output has only one meaningful input.
+        else:
+            assert len(lesson.tests) >= 6
+            assert len({case.stdin for case in lesson.tests}) == len(lesson.tests)
 
 
 @pytest.mark.parametrize('problem_id', [
@@ -44,6 +57,27 @@ def test_practice_reference_solutions_and_targeted_wrong_answers(problem_id):
         'practice-05-4-v1': ('ottly_count > friend_count', 'ottly_count >= friend_count'),
         'practice-05-5-v1': ('height <= 100', 'height < 100'),
         'practice-05-6-v1': ('print(current - target)', 'print(target - current)'),
+        'practice-06-4-v1': ('hour < 18', 'hour <= 18'),
+        'practice-06-5-v1': ('left == 1 and right == 0', 'left == 1'),
+        'practice-06-6-v1': ('and not sale == 1', ''),
+        'practice-07-4-v1': ('range(n, -1, -1)', 'range(n, 0, -1)'),
+        'practice-07-5-v1': ('first + i * step', 'first + (i + 1) * step'),
+        'practice-07-6-v1': ('weight > 0 and weight <= limit', 'weight <= limit'),
+        'practice-08-4-v1': ('expense = expense - change', 'expense = expense + change'),
+        'practice-08-5-v1': ('10 + (distance - 5) * 3', 'distance * 3'),
+        'practice-08-6-v1': ('    else:\n        streak = 0', '    else:\n        total = 0'),
+        'practice-09-4-v1': ('count = 0', 'count = 1'),
+        'practice-09-5-v1': ('print(a)', 'print(b)'),
+        'practice-09-6-v1': ('while n != 1:', 'while n > 2:'),
+        'practice-10-4-v1': ('char != "#"', 'char != "#" and char != " "'),
+        'practice-10-5-v1': ('    previous = char', '    previous = ""'),
+        'practice-10-6-v1': ('backward = char + backward', 'backward = backward + char'),
+        'practice-11-4-v1': ('range(n - 1, -1, -1)', 'range(n - 1, 0, -1)'),
+        'practice-11-5-v1': ('values[i] - values[i - 1]', 'values[i - 1] - values[i]'),
+        'practice-11-6-v1': ('(i + k) % n', '(i - k) % n'),
+        'practice-12-4-v1': ('return low', 'return high'),
+        'practice-12-5-v1': ('return longest', 'return current'),
+        'practice-12-6-v1': ('values[i] <= values[i - 1]', 'values[i] < values[i - 1]'),
     }
     wrong_by_id.update({
         problem_id: PROBLEMS[problem_id].reference_solution.replace(before, after, 1)
