@@ -3,7 +3,7 @@ from sqlalchemy import and_, or_
 from sqlalchemy.orm import Session
 
 from app.models.learning_submission import LearningSubmission
-from app.services.error_analysis import MISCONCEPTION_TAGS
+from app.services.misconceptions import MISCONCEPTION_TAGS
 from app.services.learning_contract import utc_iso
 
 

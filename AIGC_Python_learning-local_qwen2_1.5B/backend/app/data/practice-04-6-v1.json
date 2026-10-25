@@ -4,6 +4,8 @@
   "version": 1,
   "level_no": 4,
   "kind": "practice",
+  "target_misconception_tags": ["other"],
+  "source_url": "https://exercism.org/tracks/python/exercises/clock",
   "practice_focus": "从 1 开始编号时先减 1，再整除和取余，最后加 1；处理一排末尾和下一排开头。",
   "title": "小剧场找座位",
   "difficulty": 2,

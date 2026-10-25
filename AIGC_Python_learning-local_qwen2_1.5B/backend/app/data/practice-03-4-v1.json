@@ -4,6 +4,8 @@
   "version": 1,
   "level_no": 3,
   "kind": "practice",
+  "target_misconception_tags": ["other"],
+  "source_url": "https://github.com/exercism/python/blob/main/exercises/concept/currency-exchange/.docs/instructions.md",
   "practice_focus": "整数转换、加法与乘法的运算顺序；使用括号先计算长与宽之和，再乘以 2。",
   "title": "海边相框",
   "difficulty": 1,

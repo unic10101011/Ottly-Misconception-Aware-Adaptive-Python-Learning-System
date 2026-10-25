@@ -18,6 +18,7 @@ from app.services.error_analysis import AnalysisResult, analyze_failure
 from app.services.lesson_feedback import with_lesson_hints
 from app.services.personalized_history import select_related_history
 from app.services.practice_recommendation import RecommendationResult, recommend_practice
+from app.services.misconceptions import MISCONCEPTION_TAGS
 from app.services.problem_catalog import SCHEMA_VERSION, LEVELS, KNOWLEDGE, Problem, TestCase
 from app.services.learning_contract import (
     ContractJudge, ContractAnalysis, contract_judge, contract_analysis,
@@ -314,11 +315,14 @@ async def prepare_practice_recommendation(submission_id: int, current_user: User
                      and feedback.source == 'ai' and feedback.content else set())
     knowledge_ids &= set(analysis_knowledge_scope(lesson))
     knowledge_ids = knowledge_ids or set(lesson.knowledge_ids)
+    misconception_tag = (feedback.content.misconception_tag
+                         if feedback and feedback.status == 'ready' and feedback.source == 'ai'
+                         and feedback.content and feedback.content.misconception_tag in MISCONCEPTION_TAGS
+                         else None)
     candidates = [item for item in PROBLEMS.values()
                   if item.kind == 'practice' and item.published and item.problem_id not in passed
                   and knowledge_ids.intersection(item.knowledge_ids)
                   and set(item.prerequisite_problem_ids).issubset(passed)]
-    candidates.sort(key=lambda item: (abs(item.level_no - lesson.level_no), item.problem_id))
     failure_facts = {
         'problem_id': failure.problem_id, 'title': failure.problem_title,
         'description': failure.problem_description, 'code': failure.code,
@@ -330,7 +334,8 @@ async def prepare_practice_recommendation(submission_id: int, current_user: User
     }
     # The model call is independent of judging and holds no database locks.
     db.rollback()
-    result = await recommend_practice(failure_facts, candidates[:12])
+    result = await recommend_practice(failure_facts, candidates,
+        misconception_tag=misconception_tag, knowledge_ids=knowledge_ids, target_difficulty=1)
     owner = db.query(User).filter(User.id == user_id, User.status == 'enabled').with_for_update().first()
     if owner is None:
         db.rollback()

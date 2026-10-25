@@ -4,6 +4,8 @@
   "version": 1,
   "level_no": 3,
   "kind": "practice",
+  "target_misconception_tags": ["other"],
+  "source_url": "https://github.com/exercism/python/blob/main/exercises/concept/currency-exchange/.docs/instructions.md",
   "practice_focus": "区分每组数量和总数量；先将每组小朋友与老师人数相加，再乘以小组数量。",
   "title": "野餐餐盒",
   "difficulty": 1,

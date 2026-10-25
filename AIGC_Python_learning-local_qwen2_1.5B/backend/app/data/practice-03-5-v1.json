@@ -4,6 +4,8 @@
   "version": 1,
   "level_no": 3,
   "kind": "practice",
+  "target_misconception_tags": ["other"],
+  "source_url": "https://github.com/exercism/python/blob/main/exercises/concept/currency-exchange/.docs/instructions.md",
   "practice_focus": "整数加减、计算结果赋值；先合并原有和新收集的贝壳，再减去送出数量。",
   "title": "贝壳库存更新",
   "difficulty": 1,

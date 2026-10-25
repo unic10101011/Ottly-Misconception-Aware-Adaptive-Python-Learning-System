@@ -11,6 +11,60 @@ from app.services.problem_catalog import LEVELS, PROBLEMS
 from app.services.submission import judge_submission, public_judge
 
 
+def test_all_practice_questions_have_recommendation_metadata():
+    allowed = {'range_boundary', 'accumulation_error', 'condition_error',
+               'variable_error', 'syntax_error', 'other'}
+    practice = [item for item in PROBLEMS.values() if item.kind == 'practice']
+    assert len(practice) == 45
+    for item in practice:
+        assert type(item.difficulty) is int and item.difficulty in {1, 2, 3}, item.problem_id
+        assert 1 <= len(item.target_misconception_tags) <= 2, item.problem_id
+        assert set(item.target_misconception_tags) <= allowed, item.problem_id
+        assert item.source_url and item.source_url.startswith('https://'), item.problem_id
+
+
+@pytest.mark.parametrize('changes', [
+    {'difficulty': None}, {'difficulty': True}, {'difficulty': 4},
+    {'target_misconception_tags': []}, {'target_misconception_tags': ['invented']},
+    {'target_misconception_tags': ['other', 'other']}, {'source_url': None},
+])
+def test_offline_metadata_errors_name_the_problem(changes):
+    from verify_practice_content import validate_metadata
+    spec = json.loads((DATA_DIR / 'practice.json').read_text(encoding='utf-8'))[0]
+    spec.update(changes)
+    with pytest.raises(AssertionError, match=spec['problem_id']):
+        validate_metadata(spec)
+
+
+@pytest.mark.parametrize('changes', [
+    {'target_misconception_tags': []}, {'target_misconception_tags': ['invented']},
+    {'target_misconception_tags': ['variable_error', 'variable_error']},
+    {'target_misconception_tags': ['variable_error', 'condition_error', 'other']},
+    {'source_url': None}, {'source_url': 'http://example.com'}, {'difficulty': True},
+])
+def test_invalid_practice_recommendation_metadata_is_rejected(changes):
+    from pydantic import ValidationError
+    from app.services.problem_catalog import Lesson
+    data = PROBLEMS['practice-03-4-v1'].model_dump()
+    data.update(changes)
+    with pytest.raises(ValidationError):
+        Lesson.model_validate(data)
+
+
+@pytest.mark.parametrize('filename', ['practice.json', 'practice-03-4-v1.json'])
+def test_catalog_errors_identify_the_practice_with_unknown_tags(tmp_path, filename):
+    from app.services.problem_catalog import load_catalog
+    for path in DATA_DIR.glob('*.json'):
+        (tmp_path / path.name).write_bytes(path.read_bytes())
+    path = tmp_path / filename
+    data = json.loads(path.read_text(encoding='utf-8'))
+    item = data[0] if isinstance(data, list) else data
+    item['target_misconception_tags'] = ['invented']
+    path.write_text(json.dumps(data), encoding='utf-8')
+    with pytest.raises(ValueError, match=item['problem_id']):
+        load_catalog(tmp_path)
+
+
 def test_each_level_has_expected_published_practice_questions():
     practice = [problem for problem in PROBLEMS.values() if problem.kind == 'practice']
     assert len(practice) == 45
@@ -34,20 +88,10 @@ def test_practice_reference_solutions_and_targeted_wrong_answers(problem_id):
     problem = PROBLEMS[problem_id]
     wrong_by_id = {item['problem_id']: item['wrong_solution']
                    for item in json.loads((DATA_DIR / 'practice.json').read_text(encoding='utf-8'))}
-    mistakes = {
-        'practice-03-4-v1': ('(length + width) * 2', 'length + width * 2'),
-        'practice-03-5-v1': ('before - given', 'given - before'),
-        'practice-03-6-v1': ('per_group * groups', 'children + teachers * groups'),
-        'practice-04-4-v1': ('remaining // 60', 'total_seconds // 60'),
-        'practice-04-5-v1': ('number // 10 % 10', 'number // 10'),
-        'practice-04-6-v1': ('(number - 1) % seats_per_row + 1', 'number % seats_per_row'),
-        'practice-05-4-v1': ('ottly_count > friend_count', 'ottly_count >= friend_count'),
-        'practice-05-5-v1': ('height <= 100', 'height < 100'),
-        'practice-05-6-v1': ('print(current - target)', 'print(target - current)'),
-    }
+    from verify_practice_content import FULL_PRACTICE_MISTAKES
     wrong_by_id.update({
         problem_id: PROBLEMS[problem_id].reference_solution.replace(before, after, 1)
-        for problem_id, (before, after) in mistakes.items()
+        for problem_id, (before, after) in FULL_PRACTICE_MISTAKES.items()
     })
     assert judge_submission(problem, problem.reference_solution).passed, problem.problem_id
     assert not judge_submission(problem, wrong_by_id[problem.problem_id]).passed, problem.problem_id

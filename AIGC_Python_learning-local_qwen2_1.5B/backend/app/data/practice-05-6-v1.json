@@ -4,6 +4,8 @@
   "version": 1,
   "level_no": 5,
   "kind": "practice",
+  "target_misconception_tags": ["condition_error"],
+  "source_url": "https://github.com/Asabeneh/30-Days-Of-Python/blob/master/09_Day_Conditionals/09_conditionals.md",
   "practice_focus": "相等判断使用 ==；将算术与条件分支结合，根据差值方向输出非负调整量。",
   "title": "补给箱配重",
   "difficulty": 2,

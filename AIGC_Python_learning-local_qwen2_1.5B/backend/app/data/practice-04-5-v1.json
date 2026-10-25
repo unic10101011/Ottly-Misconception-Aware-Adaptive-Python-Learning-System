@@ -4,6 +4,8 @@
   "version": 1,
   "level_no": 4,
   "kind": "practice",
+  "target_misconception_tags": ["other"],
+  "source_url": "https://exercism.org/tracks/python/exercises/clock",
   "practice_focus": "使用整除与取余提取十进制数位；保留中间和末尾的零。",
   "title": "储物柜密码拆分",
   "difficulty": 1,

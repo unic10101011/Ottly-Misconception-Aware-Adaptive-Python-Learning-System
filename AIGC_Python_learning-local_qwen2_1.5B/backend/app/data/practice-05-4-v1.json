@@ -4,6 +4,8 @@
   "version": 1,
   "level_no": 5,
   "kind": "practice",
+  "target_misconception_tags": ["condition_error"],
+  "source_url": "https://github.com/Asabeneh/30-Days-Of-Python/blob/master/09_Day_Conditionals/09_conditionals.md",
   "practice_focus": "比较两个变量，区分大于、小于和相等；使用互斥分支保证只输出一个结果。",
   "title": "贝壳收集赛",
   "difficulty": 2,

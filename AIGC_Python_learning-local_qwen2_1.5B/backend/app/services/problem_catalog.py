@@ -4,7 +4,9 @@ import re
 from pathlib import Path
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field, model_validator, field_validator
+from pydantic import BaseModel, ConfigDict, Field, ValidationError, model_validator, field_validator
+
+from app.services.misconceptions import MisconceptionTag
 
 SCHEMA_VERSION = '1.0.0'
 DATA_DIR = Path(__file__).resolve().parents[1] / 'data'
@@ -84,6 +86,8 @@ class Lesson(CatalogModel):
     level_no: int = Field(strict=True, ge=1, le=12)
     kind: Literal['main', 'practice'] = 'main'
     practice_focus: str = ''
+    target_misconception_tags: list[MisconceptionTag] = Field(default_factory=list, max_length=2)
+    source_url: str | None = Field(default=None, pattern=r'^https://[^\s/]+(?:/\S*)?$')
     title: str = Field(min_length=1, max_length=255)
     difficulty: Literal[1, 2, 3]
     knowledge_ids: list[str] = Field(min_length=1)
@@ -117,13 +121,16 @@ class Lesson(CatalogModel):
     def consistent(self):
         if self.kind == 'practice' and not self.practice_focus.strip():
             raise ValueError('practice lesson needs a concrete focus')
+        if self.kind == 'practice' and (not self.target_misconception_tags or not self.source_url):
+            raise ValueError(f'{self.problem_id}: practice needs target tags and a source URL')
         if self.problem_id not in LEGACY_IDS:
             match = re.fullmatch(r'[a-z][a-z0-9]*(?:-[a-z0-9]+)*-v([1-9]\d*)', self.problem_id)
             if not match or int(match[1]) != self.version:
                 raise ValueError('problem_id must end with its version, e.g. greeting-v1')
             if self.comparison != 'exact':
                 raise ValueError('new problems require exact comparison')
-        for field in ('knowledge_ids', 'prerequisite_knowledge_ids', 'prerequisite_problem_ids'):
+        for field in ('knowledge_ids', 'prerequisite_knowledge_ids', 'prerequisite_problem_ids',
+                      'target_misconception_tags'):
             values = getattr(self, field)
             if len(values) != len(set(values)):
                 raise ValueError(f'duplicate {field}')
@@ -158,6 +165,8 @@ class LevelSlot(CatalogModel):
 class PracticeSpec(CatalogModel):
     problem_id: str = Field(pattern=r'^practice-\d{2}-[1-3]-v1$')
     level_no: int = Field(ge=1, le=12)
+    difficulty: Literal[1, 2, 3]
+    target_misconception_tags: list[MisconceptionTag] = Field(min_length=1, max_length=2)
     title: str = Field(min_length=1)
     focus: str = Field(min_length=1)
     description: str = Field(min_length=1)
@@ -166,11 +175,25 @@ class PracticeSpec(CatalogModel):
     reference_solution: str = Field(min_length=1)
     wrong_solution: str = Field(min_length=1)
     solution_explanation: str = Field(min_length=1)
-    source_url: str = Field(pattern=r'^https://')
+    source_url: str = Field(pattern=r'^https://[^\s/]+(?:/\S*)?$')
     starter_code: str = ''
     assessment: Literal['output', 'list_maximum'] = 'output'
     function_name: str | None = None
     direct_calls: list[DirectFunctionCall] = Field(default_factory=list)
+
+    @field_validator('difficulty', mode='before')
+    @classmethod
+    def integer_difficulty(cls, value):
+        if type(value) is not int:
+            raise ValueError('expected an integer difficulty')
+        return value
+
+    @field_validator('target_misconception_tags')
+    @classmethod
+    def unique_tags(cls, value):
+        if len(value) != len(set(value)):
+            raise ValueError('duplicate target_misconception_tags')
+        return value
 
 
 def practice_lesson(spec: PracticeSpec, levels: list[LevelSlot], problems: dict[str, Lesson]) -> Lesson:
@@ -186,7 +209,8 @@ def practice_lesson(spec: PracticeSpec, levels: list[LevelSlot], problems: dict[
     return Lesson(
         schema_version=SCHEMA_VERSION, problem_id=spec.problem_id, version=1,
         level_no=spec.level_no, kind='practice', practice_focus=spec.focus,
-        title=spec.title, difficulty=1, published=True,
+        title=spec.title, difficulty=spec.difficulty, published=True,
+        target_misconception_tags=spec.target_misconception_tags, source_url=spec.source_url,
         knowledge_ids=[f'K{spec.level_no:02d}'],
         prerequisite_knowledge_ids=main.prerequisite_knowledge_ids,
         prerequisite_problem_ids=[] if spec.level_no == 1 else [slots[spec.level_no - 1].problem_id],
@@ -267,7 +291,10 @@ def load_catalog(directory: Path = DATA_DIR):
     for path in sorted(directory.glob('*.json')):
         if path.name in {'knowledge.json', 'levels.json', 'practice.json'}:
             continue
-        lesson = Lesson.model_validate_json(path.read_text(encoding='utf-8'))
+        try:
+            lesson = Lesson.model_validate_json(path.read_text(encoding='utf-8'))
+        except ValidationError as error:
+            raise ValueError(f'{path.name}: {error}') from error
         if lesson.problem_id in problems:
             raise ValueError(f'duplicate problem ID: {lesson.problem_id}')
         problems[lesson.problem_id] = lesson
@@ -277,7 +304,10 @@ def load_catalog(directory: Path = DATA_DIR):
     practice_path = directory / 'practice.json'
     if practice_path.exists():
         for item in json.loads(practice_path.read_text(encoding='utf-8')):
-            spec = PracticeSpec.model_validate(item)
+            try:
+                spec = PracticeSpec.model_validate(item)
+            except ValidationError as error:
+                raise ValueError(f"practice.json ({item.get('problem_id', 'unknown')}): {error}") from error
             lesson = practice_lesson(spec, levels, problems)
             if lesson.problem_id in problems:
                 raise ValueError(f'duplicate problem ID: {lesson.problem_id}')

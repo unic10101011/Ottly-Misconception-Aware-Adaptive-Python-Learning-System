@@ -13,6 +13,7 @@ from pydantic import BaseModel, ConfigDict, Field, ValidationError
 from app.services.submission import CaseResult, JudgeResult, Problem, GREETING, GREETING_ID
 from app.services.hint_quality import quality_issues
 from app.services.problem_catalog import KNOWLEDGE
+from app.services.misconceptions import MisconceptionTag, MISCONCEPTION_TAGS
 
 
 LOCAL_LLM_URL = os.getenv("LOCAL_LLM_URL", "")
@@ -23,14 +24,6 @@ DEEPSEEK_BASE_URL = os.getenv("DEEPSEEK_BASE_URL", "https://api.deepseek.com").r
 DEEPSEEK_MODEL = os.getenv("DEEPSEEK_MODEL", "deepseek-flash")
 ANALYSIS_TIMEOUT = 90
 logger = logging.getLogger(__name__)
-MisconceptionTag = Literal[
-    'range_boundary', 'accumulation_error', 'condition_error',
-    'variable_error', 'syntax_error', 'other',
-]
-MISCONCEPTION_TAGS = {
-    'range_boundary', 'accumulation_error', 'condition_error',
-    'variable_error', 'syntax_error', 'other',
-}
 # The first hint is a reviewed concept question selected from trusted judge facts.
 # It never uses a model-generated diagnosis, and does not classify misconceptions.
 def opening_question(problem: Problem, judge: JudgeResult) -> str:
