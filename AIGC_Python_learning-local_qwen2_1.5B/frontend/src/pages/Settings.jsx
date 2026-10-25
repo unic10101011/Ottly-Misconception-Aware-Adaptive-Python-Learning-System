@@ -1,11 +1,43 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { clearUserCodeDrafts } from '../components/codeDraft.mjs'
+import profileAvatar from './images/chathaita.png'
+
+function AccountPasswordDialog({ value, onChange, onSubmit, onCancel, busy, notice }) {
+  const dialogRef = useRef(null)
+  useEffect(() => {
+    const previousFocus = document.activeElement
+    const dialog = dialogRef.current
+    dialog.showModal()
+    return () => {
+      dialog.close()
+      if (previousFocus?.isConnected) previousFocus.focus()
+    }
+  }, [])
+  return <dialog ref={dialogRef} className="account-card account-password-dialog"
+    aria-labelledby="account-password-title"
+    onCancel={event => { event.preventDefault(); if (!busy) onCancel() }}>
+    <h2 id="account-password-title">当前密码</h2>
+    <form onSubmit={onSubmit}>
+      <label>当前密码<input required type="password" autoComplete="current-password"
+        value={value} onChange={onChange} autoFocus /></label>
+      {notice && <p className="account-notice" role="alert">{notice}</p>}
+      <div className="account-dialog-actions">
+        <button type="button" className="btn btn-outline-secondary" onClick={onCancel} disabled={busy}>取消</button>
+        <button type="submit" className="btn btn-primary" disabled={busy}>保存账号信息</button>
+      </div>
+    </form>
+  </dialog>
+}
 
 function Settings() {
   const navigate = useNavigate()
   const [account, setAccount] = useState(null)
-  const [username, setUsername] = useState('')
+  const [nickname, setNickname] = useState('')
+  const [signature, setSignature] = useState('')
+  const [editingNickname, setEditingNickname] = useState(false)
+  const [accountPasswordOpen, setAccountPasswordOpen] = useState(false)
+  const nicknameRef = useRef(null)
   const [phone, setPhone] = useState('')
   const [accountPassword, setAccountPassword] = useState('')
   const [oldPassword, setOldPassword] = useState('')
@@ -25,10 +57,18 @@ function Settings() {
       if (!response.ok) throw new Error('账号信息加载失败，请重新登录。')
       const result = await response.json()
       setAccount(result.data)
-      setUsername(result.data.username)
+      setNickname(result.data.nickname || result.data.username)
+      setSignature(result.data.signature || '')
       setPhone(result.data.phone)
     }).catch(error => setNotice(error.message))
   }, [])
+
+  useEffect(() => {
+    if (editingNickname) {
+      nicknameRef.current?.focus()
+      nicknameRef.current?.select()
+    }
+  }, [editingNickname])
 
   const request = async (path, method, body) => {
     const response = await fetch(`/api/v1/auth/${path}`, {
@@ -40,7 +80,7 @@ function Settings() {
       body: JSON.stringify(body),
     })
     const result = await response.json()
-    if (!response.ok) throw new Error(result.detail || result.msg || '操作失败')
+    if (!response.ok) throw new Error(typeof result.detail === 'string' ? result.detail : result.msg || '操作失败')
     return result.data
   }
 
@@ -52,13 +92,22 @@ function Settings() {
 
   const saveAccount = async event => {
     event.preventDefault()
+    if (phone.trim() !== account.phone && !accountPasswordOpen) {
+      setNotice('')
+      setAccountPasswordOpen(true)
+      return
+    }
     setBusy(true)
     setNotice('')
     try {
-      const data = await request('me', 'PATCH', { username, phone, current_password: accountPassword })
-      localStorage.setItem('access_token', data.access_token)
-      localStorage.setItem('refresh_token', data.refresh_token)
+      const data = await request('profile', 'PATCH', { nickname, signature, phone,
+        ...(accountPasswordOpen ? { current_password: accountPassword } : {}) })
       setAccount(data)
+      setNickname(data.nickname)
+      setSignature(data.signature)
+      setPhone(data.phone)
+      setEditingNickname(false)
+      setAccountPasswordOpen(false)
       setAccountPassword('')
       setNotice('账号信息已保存。')
     } catch (error) { setNotice(error.message) }
@@ -105,16 +154,23 @@ function Settings() {
 
   return <main className="account-page">
     <h1>个人中心</h1>
-    <p className="text-muted">管理账号信息、安全设置与学习偏好。</p>
     {notice && <p className="account-notice" role="status">{notice}</p>}
     {!account ? <p>正在加载账号信息...</p> : <>
       <section className="account-card">
         <h2>账号信息</h2>
-        <p className="text-muted">账号编号：{account.id}</p>
         <form onSubmit={saveAccount}>
-          <label>用户名<input required minLength="2" maxLength="50" value={username} onChange={event => setUsername(event.target.value)} /></label>
+          <div className="account-profile-row">
+            <img className="account-avatar" src={profileAvatar} alt="头像" />
+            <div className="account-nickname">
+              {editingNickname ? <input ref={nicknameRef} required maxLength="50" aria-label="昵称"
+                value={nickname} onChange={event => setNickname(event.target.value)} />
+                : <strong aria-label="昵称">{nickname}</strong>}
+              <button type="button" className="btn btn-outline-secondary" disabled={busy}
+                onClick={() => { setEditingNickname(true); nicknameRef.current?.focus() }}>修改昵称</button>
+            </div>
+          </div>
           <label>手机号<input required minLength="6" maxLength="20" value={phone} onChange={event => setPhone(event.target.value)} /></label>
-          <label>当前密码<input required type="password" autoComplete="current-password" value={accountPassword} onChange={event => setAccountPassword(event.target.value)} /></label>
+          <label>个性签名<input maxLength="200" value={signature} onChange={event => setSignature(event.target.value)} /></label>
           <button className="btn btn-primary" disabled={busy}>保存账号信息</button>
         </form>
       </section>
@@ -145,6 +201,9 @@ function Settings() {
         </form>
       </section>
     </>}
+    {accountPasswordOpen && <AccountPasswordDialog value={accountPassword} busy={busy} notice={notice}
+      onChange={event => setAccountPassword(event.target.value)} onSubmit={saveAccount}
+      onCancel={() => { setAccountPasswordOpen(false); setAccountPassword(''); setNotice('') }} />}
   </main>
 }
 

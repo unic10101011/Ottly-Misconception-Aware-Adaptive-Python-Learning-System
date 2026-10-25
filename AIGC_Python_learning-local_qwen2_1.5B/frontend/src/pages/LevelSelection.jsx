@@ -56,16 +56,11 @@ function LevelSelection() {
     <div className="level-page">
       <img src={xingxing} alt="" className="level-decoration level-star" />
       <img src={yunduo} alt="" className="level-decoration level-cloud" />
-      <header className="level-intro">
-        <div>
-          <span className="level-eyebrow">OTTLY · 学习地图</span>
-          <h1>和小海獭继续探索 Python</h1>
-          <p>沿着海岸一步步前进，完成练习后解锁下一站。</p>
-        </div>
-        {nextLevel && <button type="button" className="level-continue" onClick={() => openLevel(nextLevel)}>
+      {nextLevel && <header className="level-intro">
+        <button type="button" className="level-continue" onClick={() => openLevel(nextLevel)}>
           继续学习 · {nextLevel.name} <span aria-hidden="true">→</span>
-        </button>}
-      </header>
+        </button>
+      </header>}
 
       {error && <p className="level-load-error" role="alert">{error}</p>}
       {!error && levels.length === 0 && <p className="level-loading" role="status">正在读取学习进度...</p>}

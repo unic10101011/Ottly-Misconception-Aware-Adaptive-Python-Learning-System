@@ -6,7 +6,7 @@ import uvicorn
 from app.api import auth, class_selection, settings, ai, coding, learning_history, guides, endless
 from app.core.database import engine, Base
 # 导入模型类，确保SQLAlchemy知道需要创建哪些表
-from app.models.user import User, AIChatRecord
+from app.models.user import User, AIChatRecord, UserProfile
 from app.models.class_selection import ClassSelection
 from app.models.settings import UserSettings, NotificationPreferences, LanguageSettings
 from app.models.learning_submission import LearningSubmission

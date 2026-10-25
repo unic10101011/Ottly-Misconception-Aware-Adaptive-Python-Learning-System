@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 from sqlalchemy.orm import Session
 
 from app.core.auth import (
@@ -11,7 +11,7 @@ from app.core.auth import (
     verify_password,
 )
 from app.core.database import get_db
-from app.models.user import User
+from app.models.user import User, UserProfile
 from app.models.user import AIChatRecord
 from app.models.class_selection import ClassSelection
 from app.models.learning_submission import LearningSubmission
@@ -53,6 +53,19 @@ class AccountUpdate(BaseModel):
     username: str = Field(min_length=2, max_length=50)
     phone: str = Field(min_length=6, max_length=20)
     current_password: str
+
+
+class ProfileUpdate(BaseModel):
+    model_config = ConfigDict(extra='forbid')
+    nickname: str = Field(min_length=1, max_length=50)
+    signature: str = Field(default='', max_length=200)
+    phone: str = Field(min_length=6, max_length=20)
+    current_password: str | None = None
+
+    @field_validator('nickname', 'signature', 'phone', mode='before')
+    @classmethod
+    def trim_profile_text(cls, value):
+        return value.strip() if isinstance(value, str) else value
 
 
 class PasswordChange(BaseModel):
@@ -126,7 +139,8 @@ async def reset_password():
 
 
 @router.get("/auth/me")
-async def get_current_user_info(current_user: User = Depends(get_current_user)):
+async def get_current_user_info(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    profile = db.get(UserProfile, current_user.id)
     return AuthResponse(
         code=200,
         msg="获取成功",
@@ -134,8 +148,33 @@ async def get_current_user_info(current_user: User = Depends(get_current_user)):
             "id": current_user.id,
             "username": current_user.username,
             "phone": current_user.phone,
+            "nickname": profile.nickname if profile and profile.nickname else current_user.username,
+            "signature": profile.signature if profile else '',
         },
     )
+
+
+@router.patch('/auth/profile')
+def update_profile(request: ProfileUpdate, current_user: User = Depends(get_current_user),
+                   db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.id == current_user.id, User.status == 'enabled').with_for_update().first()
+    if user is None:
+        raise HTTPException(status_code=401, detail='账号已注销')
+    if request.phone != user.phone:
+        if request.current_password is None or not verify_password(request.current_password, user.password):
+            raise HTTPException(status_code=403, detail='当前密码错误')
+        if db.query(User).filter(User.phone == request.phone, User.id != user.id).first():
+            raise HTTPException(status_code=409, detail='手机号已被注册')
+    profile = db.get(UserProfile, user.id)
+    if profile is None:
+        profile = UserProfile(user_id=user.id)
+        db.add(profile)
+    profile.nickname = request.nickname
+    profile.signature = request.signature
+    user.phone = request.phone
+    db.commit()
+    return AuthResponse(data={'id': user.id, 'username': user.username, 'phone': user.phone,
+                              'nickname': profile.nickname, 'signature': profile.signature})
 
 
 @router.patch("/auth/me")
@@ -194,6 +233,7 @@ def delete_account(request: AccountDelete, current_user: User = Depends(get_curr
         db.query(NotificationPreferences).filter(NotificationPreferences.user_settings_id.in_(settings_ids)).delete(synchronize_session=False)
         db.query(LanguageSettings).filter(LanguageSettings.user_settings_id.in_(settings_ids)).delete(synchronize_session=False)
     db.query(UserSettings).filter(UserSettings.user_id == user_id).delete(synchronize_session=False)
+    db.query(UserProfile).filter(UserProfile.user_id == user_id).delete(synchronize_session=False)
     db.query(LearningReview).filter(LearningReview.user_id == user_id).delete(synchronize_session=False)
     db.query(GuideProgress).filter(GuideProgress.user_id == user_id).delete(synchronize_session=False)
     db.query(LearningSubmission).filter(LearningSubmission.user_id == user_id).delete(synchronize_session=False)

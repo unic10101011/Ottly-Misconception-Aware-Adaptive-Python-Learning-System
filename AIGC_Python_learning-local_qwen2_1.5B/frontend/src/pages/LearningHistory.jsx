@@ -42,12 +42,10 @@ export default function LearningHistory() {
   const groups = groupMistakes(questions, knowledgeNames)
   const activeGroup = params.get('knowledge') || 'all'
   const visibleGroups = activeGroup === 'all' ? groups : groups.filter(group => group.id === activeGroup)
-  const remaining = questions.filter(question => question.latest_passed === false).length
 
   return <div className="mistake-page mistake-overview">
     <header className="mistake-page-header">
-      <div><span className="mistake-eyebrow">OTTLY · 复习小站</span><h1>我的错题</h1>
-        <p>{remaining ? `还有 ${remaining} 道题最近未通过，选一个知识点，再试一次。` : '沿着知识点回顾，每一次重做都是新的进步。'}</p></div>
+      <h1>我的错题</h1>
       <span className="mistake-total"><strong>{questions.length}</strong>道题待回顾</span>
     </header>
     {loading && <p role="status">正在整理你的错题...</p>}
