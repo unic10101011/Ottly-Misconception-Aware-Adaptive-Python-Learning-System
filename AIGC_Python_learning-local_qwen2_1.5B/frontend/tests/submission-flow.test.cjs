@@ -1146,7 +1146,7 @@ test('practice map groups all twelve levels and opens only the clicked circle, p
     assert.doesNotMatch(renderToStaticMarkup(tree), /class="practice-map"/)
     editorProps.onAccepted()
     tree = render()
-    find(tree, node => node.props.className === 'btn-hint practice-back-button').props.onClick()
+    find(tree, node => node.props['aria-label'] === '返回加练题库').props.onClick()
     tree = render()
     assert.match(circle(tree, 2).props.className, /is-completed/)
     assert.doesNotMatch(renderToStaticMarkup(tree), /SELECTED_DETAIL/)

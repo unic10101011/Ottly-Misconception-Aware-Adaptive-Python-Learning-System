@@ -78,8 +78,12 @@ export default function PracticePage() {
   }
 
   return <div className="lesson-page practice-page">
-    {activeId && <button type="button" className="btn-hint practice-back-button"
-      onClick={() => setParams({ level_no: String(levelNo) })}>← 返回加练题库</button>}
+    {activeId && <div className="lesson-tools" aria-label="加练工具">
+      <button type="button" className="lesson-tool-icon" title="返回加练题库" aria-label="返回加练题库"
+        onClick={() => setParams({ level_no: String(levelNo) })}>
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><path d="m14 5-7 7 7 7M7 12h14" /></svg>
+      </button>
+    </div>}
     {busy && <p role="status">正在读取加练题库...</p>}
     {error && <p role="alert">{error}</p>}
     {!busy && requestedId && !activeId && <p role="alert">这道加练尚未解锁或不存在，请选择其他练习。</p>}

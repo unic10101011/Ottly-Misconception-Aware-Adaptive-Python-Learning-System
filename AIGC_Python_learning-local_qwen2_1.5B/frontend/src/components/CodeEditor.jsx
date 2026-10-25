@@ -461,7 +461,6 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, tit
             tabIndex={0}>
             {contentTab === 'task' ? children : teaching}
           </div>
-          <a className="problem-jump" href="#code-workspace">开始编写代码 ↓</a>
         </div>
 
         <div className="code-section" id="code-workspace">
@@ -473,7 +472,6 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, tit
             {allowReset && <button type="button" className="code-reset-button"
               aria-label={resetMode === 'clear' ? '清空当前代码' : '清除代码痕迹，恢复初始代码'}
               title={resetMode === 'clear' ? '清空当前代码' : '清除代码痕迹，恢复初始代码'}
-              style={resetMode === 'clear' ? { order: -1, marginLeft: 0, marginRight: 8 } : undefined}
               disabled={busy} onClick={() => {
                 if (resetMode === 'clear' && !window.confirm('确定清空当前代码吗？')) return
                 updateCode(resetMode === 'clear' && problemId !== 'count-at-least-v1' ? '' : initialCode)
