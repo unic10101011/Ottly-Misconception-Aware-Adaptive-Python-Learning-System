@@ -256,33 +256,33 @@ def test_delayed_judge_cannot_write_after_account_delete(client, monkeypatch):
     with SessionLocal() as db:
         assert db.query(LearningSubmission).filter_by(user_id=user_id).count() == 0
 
-def test_ollama_chat_non_stream_and_stream_save_history(client, monkeypatch):
+def test_deepseek_chat_non_stream_and_stream_save_history(client, monkeypatch):
     import json
     import httpx
     from app.api import ai
 
-    _, token = register_and_login(client, "ollama_student", "13800000005")
+    _, token = register_and_login(client, "deepseek_student", "13800000005")
     requests = []
 
     def respond(request):
         payload = json.loads(request.content)
         requests.append(payload)
-        assert request.url.path == "/api/chat"
-        assert payload["model"] == "qwen2.5-coder:3b-instruct"
+        assert request.url.path == "/chat/completions"
+        assert payload["model"] == "deepseek-flash"
         assert payload["messages"][-1]["content"] in {"Explain Python lists", "Explain a loop"}
         if payload["stream"]:
             chunks = [
-                {"message": {"content": "Use "}, "done": False},
-                {"message": {"content": "for."}, "done": False},
-                {"message": {"content": ""}, "done": True},
+                {"choices": [{"delta": {"content": "Use "}, "finish_reason": None}]},
+                {"choices": [{"delta": {"content": "for."}, "finish_reason": None}]},
+                {"choices": [{"delta": {}, "finish_reason": "stop"}]},
             ]
-            return httpx.Response(200, text="\n".join(json.dumps(c) for c in chunks) + "\n")
-        return httpx.Response(200, json={"message": {"content": "A list stores values."}, "done": True})
+            return httpx.Response(200, text="\n\n".join("data: " + json.dumps(c) for c in chunks) + "\n\n")
+        return httpx.Response(200, json={"choices": [{"message": {"content": "A list stores values."}, "finish_reason": "stop"}]})
 
     real_client = httpx.AsyncClient
     transport = httpx.MockTransport(respond)
-    monkeypatch.setattr(ai, "LOCAL_LLM_URL", "http://ollama.test/api/chat")
-    monkeypatch.setattr(ai, "OLLAMA_MODEL", "qwen2.5-coder:3b-instruct")
+    monkeypatch.setattr(ai.error_analysis, "DEEPSEEK_API_KEY", "test-chat-key")
+    monkeypatch.setattr(ai.error_analysis, "DEEPSEEK_BASE_URL", "https://deepseek.test")
     monkeypatch.setattr(ai.httpx, "AsyncClient", lambda **kwargs: real_client(transport=transport, **kwargs))
 
     normal = client.post("/api/v1/ai/chat", headers=auth(token), json={

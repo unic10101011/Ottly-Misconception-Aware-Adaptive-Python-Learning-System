@@ -10,16 +10,14 @@ import asyncio
 import uuid
 from datetime import datetime
 from typing import List, Optional
-import os
 from app.core.auth import get_current_user
 from app.models.user import User
-import httpx  # 【修改】新增：用于异步HTTP请求，替换原来的 openai 库
+import httpx
+from app.services import error_analysis
 
 router = APIRouter()
 
-# ==================== 【修改】本地大模型配置（替换原来的蓝心大模型配置） ====================
-LOCAL_LLM_URL = os.getenv("LOCAL_LLM_URL")
-OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "qwen2.5-coder:7b-instruct-q4_K_M")
+# Shared DeepSeek-V4.1-Flash configuration for all AI features.
 MAX_TOKENS = 450
 CHAT_CONTEXT_TOKENS = 8192
 CHAT_MAX_TURNS = 20
@@ -38,7 +36,7 @@ CHAT_SYSTEM_PROMPT = (
     "学生的问题或代码不完整时，先问一个具体的澄清问题；分析报错要根据给出的代码和执行信息，"
     "缺少依据就明确说明，不编造输出、运行结果或错误原因。未实际运行的代码不要声称已验证。"
     "不确定的知识要坦诚说明；你是虚拟角色，不假装是真实动物或人类。"
-    f"仅在被问及技术来源时说明：本对话由本地 Ollama 服务中的 {OLLAMA_MODEL} 模型生成，"
+    "仅在被问及技术来源时说明：本对话由 DeepSeek-V4.1-Flash 模型生成，"
     "不要编造开发方或其他模型身份。"
 )
 
@@ -162,12 +160,13 @@ async def prepare_chat(chat_data: AIChatRequest, db: Session, user_id: int):
                         {'role': 'user', 'content': chat_data.question}]
 
 
-def ollama_payload(messages: list[dict], stream: bool) -> dict:
+def deepseek_payload(messages: list[dict], stream: bool) -> dict:
     return {
-        "model": OLLAMA_MODEL,
+        "model": error_analysis.DEEPSEEK_MODEL,
         "messages": messages,
         "stream": stream,
-        "options": {"num_predict": MAX_TOKENS, "temperature": TEMPERATURE, "num_ctx": CHAT_CONTEXT_TOKENS},
+        "max_tokens": MAX_TOKENS, "temperature": TEMPERATURE,
+        "thinking": {"type": "disabled"},
     }
 
 
@@ -190,29 +189,46 @@ def save_chat_if_active(db: Session, user_id: int, record: AIChatRecord) -> bool
 
 async def stream_chat_response(chat_data: AIChatRequest, db: Session, user_id: int):
     session_id, messages = await prepare_chat(chat_data, db, user_id)
-    payload = ollama_payload(messages, stream=True)
+    payload = deepseek_payload(messages, stream=True)
 
     async def generate():
         try:
             full_content = ""
             try:
                 async with httpx.AsyncClient(timeout=120.0) as client:
-                    async with client.stream("POST", LOCAL_LLM_URL, json=payload) as response:
+                    async with client.stream("POST", error_analysis.DEEPSEEK_BASE_URL + '/chat/completions',
+                                             headers={'Authorization': 'Bearer ' + error_analysis.DEEPSEEK_API_KEY},
+                                             json=payload) as response:
                         response.raise_for_status()
+                        completed = False
                         async for line in response.aiter_lines():
-                            if not line:
+                            if not line.startswith('data:'):
                                 continue
-                            data = json.loads(line)
-                            token = data.get("message", {}).get("content", "")
+                            event = line[5:].strip()
+                            if event == '[DONE]':
+                                break
+                            data = json.loads(event)
+                            if not isinstance(data, dict) or data.get('error'):
+                                raise ValueError('Invalid model stream')
+                            choices = data.get('choices')
+                            if not isinstance(choices, list):
+                                raise ValueError('Missing stream choices')
+                            if not choices:
+                                continue  # Optional usage-only event.
+                            choice = choices[0]
+                            token = choice.get('delta', {}).get('content') or ''
+                            if not isinstance(token, str):
+                                raise ValueError('Invalid streamed content')
                             if token:
                                 full_content += token
                                 pending_chats[(user_id, session_id)]['answer'] = full_content
                                 yield sse_event(token, session_id)
-                            if data.get("done"):
+                            if choice.get('finish_reason') is not None:
+                                completed = choice['finish_reason'] == 'stop'
                                 break
-                if not full_content:
-                    raise ValueError("Empty model response")
-            except (httpx.HTTPError, ValueError):
+                if not completed or not full_content.strip():
+                    raise ValueError("Incomplete model response")
+            except (httpx.HTTPError, ValueError, KeyError, TypeError, IndexError, AttributeError):
                 yield sse_event("模型调用失败，请稍后重试。", session_id, error=True)
                 yield sse_event("[END]", session_id)
                 return
@@ -239,18 +255,22 @@ async def stream_chat_response(chat_data: AIChatRequest, db: Session, user_id: i
 
 async def normal_chat_response(chat_data: AIChatRequest, db: Session, user_id: int):
     session_id, messages = await prepare_chat(chat_data, db, user_id)
-    payload = ollama_payload(messages, stream=False)
+    payload = deepseek_payload(messages, stream=False)
 
     try:
         try:
             async with httpx.AsyncClient(timeout=120.0) as client:
-                response = await client.post(LOCAL_LLM_URL, json=payload)
+                response = await client.post(error_analysis.DEEPSEEK_BASE_URL + '/chat/completions',
+                                             headers={'Authorization': 'Bearer ' + error_analysis.DEEPSEEK_API_KEY},
+                                             json=payload)
                 response.raise_for_status()
-                full_answer = response.json().get("message", {}).get("content", "").strip()
-            if not full_answer:
-                raise ValueError("Empty model response")
-        except (httpx.HTTPError, ValueError):
-            return AIChatResponse(code=400, msg="模型调用失败，请检查 Ollama 服务和模型。", data={})
+                choice = response.json()['choices'][0]
+                full_answer = choice['message']['content']
+            if choice.get('finish_reason') != 'stop' or not isinstance(full_answer, str) or not full_answer.strip():
+                raise ValueError("Incomplete model response")
+            full_answer = full_answer.strip()
+        except (httpx.HTTPError, ValueError, KeyError, TypeError, IndexError):
+            return AIChatResponse(code=400, msg="DeepSeek 调用失败，请检查密钥、账户额度或网络后重试。", data={})
 
         saved = save_chat_if_active(db, user_id, AIChatRecord(
             user_id=user_id,
@@ -285,8 +305,8 @@ async def chat_with_ai(
         current_user: User = Depends(get_current_user)
 ):
     """AI对话接口（自动选择流式或非流式）"""
-    if not LOCAL_LLM_URL:
-        raise HTTPException(status_code=503, detail="AI 模型地址尚未配置")
+    if not error_analysis.DEEPSEEK_API_KEY:
+        raise HTTPException(status_code=503, detail="DeepSeek API Key 尚未配置，请在后端配置 DEEPSEEK_API_KEY")
     if not chat_data.question.strip():
         return AIChatResponse(
             code=400,

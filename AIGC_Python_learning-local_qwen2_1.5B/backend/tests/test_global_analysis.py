@@ -6,7 +6,7 @@ from pathlib import Path
 import httpx
 import pytest
 
-from test_submission import client, login, mock_model, model_facts, submit_and_analyze
+from test_submission import client, login, mock_model, model_facts, request_schema, submit_and_analyze
 
 
 def install_model(monkeypatch, observed):
@@ -15,10 +15,10 @@ def install_model(monkeypatch, observed):
         facts = model_facts(payload)
         observed.append((payload, facts))
         if 'public_cases' in facts:
-            return httpx.Response(200, json={'done': True, 'message': {'content': json.dumps({
+            return httpx.Response(200, json={'choices': [{'finish_reason': 'stop', 'message': {'content': json.dumps({
                 'hint': '先对照题目要求，检查代码是否处理了不同输入。',
-                'knowledge_points': ['字符串与输出'], 'question': None,
-            })}})
+                'knowledge_points': [request_schema(payload)['properties']['knowledge_points']['items']['enum'][0]], 'question': None,
+            })}}]})
         evidence = facts['allowed_evidence'][0]
         errors = [error['type'] for case in facts['failed_cases'] for error in case['errors']]
         cause = ('疑似引用了尚未定义的名字。' if 'NameError' in errors else
@@ -26,9 +26,9 @@ def install_model(monkeypatch, observed):
         content = {
             'misconception_tag': 'other', 'suspected_cause': cause,
             'evidence': [{**evidence, 'explanation': '这是本次实际运行产生的公开结果。'}],
-            'knowledge_points': ['输入与输出'],
+            'knowledge_points': [request_schema(payload)['properties']['knowledge_points']['items']['enum'][0]],
         }
-        return httpx.Response(200, json={'done': True, 'message': {'content': json.dumps(content)}})
+        return httpx.Response(200, json={'choices': [{'finish_reason': 'stop', 'message': {'content': json.dumps(content)}}]})
     mock_model(monkeypatch, generate)
 
 
@@ -57,10 +57,10 @@ def test_all_lessons_and_an_unlisted_bank_id_share_the_same_analysis(client, mon
                 'problem_id': lesson.problem_id, 'code': lesson.reference_solution,
             }).json()['data']['judge']['passed']
             continue
-        assert 'syntax_error' not in payload['format']['properties']['misconception_tag']['enum']
+        assert 'syntax_error' not in request_schema(payload)['properties']['misconception_tag']['enum']
         assert facts['execution_mode'] == 'submit'
         assert facts['related_history'] == []
-        assert 'hints' not in payload['format']['properties']
+        assert 'hints' not in request_schema(payload)['properties']
         if lesson.problem_id == 'shell-shop-v1':
             assert facts['failed_cases'][0]['output_lines'] == [
                 {'line': 1, 'actual': '7', 'expected': '12', 'matches': False},
@@ -113,7 +113,7 @@ def test_run_errors_use_real_input_once_without_creating_submissions(client, mon
     assert facts['failed_cases'][0]['expected_output'] == ''
     assert facts['allowed_evidence'][0]['field'] == 'error_message'
     if error_code != 'SYNTAX_ERROR':
-        assert 'syntax_error' not in payload['format']['properties']['misconception_tag']['enum']
+        assert 'syntax_error' not in request_schema(payload)['properties']['misconception_tag']['enum']
     assert client.get('/api/v1/code/submissions', headers=headers).json()['data']['total'] == 0
 
 
@@ -124,7 +124,7 @@ def test_syntax_submission_also_requests_ai_when_configured(client, monkeypatch)
     code = 'if True\n    print(1)'
     data = submit_and_analyze(client, headers, json={'problem_id': 'level1', 'code': code})
     assert data['analysis']['source'] == 'ai'
-    assert 'syntax_error' in observed[0][0]['format']['properties']['misconception_tag']['enum']
+    assert 'syntax_error' in request_schema(observed[0][0])['properties']['misconception_tag']['enum']
 
 
 def test_run_model_outage_preserves_error_and_successful_runs_skip_ai(client, monkeypatch):

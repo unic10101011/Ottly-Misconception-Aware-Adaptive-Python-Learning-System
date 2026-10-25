@@ -1,4 +1,4 @@
-"""Opt-in real HTTP/Ollama checks across the curriculum and run-error entry.
+"""Opt-in real HTTP/DeepSeek checks across the curriculum and run-error entry.
 
 Creates an isolated test account. Reference solutions only unlock progression;
 expected_cause is report-only and is never sent to the analysis endpoint.

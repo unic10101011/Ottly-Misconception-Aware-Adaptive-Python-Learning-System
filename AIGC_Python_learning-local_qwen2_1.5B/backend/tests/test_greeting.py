@@ -25,7 +25,7 @@ def client(tmp_path, monkeypatch):
             yield db
 
     app.dependency_overrides[get_db] = database
-    monkeypatch.setattr(error_analysis, 'LOCAL_LLM_URL', '')
+    monkeypatch.setattr(error_analysis, 'DEEPSEEK_API_KEY', '')
     with TestClient(app) as test_client:
         yield test_client
     app.dependency_overrides.pop(get_db, None)

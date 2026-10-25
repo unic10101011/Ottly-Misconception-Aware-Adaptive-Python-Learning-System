@@ -1,6 +1,6 @@
 """Opt-in real-model evaluation; does not train or modify the model.
 
-Run inside the backend environment with LOCAL_LLM_URL and OLLAMA_MODEL set.
+Run inside the backend environment with DEEPSEEK_API_KEY set.
 The report contains only synthetic code and public judge evidence.
 """
 
@@ -59,8 +59,8 @@ async def evaluate(case: dict, *, with_history: bool = False) -> dict:
 
 
 async def main() -> None:
-    if not os.getenv('LOCAL_LLM_URL'):
-        raise SystemExit('LOCAL_LLM_URL is required for real-model evaluation')
+    if not os.getenv('DEEPSEEK_API_KEY'):
+        raise SystemExit('DEEPSEEK_API_KEY is required for real-model evaluation')
     results = []
     for case in CASES:
         item = await evaluate(case)
@@ -72,7 +72,7 @@ async def main() -> None:
             results.append(item)
             print(item['id'], 'with_history', item['outcome'], item['model_tag'], flush=True)
     report = {
-        'model': os.getenv('OLLAMA_MODEL', 'qwen2.5-coder:3b-instruct'),
+        'model': 'deepseek-flash',
         'problem_id': 'level2',
         'note': 'Gold labels were written before model calls; this is evaluation, not training.',
         'results': results,

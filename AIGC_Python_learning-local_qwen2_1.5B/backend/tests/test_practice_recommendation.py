@@ -114,7 +114,6 @@ async def test_tied_model_failures_return_the_stable_rule_choice(monkeypatch, fa
 @pytest.fixture
 def cloud(monkeypatch):
     from app.services import error_analysis
-    monkeypatch.setattr(error_analysis, 'ANALYSIS_PROVIDER', 'deepseek')
     monkeypatch.setattr(error_analysis, 'DEEPSEEK_API_KEY', 'recommendation-test-key')
     monkeypatch.setattr(error_analysis, 'DEEPSEEK_BASE_URL', 'https://deepseek.test')
     monkeypatch.setattr(error_analysis, 'DEEPSEEK_MODEL', 'deepseek-flash')
@@ -243,7 +242,6 @@ def test_partial_pass_guidance_does_not_become_a_diagnosis_tag(client, monkeypat
 def test_missing_model_configuration_still_recommends_and_practice_does_not_advance_main(client, monkeypatch):
     from app.services import error_analysis
     from app.services.problem_catalog import PROBLEMS
-    monkeypatch.setattr(error_analysis, 'ANALYSIS_PROVIDER', 'deepseek')
     monkeypatch.setattr(error_analysis, 'DEEPSEEK_API_KEY', '')
     monkeypatch.setattr(httpx, 'AsyncClient', lambda **kwargs: pytest.fail('offline recommendation must use rules'))
     headers = login(client)

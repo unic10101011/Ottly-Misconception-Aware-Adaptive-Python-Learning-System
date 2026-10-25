@@ -103,6 +103,11 @@ class FeedbackRoutingTests(unittest.TestCase):
                 self.assertEqual(result.status, 'ready')
                 self.assertEqual(result.guidance.knowledge_points, [name])
 
+    def test_loop_knowledge_labels_are_not_mistaken_for_replacement_code(self):
+        self.guidance['knowledge_points'] = ['for 循环与 range', 'while 循环与终止']
+        self.model.return_value = (json.dumps(self.guidance), 0)
+        self.assertEqual(self.generate().status, 'ready')
+
     def test_private_case_claims_and_solution_code_are_rejected(self):
         for hint in ['隐藏测试输入为 90', 'hidden-5 expects GOLD', '```python\nprint(1)\n```', '改成 print(1)', '改成 total = 0']:
             with self.subTest(hint=hint):
@@ -199,8 +204,7 @@ class ApiFeedbackRoutingTests(unittest.TestCase):
             self.assertEqual(response.status_code, 200, response.text)
             return response.json()['data']['analysis']
 
-        with patch.object(analysis, 'ANALYSIS_PROVIDER', 'deepseek'), \
-                patch.object(analysis, 'analysis_configuration_error', return_value=None), \
+        with patch.object(analysis, 'analysis_configuration_error', return_value=None), \
                 patch.object(analysis, 'analysis_model', return_value='offline-test'), \
                 patch.object(analysis, 'request_diagnosis', side_effect=respond):
             for slot in LEVELS[:4]:

@@ -26,7 +26,7 @@ const failure = {
   judge: { status: 'wrong_answer', passed: false, passed_cases: 0, total_cases: 1, cases: [
     { case_id: 'stdout-1', passed: false, expected_output: '5050', actual_output: '100', errors: [], execution_time: 0.01 },
   ] },
-  analysis: { status: 'ready', message: '', model: 'qwen2.5-coder:3b-instruct', content: {
+  analysis: { status: 'ready', message: '', model: 'deepseek-flash', content: {
     suspected_cause: 'Repeated replacement',
     evidence: [{ case_id: 'stdout-1', field: 'actual_output', quote: '100', explanation: 'Only the last value remains' }],
     knowledge_points: ['accumulation'],

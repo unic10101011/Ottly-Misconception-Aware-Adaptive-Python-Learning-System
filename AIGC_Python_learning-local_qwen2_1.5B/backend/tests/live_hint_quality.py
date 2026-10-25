@@ -20,22 +20,22 @@ from live_submission_smoke import CASES
 async def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--case", choices=[item[0] for item in CASES], default="syntax_error")
-    parser.add_argument("--ollama-url", default="http://127.0.0.1:11434/api/chat")
+    parser.add_argument("--deepseek-base-url", default=analysis.DEEPSEEK_BASE_URL)
     parser.add_argument("--output", default="../docs/phase1-model-diagnostic.json")
     args = parser.parse_args()
-    analysis.LOCAL_LLM_URL = args.ollama_url
+    analysis.DEEPSEEK_BASE_URL = args.deepseek_base_url.rstrip("/")
     calls = []
     original_post = analysis.httpx.AsyncClient.post
 
     async def capture(client, *values, **kwargs):
         payload = kwargs["json"]
-        record = {"stage": "review" if payload["format"]["title"] == "HintReview" else "generation"}
+        record = {"stage": "review" if 'candidate' in json.JSONDecoder().raw_decode(payload['messages'][-1]['content'])[0] else "generation"}
         calls.append(record)
         started = time.monotonic()
         try:
             response = await original_post(client, *values, **kwargs)
             record["http_status"] = response.status_code
-            record["raw_response"] = response.json()
+            record["raw_response"] = {"content": response.json()["choices"][0]["message"].get("content", "")}
             print(record["stage"], record["http_status"], flush=True)
             return response
         finally:

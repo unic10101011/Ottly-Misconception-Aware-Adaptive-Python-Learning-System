@@ -1,4 +1,4 @@
-"""Opt-in real HTTP/Ollama check. Creates one isolated demo account per run.
+"""Opt-in real HTTP/DeepSeek check. Creates one isolated demo account per run.
 
 Run from backend: python tests/live_submission_smoke.py --output ../docs/live-submission.json
 The report includes submitted code and returned evidence, never login tokens/passwords.

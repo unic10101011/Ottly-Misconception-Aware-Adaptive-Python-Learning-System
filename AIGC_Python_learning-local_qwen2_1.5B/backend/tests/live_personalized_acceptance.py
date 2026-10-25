@@ -64,7 +64,7 @@ def submit(client, token, name, code):
 
 
 def main():
-    report = {'model': 'qwen2.5-coder:3b-instruct', 'cases': []}
+    report = {'model': 'deepseek-flash', 'cases': []}
     with httpx.Client(base_url=URL, timeout=180) as client:
         first = account(client)
         second = account(client)

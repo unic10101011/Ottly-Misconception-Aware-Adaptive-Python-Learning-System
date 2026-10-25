@@ -21,7 +21,7 @@ async def answer_question(story, question, history):
             response = await client.post(
                 f'{error_analysis.DEEPSEEK_BASE_URL}/chat/completions',
                 headers={'Authorization': f'Bearer {error_analysis.DEEPSEEK_API_KEY}'},
-                json={'model': 'deepseek-flash', 'messages': messages, 'stream': False,
+                json={'model': error_analysis.DEEPSEEK_MODEL, 'messages': messages, 'stream': False,
                       'thinking': {'type': 'disabled'}, 'max_tokens': 1024},
             )
             response.raise_for_status()
@@ -29,7 +29,7 @@ async def answer_question(story, question, history):
             answer = choice['message']['content']
             if choice.get('finish_reason') != 'stop' or not isinstance(answer, str) or not answer.strip():
                 raise ValueError('Incomplete guide answer')
-            return {'answer': answer.strip(), 'model': 'deepseek-flash'}
+            return {'answer': answer.strip(), 'model': error_analysis.DEEPSEEK_MODEL}
     except httpx.HTTPStatusError as error:
         message = {401: 'DeepSeek 密钥无效，请检查后端配置。', 402: 'DeepSeek 账户余额不足。',
                    429: 'DeepSeek 请求繁忙，请稍后重试。'}.get(error.response.status_code, 'DeepSeek 服务暂不可用，请稍后重试。')

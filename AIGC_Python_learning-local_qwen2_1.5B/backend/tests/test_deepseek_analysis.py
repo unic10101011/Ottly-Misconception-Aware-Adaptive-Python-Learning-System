@@ -1,4 +1,4 @@
-"""Cloud diagnosis uses the shared evidence pipeline; chat stays on Ollama."""
+"""Cloud diagnosis uses the shared evidence pipeline; all AI entry points use DeepSeek Flash."""
 import json
 from pathlib import Path
 
@@ -11,12 +11,9 @@ from test_submission import client, login, submit_and_analyze
 @pytest.fixture
 def deepseek(monkeypatch):
     from app.services import error_analysis as service
-    monkeypatch.setattr(service, 'ANALYSIS_PROVIDER', 'deepseek')
     monkeypatch.setattr(service, 'DEEPSEEK_API_KEY', 'test-only-cloud-key')
     monkeypatch.setattr(service, 'DEEPSEEK_BASE_URL', 'https://deepseek.test/v1')
     monkeypatch.setattr(service, 'DEEPSEEK_MODEL', 'deepseek-flash')
-    # A cloud diagnosis must work without an Ollama endpoint.
-    monkeypatch.setattr(service, 'LOCAL_LLM_URL', '')
     return service
 
 
@@ -212,23 +209,22 @@ def test_even_unredacted_judges_never_send_private_evidence(monkeypatch, deepsee
 
 
 @pytest.mark.parametrize('stream', [False, True])
-def test_chat_still_calls_ollama_without_cloud_credentials(client, monkeypatch, deepseek, stream):
+def test_chat_uses_same_flash_model_and_cloud_credentials(client, monkeypatch, deepseek, stream):
     from app.api import ai
-    monkeypatch.setattr(ai, 'LOCAL_LLM_URL', 'http://ollama.test/api/chat')
     observed = []
     def reply(request):
         payload = json.loads(request.content)
         observed.append(payload)
-        assert str(request.url) == 'http://ollama.test/api/chat'
-        assert 'Authorization' not in request.headers
-        assert payload['model'] == ai.OLLAMA_MODEL
+        assert str(request.url) == 'https://deepseek.test/v1/chat/completions'
+        assert request.headers['Authorization'] == 'Bearer test-only-cloud-key'
+        assert payload['model'] == deepseek.DEEPSEEK_MODEL
         assert 'response_format' not in payload
         assert 'Ottly' in payload['messages'][0]['content']
         if stream:
-            return httpx.Response(200, text=json.dumps({'message': {'content': 'LOCAL_OTTLY_REPLY'}, 'done': True}) + '\n')
-        return httpx.Response(200, json={'message': {'content': 'LOCAL_OTTLY_REPLY'}, 'done': True})
+            return httpx.Response(200, text='data: ' + json.dumps({'choices': [{'delta': {'content': 'CLOUD_OTTLY_REPLY'}, 'finish_reason': 'stop'}]}) + '\n\n')
+        return httpx.Response(200, json={'choices': [{'message': {'content': 'CLOUD_OTTLY_REPLY'}, 'finish_reason': 'stop'}]})
     install_cloud(monkeypatch, reply)
     response = client.post('/api/v1/ai/chat', headers=login(client), json={'question': '你是谁？', 'stream': stream})
     assert response.status_code == 200
-    assert 'LOCAL_OTTLY_REPLY' in response.text
+    assert 'CLOUD_OTTLY_REPLY' in response.text
     assert len(observed) == 1

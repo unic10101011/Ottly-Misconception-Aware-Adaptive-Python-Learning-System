@@ -13,7 +13,7 @@ def main():
     url = make_url(os.environ['DATABASE_URL'])
     if url.get_backend_name() != 'mysql' or not (url.database or '').startswith('ottly_contract_test_'):
         raise SystemExit('A dedicated ottly_contract_test_* MySQL database is required.')
-    os.environ['LOCAL_LLM_URL'] = ''
+    os.environ['DEEPSEEK_API_KEY'] = ''
     os.environ.setdefault('JWT_SECRET', secrets.token_urlsafe(48))
     from fastapi.testclient import TestClient
     from main import app

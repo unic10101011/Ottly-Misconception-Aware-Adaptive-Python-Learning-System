@@ -40,23 +40,15 @@ if (-not (Test-Path -LiteralPath $envFile)) {
         'DB_PASSWORD=' + (New-HexSecret)
         'DB_ROOT_PASSWORD=' + (New-HexSecret)
         'JWT_SECRET=' + (New-HexSecret)
-        'LOCAL_LLM_URL=http://host.docker.internal:11434/api/chat'
-        'OLLAMA_MODEL=qwen2.5-coder:7b-instruct-q4_K_M'
+        'DEEPSEEK_API_KEY='
+        'DEEPSEEK_BASE_URL=https://api.deepseek.com'
     ) -join [Environment]::NewLine
     [System.IO.File]::WriteAllText($envFile, $contents + [Environment]::NewLine, [System.Text.Encoding]::ASCII)
     Write-Host '已生成本机演示配置 .env'
 }
 
-$ollamaExe = Join-Path $env:LOCALAPPDATA 'Programs\Ollama\ollama.exe'
-if (Test-Path -LiteralPath $ollamaExe) {
-    try {
-        Invoke-WebRequest -Uri 'http://127.0.0.1:11434/api/version' -UseBasicParsing -TimeoutSec 2 | Out-Null
-    } catch {
-        Start-Process -FilePath $ollamaExe -ArgumentList 'serve' -WindowStyle Hidden
-        Start-Sleep -Seconds 2
-    }
-} else {
-    Write-Warning '未安装 Ollama，AI 聊天暂不可用。'
+if (-not (Select-String -LiteralPath $envFile -Pattern '^DEEPSEEK_API_KEY=.+$' -Quiet)) {
+    Write-Warning '请在项目 .env 中设置 DEEPSEEK_API_KEY，AI 功能统一使用 DeepSeek-V4.1-Flash。'
 }
 & $dockerExe compose --progress plain up --build -d
 if ($LASTEXITCODE -ne 0) {

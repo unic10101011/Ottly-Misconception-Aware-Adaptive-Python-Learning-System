@@ -58,9 +58,9 @@ CORRECT = "total = 0\nfor i in range(1, 101):\n    total += i\nprint(total)"
 def test_failed_submit_returns_judge_before_model_and_analysis_is_owned(client, monkeypatch):
     from app.services import error_analysis
 
-    monkeypatch.setattr(error_analysis, "LOCAL_LLM_URL", "http://ollama.test/api/chat")
+    monkeypatch.setattr(error_analysis, "DEEPSEEK_API_KEY", "test-only-cloud-key")
     monkeypatch.setattr(error_analysis.httpx, "AsyncClient",
-                        lambda **kwargs: pytest.fail("submit must not call Ollama"))
+                        lambda **kwargs: pytest.fail("submit must not call the model"))
     owner = login(client)
     first = client.post("/api/v1/code/submit", headers=owner,
                         json={"problem_id": "level2", "code": OVERWRITE}).json()["data"]
@@ -131,21 +131,17 @@ def test_wrong_answer_fallback_checks_one_accumulation_step():
 def test_offline_syntax_error_keeps_grounded_compiler_hints(client, monkeypatch, code):
     from app.services import error_analysis
 
-    monkeypatch.setattr(error_analysis, "LOCAL_LLM_URL", "")
+    monkeypatch.setattr(error_analysis, "DEEPSEEK_API_KEY", "")
     monkeypatch.setattr(error_analysis.httpx, "AsyncClient",
-                        lambda **kwargs: pytest.fail("Syntax errors must not call Ollama"))
+                        lambda **kwargs: pytest.fail("Missing key must not call the model"))
     data = submit_and_analyze(client, login(client), json={"problem_id": "level2", "code": code})
     assert data["judge"]["status"] == "execution_error"
     assert data["judge"]["cases"][0]["errors"][0]["type"] == "SYNTAX_ERROR"
     analysis = data["analysis"]
-    assert analysis["status"] == "ready"
-    assert analysis["source"] == "fixed"
-    assert analysis["content"]["misconception_tag"] == "syntax_error"
-    assert analysis["content"]["evidence"][0]["quote"] == data["judge"]["cases"][0]["errors"][0]["message"]
-    assert "变量名以数字开头" not in json.dumps(analysis, ensure_ascii=False)
-    if code.startswith("int sum"):
-        assert "声明" in analysis["content"]["suspected_cause"]
-        assert "类型" in analysis["content"]["hints"]["level3"]
+    assert analysis["status"] == "unavailable"
+    assert analysis["source"] is None
+    assert analysis["content"] is None
+    assert "DeepSeek" in analysis["message"]
 
 
 @pytest.mark.parametrize('code,tag,actual', [
@@ -167,7 +163,7 @@ def test_model_tag_is_saved_with_the_same_public_judge_evidence(client, monkeypa
             quote=case['errors'][0]['message'] if case['errors'] else case['actual_output'].strip(),
             explanation='公开测试显示了本次失败的真实结果。',
         )
-        return httpx.Response(200, json={'done': True, 'message': {'content': json.dumps(content)}})
+        return httpx.Response(200, json={'choices': [{'finish_reason': 'stop', 'message': {'content': json.dumps(content)}}]})
 
     mock_model(monkeypatch, handler)
     headers = login(client)
@@ -182,7 +178,7 @@ def test_unknown_model_tag_is_downgraded_to_other(client, monkeypatch):
     def handler(request):
         content = sample_analysis()
         content['misconception_tag'] = 'sum_variable_name_error'
-        return httpx.Response(200, json={'done': True, 'message': {'content': json.dumps(content)}})
+        return httpx.Response(200, json={'choices': [{'finish_reason': 'stop', 'message': {'content': json.dumps(content)}}]})
 
     mock_model(monkeypatch, handler)
     result = submit_and_analyze(client, login(client), json={'problem_id': 'level2', 'code': OVERWRITE})
@@ -196,7 +192,7 @@ def test_diagnosis_ignores_related_history_and_saves_current_status(client, monk
     def handler(request):
         facts = model_facts(json.loads(request.content))
         drafts.append(facts)
-        return httpx.Response(200, json={'done': True, 'message': {'content': json.dumps(sample_analysis())}})
+        return httpx.Response(200, json={'choices': [{'finish_reason': 'stop', 'message': {'content': json.dumps(sample_analysis())}}]})
 
     mock_model(monkeypatch, handler)
     headers = login(client)
@@ -235,7 +231,7 @@ def test_current_name_error_cannot_inherit_a_past_range_tag(client, monkeypatch,
                 field='error_message', quote=facts['failed_cases'][0]['errors'][0]['message'],
                 explanation='公开报错说明名字尚未定义。',
             )
-        return httpx.Response(200, json={'done': True, 'message': {'content': json.dumps(content)}})
+        return httpx.Response(200, json={'choices': [{'finish_reason': 'stop', 'message': {'content': json.dumps(content)}}]})
 
     mock_model(monkeypatch, handler)
     headers = login(client)
@@ -253,7 +249,7 @@ def test_correct_range_cannot_be_reported_as_boundary_error(client, monkeypatch)
         content = sample_analysis()
         content['misconception_tag'] = 'range_boundary'
         content['suspected_cause'] = '疑似循环范围没有包含一百。'
-        return httpx.Response(200, json={'done': True, 'message': {'content': json.dumps(content)}})
+        return httpx.Response(200, json={'choices': [{'finish_reason': 'stop', 'message': {'content': json.dumps(content)}}]})
 
     mock_model(monkeypatch, handler)
     headers = login(client)
@@ -274,7 +270,7 @@ def test_name_error_rejects_unrelated_cause(client, monkeypatch, cause):
         content['evidence'][0].update(case_id=case['case_id'], field='error_message',
                                       quote=case['errors'][0]['message'],
                                       explanation='公开报错指出变量没有定义。')
-        return httpx.Response(200, json={'done': True, 'message': {'content': json.dumps(content)}})
+        return httpx.Response(200, json={'choices': [{'finish_reason': 'stop', 'message': {'content': json.dumps(content)}}]})
 
     mock_model(monkeypatch, handler)
     headers = login(client)
@@ -294,7 +290,7 @@ def test_name_error_accepts_spelling_explanation(client, monkeypatch):
         content['evidence'][0].update(case_id=case['case_id'], field='error_message',
                                       quote=case['errors'][0]['message'],
                                       explanation='公开报错指出这个名字没有定义。')
-        return httpx.Response(200, json={'done': True, 'message': {'content': json.dumps(content)}})
+        return httpx.Response(200, json={'choices': [{'finish_reason': 'stop', 'message': {'content': json.dumps(content)}}]})
 
     mock_model(monkeypatch, handler)
     result = submit_and_analyze(client, login(client),
@@ -309,8 +305,8 @@ def test_model_failure_after_related_history_does_not_claim_personalization(clie
     def handler(request):
         calls.append(request)
         if len(calls) > 1:
-            return httpx.Response(200, json={'done': True, 'message': {'content': 'invalid json'}})
-        return httpx.Response(200, json={'done': True, 'message': {'content': json.dumps(sample_analysis())}})
+            return httpx.Response(200, json={'choices': [{'finish_reason': 'stop', 'message': {'content': 'invalid json'}}]})
+        return httpx.Response(200, json={'choices': [{'finish_reason': 'stop', 'message': {'content': json.dumps(sample_analysis())}}]})
 
     mock_model(monkeypatch, handler)
     headers = login(client)
@@ -332,14 +328,14 @@ def test_greeting_undefined_username_uses_public_error_for_variable_tag(client, 
         content.update(
             misconception_tag='variable_error',
             suspected_cause='疑似使用了尚未赋值的名字。',
-            knowledge_points=['变量赋值'],
+            knowledge_points=['变量、输入与字符串拼接'],
         )
         content['evidence'][0].update(case_id=case['case_id'], field='error_message',
                                       quote=case['errors'][0]['message'],
                                       explanation='公开运行错误指出这个名字尚未定义。')
         content['hints']['level2'] = '查看报错行里的名字，核对前面赋值时的拼写。'
         content['hints']['level3'] = '把报错中的名字和已有赋值逐字对照，再重新运行。'
-        return httpx.Response(200, json={'done': True, 'message': {'content': json.dumps(content)}})
+        return httpx.Response(200, json={'choices': [{'finish_reason': 'stop', 'message': {'content': json.dumps(content)}}]})
 
     mock_model(monkeypatch, handler)
     headers = login(client)
@@ -372,12 +368,12 @@ def test_greeting_missing_punctuation_sends_public_input_to_generation_and_revie
                                 level3='逐字对照实际输出和样例，记录末尾缺少的标点，再修改并运行。')
         if weak_hint:
             content['hints']['level3'] = '检查格式是否正确。'
-        return httpx.Response(200, json={'done': True, 'message': {'content': json.dumps(content)}})
+        return httpx.Response(200, json={'choices': [{'finish_reason': 'stop', 'message': {'content': json.dumps(content)}}]})
 
     def review(request):
         observed.append(json.loads(request.content)['messages'][-1]['content'])
-        return httpx.Response(200, json={'done': True, 'message': {
-            'content': json.dumps({'tag_supported': True, 'issues': []})}})
+        return httpx.Response(200, json={'choices': [{'finish_reason': 'stop', 'message': {
+            'content': json.dumps({'tag_supported': True, 'issues': []})}}]})
 
     mock_model(monkeypatch, draft, review)
     headers = login(client)
@@ -393,7 +389,7 @@ def test_greeting_missing_punctuation_sends_public_input_to_generation_and_revie
     again = submit_and_analyze(client, headers, json={'problem_id': 'greeting-v1', 'code': code})
     assert again['analysis']['source'] == 'ai'
     assert again['analysis']['personalization'] == {'used': False, 'related_history_count': 0}
-    for facts in (json.loads(item) if isinstance(item, str) else item for item in observed):
+    for facts in (json.JSONDecoder().raw_decode(item)[0] if isinstance(item, str) else item for item in observed):
         assert facts['judge_status'] == 'wrong_answer'
         assert facts['related_history'] == []
         assert len(facts['failed_cases']) == 1
@@ -406,30 +402,35 @@ def test_greeting_missing_punctuation_sends_public_input_to_generation_and_revie
 def mock_model(monkeypatch, handler, review_handler=None):
     from app.services import error_analysis
     factory = httpx.AsyncClient
-    monkeypatch.setattr(error_analysis, "LOCAL_LLM_URL", "http://ollama.test/api/chat")
+    monkeypatch.setattr(error_analysis, "DEEPSEEK_API_KEY", "test-only-cloud-key")
     async def dispatch(request):
         payload = json.loads(request.content)
-        if payload.get("format", {}).get("title") == "HintReview":
-            result = review_handler(request) if review_handler else httpx.Response(200, json={
-                "done": True, "message": {"content": json.dumps({"issues": [], "tag_supported": True})}})
+        if request_schema(payload).get("title") == "HintReview":
+            result = review_handler(request) if review_handler else httpx.Response(200, json={'choices': [{'finish_reason': 'stop', 'message': {"content": json.dumps({"issues": [], "tag_supported": True})}}]})
         else:
             result = handler(request)
         result = await result if asyncio.iscoroutine(result) else result
         # Public response fixtures include trusted hints; the model now returns
         # only the diagnosis draft, and the service supplies reviewed hints.
-        if payload.get('format', {}).get('title') == 'DiagnosisDraft':
+        if request_schema(payload).get("title") == 'DiagnosisDraft':
             try:
                 body = result.json()
-                draft = json.loads(body['message']['content'])
+                draft = json.loads(body['choices'][0]['message']['content'])
                 draft.pop('hints', None)
+                from app.services.problem_catalog import KNOWLEDGE, KNOWLEDGE_ALIASES, alias_key
+                draft['knowledge_points'] = [KNOWLEDGE[KNOWLEDGE_ALIASES[alias_key(point)]].name if alias_key(point) in KNOWLEDGE_ALIASES else point for point in draft.get('knowledge_points', [])]
                 draft.setdefault('code_observation', '核对本次代码及公开执行结果。')
-                body['message']['content'] = json.dumps(draft)
+                body['choices'][0]['message']['content'] = json.dumps(draft)
                 return httpx.Response(result.status_code, json=body)
             except (ValueError, KeyError, TypeError, AttributeError):
                 pass
         return result
 
     monkeypatch.setattr(error_analysis.httpx, "AsyncClient", lambda **kwargs: factory(transport=httpx.MockTransport(dispatch), **kwargs))
+
+
+def request_schema(payload):
+    return json.loads(payload['messages'][-1]['content'].rsplit('只返回符合以下 JSON Schema 的 JSON 对象：\n', 1)[1])
 
 
 def model_facts(payload):
@@ -455,7 +456,7 @@ def submit_and_analyze(client, headers, **kwargs):
 ])
 def test_three_error_types_return_real_judge_evidence_before_ai(client, monkeypatch, code, status, evidence):
     from app.services import error_analysis
-    monkeypatch.setattr(error_analysis, 'LOCAL_LLM_URL', 'http://ollama.test/api/chat')
+    monkeypatch.setattr(error_analysis, 'DEEPSEEK_API_KEY', 'test-only-cloud-key')
     monkeypatch.setattr(error_analysis.httpx, 'AsyncClient',
                         lambda **kwargs: pytest.fail('first response must not load the model'))
     data = client.post('/api/v1/code/submit', headers=login(client),
@@ -474,13 +475,11 @@ def test_model_timings_are_saved_and_repeat_analysis_does_not_recall_model(clien
 
     def draft(request):
         calls.append('draft')
-        return httpx.Response(200, json={'done': True, 'load_duration': 3_000_000,
-                                         'message': {'content': json.dumps(sample_analysis())}})
+        return httpx.Response(200, json={'choices': [{'finish_reason': 'stop', 'message': {'content': json.dumps(sample_analysis())}}]})
 
     def review(request):
         calls.append('review')
-        return httpx.Response(200, json={'done': True, 'load_duration': 2_000_000,
-                                         'message': {'content': '{"issues": [], "tag_supported": true}'}})
+        return httpx.Response(200, json={'choices': [{'finish_reason': 'stop', 'message': {'content': '{"issues": [], "tag_supported": true}'}}]})
 
     mock_model(monkeypatch, draft, review)
     headers = login(client)
@@ -491,7 +490,7 @@ def test_model_timings_are_saved_and_repeat_analysis_does_not_recall_model(clien
     second = client.post(path, headers=headers).json()['data']
     assert calls == ['draft', 'review']
     assert second['timings']['judge_ms'] == first['timings']['judge_ms']
-    assert second['timings']['model_load_ms'] == 5.0
+    assert second['timings']['model_load_ms'] == 0.0
     assert second['analysis']['content']['misconception_tag'] == 'accumulation_error'
     assert second['timings']['hint_generation_ms'] >= 0
     assert client.post(path, headers=headers).json()['data']['analysis'] == second['analysis']
@@ -511,14 +510,14 @@ def test_review_cannot_reject_server_owned_opening_question(client, monkeypatch,
     from app.services.submission import PROBLEMS, judge_submission
 
     def draft(request):
-        return httpx.Response(200, json={'done': True, 'message': {'content': json.dumps(sample_analysis())}})
+        return httpx.Response(200, json={'choices': [{'finish_reason': 'stop', 'message': {'content': json.dumps(sample_analysis())}}]})
 
     def review(request):
         issues = [{'code': 'level1_leak', 'reason': '误判服务端概念问题'}]
         if other_issue:
             issues.append({'code': other_issue, 'reason': '其他分析内容仍需拦截'})
-        return httpx.Response(200, json={'done': True, 'message': {
-            'content': json.dumps({'issues': issues, 'tag_supported': True})}})
+        return httpx.Response(200, json={'choices': [{'finish_reason': 'stop', 'message': {
+            'content': json.dumps({'issues': issues, 'tag_supported': True})}}]})
 
     mock_model(monkeypatch, draft, review)
     data = submit_and_analyze(client, login(client), json={'problem_id': 'level2', 'code': OVERWRITE})
@@ -542,13 +541,13 @@ def test_review_of_weak_hints_keeps_grounded_diagnosis(client, monkeypatch, issu
     from app.services.submission import PROBLEMS, judge_submission
 
     def draft(request):
-        return httpx.Response(200, json={'done': True, 'message': {'content': json.dumps(sample_analysis())}})
+        return httpx.Response(200, json={'choices': [{'finish_reason': 'stop', 'message': {'content': json.dumps(sample_analysis())}}]})
 
     def review(request):
-        return httpx.Response(200, json={'done': True, 'message': {'content': json.dumps({
+        return httpx.Response(200, json={'choices': [{'finish_reason': 'stop', 'message': {'content': json.dumps({
             'tag_supported': True,
             'issues': [{'code': code, 'reason': '审核发现问题'} for code in issue_codes],
-        })}})
+        })}}]})
 
     mock_model(monkeypatch, draft, review)
     data = submit_and_analyze(client, login(client), json={'problem_id': 'level2', 'code': OVERWRITE})
@@ -598,7 +597,7 @@ def test_model_generates_only_diagnosis_and_service_supplies_reviewed_hints(clie
         calls.append(payload)
         content = sample_analysis()
         content["hints"]["level2"] = "使用变量之前，需要先明确哪些信息？"
-        return httpx.Response(200, json={"done": True, "message": {"content": json.dumps(content)}})
+        return httpx.Response(200, json={'choices': [{'finish_reason': 'stop', 'message': {"content": json.dumps(content)}}]})
 
     mock_model(monkeypatch, handler)
     data = submit_and_analyze(client, login(client), json={"problem_id": "level2", "code": OVERWRITE})
@@ -606,8 +605,8 @@ def test_model_generates_only_diagnosis_and_service_supplies_reviewed_hints(clie
     assert len(calls) == 1
     assert "前两轮" in data["analysis"]["content"]["hints"]["level3"]
     assert "基础提示" in data["analysis"]["message"]
-    assert 'hints' not in calls[0]['format']['properties']
-    assert 'Hints' not in calls[0]['format']['$defs']
+    assert 'hints' not in request_schema(calls[0])['properties']
+    assert 'Hints' not in request_schema(calls[0])['$defs']
 
 
 def test_invalid_analysis_is_not_retried(client, monkeypatch):
@@ -616,7 +615,7 @@ def test_invalid_analysis_is_not_retried(client, monkeypatch):
 
     async def handler(request):
         calls.append(request)
-        return httpx.Response(200, json={"done": True, "message": {"content": "invalid json"}})
+        return httpx.Response(200, json={'choices': [{'finish_reason': 'stop', 'message': {"content": "invalid json"}}]})
 
     mock_model(monkeypatch, handler)
     monkeypatch.setattr(error_analysis, "ANALYSIS_TIMEOUT", 0.1)
@@ -631,15 +630,15 @@ def test_semantic_rejection_does_not_change_judge_or_retry(client, monkeypatch):
 
     def draft(request):
         drafts.append(json.loads(request.content))
-        return httpx.Response(200, json={"done": True, "message": {"content": json.dumps(sample_analysis())}})
+        return httpx.Response(200, json={'choices': [{'finish_reason': 'stop', 'message': {"content": json.dumps(sample_analysis())}}]})
 
     def review(request):
         payload = json.loads(request.content)
         reviews.append(payload)
-        return httpx.Response(200, json={"done": True, "message": {"content": json.dumps({
+        return httpx.Response(200, json={'choices': [{'finish_reason': 'stop', 'message': {"content": json.dumps({
             "issues": [{"code": "unrelated_claim", "reason": "候选解释提及了当前代码不支持的原因。"}],
             "tag_supported": True,
-        })}})
+        })}}]})
 
     mock_model(monkeypatch, draft, review)
     data = submit_and_analyze(client, login(client), json={"problem_id": "level2", "code": OVERWRITE})
@@ -648,7 +647,7 @@ def test_semantic_rejection_does_not_change_judge_or_retry(client, monkeypatch):
     assert data["judge"]["cases"][0]["actual_output"] == "100\n"
     assert len(drafts) == len(reviews) == 1
     assert model_facts(drafts[0])["student_code"] == OVERWRITE
-    facts = json.loads(reviews[0]["messages"][-1]["content"])
+    facts = model_facts(reviews[0])
     assert facts["student_code"] == OVERWRITE
     assert facts["failed_cases"][0]["actual_output"] == data["judge"]["cases"][0]["actual_output"]
 
@@ -657,12 +656,12 @@ def test_unsupported_specific_tag_is_saved_as_other(client, monkeypatch):
     def draft(request):
         content = sample_analysis()
         content['misconception_tag'] = 'range_boundary'
-        return httpx.Response(200, json={'done': True, 'message': {'content': json.dumps(content)}})
+        return httpx.Response(200, json={'choices': [{'finish_reason': 'stop', 'message': {'content': json.dumps(content)}}]})
 
     def review(request):
-        return httpx.Response(200, json={'done': True, 'message': {'content': json.dumps({
+        return httpx.Response(200, json={'choices': [{'finish_reason': 'stop', 'message': {'content': json.dumps({
             'issues': [], 'tag_supported': False,
-        })}})
+        })}}]})
 
     mock_model(monkeypatch, draft, review)
     headers = login(client)
@@ -677,7 +676,7 @@ def test_unsupported_specific_tag_is_saved_as_other(client, monkeypatch):
                                             ("slow", "timeout"), ("plain_503", "unavailable")])
 def test_unverified_analysis_is_not_displayed(client, monkeypatch, failure, expected):
     def draft(request):
-        return httpx.Response(200, json={"done": True, "message": {"content": json.dumps(sample_analysis())}})
+        return httpx.Response(200, json={'choices': [{'finish_reason': 'stop', 'message': {"content": json.dumps(sample_analysis())}}]})
 
     def review(request):
         if failure == "offline":
@@ -686,7 +685,7 @@ def test_unverified_analysis_is_not_displayed(client, monkeypatch, failure, expe
             raise httpx.ReadTimeout("review timed out")
         if failure == "plain_503":
             return httpx.Response(503, text="review unavailable")
-        return httpx.Response(200, json={"done": True, "message": {"content": "{}"}})
+        return httpx.Response(200, json={'choices': [{'finish_reason': 'stop', 'message': {"content": "{}"}}]})
 
     mock_model(monkeypatch, draft, review)
     data = submit_and_analyze(client, login(client), json={"problem_id": "level2", "code": OVERWRITE})
@@ -729,8 +728,8 @@ def test_real_judge_evidence_is_sent_to_model(client, monkeypatch, code, status,
         )
         if case["errors"]:
             content["suspected_cause"] = "疑似使用了没有定义的名字。"
-        assert payload["format"]["type"] == "object"
-        return httpx.Response(200, json={"done": True, "message": {"content": json.dumps(content)}})
+        assert request_schema(payload)["type"] == "object"
+        return httpx.Response(200, json={'choices': [{'finish_reason': 'stop', 'message': {"content": json.dumps(content)}}]})
 
     mock_model(monkeypatch, handler)
     data = submit_and_analyze(client, login(client), json={"problem_id": "level2", "code": code})
@@ -780,8 +779,7 @@ def test_analysis_failure_preserves_judging(client, monkeypatch, failure, expect
             content.pop("suspected_cause")
         if failure == "false_pass":
             content["suspected_cause"] = "判题已经通过所有测试。"
-        return httpx.Response(200, json={"done": True, "done_reason": "length" if failure == "truncated" else "stop",
-                                       "message": {"content": "not json" if failure == "invalid_json" else json.dumps(content)}})
+        return httpx.Response(200, json={'choices': [{'finish_reason': 'length' if failure == 'truncated' else 'stop', 'message': {"content": "not json" if failure == "invalid_json" else json.dumps(content)}}]})
 
     mock_model(monkeypatch, handler)
     data = submit_and_analyze(client, login(client), json={"problem_id": "level2", "code": OVERWRITE})
@@ -816,7 +814,7 @@ def test_output_analysis_receives_verdict_and_real_character_differences(client,
         content = sample_analysis()
         content.update(misconception_tag='other', suspected_cause='疑似输出文本的大小写和标点不符合要求。')
         content['evidence'][0].update(quote='Hello, world', explanation='实际输出与题目要求的文本不同。')
-        return httpx.Response(200, json={'done': True, 'message': {'content': json.dumps(content)}})
+        return httpx.Response(200, json={'choices': [{'finish_reason': 'stop', 'message': {'content': json.dumps(content)}}]})
 
     mock_model(monkeypatch, draft)
     code = '# 请让 Ottly 说出她的第一句话\nprint("Hello, world")'
@@ -863,7 +861,7 @@ def test_diagnosis_can_quote_the_students_existing_expression(client, monkeypatc
         content = sample_analysis()
         content["suspected_cause"] = "疑似 print(missing_total) 引用了尚未定义的变量。"
         content["evidence"][0].update(field="error_message", quote=facts["failed_cases"][0]["errors"][0]["message"])
-        return httpx.Response(200, json={"done": True, "message": {"content": json.dumps(content)}})
+        return httpx.Response(200, json={'choices': [{'finish_reason': 'stop', 'message': {"content": json.dumps(content)}}]})
     mock_model(monkeypatch, handler)
     data = submit_and_analyze(client, login(client), json={"problem_id": "level2", "code": "print(missing_total)"})
     assert data["analysis"]["status"] == "ready"
@@ -875,7 +873,7 @@ def test_empty_and_long_output_can_be_grounded(client, monkeypatch, code, quote)
     def handler(request):
         content = sample_analysis()
         content["evidence"][0]["quote"] = quote
-        return httpx.Response(200, json={"done": True, "message": {"content": json.dumps(content)}})
+        return httpx.Response(200, json={'choices': [{'finish_reason': 'stop', 'message': {"content": json.dumps(content)}}]})
     mock_model(monkeypatch, handler)
     data = submit_and_analyze(client, login(client), json={"problem_id": "level2", "code": code})
     assert data["analysis"]["status"] == "ready"

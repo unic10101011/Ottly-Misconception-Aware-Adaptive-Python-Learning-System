@@ -15,18 +15,23 @@ def chat_runtime(monkeypatch):
     monkeypatch.setattr(ai, 'active_chat_sessions', {})
     monkeypatch.setattr(ai, 'pending_chats', {})
     monkeypatch.setattr(ai, 'CHAT_RUNTIME_ID', 'boot-one')
-    monkeypatch.setattr(ai, 'LOCAL_LLM_URL', 'http://ollama.test/api/chat')
+    monkeypatch.setattr(ai.error_analysis, 'DEEPSEEK_API_KEY', 'test-chat-key')
+    monkeypatch.setattr(ai.error_analysis, 'DEEPSEEK_BASE_URL', 'https://deepseek.test')
     requests = []
 
     def reply(request):
         payload = json.loads(request.content)
+        assert str(request.url) == 'https://deepseek.test/chat/completions'
+        assert request.headers['Authorization'] == 'Bearer test-chat-key'
+        assert payload['model'] == 'deepseek-flash'
+        assert payload['thinking'] == {'type': 'disabled'}
         requests.append(payload)
         if payload['stream']:
-            return httpx.Response(200, text='\n'.join(json.dumps(item) for item in [
-                {'message': {'content': '保留'}, 'done': False},
-                {'message': {'content': '上下文。'}, 'done': True},
+            return httpx.Response(200, text='\n\n'.join('data: ' + json.dumps(item) for item in [
+                {'choices': [{'delta': {'content': '保留', 'reasoning_content': 'PRIVATE_REASONING'}, 'finish_reason': None}]},
+                {'choices': [{'delta': {'content': '上下文。'}, 'finish_reason': 'stop'}]},
             ]) + '\n')
-        return httpx.Response(200, json={'message': {'content': '保留上下文。'}, 'done': True})
+        return httpx.Response(200, json={'choices': [{'message': {'content': '保留上下文。', 'reasoning_content': 'PRIVATE_REASONING'}, 'finish_reason': 'stop'}]})
 
     real_client = httpx.AsyncClient
     transport = httpx.MockTransport(reply)
@@ -48,7 +53,8 @@ def test_returning_restores_current_session_and_model_keeps_more_than_four_turns
     assert [item['content'] for item in restored['messages'][::2]] == [f'问题{i}' for i in range(6)]
     assert len(chat_runtime[-1]['messages']) == 12
     assert chat_runtime[-1]['messages'][1]['content'] == '问题0'
-    assert chat_runtime[-1]['options']['num_ctx'] == 8192
+    assert 'options' not in chat_runtime[-1]
+    assert chat_runtime[-1]['max_tokens'] == 450
     assert restored['pending'] is False
 
 
