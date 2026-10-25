@@ -7,7 +7,8 @@ from app.services.submission import JudgeResult
 
 def with_lesson_hints(lesson: Lesson, analysis: AnalysisResult, judge: JudgeResult) -> AnalysisResult:
     # Preserve cloud setup/service errors instead of disguising them as a ready diagnosis.
-    if judge.passed or analysis.status == 'ready' or error_analysis.ANALYSIS_PROVIDER == 'deepseek':
+    if (judge.passed or 0 < judge.passed_cases < judge.total_cases
+            or analysis.status == 'ready' or error_analysis.ANALYSIS_PROVIDER == 'deepseek'):
         return analysis
     if not any(slot.problem_id == lesson.problem_id for slot in LEVELS):
         return analysis

@@ -998,6 +998,12 @@ body.eye-protection {
 .practice-circle > span { display: grid; place-items: center; }
 .practice-circle-caption { color: #31566d; font-size: 13px; font-weight: 600; }
 .practice-back-button { margin-bottom: 14px; }
+.guidance-question { margin-top: 16px; padding: 16px; border: 1px solid #c7dfec; border-radius: 12px; background: #f4faff; }
+.guidance-question fieldset { margin: 0 0 12px; padding: 0; border: 0; }
+.guidance-question legend { margin-bottom: 10px; font-size: 16px; font-weight: 700; }
+.guidance-question label { display: flex; align-items: flex-start; gap: 10px; min-height: 44px; padding: 10px 8px; cursor: pointer; }
+.guidance-question input { margin-top: 5px; flex-shrink: 0; }
+.guidance-question p[role="status"] { margin: 14px 0 0; }
 .practice-page .practice-statement h3 { margin: 0 0 12px; font-size: 22px; font-weight: 700; line-height: 1.4; }
 .practice-page .practice-statement p { margin: 0; font-size: 17px; line-height: 1.85; white-space: pre-line; }
 .practice-statement section + section { margin-top: 24px; }
