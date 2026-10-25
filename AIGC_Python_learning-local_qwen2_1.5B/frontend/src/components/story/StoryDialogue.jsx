@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { createStoryState, currentStoryNode, stepStory } from './storyEngine.mjs'
+import { askGuideQuestion } from '../codeApi.mjs'
 
 function useModal(ref) {
   useEffect(() => {
@@ -52,11 +53,27 @@ export default function StoryDialogue({ story, canSkip, onFinish, onSkip, onExit
   const [state, setState] = useState(() => createStoryState(story))
   const [progress, setProgress] = useState({ nodeId: null, count: 0 })
   const [historyOpen, setHistoryOpen] = useState(false)
+  const [question, setQuestion] = useState('')
+  const [asking, setAsking] = useState(false)
+  const [questionError, setQuestionError] = useState('')
+  const [answerOpen, setAnswerOpen] = useState(false)
+  const answerContent = useRef(null)
+  const questionRequest = useRef(null)
+  useEffect(() => () => { questionRequest.current = null }, [])
   const node = currentStoryNode(story, state)
   const text = state.history[state.history.length - 1].text
   const textKey = `${node.id}:${state.history.length}`
   const count = progress.nodeId === textKey ? progress.count : 0
   const revealed = count >= text.length
+  const canAskQuestion = node.type === 'choice' && node.options.every(option => state.heard.includes(option.id))
+  const expandedAnswer = canAskQuestion && (asking || answerOpen)
+
+  useEffect(() => {
+    if (expandedAnswer && !historyOpen) {
+      answerContent.current?.focus({ preventScroll: true })
+      if (answerContent.current) answerContent.current.scrollTop = 0
+    }
+  }, [expandedAnswer, asking, historyOpen])
 
   useEffect(() => {
     if (historyOpen) return
@@ -74,6 +91,36 @@ export default function StoryDialogue({ story, canSkip, onFinish, onSkip, onExit
 
   const act = action => {
     if (!historyOpen && revealed) setState(previous => stepStory(story, previous, action))
+  }
+  const ask = async event => {
+    event.preventDefault()
+    const value = question.trim()
+    if (!value || questionRequest.current || !canAskQuestion || answerOpen || historyOpen || !revealed) return
+    const request = {}
+    questionRequest.current = request
+    setAsking(true)
+    setQuestionError('')
+    const history = state.history.filter(entry => ['guide-question', 'guide-answer'].includes(entry.id)).slice(-10)
+      .map(entry => ({ role: entry.speaker === '我' ? 'user' : 'assistant', content: entry.text }))
+    try {
+      const result = await askGuideQuestion(story.problemId, value, history, localStorage.getItem('access_token'))
+      if (questionRequest.current !== request) return
+      setState(previous => stepStory(story, previous, { type: 'question-reply', question: value, answer: result.answer }))
+      setAnswerOpen(true)
+      setQuestion('')
+    } catch (error) {
+      if (questionRequest.current === request) setQuestionError(error.message)
+    } finally {
+      if (questionRequest.current === request) { questionRequest.current = null; setAsking(false) }
+    }
+  }
+  const continueStory = () => {
+    questionRequest.current = null
+    setAsking(false)
+    setAnswerOpen(false)
+    setQuestion('')
+    setQuestionError('')
+    act({ type: 'continue' })
   }
   const advance = () => {
     if (historyOpen) return
@@ -101,7 +148,7 @@ export default function StoryDialogue({ story, canSkip, onFinish, onSkip, onExit
       aria-label={node.type === 'quiz' ? '知识小测选项' : '想问的问题'}>
       {node.options.filter(option => node.type !== 'choice' || !state.heard.includes(option.id)).map(option => <button type="button"
         className={`story-option-strip${state.feedback?.optionId === option.id ? state.feedback.correct ? ' is-correct' : ' is-incorrect' : ''}`}
-        key={option.id} disabled={!revealed || historyOpen || Boolean(state.feedback)}
+        key={option.id} disabled={!revealed || historyOpen || asking || Boolean(state.feedback)}
         onClick={() => act({ type: node.type === 'quiz' ? 'answer' : 'choose', optionId: option.id })}>
         <span className="story-option-dots" aria-hidden="true">▪ ▪ ▪</span>
         <span>{option.text}</span>
@@ -109,22 +156,34 @@ export default function StoryDialogue({ story, canSkip, onFinish, onSkip, onExit
         <span className="story-option-corners" aria-hidden="true"><i /><i /></span>
       </button>)}
     </div>}
-    <section className="story-stage">
-      <img className="story-portrait" src="/story-assets/ottly-portrait-transparent.png" alt="小海獭 Ottly" />
+    <section className={`story-stage${expandedAnswer ? ' story-stage-answer' : ''}`}>
+      {!expandedAnswer && <img className="story-portrait" src="/story-assets/ottly-portrait-transparent.png" alt="小海獭 Ottly" />}
       <div className="story-frame-shadow" aria-hidden="true" />
-      <div className="story-frame" onClick={event => { if (!event.target.closest('button, a')) advance() }}>
+      <div className="story-frame" onClick={event => { if (!event.target.closest('button, a, form')) advance() }}>
         <div className="story-corner-squares" aria-hidden="true"><i /><i /></div>
         <div className="story-nameplate">Ottly</div>
         <div className="story-heading"><span id="story-title">第 {story.levelNo || 1} 关 · {story.title}</span><span>{story.knowledge}</span></div>
-        <div className="story-content">
-          <p className="story-copy" aria-hidden="true">{text.slice(0, count)}</p>
-          <p className="story-sr" aria-live="polite" aria-atomic="true">{text}</p>
+        <div className="story-content" ref={answerContent} tabIndex={expandedAnswer ? -1 : undefined} aria-label={expandedAnswer ? 'Ottly 的解答' : undefined}>
+          {asking ? <p className="story-copy" role="status">Ottly 正在思考，你也可以直接继续。</p> : <>
+            <p className="story-copy" aria-hidden="true">{text.slice(0, count)}</p>
+            <p className="story-sr" aria-live="polite" aria-atomic="true">{text}</p></>}
           {saveError && <p role="alert" className="story-save-error">{saveError}</p>}
         </div>
+        {canAskQuestion && !expandedAnswer && <form className="story-question-form" onSubmit={ask}>
+          <label htmlFor="story-question">向 Ottly 提问</label>
+          <div className="story-question-row"><input id="story-question" type="text" maxLength={1000}
+            placeholder="输入你对本关知识点的疑问…" value={question} disabled={asking || historyOpen}
+            onChange={event => setQuestion(event.target.value)} />
+            <button type="submit" disabled={!revealed || !question.trim() || asking || historyOpen}>{asking ? '正在解答…' : '发送问题'}</button></div>
+          {asking && <span role="status">Ottly 正在思考，你也可以直接继续。</span>}
+          {questionError && <span role="alert" className="story-save-error">{questionError}</span>}
+        </form>}
         <footer className="story-footer">
-          {node.type === 'choice' ? <><span>{state.heard.length ? '也可以再问一次，或继续挑战。' : '完整听完一个回答，就能继续。'}</span>
-            <button type="button" disabled={!revealed || state.heard.length < story.requiredQuestions}
-              onClick={() => act({ type: 'continue' })}>我明白了，继续</button></>
+          {node.type === 'choice' ? <><span>{expandedAnswer ? '读完后可以继续提问，或继续挑战。' : canAskQuestion ? '可以输入问题，也可以跳过提问继续。' : '选择一个想了解的问题，或直接继续。'}</span>
+            <div className="story-feedback-actions">{answerOpen && <button type="button" disabled={!revealed || historyOpen}
+              onClick={() => { setAnswerOpen(false); act({ type: 'question-done' }) }}>继续提问</button>}
+            <button type="button" disabled={!revealed || historyOpen}
+              onClick={continueStory}>我明白了，继续</button></div></>
             : node.type === 'quiz' ? <><span>{state.feedback ? state.feedback.correct ? '答对啦！理解之后再继续。' : '再想一想，可以重新选择。' : '选择屏幕中间的一项。'}</span>
               {state.feedback && (revealed ? state.feedback.correct
                 ? <button type="button" onClick={() => act({ type: 'quiz-next' })}>继续下一步</button>

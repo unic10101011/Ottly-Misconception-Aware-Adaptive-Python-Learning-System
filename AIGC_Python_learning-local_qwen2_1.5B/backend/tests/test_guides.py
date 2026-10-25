@@ -16,7 +16,7 @@ def test_guide_requires_auth_and_rejects_incomplete_or_wrong_answers(client):
     assert client.post('/api/v1/code/guides/level1/complete', headers=headers,
                        json={**payload, 'version': 'old-version'}).status_code == 422
     assert client.post('/api/v1/code/guides/level1/complete', headers=headers,
-                       json={**payload, 'heard': []}).status_code == 422
+                       json={**payload, 'heard': ['invalid-option']}).status_code == 422
     key = next(iter(payload['answers']))
     payload['answers'][key] = 'not-an-answer'
     assert client.post('/api/v1/code/guides/level1/complete', headers=headers, json=payload).status_code == 422
@@ -54,9 +54,8 @@ def test_every_formal_guide_can_finish_and_delete_account_clears_guide_rows(clie
     for pid, story in guides.GUIDES.items():
         data = client.get(f'/api/v1/code/guides/{pid}', headers=headers).json()['data']
         assert data['completed'] is False
-        heard = next(node['options'][0]['id'] for node in story['nodes'] if node['type'] == 'choice')
         response = client.post(f'/api/v1/code/guides/{pid}/complete', headers=headers, json={
-            'version': story['id'], 'heard': [heard],
+            'version': story['id'], 'heard': [],
             'answers': {node['id']: node['correct'] for node in story['nodes'] if node['type'] == 'quiz'},
         })
         assert response.status_code == 200, response.text

@@ -41,6 +41,103 @@ function find(tree, predicate) {
 }
 const button = (tree, text) => find(tree, node => node.type === 'button' && node.props.children === text)
 
+function hearPresetQuestion(render, props) {
+  find(render(props), node => node.props.className === 'story-frame').props.onClick({ target: { closest: () => null } })
+  assert.equal(find(render(props), node => node.type === 'input'), undefined, 'preset selection has no free question input')
+  const group = find(render(props), node => node.props['aria-label'] === '想问的问题')
+  React.Children.toArray(group.props.children)[0].props.onClick()
+  for (let step = 0; step < 20; step++) {
+    const tree = render(props)
+    const next = button(tree, 'NEXT →')
+    if (!next) return
+    assert.equal(find(tree, node => node.type === 'input'), undefined, 'preset explanation has no free question input')
+    next.props.onClick()
+  }
+  assert.fail('preset question should return to the question menu')
+}
+
+test('all twelve guides keep preset options and show input only after all preset explanations', async () => {
+  const stories = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../backend/app/data/guides/catalog.json'), 'utf8'))
+  const engine = await import('../src/components/story/storyEngine.mjs')
+  for (const source of Object.values(stories)) {
+    for (const node of source.nodes) {
+      const render = harness('../src/components/story/StoryDialogue.jsx', { './storyEngine.mjs': engine })
+      assert.equal(find(render({ story: { ...source, start: node.id } }), item => item.type === 'input'), undefined)
+    }
+    const story = { ...source, start: source.nodes.find(node => node.type === 'choice').id }
+    const props = { story, canSkip: false }
+    const render = harness('../src/components/story/StoryDialogue.jsx', { './storyEngine.mjs': engine })
+    hearPresetQuestion(render, props)
+    assert.equal(find(render(props), node => node.type === 'input'), undefined)
+    assert.ok(find(render(props), node => node.props['aria-label'] === '想问的问题'))
+    assert.notEqual(find(render(props), node => node.props.className === 'story-sr').props.children, '还有想问的吗？也可以继续。')
+    hearPresetQuestion(render, props)
+    assert.ok(find(render(props), node => node.type === 'input'), source.problemId)
+    assert.equal(find(render(props), node => node.props.className === 'story-sr').props.children, '还有想问的吗？也可以继续。')
+  }
+})
+
+test('free questions reject blanks, show replies, retry errors and ignore late replies after continuing', async () => {
+  const source = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../backend/app/data/guides/catalog.json'), 'utf8')).level1
+  const engine = await import('../src/components/story/storyEngine.mjs')
+  const story = { ...source, start: source.nodes.find(node => node.type === 'choice').id }
+  let resolve, reject, calls = 0
+  const render = harness('../src/components/story/StoryDialogue.jsx', {
+    './storyEngine.mjs': engine,
+    '../codeApi.mjs': { askGuideQuestion: (pid, question, history, token) => {
+      calls++; assert.equal(pid, 'level1'); assert.equal(token, 'test-token')
+      return new Promise((yes, no) => { resolve = yes; reject = no })
+    } },
+  })
+  const props = { story, canSkip: false }
+  const reveal = () => find(render(props), node => node.props.className === 'story-frame').props.onClick({ target: { closest: () => null } })
+  const input = () => find(render(props), node => node.type === 'input')
+  const send = () => find(render(props), node => node.type === 'form').props.onSubmit({ preventDefault() {} })
+  const originalStorage = global.localStorage
+  global.localStorage = { getItem: () => 'test-token' }
+  try {
+    hearPresetQuestion(render, props)
+    hearPresetQuestion(render, props)
+    reveal()
+    await send()
+    assert.equal(calls, 0)
+    input().props.onChange({ target: { value: '引号有什么作用？' } })
+    const submit = find(render(props), node => node.type === 'form').props.onSubmit
+    let pending = send()
+    await submit({ preventDefault() {} })
+    assert.equal(calls, 1, 'duplicate submits are blocked')
+    assert.equal(input(), undefined, 'input is hidden while answering')
+    assert.ok(find(render(props), node => node.props.className === 'story-stage story-stage-answer'))
+    assert.equal(find(render(props), node => node.props.className === 'story-portrait'), undefined)
+    reject(new Error('服务繁忙'))
+    await pending
+    assert.equal(input().props.value, '引号有什么作用？')
+    assert.ok(find(render(props), node => node.props.role === 'alert'))
+    pending = send()
+    resolve({ answer: '引号用来标记字符串。' })
+    await pending
+    reveal()
+    assert.equal(find(render(props), node => node.props.className === 'story-copy').props.children, '引号用来标记字符串。')
+    assert.ok(find(render(props), node => node.props.className === 'story-stage story-stage-answer'), 'answer remains expanded until the reader is done')
+    assert.equal(input(), undefined)
+    button(render(props), '继续提问').props.onClick()
+    reveal()
+    assert.ok(find(render(props), node => node.props.className === 'story-portrait'))
+    assert.ok(find(render(props), node => node.props.className === 'story-stage'))
+    assert.equal(find(render(props), node => node.props.className === 'story-copy').props.children, '还有想问的吗？也可以继续。')
+    assert.equal(input().props.value, '')
+    input().props.onChange({ target: { value: '再举个例子' } })
+    pending = send()
+    assert.equal(button(render(props), '我明白了，继续').props.disabled, false)
+    button(render(props), '我明白了，继续').props.onClick()
+    resolve({ answer: '迟到的回答' })
+    await pending
+    reveal()
+    assert.notEqual(find(render(props), node => node.props.className === 'story-copy').props.children, '迟到的回答')
+    assert.equal(input(), undefined)
+  } finally { if (originalStorage === undefined) delete global.localStorage; else global.localStorage = originalStorage }
+})
+
 test('quiz keeps all options visible during explanation, marks only the selected answer and locks further answers', async () => {
   const source = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../backend/app/data/guides/catalog.json'), 'utf8')).level1
   const engine = await import('../src/components/story/storyEngine.mjs')

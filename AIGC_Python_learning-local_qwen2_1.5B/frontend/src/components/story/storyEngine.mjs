@@ -4,7 +4,7 @@ export function currentStoryNode(story, state) {
 
 function enterNode(story, state, id) {
   const node = story.nodes.find(item => item.id === id)
-  const text = node.type === 'choice' && state.heard.length
+  const text = node.type === 'choice' && node.options.every(option => state.heard.includes(option.id))
     ? '还有想问的吗？也可以继续。' : node.text
   return { ...state, nodeId: id, feedback: null,
     history: [...state.history, { id: node.id, speaker: node.speaker, text }] }
@@ -27,7 +27,13 @@ export function stepStory(story, state, action) {
     return enterNode(story, { ...state,
       history: [...state.history, { id: option.id, speaker: '我', text: option.text }] }, option.next)
   }
-  if (action.type === 'continue' && node.type === 'choice' && state.heard.length >= story.requiredQuestions) {
+  if (action.type === 'question-reply' && node.type === 'choice') {
+    return { ...state, history: [...state.history,
+      { id: 'guide-question', speaker: '我', text: action.question },
+      { id: 'guide-answer', speaker: 'Ottly', text: action.answer }] }
+  }
+  if (action.type === 'question-done' && node.type === 'choice') return enterNode(story, state, node.id)
+  if (action.type === 'continue' && node.type === 'choice') {
     return enterNode(story, state, node.next)
   }
   if (node.type === 'quiz') {
@@ -46,7 +52,7 @@ export function stepStory(story, state, action) {
     }
     if (action.type === 'quiz-next' && state.feedback?.correct) return enterNode(story, state, node.next)
   }
-  if (action.type === 'finish' && node.type === 'end' && state.heard.length >= story.requiredQuestions) {
+  if (action.type === 'finish' && node.type === 'end') {
     if (story.nodes.some(item => item.type === 'quiz' && state.answers[item.id] !== item.correct)) return state
     return { ...state, complete: true }
   }

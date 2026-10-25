@@ -160,6 +160,10 @@ export function getGuide(problemId, token) {
   return requestLearningHistory(`/code/guides/${encodeURIComponent(problemId)}`, 'GET', token)
 }
 
+export function askGuideQuestion(problemId, question, history, token) {
+  return requestLearningHistory(`/code/guides/${encodeURIComponent(problemId)}/question`, 'POST', token, { question, history }, 65000)
+}
+
 export function completeGuide(problemId, version, heard, answers, token) {
   return requestLearningHistory(`/code/guides/${encodeURIComponent(problemId)}/complete`, 'POST', token, { version, heard, answers })
 }

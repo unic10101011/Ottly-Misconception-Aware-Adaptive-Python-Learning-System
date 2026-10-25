@@ -1,6 +1,27 @@
 const test = require('node:test')
 const assert = require('node:assert/strict')
 
+test('all twelve guides can skip questions, keep AI replies in history and still require quizzes', async () => {
+  const stories = JSON.parse(require('node:fs').readFileSync(require('node:path').resolve(__dirname, '../../backend/app/data/guides/catalog.json'), 'utf8'))
+  const { createStoryState, stepStory, currentStoryNode } = await import('../src/components/story/storyEngine.mjs')
+  for (const story of Object.values(stories)) {
+    let state = createStoryState(story)
+    while (currentStoryNode(story, state).type === 'line') state = stepStory(story, state, { type: 'next' })
+    const reply = stepStory(story, state, { type: 'question-reply', question: '为什么？', answer: '举个小例子。' })
+    assert.deepEqual(reply.history.slice(-2).map(entry => entry.text), ['为什么？', '举个小例子。'])
+    assert.equal(reply.nodeId, state.nodeId)
+    state = stepStory(story, state, { type: 'continue' })
+    while (currentStoryNode(story, state).type === 'line') state = stepStory(story, state, { type: 'next' })
+    assert.equal(stepStory(story, state, { type: 'finish' }).complete, false)
+    while (currentStoryNode(story, state).type === 'quiz') {
+      state = stepStory(story, state, { type: 'answer', optionId: currentStoryNode(story, state).correct })
+      state = stepStory(story, state, { type: 'quiz-next' })
+    }
+    assert.equal(stepStory(story, state, { type: 'finish' }).complete, true)
+    assert.deepEqual(state.heard, [])
+  }
+})
+
 async function setup() {
   const story = JSON.parse(require('node:fs').readFileSync(require('node:path').resolve(__dirname, '../../backend/app/data/guides/catalog.json'), 'utf8')).level1
   const { createStoryState, stepStory, currentStoryNode } = await import('../src/components/story/storyEngine.mjs')
@@ -24,12 +45,12 @@ test('story uses valid stable nodes for the formal first lesson and does not rev
   assert.equal(state.complete, false)
 })
 
-test('a first question must be fully heard before continuing and both questions remain available', async () => {
+test('questions are optional and both preset questions remain available', async () => {
   const { story, createStoryState, stepStory, currentStoryNode } = await setup()
   let state = createStoryState(story)
   while (currentStoryNode(story, state).type === 'line') state = stepStory(story, state, { type: 'next' })
   const menuId = state.nodeId
-  assert.equal(stepStory(story, state, { type: 'continue' }), state)
+  assert.notEqual(stepStory(story, state, { type: 'continue' }).nodeId, state.nodeId)
   assert.equal(stepStory(story, state, { type: 'next' }), state)
   assert.equal(stepStory(story, state, { type: 'finish' }), state)
   const options = currentStoryNode(story, state).options
