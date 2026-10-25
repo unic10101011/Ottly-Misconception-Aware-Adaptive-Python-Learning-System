@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import SubmissionFeedback from '../components/SubmissionFeedback.jsx'
 import ProblemMetadata from '../components/ProblemMetadata.jsx'
 import StatusStamp from '../components/StatusStamp.jsx'
+import PythonEditor from '../components/PythonEditor.jsx'
 import { knowledgeName, questionKnowledgeIds, mistakeOverviewUrl } from '../components/mistakeGrouping.mjs'
 import { getLearningHistory, getMistakeQuestions, getKnowledge, requestAnalysis, requestCode } from '../components/codeApi.mjs'
 
@@ -236,8 +237,8 @@ function MistakeDetail() {
             </div>
             <div className="mistake-code-pane">
               <div className="mistake-code-title"><span>Python 代码</span></div>
-              <textarea aria-label="复习代码编辑器" className="mistake-code-input" spellCheck={false}
-                value={code} readOnly={busy} maxLength={6000} onChange={event => editCode(event.target.value)} />
+              <PythonEditor label="复习代码编辑器" className="mistake-code-editor" height={290}
+                value={code} readOnly={busy} documentId={selectedId} onChange={editCode} />
               <div className="lesson-input">
                 <label htmlFor="review-stdin">运行输入（每次 input 读取一行）</label>
                 <textarea id="review-stdin" value={stdin} readOnly={busy} maxLength={8000} rows={3}

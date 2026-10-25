@@ -8,6 +8,12 @@ const fs = require('node:fs')
 const Module = require('node:module')
 const { pathToFileURL } = require('node:url')
 
+// Page tests exercise state and requests; the real editor configuration and
+// keyboard interactions are covered in dedicated configuration and DOM tests.
+const PythonEditorStub = React.forwardRef(({ value, onChange, readOnly, label = 'Python 代码编辑器', className }, ref) =>
+  React.createElement('textarea', { ref, value, readOnly, className, 'aria-label': label,
+    onChange: event => onChange(event.target.value) }))
+
 function loadJsx(file, overrides = {}) {
   const filename = path.resolve(__dirname, file)
   const compiled = transformSync(fs.readFileSync(filename, 'utf8'), { loader: 'jsx', format: 'cjs', define: { 'import.meta.url': JSON.stringify(pathToFileURL(filename).href) } })
@@ -16,6 +22,7 @@ function loadJsx(file, overrides = {}) {
   loaded.paths = Module._nodeModulePaths(path.dirname(filename))
   const nativeRequire = loaded.require.bind(loaded)
   loaded.require = id => Object.hasOwn(overrides, id) ? overrides[id]
+    : id.endsWith('/PythonEditor.jsx') ? PythonEditorStub
     : id === './PracticeRecommendationModal.jsx' ? { default: () => null } : nativeRequire(id)
   loaded._compile(compiled.code, filename)
   return loaded.exports.default
@@ -647,7 +654,7 @@ test('Ottly entry waits for diagnosis, opens on demand, and ignores results afte
     await find(tree, 'btn-submit').props.onClick()
     tree = render()
     assert.equal(find(tree, 'ottly-diagnosis'), undefined)
-    find(tree, 'code-textarea').props.onChange({ target: { value: 'print(5050)' } })
+    find(tree, 'code-input-editor').props.onChange('print(5050)')
     pending[1]({ analysis: failure.analysis })
     await new Promise(resolve => setImmediate(resolve))
     assert.equal(find(render(), 'ottly-diagnosis'), undefined, 'late diagnosis cannot reappear after an edit')
@@ -1270,7 +1277,7 @@ test('corrected-pass recommendations preserve the verdict, support skipping and 
       } else {
         assert.deepEqual(requests, [[81, 'student-token']])
         assert.match(renderToStaticMarkup(tree), /Ottly正在挑选加练题/)
-        if (action === 'edit') find(tree, node => node.props.className === 'code-textarea').props.onChange({ target: { value: 'print(4)' } })
+        if (action === 'edit') find(tree, node => node.props.className === 'code-input-editor').props.onChange('print(4)')
         if (action === 'unmount') cleanups.forEach(fn => fn())
         resolveRecommendation(action === 'unavailable' ? { status: 'unavailable' } : { status: 'ready', recommendation: selected })
         await new Promise(resolve => setImmediate(resolve))

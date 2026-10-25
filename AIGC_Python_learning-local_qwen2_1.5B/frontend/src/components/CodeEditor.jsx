@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import SubmissionFeedback from './SubmissionFeedback.jsx'
 import PracticeRecommendationModal from './PracticeRecommendationModal.jsx'
+import PythonEditor from './PythonEditor.jsx'
 import { requestCode, requestAnalysis, requestPracticeRecommendation } from './codeApi.mjs'
 import { readCodeDraft, saveCodeDraft } from './codeDraft.mjs'
 
@@ -18,14 +19,12 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, tit
   const [submission, setSubmission] = useState(null)
   const [authRequired, setAuthRequired] = useState(false)
   const [modal, setModal] = useState({ show: false, type: 'info', title: '', message: '' })
-  const [lineCount, setLineCount] = useState(1)
   const [showConfetti, setShowConfetti] = useState(false)
   const [contentTab, setContentTab] = useState('task')
   const [recommendation, setRecommendation] = useState(null)
   const [recommendationPending, setRecommendationPending] = useState(false)
 
-  const textareaRef = useRef(null)
-  const lineNumbersRef = useRef(null)
+  const editorRef = useRef(null)
   const canvasRef = useRef(null)
   const animationRef = useRef(null)
   const particlesRef = useRef([])
@@ -40,18 +39,6 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, tit
   const isPartialFailure = submission && !submission.judge.passed && submission.judge.passed_cases > 0
     && submission.judge.passed_cases < submission.judge.total_cases
   const analysisPending = submission && !submission.judge.passed && submission.analysis?.status === 'preparing'
-
-  // Update line numbers
-  useEffect(() => {
-    setLineCount(code.split('\n').length)
-  }, [code])
-
-  // Sync scroll
-  const handleScroll = () => {
-    if (lineNumbersRef.current && textareaRef.current) {
-      lineNumbersRef.current.scrollTop = textareaRef.current.scrollTop
-    }
-  }
 
   const updateCode = (value) => {
     if (busyRef.current) return
@@ -80,22 +67,6 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, tit
     if (submissionRef.current?.origin === 'run') {
       setSubmission(null)
       submissionRef.current = null
-    }
-  }
-
-  // Tab key handler
-  const handleKeyDown = (e) => {
-    if (busyRef.current) return
-    if (e.key === 'Tab') {
-      e.preventDefault()
-      const start = e.target.selectionStart
-      const end = e.target.selectionEnd
-      const newCode = code.substring(0, start) + '    ' + code.substring(end)
-      if (newCode.length > 6000) return
-      updateCode(newCode)
-      setTimeout(() => {
-        e.target.selectionStart = e.target.selectionEnd = start + 4
-      }, 0)
     }
   }
 
@@ -475,7 +446,7 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, tit
               disabled={busy} onClick={() => {
                 if (resetMode === 'clear' && !window.confirm('确定清空当前代码吗？')) return
                 updateCode(resetMode === 'clear' && problemId !== 'count-at-least-v1' ? '' : initialCode)
-                textareaRef.current?.focus()
+                editorRef.current?.focus()
               }}>
               <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
                 strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -484,29 +455,8 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, tit
             </button>}
           </div>
           <div className="code-editor-box">
-            <div className="code-line-numbers" ref={lineNumbersRef}>
-              {Array.from({ length: Math.max(lineCount, 1) }, (_, i) => (
-                <div key={i}>{i + 1}</div>
-              ))}
-            </div>
-            <textarea
-              ref={textareaRef}
-              className="code-textarea"
-              placeholder="在这里输入 Python 代码..."
-              value={code}
-              onChange={(e) => updateCode(e.target.value)}
-              aria-label="Python 代码编辑器"
-              readOnly={busy}
-              aria-busy={busy}
-              maxLength={6000}
-              wrap="off"
-              onScroll={handleScroll}
-              onKeyDown={handleKeyDown}
-              spellCheck={false}
-              autoComplete="off"
-              autoCorrect="off"
-              autoCapitalize="off"
-            />
+            <PythonEditor ref={editorRef} className="code-input-editor" value={code}
+              onChange={updateCode} readOnly={busy} documentId={`${userId}:${problemId}`} />
           </div>
 
           {draftError && <p className="draft-status" role="status">{draftError}</p>}

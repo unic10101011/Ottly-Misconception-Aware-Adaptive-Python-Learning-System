@@ -515,39 +515,6 @@ body.eye-protection {
   min-width: 0;
 }
 
-.code-line-numbers {
-  background: #1e1e1e;
-  padding: 12px 8px;
-  text-align: right;
-  user-select: none;
-  min-width: 36px;
-  font-family: 'Consolas', 'Monaco', monospace;
-  font-size: 14px;
-  line-height: 22px;
-  color: #858585;
-  overflow: hidden;
-}
-
-.code-textarea {
-  flex: 1;
-  min-width: 0;
-  background: transparent;
-  border: none;
-  outline: none;
-  color: #d4d4d4;
-  font-family: 'Consolas', 'Monaco', monospace;
-  font-size: 14px;
-  line-height: 22px;
-  padding: 12px;
-  resize: none;
-  height: 100%;
-  overflow: auto;
-}
-
-.code-textarea::placeholder {
-  color: #5a5a5a;
-}
-
 /* 输出区 */
 .output-box {
   margin-top: 12px;
@@ -810,7 +777,6 @@ body.eye-protection {
 .btn-hint:hover { background: #eff6ff; }
 .btn-hint:focus-visible { outline: 3px solid #83b9ed; outline-offset: 3px; }
 .analysis-evidence { margin-top: 12px; padding: 10px; background: #f5f8fb; border-radius: 8px; }
-.code-textarea[readonly] { opacity: 0.75; }
 
 /* 错题复习工作台 */
 .mistake-page { min-width: 0; color: #24394a; padding: 2px 4px 28px; }
@@ -879,9 +845,7 @@ body.eye-protection {
 .mistake-text-link { border: 0; background: none; color: #2571b6; font-size: 13px; padding: 0; cursor: pointer; }
 .mistake-code-pane { min-width: 0; padding: 24px; }
 .mistake-code-title { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; font-weight: 700; margin-bottom: 10px; }
-.mistake-code-input { display: block; width: 100%; min-height: 250px; resize: vertical; border: 1px solid #33445a; border-radius: 11px; background: #202b3a; color: #e9f3ff; padding: 17px; font: 14px/1.6 Consolas, Monaco, monospace; outline: none; }
-.mistake-code-input:focus { border-color: #69a8ee; box-shadow: 0 0 0 3px rgba(74, 144, 226, .16); }
-.mistake-code-input[readonly] { opacity: .75; }
+.mistake-code-editor { border: 1px solid #33445a; border-radius: 11px; }
 .mistake-actions { display: flex; justify-content: flex-end; gap: 9px; flex-wrap: wrap; margin-top: 12px; }
 .mistake-actions button, .mistake-pagination button { border-radius: 8px; padding: 9px 15px; cursor: pointer; font-weight: 700; }
 .mistake-primary-button { border: 1px solid #2c78c2; background: #3f8edc; color: #fff; }
@@ -1157,9 +1121,6 @@ button:disabled { cursor: not-allowed; }
 .code-reset-button:focus-visible { outline: 3px solid #f47b87; outline-offset: 2px; }
 .code-reset-button:disabled { opacity: .55; cursor: not-allowed; }
 .code-editor-box { height: 290px; border-radius: 0 0 13px 13px; background: #233446; }
-.code-line-numbers { background: #1c2c3c; }
-.code-textarea { color: #edf6fa; }
-.code-textarea:focus-visible { outline: 2px solid #6ab5db; outline-offset: -2px; }
 .code-buttons { justify-content: flex-start; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
 .code-buttons button { min-width: 130px; min-height: 45px; padding: 9px 22px; border-radius: 11px; font-size: 14px; font-weight: 800; transition: background-color .16s ease-out, box-shadow .16s ease-out, transform .16s ease-out; }
 .btn-run { border: 1px solid #a6cfe2; background: #edf8fc; color: #176c9a; }
