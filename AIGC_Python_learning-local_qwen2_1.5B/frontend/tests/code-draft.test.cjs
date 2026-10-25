@@ -59,3 +59,27 @@ test('deleting an account clears only that account drafts on this browser', asyn
     else delete global.localStorage
   }
 })
+
+test('level twelve removes the old untouched pass placeholder while preserving student code and input', async () => {
+  const { readCodeDraft, saveCodeDraft } = await import('../src/components/codeDraft.mjs')
+  const original = Object.getOwnPropertyDescriptor(global, 'localStorage')
+  const entries = new Map()
+  Object.defineProperty(global, 'localStorage', { configurable: true, value: {
+    getItem: key => entries.get(key) ?? null, setItem: (key, value) => entries.set(key, value),
+  } })
+  try {
+    const old = 'def count_at_least(scores, threshold):\n    # begin\n    pass\n    # end\n\nn = int(input())\n'
+    saveCodeDraft(1, 'count-at-least-v1', old, '0\n60\n')
+    assert.deepEqual(readCodeDraft(1, 'count-at-least-v1'), {
+      code: old.replace('    pass\n', '    \n'), stdin: '0\n60\n',
+    })
+    const written = old.replace('    pass\n', '    count = 0\n    for score in scores:\n        pass\n    return count\n')
+    saveCodeDraft(1, 'count-at-least-v1', written, 'my input')
+    assert.deepEqual(readCodeDraft(1, 'count-at-least-v1'), { code: written, stdin: 'my input' })
+    saveCodeDraft(1, 'practice-12-2-v1', old, '')
+    assert.equal(readCodeDraft(1, 'practice-12-2-v1').code, old)
+  } finally {
+    if (original) Object.defineProperty(global, 'localStorage', original)
+    else delete global.localStorage
+  }
+})

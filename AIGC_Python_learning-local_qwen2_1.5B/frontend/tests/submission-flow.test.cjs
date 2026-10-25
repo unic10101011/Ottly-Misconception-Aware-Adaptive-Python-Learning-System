@@ -16,7 +16,8 @@ function loadJsx(file, overrides = {}) {
   loaded.paths = Module._nodeModulePaths(path.dirname(filename))
   const nativeRequire = loaded.require.bind(loaded)
   loaded.require = id => Object.hasOwn(overrides, id) ? overrides[id]
-    : id === './PracticeRecommendationModal.jsx' ? { default: () => null } : nativeRequire(id)
+    : ['./PracticeRecommendationModal.jsx', '../components/EndlessChallengeModal.jsx'].includes(id)
+      ? { default: () => null } : nativeRequire(id)
   loaded._compile(compiled.code, filename)
   return loaded.exports.default
 }
@@ -1133,7 +1134,7 @@ test('practice map groups all twelve levels and opens only the clicked circle, p
     effects[1]()
     assert.deepEqual(calls, [], 'the overview must not automatically fetch the first question')
     const html = renderToStaticMarkup(tree)
-    assert.equal((html.match(/class="practice-map-level"/g) || []).length, 12)
+    assert.equal((html.match(/class="practice-map-level"/g) || []).length, 13)
     assert.equal((html.match(/class="practice-circle /g) || []).length, 36)
     assert.doesNotMatch(html, /QUESTION_TITLE_ONLY_IN_DETAIL|FOCUS_ONLY_IN_DETAIL|SELECTED_DETAIL/)
     assert.match(circle(tree, 1).props.className, /is-completed/)

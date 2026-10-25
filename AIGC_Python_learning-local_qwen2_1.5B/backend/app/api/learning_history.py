@@ -11,6 +11,7 @@ from app.models.learning_review import LearningReview
 from app.models.user import User
 from app.services.submission import PROBLEMS
 from app.services.problem_catalog import SCHEMA_VERSION
+from app.models.generated_problem import GeneratedProblem
 from app.services.learning_contract import contract_judge, submission_error, history_analysis, snapshot_fields, utc_iso
 from app.services.error_analysis import MISCONCEPTION_TAGS
 
@@ -94,6 +95,7 @@ def my_submissions(
 
 @router.get("/code/mistakes")
 def my_mistake_questions(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    generated_ids = {row[0] for row in db.query(GeneratedProblem.problem_id).filter_by(user_id=current_user.id)}
     attempts = db.query(LearningSubmission).filter(
         LearningSubmission.user_id == current_user.id,
     ).order_by(LearningSubmission.id.desc()).all()
@@ -129,7 +131,8 @@ def my_mistake_questions(current_user: User = Depends(get_current_user), db: Ses
             "problem_id": problem_id,
             "title": rows[0].problem_title,
             "description": rows[0].problem_description,
-            "source": ("加练题" if problem_id in PROBLEMS and PROBLEMS[problem_id].kind == 'practice'
+            "source": ("Ottly 出题" if problem_id in generated_ids else
+                       "加练题" if problem_id in PROBLEMS and PROBLEMS[problem_id].kind == 'practice'
                        else "系统关卡" if problem_id in PROBLEMS else "来源待题库提供"),
             "first_wrong_submission_id": failures[-1].id,
             "first_wrong_at": utc_iso(failures[-1].created_at),

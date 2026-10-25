@@ -2,20 +2,24 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate, useOutletContext, useSearchParams } from 'react-router-dom'
 import CodeEditor from '../components/CodeEditor.jsx'
 import { getLesson, getPractice, getSolution } from '../components/codeApi.mjs'
+import EndlessChallengeModal from '../components/EndlessChallengeModal.jsx'
 
-export default function PracticePage() {
+export default function PracticePage({ endless = false } = {}) {
   const navigate = useNavigate()
   const { userId } = useOutletContext()
   const [params, setParams] = useSearchParams()
   const requestedLevel = Number(params.get('level_no'))
   const hasRequestedLevel = Number.isInteger(requestedLevel) && requestedLevel >= 1 && requestedLevel <= 12
+  const requestedEndlessCategory = params.get('category') === 'endless'
   const [items, setItems] = useState([])
   const [lesson, setLesson] = useState(null)
   const [solution, setSolution] = useState(null)
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(true)
+  const [showEndless, setShowEndless] = useState(false)
 
   useEffect(() => {
+    if (endless) { setBusy(false); return }
     let active = true
     setBusy(true)
     getPractice(localStorage.getItem('access_token')).then(data => {
@@ -27,13 +31,15 @@ export default function PracticePage() {
       if (cause.status === 401) navigate('/auth')
     }).finally(() => { if (active) setBusy(false) })
     return () => { active = false }
-  }, [navigate])
+  }, [navigate, endless])
 
   const requestedId = params.get('problem_id')
   const activeItem = items.find(item => item.problem_id === requestedId && item.available
     && (!hasRequestedLevel || item.level_no === requestedLevel))
-  const activeId = activeItem?.problem_id || null
+  const activeId = endless ? requestedId : activeItem?.problem_id || null
   const levelNo = activeItem?.level_no
+  const isEndlessQuestion = endless || activeItem?.kind === 'endless'
+  const endlessItems = items.filter(item => item.kind === 'endless')
   const activeIdRef = useRef(activeId)
   activeIdRef.current = activeId
   const currentSolution = solution?.problem_id === activeId ? solution : null
@@ -43,6 +49,10 @@ export default function PracticePage() {
     : lesson?.description
 
   useEffect(() => {
+    if (!activeId && !busy && requestedEndlessCategory) {
+      document.getElementById('practice-endless')?.scrollIntoView({ block: 'start' })
+      return
+    }
     if (!activeId) {
       setLesson(null)
       return
@@ -65,7 +75,7 @@ export default function PracticePage() {
     if (!activeId && !busy && hasRequestedLevel) {
       document.getElementById(`practice-level-${requestedLevel}`)?.scrollIntoView({ block: 'start' })
     }
-  }, [activeId, busy, hasRequestedLevel, requestedLevel])
+  }, [activeId, busy, hasRequestedLevel, requestedLevel, requestedEndlessCategory])
 
   const showSolution = async () => {
     const requestedId = activeId
@@ -78,12 +88,16 @@ export default function PracticePage() {
   }
 
   return <div className="lesson-page practice-page">
-    {activeId && <button type="button" className="btn-hint practice-back-button"
-      onClick={() => setParams({ level_no: String(levelNo) })}>← 返回加练题库</button>}
+    {endless && <div className="endless-toolbar">
+      <button type="button" className="btn-hint" onClick={() => navigate('/app/practice?category=endless')}>← 返回题库</button>
+      <button type="button" className="btn-hint" onClick={() => setShowEndless(true)}>继续无尽挑战</button>
+    </div>}
+    {!endless && activeId && <button type="button" className="btn-hint practice-back-button"
+      onClick={() => setParams(activeItem?.kind === 'endless' ? { category: 'endless' } : { level_no: String(levelNo) })}>← 返回加练题库</button>}
     {busy && <p role="status">正在读取加练题库...</p>}
     {error && <p role="alert">{error}</p>}
     {!busy && requestedId && !activeId && <p role="alert">这道加练尚未解锁或不存在，请选择其他练习。</p>}
-    {!activeId && items.length > 0 && <div className="practice-map" aria-label="加练题库">
+    {!endless && !activeId && items.length > 0 && <div className="practice-map" aria-label="加练题库">
       <div className="practice-map-legend" aria-label="通关状态说明">
         <span><i className="practice-legend-dot is-pending" aria-hidden="true" />蓝色：未通关</span>
         <span><i className="practice-legend-dot is-completed" aria-hidden="true" />绿色：已通关</span>
@@ -93,7 +107,7 @@ export default function PracticePage() {
           aria-labelledby={`practice-heading-${number}`}>
           <h2 id={`practice-heading-${number}`}>第 {number} 关</h2>
           <ol className="practice-map-questions">
-            {items.filter(item => item.level_no === number).map((item, index) =>
+            {items.filter(item => item.kind !== 'endless' && item.level_no === number).map((item, index) =>
               <li className="practice-map-question" key={item.problem_id}>
                 <button type="button" className={`practice-circle ${item.completed ? 'is-completed' : 'is-pending'}`}
                   disabled={!item.available}
@@ -109,12 +123,28 @@ export default function PracticePage() {
               </li>)}
           </ol>
         </section>)}
+      <section className="practice-map-level" id="practice-endless" aria-labelledby="practice-heading-endless">
+        <h2 id="practice-heading-endless">无尽模式</h2>
+        {endlessItems.length === 0 && <p>还没有生成的题目。完成全部 12 关后，可以让 Ottly 出题。</p>}
+        <ol className="practice-map-questions">
+          {endlessItems.map((item, index) => <li className="practice-map-question" key={item.problem_id}>
+            <button type="button" className={`practice-circle ${item.completed ? 'is-completed' : 'is-pending'}`}
+              disabled={!item.available} title={item.title}
+              aria-label={`无尽模式，练习 ${index + 1}，${item.title}，${item.completed ? '已通过' : item.available ? '未通过' : '完成全部 12 关后解锁'}`}
+              onClick={() => { setError(''); setParams({ category: 'endless', problem_id: item.problem_id }) }}>
+              <span aria-hidden="true">{!item.available ? '🔒' : item.completed ? '✓' : index + 1}</span>
+            </button>
+            <span className="practice-circle-caption">练习 {index + 1}</span>
+          </li>)}
+        </ol>
+      </section>
     </div>}
     {activeId && !lesson && !error && <p role="status">正在加载题目...</p>}
     {lesson?.problem_id === activeId && <>
       <CodeEditor key={lesson.problem_id} userId={userId} initialCode={lesson.starter_code}
-        problemId={lesson.problem_id} title={`加练 · ${lesson.title}`}
-        acceptsInput={levelNo !== 1} persistentOutput allowReset sampleInput={lesson.examples[0]?.stdin || ''}
+        problemId={lesson.problem_id} title={`${isEndlessQuestion ? '无尽挑战' : '加练'} · ${lesson.title}`}
+        acceptsInput={isEndlessQuestion ? lesson.examples.some(example => example.stdin !== '') : levelNo !== 1}
+        persistentOutput allowReset sampleInput={lesson.examples[0]?.stdin || ''}
         teaching={lesson.teaching.map(item => <section className="lesson-teaching" key={item.title}>
           <h4>{item.title}</h4><p>{item.text}</p><pre>{item.example}</pre>
         </section>)}
@@ -133,10 +163,12 @@ export default function PracticePage() {
         </div>)}
       </CodeEditor>
       {lesson.completed && <section className="lesson-complete" aria-label="加练完成">
-        <h3>这道加练已通过</h3>
+        <h3>{isEndlessQuestion ? '这道挑战已通过' : '这道加练已通过'}</h3>
         {!currentSolution && <button type="button" className="btn-hint" onClick={showSolution}>查看参考解与解析</button>}
         {currentSolution && <><pre>{currentSolution.reference_solution}</pre><p>{currentSolution.solution_explanation}</p></>}
       </section>}
     </>}
+    {endless && !activeId && <p>点击“继续无尽挑战”选择一道题目。</p>}
+    {showEndless && <EndlessChallengeModal onClose={() => setShowEndless(false)} />}
   </div>
 }
