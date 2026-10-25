@@ -1,0 +1,96 @@
+{
+  "schema_version": "1.0.0",
+  "problem_id": "practice-08-5-v1",
+  "version": 1,
+  "level_no": 8,
+  "kind": "practice",
+  "target_misconception_tags": ["condition_error", "accumulation_error"],
+  "source_url": "https://exercism.org/tracks/python/exercises/sum-of-multiples",
+  "practice_focus": "循环内先用条件分支计算单个航段的分段耗能，再累加到总数；每段独立应用优惠。",
+  "title": "分段航行耗能",
+  "difficulty": 3,
+  "knowledge_ids": [
+    "K08",
+    "K03",
+    "K05",
+    "K07"
+  ],
+  "prerequisite_knowledge_ids": [
+    "K07",
+    "K03"
+  ],
+  "prerequisite_problem_ids": [
+    "coastal-markers-v1"
+  ],
+  "published": true,
+  "story": "Ottly 的电动小船分多个航段行驶。每个航段都从头计算耗能：前 5 个距离单位每单位消耗 2 格能量，超出 5 的部分每单位消耗 3 格能量。例如，一个长 6 单位的航段消耗 13 格能量。请计算全部航段的总耗能。",
+  "teaching": [
+    {
+      "title": "本题练习重点",
+      "text": "循环内先用条件分支计算单个航段的分段耗能，再累加到总数；每段独立应用优惠。",
+      "example": "先运行样例，再检查零值、边界和各分支的情况。"
+    }
+  ],
+  "description": "先输入航段数量 n（0–100），接下来 n 行每行输入一个航段距离 distance（0–100）。分别计算每个航段的耗能，再累加并输出一行整数总耗能。每个航段的前 5 单位优惠独立计算，不能先合并距离再计费。距离为 0 时耗能为 0；n 为 0 时输出 0。不附其他文字。",
+  "starter_code": "# 在这里编写 Python 代码\n",
+  "examples": [
+    {
+      "stdin": "3\n4\n5\n6\n",
+      "stdout": "31\n"
+    }
+  ],
+  "tests": [
+    {
+      "case_id": "sample-1",
+      "stdin": "3\n4\n5\n6\n",
+      "expected_output": "31\n",
+      "visibility": "public"
+    },
+    {
+      "case_id": "hidden-1",
+      "stdin": "0\n",
+      "expected_output": "0\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-2",
+      "stdin": "1\n0\n",
+      "expected_output": "0\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-3",
+      "stdin": "1\n5\n",
+      "expected_output": "10\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-4",
+      "stdin": "1\n6\n",
+      "expected_output": "13\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-5",
+      "stdin": "2\n6\n6\n",
+      "expected_output": "26\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-6",
+      "stdin": "2\n100\n100\n",
+      "expected_output": "590\n",
+      "visibility": "hidden"
+    }
+  ],
+  "comparison": "exact",
+  "time_limit_seconds": 3,
+  "output_limit_chars": 8000,
+  "hints": {
+    "level1": "单个航段的前一部分和超出部分分别怎样计算？",
+    "level2": "在循环内先算当前航段耗能，再把它加入总数。",
+    "level3": "用两个长度都为 6 的航段检查，确认前 5 单位优惠分别计算了两次。"
+  },
+  "reference_solution": "n = int(input())\ntotal = 0\n\nfor i in range(n):\n    distance = int(input())\n\n    if distance <= 5:\n        cost = distance * 2\n    else:\n        cost = 10 + (distance - 5) * 3\n\n    total = total + cost\n\nprint(total)\n",
+  "solution_explanation": "距离不超过 5 时，每单位均按 2 计算。超过 5 时，前 5 单位固定消耗 10，再加超出部分的三倍。每轮只计算当前航段的 cost，并更新 total；不能将所有距离先相加后只应用一次分段规则。"
+}

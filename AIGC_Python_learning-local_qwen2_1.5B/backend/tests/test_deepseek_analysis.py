@@ -48,6 +48,13 @@ def cloud_reply(request, observed):
     observed.append(facts)
     if 'candidate' in facts:
         return completion({'tag_supported': True, 'issues': []})
+    if 'public_cases' in facts:
+        lesson = PROBLEMS[facts['problem']['problem_id']]
+        return completion({
+            'hint': '先对照题目要求，检查代码是否处理了不同输入。',
+            'knowledge_points': [KNOWLEDGE[lesson.knowledge_ids[0]].name],
+            'question': None,
+        })
     name_error = any(error['type'] == 'NameError' for case in facts['failed_cases'] for error in case['errors'])
     lesson = PROBLEMS.get(facts['problem']['problem_id'])
     knowledge_id = lesson.knowledge_ids[0] if lesson else 'K02' if name_error else 'K01'
@@ -63,10 +70,12 @@ def cloud_reply(request, observed):
 
 def test_cloud_diagnosis_and_review_cover_all_twelve_lessons_and_practice(client, monkeypatch, deepseek):
     from app.services.submission import PROBLEMS
+    from app.services.problem_catalog import KNOWLEDGE
     observed = []
     install_cloud(monkeypatch, lambda request: cloud_reply(request, observed))
     headers = login(client)
     cases = json.loads((Path(__file__).parent / 'data/global_analysis_cases.json').read_text(encoding='utf-8'))
+    expected_calls = 0
     for case in cases:
         lesson = PROBLEMS[case['problem_id']]
         code = case.get('code') or lesson.reference_solution.replace(*case['replace'], 1)
@@ -74,19 +83,32 @@ def test_cloud_diagnosis_and_review_cover_all_twelve_lessons_and_practice(client
         assert data['analysis']['status'] == 'ready', data['analysis']
         assert data['analysis']['source'] == 'ai'
         assert data['analysis']['model'] == 'deepseek-flash'
-        assert data['analysis']['content']['knowledge_ids'] == lesson.knowledge_ids[:1]
         assert data['analysis']['timings']['model_load_ms'] == 0
-        assert observed[-2]['execution_mode'] == 'submit'
-        assert observed[-2]['problem']['problem_id'] == lesson.problem_id
-        assert 'candidate' in observed[-1], 'review must also use the cloud model'
-        assert 'reference_solution' not in observed[-2]['problem']
+        partial = 0 < data['judge']['passed_cases'] < data['judge']['total_cases']
+        if partial:
+            expected_calls += 1
+            assert data['analysis']['feedback_kind'] == 'guidance'
+            assert data['analysis']['content'] is None
+            assert data['analysis']['guidance']['knowledge_points'] == [KNOWLEDGE[lesson.knowledge_ids[0]].name]
+            facts = observed[-1]
+            assert 'public_cases' in facts
+        else:
+            expected_calls += 2
+            assert data['analysis']['feedback_kind'] == 'diagnosis'
+            assert data['analysis']['content']['knowledge_ids'] == lesson.knowledge_ids[:1]
+            facts = observed[-2]
+            assert facts['execution_mode'] == 'submit'
+            assert 'candidate' in observed[-1], 'diagnosis review must also use the cloud model'
+        assert facts['problem']['problem_id'] == lesson.problem_id
+        assert 'reference_solution' not in facts['problem']
         public_ids = {test.case_id for test in lesson.tests if test.visibility == 'public'}
-        assert all(item['case_id'] in public_ids for item in observed[-2]['allowed_evidence'])
+        assert all(item['case_id'] in public_ids for item in facts.get('allowed_evidence', []))
+        assert 'hidden-' not in json.dumps(facts)
         assert 'PRIVATE_REASONING' not in json.dumps(data)
         assert client.post('/api/v1/code/submit', headers=headers, json={
             'problem_id': lesson.problem_id, 'code': lesson.reference_solution,
         }).json()['data']['judge']['passed']
-    assert len(observed) == 24
+    assert len(observed) == expected_calls
     practice = PROBLEMS['practice-01-1-v1']
     data = submit_and_analyze(client, headers, json={'problem_id': practice.problem_id, 'code': 'print("wrong")'})
     assert data['analysis']['model'] == 'deepseek-flash'

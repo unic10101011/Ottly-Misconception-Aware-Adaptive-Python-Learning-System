@@ -1,0 +1,106 @@
+{
+  "schema_version": "1.0.0",
+  "problem_id": "practice-06-6-v1",
+  "version": 1,
+  "level_no": 6,
+  "kind": "practice",
+  "target_misconception_tags": ["condition_error"],
+  "source_url": "https://exercism.org/tracks/python/exercises/ghost-gobble-arcade-game",
+  "practice_focus": "先计算总价，再用括号组合 and、or、not；会员条件不能绕过最低消费与特价限制。",
+  "title": "优惠券核验",
+  "difficulty": 3,
+  "knowledge_ids": [
+    "K06",
+    "K03",
+    "K05"
+  ],
+  "prerequisite_knowledge_ids": [
+    "K05"
+  ],
+  "prerequisite_problem_ids": [
+    "badge-v1"
+  ],
+  "published": true,
+  "story": "Ottly 在海边商店买东西，准备使用一张优惠券。商店规定，商品总价至少为 50，顾客是会员或者商品总价至少为 100，并且本单商品没有参加特价活动，才可以使用。每次订单只购买一种商品，请判断优惠券能否使用。",
+  "teaching": [
+    {
+      "title": "本题练习重点",
+      "text": "先计算总价，再用括号组合 and、or、not；会员条件不能绕过最低消费与特价限制。",
+      "example": "先运行样例，再检查零值、边界和各分支的情况。"
+    }
+  ],
+  "description": "依次输入四个整数，每项单独一行：商品单价 price（1–100）、购买数量 quantity（0–100）、会员标记 member（1 表示会员，0 表示非会员）、特价标记 sale（1 表示特价，0 表示非特价）。总价为单价乘数量，按使用优惠券前的金额判断。同时满足总价至少 50、是会员或总价至少 100、不是特价商品时输出 VALID，否则输出 INVALID。只输出一行，不附其他文字。",
+  "starter_code": "# 在这里编写 Python 代码\n",
+  "examples": [
+    {
+      "stdin": "10\n6\n1\n0\n",
+      "stdout": "VALID\n"
+    }
+  ],
+  "tests": [
+    {
+      "case_id": "sample-1",
+      "stdin": "10\n6\n1\n0\n",
+      "expected_output": "VALID\n",
+      "visibility": "public"
+    },
+    {
+      "case_id": "hidden-1",
+      "stdin": "7\n7\n1\n0\n",
+      "expected_output": "INVALID\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-2",
+      "stdin": "10\n5\n1\n0\n",
+      "expected_output": "VALID\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-3",
+      "stdin": "10\n5\n0\n0\n",
+      "expected_output": "INVALID\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-4",
+      "stdin": "1\n99\n0\n0\n",
+      "expected_output": "INVALID\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-5",
+      "stdin": "10\n10\n0\n0\n",
+      "expected_output": "VALID\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-6",
+      "stdin": "10\n10\n1\n1\n",
+      "expected_output": "INVALID\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-7",
+      "stdin": "100\n0\n1\n0\n",
+      "expected_output": "INVALID\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-8",
+      "stdin": "100\n100\n0\n0\n",
+      "expected_output": "VALID\n",
+      "visibility": "hidden"
+    }
+  ],
+  "comparison": "exact",
+  "time_limit_seconds": 3,
+  "output_limit_chars": 8000,
+  "hints": {
+    "level1": "哪些要求必须同时满足，哪两个要求满足一个就够？",
+    "level2": "先保存商品总价，再把会员或达到较高金额这一组条件括起来。",
+    "level3": "分别检查总价 49、50、99、100，以及会员购买特价商品的情况。"
+  },
+  "reference_solution": "price = int(input())\nquantity = int(input())\nmember = int(input())\nsale = int(input())\n\ntotal = price * quantity\n\nif total >= 50 and (member == 1 or total >= 100) and not sale == 1:\n    print(\"VALID\")\nelse:\n    print(\"INVALID\")\n",
+  "solution_explanation": "先计算 total。最低总价与非特价要求必须成立；会员或达到 100 的总价二者满足其一即可，用括号作为一组。会员未满 50 仍不合格，特价商品无论金额多少均不合格。"
+}

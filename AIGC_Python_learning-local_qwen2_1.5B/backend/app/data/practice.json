@@ -1,368 +1,1850 @@
 [
   {
-    "problem_id":"practice-01-1-v1","level_no":1,
-    "difficulty":1,"target_misconception_tags":["other"],
-    "title":"灯塔口令","focus":"练习 print、字符串引号以及标点和空格的精确输出。",
-    "description":"无需输入。只输出一行 Hello, Ottly!。逗号后一个空格，末尾英文感叹号，不输出其他文字。",
-    "sample":{"stdin":"","stdout":"Hello, Ottly!\n"},"hidden":[],
-    "reference_solution":"print('Hello, Ottly!')\n","wrong_solution":"print('Hello, Ottly')\n",
-    "solution_explanation":"用英文引号括住要显示的整段文字，print 会在末尾自动换行。感叹号也属于输出内容。",
-    "source_url":"https://exercism.org/tracks/python/exercises/hello-world"
+    "problem_id": "practice-01-1-v1",
+    "level_no": 1,
+    "title": "灯塔口令",
+    "focus": "练习 print、字符串引号以及标点和空格的精确输出。",
+    "description": "本题无需输入。\n使用 print 输出一行 Hello, Ottly!，注意大小写：逗号后有一个空格，末尾有英文感叹号。\n不要输出引号、额外空行或其他提示文字。",
+    "sample": {
+      "stdin": "",
+      "stdout": "Hello, Ottly!\n"
+    },
+    "hidden": [],
+    "reference_solution": "print('Hello, Ottly!')\n",
+    "wrong_solution": "print('Hello, Ottly')\n",
+    "solution_explanation": "用英文引号括住要显示的整段文字，print 会在末尾自动换行。感叹号也属于输出内容。",
+    "source_url": "https://exercism.org/tracks/python/exercises/hello-world",
+    "story": "夜幕降临，Ottly 第一次来到灯塔值班。她要让屏幕显示一句约定好的欢迎口令，告诉伙伴灯塔已经准备就绪。口令中的空格和标点都是约定的一部分，请帮她准确显示。",
+    "difficulty": 1,
+    "target_misconception_tags": [
+      "other"
+    ]
   },
   {
-    "problem_id":"practice-01-2-v1","level_no":1,
-    "difficulty":1,"target_misconception_tags":["other"],
-    "title":"两行广播","focus":"练习两次 print 的换行，不把两行拼成一行。",
-    "description":"无需输入。第一行输出 Sea，第二行输出 Otter；除此之外不输出任何内容。",
-    "sample":{"stdin":"","stdout":"Sea\nOtter\n"},"hidden":[],
-    "reference_solution":"print('Sea')\nprint('Otter')\n","wrong_solution":"print('Sea Otter')\n",
-    "solution_explanation":"两次调用 print，每次默认在结尾换行，所以两个词分别在一行。",
-    "source_url":"https://github.com/alexmojaki/futurecoder/blob/main/core/chapters/c02_string_basics.py"
+    "problem_id": "practice-01-2-v1",
+    "level_no": 1,
+    "title": "两行广播",
+    "focus": "练习两次 print 的换行，不把两行拼成一行。",
+    "description": "本题无需输入。\n第一行输出 Sea，第二行输出 Otter，注意首字母大写。\n两个单词不能放在同一行，也不要添加空格、引号、标点或额外空行。",
+    "sample": {
+      "stdin": "",
+      "stdout": "Sea\nOtter\n"
+    },
+    "hidden": [],
+    "reference_solution": "print('Sea')\nprint('Otter')\n",
+    "wrong_solution": "print('Sea Otter')\n",
+    "solution_explanation": "两次调用 print，每次默认在结尾换行，所以两个词分别在一行。",
+    "source_url": "https://github.com/alexmojaki/futurecoder/blob/main/core/chapters/c02_string_basics.py",
+    "story": "海边电台准备播放开场广播。Ottly 想让屏幕先显示大海，再显示海獭，两个英文单词分别占据一行，像两句清楚的报幕。请帮她安排好显示顺序。",
+    "difficulty": 1,
+    "target_misconception_tags": [
+      "other"
+    ]
   },
   {
-    "problem_id":"practice-01-3-v1","level_no":1,
-    "difficulty":1,"target_misconception_tags":["other"],
-    "title":"带引号的船名","focus":"区分包裹字符串的引号与真正需要输出的双引号。",
-    "description":"无需输入。恰好输出一行 The boat is \"Ottly\".，其中 Ottly 两侧的英文双引号也要显示。",
-    "sample":{"stdin":"","stdout":"The boat is \"Ottly\".\n"},"hidden":[],
-    "reference_solution":"print('The boat is \"Ottly\".')\n","wrong_solution":"print('The boat is Ottly.')\n",
-    "solution_explanation":"外层使用单引号定义字符串，里面的双引号便是字符串内容，会随文字一起输出。",
-    "source_url":"https://github.com/alexmojaki/futurecoder/blob/main/core/chapters/c02_string_basics.py"
+    "problem_id": "practice-01-3-v1",
+    "level_no": 1,
+    "title": "带引号的船名",
+    "focus": "区分包裹字符串的引号与真正需要输出的双引号。",
+    "description": "本题无需输入。\n输出一行 The boat is \"Ottly\".，单词之间各有一个空格。\nOttly 两侧的英文双引号和末尾的英文句号都属于输出内容，不要省略或添加其他文字。",
+    "sample": {
+      "stdin": "",
+      "stdout": "The boat is \"Ottly\".\n"
+    },
+    "hidden": [],
+    "reference_solution": "print('The boat is \"Ottly\".')\n",
+    "wrong_solution": "print('The boat is Ottly.')\n",
+    "solution_explanation": "外层使用单引号定义字符串，里面的双引号便是字符串内容，会随文字一起输出。",
+    "source_url": "https://github.com/alexmojaki/futurecoder/blob/main/core/chapters/c02_string_basics.py",
+    "story": "Ottly 给小船起好了名字，正准备制作英文介绍牌。介绍牌需要把船名放在双引号中，让大家一眼就能认出它。请把整句话连同引号一起显示出来。",
+    "difficulty": 1,
+    "target_misconception_tags": [
+      "other"
+    ]
   },
   {
-    "problem_id":"practice-02-1-v1","level_no":2,
-    "difficulty":1,"target_misconception_tags":["variable_error"],
-    "title":"朋友问候","focus":"输入姓名后使用变量，避免写死样例或打印变量名。",
-    "description":"输入一行姓名，长度 1–20，可以包含内部空格。输出一行 Hello, 姓名!，保留原有大小写和空格。",
-    "sample":{"stdin":"Mia\n","stdout":"Hello, Mia!\n"},"hidden":[{"stdin":"Bo\n","stdout":"Hello, Bo!\n"},{"stdin":"Sea Otter\n","stdout":"Hello, Sea Otter!\n"}],
-    "reference_solution":"name = input()\nprint('Hello, ' + name + '!')\n","wrong_solution":"name = input()\nprint('Hello, name!')\n",
-    "solution_explanation":"把输入赋给 name，拼接时使用变量 name，而不是带引号的固定文本。",
-    "source_url":"https://exercism.org/tracks/python/exercises/two-fer"
+    "problem_id": "practice-02-1-v1",
+    "level_no": 2,
+    "title": "朋友问候",
+    "focus": "输入姓名后使用变量，避免写死样例或打印变量名。",
+    "description": "输入一行姓名，长度为 1–20，可以包含内部空格。\n输出一行 Hello, 姓名!，其中“姓名”替换为输入内容，逗号后有一个空格。\n保留姓名原有的大小写和内部空格，不要写死样例姓名，也不要附加提示语。",
+    "sample": {
+      "stdin": "Mia\n",
+      "stdout": "Hello, Mia!\n"
+    },
+    "hidden": [
+      {
+        "stdin": "Bo\n",
+        "stdout": "Hello, Bo!\n"
+      },
+      {
+        "stdin": "Sea Otter\n",
+        "stdout": "Hello, Sea Otter!\n"
+      },
+      {
+        "stdin": "A\n",
+        "stdout": "Hello, A!\n"
+      },
+      {
+        "stdin": "Ottly\n",
+        "stdout": "Hello, Ottly!\n"
+      },
+      {
+        "stdin": "mIa\n",
+        "stdout": "Hello, mIa!\n"
+      },
+      {
+        "stdin": "ABCDEFGHIJKLMNOPQRST\n",
+        "stdout": "Hello, ABCDEFGHIJKLMNOPQRST!\n"
+      }
+    ],
+    "reference_solution": "name = input()\nprint('Hello, ' + name + '!')\n",
+    "wrong_solution": "name = input()\nprint('Hello, name!')\n",
+    "solution_explanation": "把输入赋给 name，拼接时使用变量 name，而不是带引号的固定文本。",
+    "source_url": "https://exercism.org/tracks/python/exercises/two-fer",
+    "story": "新朋友陆续来到海边小屋，Ottly 想给每位来访者显示一句专属问候。每次输入的名字可能不同，也可能由多个单词组成。请让问候语使用这次输入的真实姓名。",
+    "difficulty": 1,
+    "target_misconception_tags": [
+      "variable_error"
+    ]
   },
   {
-    "problem_id":"practice-02-2-v1","level_no":2,
-    "difficulty":1,"target_misconception_tags":["variable_error"],
-    "title":"码头名牌","focus":"连续读取两个输入并分别保存，避免覆盖与拼接顺序颠倒。",
-    "description":"第一行输入姓名，第二行输入码头名。输出 姓名 at 码头名，at 两侧各一个空格。两项均是非空文本。",
-    "sample":{"stdin":"Mia\nEast\n","stdout":"Mia at East\n"},"hidden":[{"stdin":"Bo\nWest\n","stdout":"Bo at West\n"},{"stdin":"Sea Otter\nNorth Pier\n","stdout":"Sea Otter at North Pier\n"}],
-    "reference_solution":"name = input()\npier = input()\nprint(name + ' at ' + pier)\n","wrong_solution":"name = input()\nname = input()\nprint(name + ' at ' + name)\n",
-    "solution_explanation":"第一次输入放到 name，第二次放到 pier；按姓名、固定文本、码头名的顺序拼接。",
-    "source_url":"https://github.com/alexmojaki/futurecoder/blob/main/core/chapters/c03_variables.py"
+    "problem_id": "practice-02-2-v1",
+    "level_no": 2,
+    "title": "码头名牌",
+    "focus": "连续读取两个输入并分别保存，避免覆盖与拼接顺序颠倒。",
+    "description": "第一行输入姓名，第二行输入码头名，两项均为非空文本，可以包含内部空格。\n输出一行“姓名 at 码头名”，将姓名与码头名替换为输入内容，at 两侧各有一个空格。\n保留输入的大小写和内部空格，不要颠倒两项或添加其他文字。",
+    "sample": {
+      "stdin": "Mia\nEast\n",
+      "stdout": "Mia at East\n"
+    },
+    "hidden": [
+      {
+        "stdin": "Bo\nWest\n",
+        "stdout": "Bo at West\n"
+      },
+      {
+        "stdin": "Sea Otter\nNorth Pier\n",
+        "stdout": "Sea Otter at North Pier\n"
+      },
+      {
+        "stdin": "A\nB\n",
+        "stdout": "A at B\n"
+      },
+      {
+        "stdin": "East\nMia\n",
+        "stdout": "East at Mia\n"
+      },
+      {
+        "stdin": "mIa\nnorth pier\n",
+        "stdout": "mIa at north pier\n"
+      },
+      {
+        "stdin": "Bo\nSouth Dock\n",
+        "stdout": "Bo at South Dock\n"
+      }
+    ],
+    "reference_solution": "name = input()\npier = input()\nprint(name + ' at ' + pier)\n",
+    "wrong_solution": "name = input()\nname = input()\nprint(name + ' at ' + name)\n",
+    "solution_explanation": "第一次输入放到 name，第二次放到 pier；按姓名、固定文本、码头名的顺序拼接。",
+    "source_url": "https://github.com/alexmojaki/futurecoder/blob/main/core/chapters/c03_variables.py",
+    "story": "码头准备举办见面会，Ottly 要为朋友制作名牌。每张名牌同时写上姓名和约定见面的码头，方便大家找到彼此。请把两次输入分别保存，再按规定顺序组合成一句话。",
+    "difficulty": 1,
+    "target_misconception_tags": [
+      "variable_error"
+    ]
   },
   {
-    "problem_id":"practice-02-3-v1","level_no":2,
-    "difficulty":1,"target_misconception_tags":["variable_error"],
-    "title":"前后两句","focus":"一个输入的变量可以多次使用，两次输出必须保持同一姓名。",
-    "description":"只输入一行姓名。第一行输出 Hi, 姓名；第二行输出 Bye, 姓名。不要尝试读取第二行输入。",
-    "sample":{"stdin":"Mia\n","stdout":"Hi, Mia\nBye, Mia\n"},"hidden":[{"stdin":"Bo\n","stdout":"Hi, Bo\nBye, Bo\n"}],
-    "reference_solution":"name = input()\nprint('Hi, ' + name)\nprint('Bye, ' + name)\n","wrong_solution":"name = input()\nprint('Hi, ' + name)\nname = input()\nprint('Bye, ' + name)\n",
-    "solution_explanation":"输入一次后变量保存着姓名，后续两句可以重复使用，无需再次读取。",
-    "source_url":"https://exercism.org/tracks/python/exercises/two-fer"
+    "problem_id": "practice-02-3-v1",
+    "level_no": 2,
+    "title": "前后两句",
+    "focus": "一个输入的变量可以多次使用，两次输出必须保持同一姓名。",
+    "description": "只输入一行非空姓名，可以包含内部空格。\n第一行输出 Hi, 姓名，第二行输出 Bye, 姓名，逗号后均有一个空格。\n姓名保留输入的大小写和内部空格。只读取一次输入，不添加句末标点或其他文字。",
+    "sample": {
+      "stdin": "Mia\n",
+      "stdout": "Hi, Mia\nBye, Mia\n"
+    },
+    "hidden": [
+      {
+        "stdin": "Bo\n",
+        "stdout": "Hi, Bo\nBye, Bo\n"
+      },
+      {
+        "stdin": "A\n",
+        "stdout": "Hi, A\nBye, A\n"
+      },
+      {
+        "stdin": "Sea Otter\n",
+        "stdout": "Hi, Sea Otter\nBye, Sea Otter\n"
+      },
+      {
+        "stdin": "mIa\n",
+        "stdout": "Hi, mIa\nBye, mIa\n"
+      },
+      {
+        "stdin": "Ottly\n",
+        "stdout": "Hi, Ottly\nBye, Ottly\n"
+      }
+    ],
+    "reference_solution": "name = input()\nprint('Hi, ' + name)\nprint('Bye, ' + name)\n",
+    "wrong_solution": "name = input()\nprint('Hi, ' + name)\nname = input()\nprint('Bye, ' + name)\n",
+    "solution_explanation": "输入一次后变量保存着姓名，后续两句可以重复使用，无需再次读取。",
+    "source_url": "https://exercism.org/tracks/python/exercises/two-fer",
+    "story": "Ottly 的小屋有一块会显示迎接和告别消息的屏幕。朋友只登记一次姓名，屏幕就要连续显示两句话，而且两句话里都使用同一个名字。请帮她完成这个小程序。",
+    "difficulty": 1,
+    "target_misconception_tags": [
+      "variable_error"
+    ]
   },
   {
-    "problem_id":"practice-03-1-v1","level_no":3,
-    "difficulty":1,"target_misconception_tags":["variable_error"],
-    "title":"买贴纸","focus":"将数字输入转为整数后相乘，避免把文本直接拼接。",
-    "description":"依次输入贴纸单价和购买数量，均为 0–100 的整数；输出总价一行。",
-    "sample":{"stdin":"4\n3\n","stdout":"12\n"},"hidden":[{"stdin":"0\n5\n","stdout":"0\n"},{"stdin":"12\n2\n","stdout":"24\n"}],
-    "reference_solution":"price = int(input())\ncount = int(input())\nprint(price * count)\n","wrong_solution":"price = input()\ncount = input()\nprint(price + count)\n",
-    "solution_explanation":"input 得到文本；int 转换为整数后，乘号计算价格乘数量。",
-    "source_url":"https://exercism.org/tracks/python/exercises/currency-exchange"
+    "problem_id": "practice-03-1-v1",
+    "level_no": 3,
+    "title": "买贴纸",
+    "focus": "将数字输入转为整数后相乘，避免把文本直接拼接。",
+    "description": "第一行输入贴纸单价，第二行输入购买数量，均为 0–100 的整数。\n把输入转换为整数后，计算单价乘以数量。\n输出一行整数总价，不附单位或提示语；单价或数量为零时也要正常输出。",
+    "sample": {
+      "stdin": "4\n3\n",
+      "stdout": "12\n"
+    },
+    "hidden": [
+      {
+        "stdin": "0\n5\n",
+        "stdout": "0\n"
+      },
+      {
+        "stdin": "12\n2\n",
+        "stdout": "24\n"
+      },
+      {
+        "stdin": "5\n0\n",
+        "stdout": "0\n"
+      },
+      {
+        "stdin": "1\n1\n",
+        "stdout": "1\n"
+      },
+      {
+        "stdin": "100\n100\n",
+        "stdout": "10000\n"
+      },
+      {
+        "stdin": "0\n0\n",
+        "stdout": "0\n"
+      }
+    ],
+    "reference_solution": "price = int(input())\ncount = int(input())\nprint(price * count)\n",
+    "wrong_solution": "price = input()\ncount = input()\nprint(price + count)\n",
+    "solution_explanation": "input 得到文本；int 转换为整数后，乘号计算价格乘数量。",
+    "source_url": "https://exercism.org/tracks/python/exercises/currency-exchange",
+    "story": "海边集市开张了，Ottly 想买一些相同的贴纸装饰日记本。每张贴纸的价格相同，购买数量由输入决定。请帮她计算这次一共需要花费多少颗贝壳。",
+    "difficulty": 1,
+    "target_misconception_tags": [
+      "variable_error"
+    ]
   },
   {
-    "problem_id":"practice-03-2-v1","level_no":3,
-    "difficulty":1,"target_misconception_tags":["other"],
-    "title":"还剩几片","focus":"分清减法的前后顺序，边界相等时结果为零。",
-    "description":"输入原有贝壳数和花费数，均为整数且花费不超过原有数；输出剩余贝壳数。",
-    "sample":{"stdin":"10\n3\n","stdout":"7\n"},"hidden":[{"stdin":"3\n3\n","stdout":"0\n"},{"stdin":"20\n0\n","stdout":"20\n"}],
-    "reference_solution":"before = int(input())\nspent = int(input())\nprint(before - spent)\n","wrong_solution":"before = int(input())\nspent = int(input())\nprint(spent - before)\n",
-    "solution_explanation":"剩余数等于原有数减去花费数，减法交换顺序会改变结果。",
-    "source_url":"https://exercism.org/tracks/python/exercises/guidos-gorgeous-lasagna"
+    "problem_id": "practice-03-2-v1",
+    "level_no": 3,
+    "title": "还剩几片",
+    "focus": "分清减法的前后顺序，边界相等时结果为零。",
+    "description": "第一行输入原有贝壳数，第二行输入花费数，均为非负整数，且花费数不超过原有数。\n输出一行整数，表示原有数量减去花费数量后的剩余数。\n没有花费或恰好全部花完时也按同一规则计算，不附其他文字。",
+    "sample": {
+      "stdin": "10\n3\n",
+      "stdout": "7\n"
+    },
+    "hidden": [
+      {
+        "stdin": "3\n3\n",
+        "stdout": "0\n"
+      },
+      {
+        "stdin": "20\n0\n",
+        "stdout": "20\n"
+      },
+      {
+        "stdin": "0\n0\n",
+        "stdout": "0\n"
+      },
+      {
+        "stdin": "1\n0\n",
+        "stdout": "1\n"
+      },
+      {
+        "stdin": "10000\n9999\n",
+        "stdout": "1\n"
+      },
+      {
+        "stdin": "10000\n10000\n",
+        "stdout": "0\n"
+      }
+    ],
+    "reference_solution": "before = int(input())\nspent = int(input())\nprint(before - spent)\n",
+    "wrong_solution": "before = int(input())\nspent = int(input())\nprint(spent - before)\n",
+    "solution_explanation": "剩余数等于原有数减去花费数，减法交换顺序会改变结果。",
+    "source_url": "https://exercism.org/tracks/python/exercises/guidos-gorgeous-lasagna",
+    "story": "Ottly 带着一些贝壳去集市，购买物品时花掉了一部分。她想整理自己的小账本，看看回来时还剩多少颗。题目保证她没有透支，不需要处理欠款。",
+    "difficulty": 1,
+    "target_misconception_tags": [
+      "other"
+    ]
   },
   {
-    "problem_id":"practice-03-3-v1","level_no":3,
-    "difficulty":2,"target_misconception_tags":["other"],
-    "title":"两摊合计","focus":"保存四个整数输入，分别计算两摊价格再相加。",
-    "description":"依次输入 A 摊单价、A 摊数量、B 摊单价、B 摊数量，均为 0–100 的整数；输出两摊总价。",
-    "sample":{"stdin":"2\n3\n4\n5\n","stdout":"26\n"},"hidden":[{"stdin":"2\n0\n4\n5\n","stdout":"20\n"},{"stdin":"9\n2\n3\n0\n","stdout":"18\n"}],
-    "reference_solution":"a = int(input())\nb = int(input())\nc = int(input())\nd = int(input())\nprint(a * b + c * d)\n","wrong_solution":"a = int(input())\nb = int(input())\nc = int(input())\nd = int(input())\nprint(a + b + c + d)\n",
-    "solution_explanation":"先分别相乘得到两个小计，再把小计相加。某摊购买数量为零时，另一摊仍应计入。",
-    "source_url":"https://exercism.org/tracks/python/exercises/currency-exchange"
+    "problem_id": "practice-03-3-v1",
+    "level_no": 3,
+    "title": "两摊合计",
+    "focus": "保存四个整数输入，分别计算两摊价格再相加。",
+    "description": "依次输入四行整数：A 摊单价、A 摊购买数量、B 摊单价、B 摊购买数量，每项均为 0–100。\n输出一行整数，表示两个摊位的总花费。\n某个摊位购买数量为零时，该摊花费为零，但仍要计入另一个摊位的花费。",
+    "sample": {
+      "stdin": "2\n3\n4\n5\n",
+      "stdout": "26\n"
+    },
+    "hidden": [
+      {
+        "stdin": "2\n0\n4\n5\n",
+        "stdout": "20\n"
+      },
+      {
+        "stdin": "9\n2\n3\n0\n",
+        "stdout": "18\n"
+      },
+      {
+        "stdin": "0\n0\n0\n0\n",
+        "stdout": "0\n"
+      },
+      {
+        "stdin": "100\n100\n100\n100\n",
+        "stdout": "20000\n"
+      },
+      {
+        "stdin": "0\n7\n3\n2\n",
+        "stdout": "6\n"
+      },
+      {
+        "stdin": "1\n1\n1\n1\n",
+        "stdout": "2\n"
+      }
+    ],
+    "reference_solution": "a = int(input())\nb = int(input())\nc = int(input())\nd = int(input())\nprint(a * b + c * d)\n",
+    "wrong_solution": "a = int(input())\nb = int(input())\nc = int(input())\nd = int(input())\nprint(a + b + c + d)\n",
+    "solution_explanation": "先分别相乘得到两个小计，再把小计相加。某摊购买数量为零时，另一摊仍应计入。",
+    "source_url": "https://exercism.org/tracks/python/exercises/currency-exchange",
+    "story": "Ottly 在两个摊位购买了物品，每个摊位各有一种商品。两种商品的单价和购买数量可能不同，她想把两笔支出记成一个总数。请分别计算两个摊位的小计，再合并账单。",
+    "difficulty": 2,
+    "target_misconception_tags": [
+      "other"
+    ]
   },
   {
-    "problem_id":"practice-04-1-v1","level_no":4,
-    "difficulty":1,"target_misconception_tags":["other"],
-    "title":"装满的盒数","focus":"使用整除得到完整盒数，余下不足一盒的贝壳不计盒数。",
-    "description":"输入贝壳数 n（0–1000）和每盒容量 k（1–100），输出能装满的盒数，不输出余数。",
-    "sample":{"stdin":"10\n3\n","stdout":"3\n"},"hidden":[{"stdin":"2\n3\n","stdout":"0\n"},{"stdin":"12\n4\n","stdout":"3\n"}],
-    "reference_solution":"n = int(input())\nk = int(input())\nprint(n // k)\n","wrong_solution":"n = int(input())\nk = int(input())\nprint(n / k)\n",
-    "solution_explanation":"n // k 给出完整盒数，普通除法可能产生小数，不表示装满的盒数。",
-    "source_url":"https://exercism.org/tracks/python/exercises/currency-exchange"
+    "problem_id": "practice-04-1-v1",
+    "level_no": 4,
+    "title": "装满的盒数",
+    "focus": "使用整除得到完整盒数，余下不足一盒的贝壳不计盒数。",
+    "description": "第一行输入贝壳总数 n（0–1000），第二行输入每盒容量 k（1–100）。\n输出一行整数，表示能装满的盒数，不输出剩余贝壳数。\n不足一盒时输出 0；剩余贝壳不能再算作一盒，也不要输出小数或单位。",
+    "sample": {
+      "stdin": "10\n3\n",
+      "stdout": "3\n"
+    },
+    "hidden": [
+      {
+        "stdin": "2\n3\n",
+        "stdout": "0\n"
+      },
+      {
+        "stdin": "12\n4\n",
+        "stdout": "3\n"
+      },
+      {
+        "stdin": "0\n1\n",
+        "stdout": "0\n"
+      },
+      {
+        "stdin": "1000\n1\n",
+        "stdout": "1000\n"
+      },
+      {
+        "stdin": "1000\n100\n",
+        "stdout": "10\n"
+      },
+      {
+        "stdin": "99\n100\n",
+        "stdout": "0\n"
+      },
+      {
+        "stdin": "101\n100\n",
+        "stdout": "1\n"
+      }
+    ],
+    "reference_solution": "n = int(input())\nk = int(input())\nprint(n // k)\n",
+    "wrong_solution": "n = int(input())\nk = int(input())\nprint(n / k)\n",
+    "solution_explanation": "n // k 给出完整盒数，普通除法可能产生小数，不表示装满的盒数。",
+    "source_url": "https://exercism.org/tracks/python/exercises/currency-exchange",
+    "story": "Ottly 要把贝壳装进同样大小的礼盒。只有完全装满的盒子才能贴上封条送出，不满一盒的贝壳暂时留在桌上。请帮她数清可以送出的完整礼盒数量。",
+    "difficulty": 1,
+    "target_misconception_tags": [
+      "other"
+    ]
   },
   {
-    "problem_id":"practice-04-2-v1","level_no":4,
-    "difficulty":1,"target_misconception_tags":["other"],
-    "title":"剩余分钟","focus":"把总分钟分别拆成完整小时数和剩余分钟数。",
-    "description":"输入非负整数总分钟数（0–10000），第一行输出完整小时数，第二行输出不足一小时的分钟数。",
-    "sample":{"stdin":"125\n","stdout":"2\n5\n"},"hidden":[{"stdin":"60\n","stdout":"1\n0\n"},{"stdin":"0\n","stdout":"0\n0\n"}],
-    "reference_solution":"minutes = int(input())\nprint(minutes // 60)\nprint(minutes % 60)\n","wrong_solution":"minutes = int(input())\nprint(minutes % 60)\nprint(minutes // 60)\n",
-    "solution_explanation":"整除 60 是完整小时数，取余 60 是剩下的分钟数；输出顺序不能颠倒。",
-    "source_url":"https://exercism.org/tracks/python/exercises/clock"
+    "problem_id": "practice-04-2-v1",
+    "level_no": 4,
+    "title": "剩余分钟",
+    "focus": "把总分钟分别拆成完整小时数和剩余分钟数。",
+    "description": "输入一行整数总分钟数，范围为 0–10000。\n第一行输出完整小时数，第二行输出不足一小时的分钟数，两项均为整数。\n一小时等于 60 分钟，剩余分钟为 0–59。即使结果为零也要输出，不附其他文字。",
+    "sample": {
+      "stdin": "125\n",
+      "stdout": "2\n5\n"
+    },
+    "hidden": [
+      {
+        "stdin": "60\n",
+        "stdout": "1\n0\n"
+      },
+      {
+        "stdin": "0\n",
+        "stdout": "0\n0\n"
+      },
+      {
+        "stdin": "59\n",
+        "stdout": "0\n59\n"
+      },
+      {
+        "stdin": "61\n",
+        "stdout": "1\n1\n"
+      },
+      {
+        "stdin": "119\n",
+        "stdout": "1\n59\n"
+      },
+      {
+        "stdin": "10000\n",
+        "stdout": "166\n40\n"
+      }
+    ],
+    "reference_solution": "minutes = int(input())\nprint(minutes // 60)\nprint(minutes % 60)\n",
+    "wrong_solution": "minutes = int(input())\nprint(minutes % 60)\nprint(minutes // 60)\n",
+    "solution_explanation": "整除 60 是完整小时数，取余 60 是剩下的分钟数；输出顺序不能颠倒。",
+    "source_url": "https://exercism.org/tracks/python/exercises/clock",
+    "story": "Ottly 给海边电台记录了一段节目时长，但计时器只显示总分钟数。她希望把它拆成完整小时和不足一小时的剩余分钟，便于安排下一段节目。请帮她转换时间。",
+    "difficulty": 1,
+    "target_misconception_tags": [
+      "other"
+    ]
   },
   {
-    "problem_id":"practice-04-3-v1","level_no":4,
-    "difficulty":2,"target_misconception_tags":["other"],
-    "title":"潮汐轮次","focus":"处理余数为零的周期末尾，轮内序号是 1 到 4。",
-    "description":"每 4 次潮汐为一轮。输入第 n 次潮汐（1–10000），输出它是本轮的第几次，结果只可能为 1、2、3 或 4。",
-    "sample":{"stdin":"4\n","stdout":"4\n"},"hidden":[{"stdin":"5\n","stdout":"1\n"},{"stdin":"8\n","stdout":"4\n"},{"stdin":"1\n","stdout":"1\n"}],
-    "reference_solution":"n = int(input())\nprint((n - 1) % 4 + 1)\n","wrong_solution":"n = int(input())\nprint(n % 4)\n",
-    "solution_explanation":"先从 n 减 1 变成从零开始的编号，取余后再加 1，四的倍数就会得到 4 而不是 0。",
-    "source_url":"https://exercism.org/tracks/python/exercises/raindrops"
+    "problem_id": "practice-04-3-v1",
+    "level_no": 4,
+    "title": "潮汐轮次",
+    "focus": "处理余数为零的周期末尾，轮内序号是 1 到 4。",
+    "description": "输入一行整数 n（1–10000），表示从第一次观察开始累计到的第 n 次潮汐。\n输出一行整数，表示它是本轮的第几次，结果只能是 1、2、3 或 4。\n每轮最后一次应输出 4，紧接着的一次输出 1，不附其他文字。",
+    "sample": {
+      "stdin": "4\n",
+      "stdout": "4\n"
+    },
+    "hidden": [
+      {
+        "stdin": "5\n",
+        "stdout": "1\n"
+      },
+      {
+        "stdin": "8\n",
+        "stdout": "4\n"
+      },
+      {
+        "stdin": "1\n",
+        "stdout": "1\n"
+      },
+      {
+        "stdin": "2\n",
+        "stdout": "2\n"
+      },
+      {
+        "stdin": "3\n",
+        "stdout": "3\n"
+      },
+      {
+        "stdin": "9\n",
+        "stdout": "1\n"
+      },
+      {
+        "stdin": "9999\n",
+        "stdout": "3\n"
+      },
+      {
+        "stdin": "10000\n",
+        "stdout": "4\n"
+      }
+    ],
+    "reference_solution": "n = int(input())\nprint((n - 1) % 4 + 1)\n",
+    "wrong_solution": "n = int(input())\nprint(n % 4)\n",
+    "solution_explanation": "先从 n 减 1 变成从零开始的编号，取余后再加 1，四的倍数就会得到 4 而不是 0。",
+    "source_url": "https://exercism.org/tracks/python/exercises/raindrops",
+    "story": "Ottly 为潮汐观察记录设计了一个循环编号：每观察 4 次就完成一轮，下一次重新从 1 开始。记录本上只有从 1 开始的总次数，请找出当前记录在这一轮中的位置。",
+    "difficulty": 2,
+    "target_misconception_tags": [
+      "other"
+    ]
   },
   {
-    "problem_id":"practice-05-1-v1","level_no":5,
-    "difficulty":1,"target_misconception_tags":["condition_error"],
-    "title":"航行等级","focus":"用互斥分支处理 10 和 20 两个区间边界。",
-    "description":"输入非负整数里程。小于 10 输出 New；10–19 输出 Ready；20 及以上输出 Expert。只输出一行。",
-    "sample":{"stdin":"10\n","stdout":"Ready\n"},"hidden":[{"stdin":"9\n","stdout":"New\n"},{"stdin":"19\n","stdout":"Ready\n"},{"stdin":"20\n","stdout":"Expert\n"}],
-    "reference_solution":"distance = int(input())\nif distance < 10:\n    print('New')\nelif distance < 20:\n    print('Ready')\nelse:\n    print('Expert')\n","wrong_solution":"distance = int(input())\nif distance <= 10:\n    print('New')\nelif distance < 20:\n    print('Ready')\nelse:\n    print('Expert')\n",
-    "solution_explanation":"前一分支已排除小于十，所以第二分支只需检查小于二十；等于十归入 Ready。",
-    "source_url":"https://exercism.org/tracks/python/exercises/meltdown-mitigation"
+    "problem_id": "practice-05-1-v1",
+    "level_no": 5,
+    "title": "航行等级",
+    "focus": "用互斥分支处理 10 和 20 两个区间边界。",
+    "description": "输入一行非负整数，表示累计航行里程。\n里程小于 10 时输出 New；10–19 时输出 Ready；20 及以上时输出 Expert。\n只输出对应的一个英文单词，大小写与题目一致，不附其他文字。",
+    "sample": {
+      "stdin": "10\n",
+      "stdout": "Ready\n"
+    },
+    "hidden": [
+      {
+        "stdin": "9\n",
+        "stdout": "New\n"
+      },
+      {
+        "stdin": "19\n",
+        "stdout": "Ready\n"
+      },
+      {
+        "stdin": "20\n",
+        "stdout": "Expert\n"
+      },
+      {
+        "stdin": "0\n",
+        "stdout": "New\n"
+      },
+      {
+        "stdin": "1\n",
+        "stdout": "New\n"
+      },
+      {
+        "stdin": "11\n",
+        "stdout": "Ready\n"
+      },
+      {
+        "stdin": "21\n",
+        "stdout": "Expert\n"
+      },
+      {
+        "stdin": "10000\n",
+        "stdout": "Expert\n"
+      }
+    ],
+    "reference_solution": "distance = int(input())\nif distance < 10:\n    print('New')\nelif distance < 20:\n    print('Ready')\nelse:\n    print('Expert')\n",
+    "wrong_solution": "distance = int(input())\nif distance <= 10:\n    print('New')\nelif distance < 20:\n    print('Ready')\nelse:\n    print('Expert')\n",
+    "solution_explanation": "前一分支已排除小于十，所以第二分支只需检查小于二十；等于十归入 Ready。",
+    "source_url": "https://exercism.org/tracks/python/exercises/meltdown-mitigation",
+    "story": "航行日记积累得越来越厚，Ottly 想根据累计里程给小船贴上航行等级标记。每个里程只能对应一个等级，刚到升级门槛时就应使用新等级。请帮她作出判断。",
+    "difficulty": 1,
+    "target_misconception_tags": [
+      "condition_error"
+    ]
   },
   {
-    "problem_id":"practice-05-2-v1","level_no":5,
-    "difficulty":2,"target_misconception_tags":["condition_error"],
-    "title":"靶心得分","focus":"从窄区间开始判断，避免先匹配宽区间覆盖高分。",
-    "description":"输入非负整数距离。距离不超过 2 得 10 分；3 到 5 得 5 分；大于 5 得 0 分。输出分数。",
-    "sample":{"stdin":"2\n","stdout":"10\n"},"hidden":[{"stdin":"3\n","stdout":"5\n"},{"stdin":"5\n","stdout":"5\n"},{"stdin":"6\n","stdout":"0\n"}],
-    "reference_solution":"distance = int(input())\nif distance <= 2:\n    print(10)\nelif distance <= 5:\n    print(5)\nelse:\n    print(0)\n","wrong_solution":"distance = int(input())\nif distance <= 5:\n    print(5)\nelif distance <= 2:\n    print(10)\nelse:\n    print(0)\n",
-    "solution_explanation":"先判定最靠近靶心的距离，再检查外圈；否则小于等于二的情况会被宽范围提前接走。",
-    "source_url":"https://exercism.org/tracks/python/exercises/darts"
+    "problem_id": "practice-05-2-v1",
+    "level_no": 5,
+    "title": "靶心得分",
+    "focus": "从窄区间开始判断，避免先匹配宽区间覆盖高分。",
+    "description": "输入一行非负整数，表示落点到靶心的距离。\n距离不超过 2 时得 10 分，距离为 3–5 时得 5 分，大于 5 时得 0 分。\n输出一行整数得分。注意距离恰好为 2 或 5 时所属的区间，不附其他文字。",
+    "sample": {
+      "stdin": "2\n",
+      "stdout": "10\n"
+    },
+    "hidden": [
+      {
+        "stdin": "3\n",
+        "stdout": "5\n"
+      },
+      {
+        "stdin": "5\n",
+        "stdout": "5\n"
+      },
+      {
+        "stdin": "6\n",
+        "stdout": "0\n"
+      },
+      {
+        "stdin": "0\n",
+        "stdout": "10\n"
+      },
+      {
+        "stdin": "1\n",
+        "stdout": "10\n"
+      },
+      {
+        "stdin": "4\n",
+        "stdout": "5\n"
+      },
+      {
+        "stdin": "10000\n",
+        "stdout": "0\n"
+      }
+    ],
+    "reference_solution": "distance = int(input())\nif distance <= 2:\n    print(10)\nelif distance <= 5:\n    print(5)\nelse:\n    print(0)\n",
+    "wrong_solution": "distance = int(input())\nif distance <= 5:\n    print(5)\nelif distance <= 2:\n    print(10)\nelse:\n    print(0)\n",
+    "solution_explanation": "先判定最靠近靶心的距离，再检查外圈；否则小于等于二的情况会被宽范围提前接走。",
+    "source_url": "https://exercism.org/tracks/python/exercises/darts",
+    "story": "海边运动会设置了投掷小游戏。裁判会记录落点到靶心的整数距离，越靠近靶心，得分越高。Ottly 需要一个小程序，让每次投掷都能按相同规则计分。",
+    "difficulty": 2,
+    "target_misconception_tags": [
+      "condition_error"
+    ]
   },
   {
-    "problem_id":"practice-05-3-v1","level_no":5,
-    "difficulty":1,"target_misconception_tags":["condition_error"],
-    "title":"补给判定","focus":"分别处理库存为零、1 到 4、至少 5 的互斥情况。",
-    "description":"输入非负整数库存；为 0 输出 Empty；为 1–4 输出 Low；为 5 及以上输出 Enough。",
-    "sample":{"stdin":"0\n","stdout":"Empty\n"},"hidden":[{"stdin":"1\n","stdout":"Low\n"},{"stdin":"4\n","stdout":"Low\n"},{"stdin":"5\n","stdout":"Enough\n"}],
-    "reference_solution":"stock = int(input())\nif stock == 0:\n    print('Empty')\nelif stock < 5:\n    print('Low')\nelse:\n    print('Enough')\n","wrong_solution":"stock = int(input())\nif stock < 0:\n    print('Empty')\nelif stock < 5:\n    print('Low')\nelse:\n    print('Enough')\n",
-    "solution_explanation":"零需要单独归入 Empty；正数一到四进入 Low，五及以上进入 Enough。",
-    "source_url":"https://exercism.org/tracks/python/exercises/black-jack"
+    "problem_id": "practice-05-3-v1",
+    "level_no": 5,
+    "title": "补给判定",
+    "focus": "分别处理库存为零、1 到 4、至少 5 的互斥情况。",
+    "description": "输入一行非负整数，表示当前库存数量。\n库存为 0 时输出 Empty；库存为 1–4 时输出 Low；库存为 5 及以上时输出 Enough。\n每次只输出一行，注意英文单词的大小写，不附单位或解释。",
+    "sample": {
+      "stdin": "0\n",
+      "stdout": "Empty\n"
+    },
+    "hidden": [
+      {
+        "stdin": "1\n",
+        "stdout": "Low\n"
+      },
+      {
+        "stdin": "4\n",
+        "stdout": "Low\n"
+      },
+      {
+        "stdin": "5\n",
+        "stdout": "Enough\n"
+      },
+      {
+        "stdin": "2\n",
+        "stdout": "Low\n"
+      },
+      {
+        "stdin": "3\n",
+        "stdout": "Low\n"
+      },
+      {
+        "stdin": "6\n",
+        "stdout": "Enough\n"
+      },
+      {
+        "stdin": "10000\n",
+        "stdout": "Enough\n"
+      }
+    ],
+    "reference_solution": "stock = int(input())\nif stock == 0:\n    print('Empty')\nelif stock < 5:\n    print('Low')\nelse:\n    print('Enough')\n",
+    "wrong_solution": "stock = int(input())\nif stock < 0:\n    print('Empty')\nelif stock < 5:\n    print('Low')\nelse:\n    print('Enough')\n",
+    "solution_explanation": "零需要单独归入 Empty；正数一到四进入 Low，五及以上进入 Enough。",
+    "source_url": "https://exercism.org/tracks/python/exercises/black-jack",
+    "story": "出航前，Ottly 要检查补给仓库。空仓库需要立即补货，少量库存需要留意，数量足够时则可以安心准备。请根据当前库存显示唯一的状态提示。",
+    "difficulty": 1,
+    "target_misconception_tags": [
+      "condition_error"
+    ]
   },
   {
-    "problem_id":"practice-06-1-v1","level_no":6,
-    "difficulty":1,"target_misconception_tags":["condition_error"],
-    "title":"双条件放行","focus":"风和浪必须同时合格，区分 and 与 or。",
-    "description":"依次输入非负整数风速、浪高。风速不超过 5 且浪高不超过 2 时输出 Go，否则输出 Wait。",
-    "sample":{"stdin":"5\n2\n","stdout":"Go\n"},"hidden":[{"stdin":"6\n2\n","stdout":"Wait\n"},{"stdin":"5\n3\n","stdout":"Wait\n"},{"stdin":"1\n1\n","stdout":"Go\n"}],
-    "reference_solution":"wind = int(input())\nwave = int(input())\nif wind <= 5 and wave <= 2:\n    print('Go')\nelse:\n    print('Wait')\n","wrong_solution":"wind = int(input())\nwave = int(input())\nif wind <= 5 or wave <= 2:\n    print('Go')\nelse:\n    print('Wait')\n",
-    "solution_explanation":"两项都符合才放行，用 and；只符合一项的输入应输出 Wait。",
-    "source_url":"https://exercism.org/tracks/python/exercises/ghost-gobble-arcade-game"
+    "problem_id": "practice-06-1-v1",
+    "level_no": 6,
+    "title": "双条件放行",
+    "focus": "风和浪必须同时合格，区分 and 与 or。",
+    "description": "第一行输入非负整数风速，第二行输入非负整数浪高。\n只有风速不超过 5 且浪高不超过 2 时，输出 Go；其他情况输出 Wait。\n边界值 5 和 2 都算合格。只输出一行，不附其他文字。",
+    "sample": {
+      "stdin": "5\n2\n",
+      "stdout": "Go\n"
+    },
+    "hidden": [
+      {
+        "stdin": "6\n2\n",
+        "stdout": "Wait\n"
+      },
+      {
+        "stdin": "5\n3\n",
+        "stdout": "Wait\n"
+      },
+      {
+        "stdin": "1\n1\n",
+        "stdout": "Go\n"
+      },
+      {
+        "stdin": "0\n0\n",
+        "stdout": "Go\n"
+      },
+      {
+        "stdin": "4\n2\n",
+        "stdout": "Go\n"
+      },
+      {
+        "stdin": "5\n1\n",
+        "stdout": "Go\n"
+      },
+      {
+        "stdin": "6\n3\n",
+        "stdout": "Wait\n"
+      },
+      {
+        "stdin": "100\n0\n",
+        "stdout": "Wait\n"
+      },
+      {
+        "stdin": "0\n100\n",
+        "stdout": "Wait\n"
+      }
+    ],
+    "reference_solution": "wind = int(input())\nwave = int(input())\nif wind <= 5 and wave <= 2:\n    print('Go')\nelse:\n    print('Wait')\n",
+    "wrong_solution": "wind = int(input())\nwave = int(input())\nif wind <= 5 or wave <= 2:\n    print('Go')\nelse:\n    print('Wait')\n",
+    "solution_explanation": "两项都符合才放行，用 and；只符合一项的输入应输出 Wait。",
+    "source_url": "https://exercism.org/tracks/python/exercises/ghost-gobble-arcade-game",
+    "story": "Ottly 的小船准备离开港口。这里的出航规则同时检查风速和浪高，只有两项都合格才能放行。即使其中一项很好，另一项超限时也需要等待。",
+    "difficulty": 1,
+    "target_misconception_tags": [
+      "condition_error"
+    ]
   },
   {
-    "problem_id":"practice-06-2-v1","level_no":6,
-    "difficulty":1,"target_misconception_tags":["condition_error"],
-    "title":"两种警报","focus":"任何单一条件超限都要触发警报，区分 or 与 and。",
-    "description":"依次输入非负整数风速、浪高。风速大于 5 或浪高大于 2 就输出 Alarm，否则输出 Safe。",
-    "sample":{"stdin":"6\n1\n","stdout":"Alarm\n"},"hidden":[{"stdin":"1\n3\n","stdout":"Alarm\n"},{"stdin":"5\n2\n","stdout":"Safe\n"},{"stdin":"6\n3\n","stdout":"Alarm\n"}],
-    "reference_solution":"wind = int(input())\nwave = int(input())\nif wind > 5 or wave > 2:\n    print('Alarm')\nelse:\n    print('Safe')\n","wrong_solution":"wind = int(input())\nwave = int(input())\nif wind > 5 and wave > 2:\n    print('Alarm')\nelse:\n    print('Safe')\n",
-    "solution_explanation":"两项有一项超限就报警，所以用 or；边界等于五和二还不算超限。",
-    "source_url":"https://exercism.org/tracks/python/exercises/ghost-gobble-arcade-game"
+    "problem_id": "practice-06-2-v1",
+    "level_no": 6,
+    "title": "两种警报",
+    "focus": "任何单一条件超限都要触发警报，区分 or 与 and。",
+    "description": "第一行输入非负整数风速，第二行输入非负整数浪高。\n风速大于 5 或浪高大于 2 时输出 Alarm，否则输出 Safe。\n等于警戒线不算超限，每次只输出一个状态，不附其他文字。",
+    "sample": {
+      "stdin": "6\n1\n",
+      "stdout": "Alarm\n"
+    },
+    "hidden": [
+      {
+        "stdin": "1\n3\n",
+        "stdout": "Alarm\n"
+      },
+      {
+        "stdin": "5\n2\n",
+        "stdout": "Safe\n"
+      },
+      {
+        "stdin": "6\n3\n",
+        "stdout": "Alarm\n"
+      },
+      {
+        "stdin": "0\n0\n",
+        "stdout": "Safe\n"
+      },
+      {
+        "stdin": "4\n2\n",
+        "stdout": "Safe\n"
+      },
+      {
+        "stdin": "5\n1\n",
+        "stdout": "Safe\n"
+      },
+      {
+        "stdin": "6\n0\n",
+        "stdout": "Alarm\n"
+      },
+      {
+        "stdin": "0\n3\n",
+        "stdout": "Alarm\n"
+      }
+    ],
+    "reference_solution": "wind = int(input())\nwave = int(input())\nif wind > 5 or wave > 2:\n    print('Alarm')\nelse:\n    print('Safe')\n",
+    "wrong_solution": "wind = int(input())\nwave = int(input())\nif wind > 5 and wave > 2:\n    print('Alarm')\nelse:\n    print('Safe')\n",
+    "solution_explanation": "两项有一项超限就报警，所以用 or；边界等于五和二还不算超限。",
+    "source_url": "https://exercism.org/tracks/python/exercises/ghost-gobble-arcade-game",
+    "story": "码头的监测器会检查风速和浪高。只要其中任意一项超过警戒线，就要亮起警报；只有两项都没有超限，才显示安全。请帮助 Ottly 编写警报判断。",
+    "difficulty": 1,
+    "target_misconception_tags": [
+      "condition_error"
+    ]
   },
   {
-    "problem_id":"practice-06-3-v1","level_no":6,
-    "difficulty":3,"target_misconception_tags":["condition_error"],
-    "title":"闰年灯","focus":"组合 and、or、not，百年年份必须检查能否被四百整除。",
-    "description":"输入公元年份（1–9999）。能被 4 整除且不能被 100 整除，或能被 400 整除时输出 Leap，否则输出 Normal。",
-    "sample":{"stdin":"2000\n","stdout":"Leap\n"},"hidden":[{"stdin":"1900\n","stdout":"Normal\n"},{"stdin":"2024\n","stdout":"Leap\n"},{"stdin":"2023\n","stdout":"Normal\n"}],
-    "reference_solution":"year = int(input())\nif (year % 4 == 0 and not year % 100 == 0) or year % 400 == 0:\n    print('Leap')\nelse:\n    print('Normal')\n","wrong_solution":"year = int(input())\nif year % 4 == 0:\n    print('Leap')\nelse:\n    print('Normal')\n",
-    "solution_explanation":"普通四的倍数是闰年，但百年年份还必须是四百的倍数。括号明确区分两个可满足的条件。",
-    "source_url":"https://exercism.org/tracks/python/exercises/leap"
+    "problem_id": "practice-06-3-v1",
+    "level_no": 6,
+    "title": "闰年灯",
+    "focus": "组合 and、or、not，百年年份必须检查能否被四百整除。",
+    "description": "输入一行公元年份，范围为 1–9999。\n能被 4 整除且不能被 100 整除，或者能被 400 整除的年份，输出 Leap；其他年份输出 Normal。\n只输出一行。判断整百年份时也必须遵守上述规则，不附其他文字。",
+    "sample": {
+      "stdin": "2000\n",
+      "stdout": "Leap\n"
+    },
+    "hidden": [
+      {
+        "stdin": "1900\n",
+        "stdout": "Normal\n"
+      },
+      {
+        "stdin": "2024\n",
+        "stdout": "Leap\n"
+      },
+      {
+        "stdin": "2023\n",
+        "stdout": "Normal\n"
+      },
+      {
+        "stdin": "1\n",
+        "stdout": "Normal\n"
+      },
+      {
+        "stdin": "4\n",
+        "stdout": "Leap\n"
+      },
+      {
+        "stdin": "100\n",
+        "stdout": "Normal\n"
+      },
+      {
+        "stdin": "400\n",
+        "stdout": "Leap\n"
+      },
+      {
+        "stdin": "2100\n",
+        "stdout": "Normal\n"
+      },
+      {
+        "stdin": "2400\n",
+        "stdout": "Leap\n"
+      },
+      {
+        "stdin": "9999\n",
+        "stdout": "Normal\n"
+      }
+    ],
+    "reference_solution": "year = int(input())\nif (year % 4 == 0 and not year % 100 == 0) or year % 400 == 0:\n    print('Leap')\nelse:\n    print('Normal')\n",
+    "wrong_solution": "year = int(input())\nif year % 4 == 0:\n    print('Leap')\nelse:\n    print('Normal')\n",
+    "solution_explanation": "普通四的倍数是闰年，但百年年份还必须是四百的倍数。括号明确区分两个可满足的条件。",
+    "source_url": "https://exercism.org/tracks/python/exercises/leap",
+    "story": "Ottly 正在整理历年的潮汐日历，需要判断某一年是否应多留出一天。普通的四年规律在整百年份会有例外，请按完整规则点亮对应的日历标记。",
+    "difficulty": 3,
+    "target_misconception_tags": [
+      "condition_error"
+    ]
   },
   {
-    "problem_id":"practice-07-1-v1","level_no":7,
-    "difficulty":1,"target_misconception_tags":["range_boundary"],
-    "title":"从 1 到 n","focus":"range 的右端不包含，n 为零时循环执行零次。",
-    "description":"输入整数 n（0–100）。从 1 到 n 每行输出一个整数；当 n 为 0 时不输出任何内容。",
-    "sample":{"stdin":"3\n","stdout":"1\n2\n3\n"},"hidden":[{"stdin":"0\n","stdout":""},{"stdin":"1\n","stdout":"1\n"}],
-    "reference_solution":"n = int(input())\nfor i in range(1, n + 1):\n    print(i)\n","wrong_solution":"n = int(input())\nfor i in range(1, n):\n    print(i)\n",
-    "solution_explanation":"range 的结束值不被取到，所以要把 n 加一；n 为零时范围为空。",
-    "source_url":"https://exercism.org/tracks/python/exercises/making-the-grade"
+    "problem_id": "practice-07-1-v1",
+    "level_no": 7,
+    "title": "从 1 到 n",
+    "focus": "range 的右端不包含，n 为零时循环执行零次。",
+    "description": "输入一行整数 n（0–100）。\n按从小到大的顺序，逐行输出 1 到 n 的每个整数，包含 n。\nn 为 0 时不输出任何内容，连空行也不输出；其他情况不附标签或单位。",
+    "sample": {
+      "stdin": "3\n",
+      "stdout": "1\n2\n3\n"
+    },
+    "hidden": [
+      {
+        "stdin": "0\n",
+        "stdout": ""
+      },
+      {
+        "stdin": "1\n",
+        "stdout": "1\n"
+      },
+      {
+        "stdin": "2\n",
+        "stdout": "1\n2\n"
+      },
+      {
+        "stdin": "10\n",
+        "stdout": "1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n"
+      },
+      {
+        "stdin": "99\n",
+        "stdout": "1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23\n24\n25\n26\n27\n28\n29\n30\n31\n32\n33\n34\n35\n36\n37\n38\n39\n40\n41\n42\n43\n44\n45\n46\n47\n48\n49\n50\n51\n52\n53\n54\n55\n56\n57\n58\n59\n60\n61\n62\n63\n64\n65\n66\n67\n68\n69\n70\n71\n72\n73\n74\n75\n76\n77\n78\n79\n80\n81\n82\n83\n84\n85\n86\n87\n88\n89\n90\n91\n92\n93\n94\n95\n96\n97\n98\n99\n"
+      },
+      {
+        "stdin": "100\n",
+        "stdout": "1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23\n24\n25\n26\n27\n28\n29\n30\n31\n32\n33\n34\n35\n36\n37\n38\n39\n40\n41\n42\n43\n44\n45\n46\n47\n48\n49\n50\n51\n52\n53\n54\n55\n56\n57\n58\n59\n60\n61\n62\n63\n64\n65\n66\n67\n68\n69\n70\n71\n72\n73\n74\n75\n76\n77\n78\n79\n80\n81\n82\n83\n84\n85\n86\n87\n88\n89\n90\n91\n92\n93\n94\n95\n96\n97\n98\n99\n100\n"
+      }
+    ],
+    "reference_solution": "n = int(input())\nfor i in range(1, n + 1):\n    print(i)\n",
+    "wrong_solution": "n = int(input())\nfor i in range(1, n):\n    print(i)\n",
+    "solution_explanation": "range 的结束值不被取到，所以要把 n 加一；n 为零时范围为空。",
+    "source_url": "https://exercism.org/tracks/python/exercises/making-the-grade",
+    "story": "Ottly 要给沿岸的一段路标补上编号。路标从 1 开始，直到输入指定的最后一个编号；每个编号都要独占一行，方便逐个打印成标签。",
+    "difficulty": 1,
+    "target_misconception_tags": [
+      "range_boundary"
+    ]
   },
   {
-    "problem_id":"practice-07-2-v1","level_no":7,
-    "difficulty":2,"target_misconception_tags":["range_boundary","condition_error"],
-    "title":"偶数路标","focus":"在循环体内只输出满足条件的数字，同时包含上界 n。",
-    "description":"输入整数 n（0–100），每行输出 1 到 n 中的一个偶数，按从小到大的顺序。没有偶数则不输出。",
-    "sample":{"stdin":"6\n","stdout":"2\n4\n6\n"},"hidden":[{"stdin":"1\n","stdout":""},{"stdin":"2\n","stdout":"2\n"},{"stdin":"0\n","stdout":""}],
-    "reference_solution":"n = int(input())\nfor i in range(1, n + 1):\n    if i % 2 == 0:\n        print(i)\n","wrong_solution":"n = int(input())\nfor i in range(1, n + 1):\n    print(i)\n",
-    "solution_explanation":"每轮先检查当前数能否被二整除，只在条件成立时输出；n+1 保证 n 被考虑。",
-    "source_url":"https://exercism.org/tracks/python/exercises/raindrops"
+    "problem_id": "practice-07-2-v1",
+    "level_no": 7,
+    "title": "偶数路标",
+    "focus": "在循环体内只输出满足条件的数字，同时包含上界 n。",
+    "description": "输入一行整数 n（0–100）。\n从小到大逐行输出 1 到 n 中的所有偶数，每行一个整数，范围包含 n。\n没有符合条件的编号时不输出任何内容，不附其他文字或额外空行。",
+    "sample": {
+      "stdin": "6\n",
+      "stdout": "2\n4\n6\n"
+    },
+    "hidden": [
+      {
+        "stdin": "1\n",
+        "stdout": ""
+      },
+      {
+        "stdin": "2\n",
+        "stdout": "2\n"
+      },
+      {
+        "stdin": "0\n",
+        "stdout": ""
+      },
+      {
+        "stdin": "3\n",
+        "stdout": "2\n"
+      },
+      {
+        "stdin": "7\n",
+        "stdout": "2\n4\n6\n"
+      },
+      {
+        "stdin": "99\n",
+        "stdout": "2\n4\n6\n8\n10\n12\n14\n16\n18\n20\n22\n24\n26\n28\n30\n32\n34\n36\n38\n40\n42\n44\n46\n48\n50\n52\n54\n56\n58\n60\n62\n64\n66\n68\n70\n72\n74\n76\n78\n80\n82\n84\n86\n88\n90\n92\n94\n96\n98\n"
+      },
+      {
+        "stdin": "100\n",
+        "stdout": "2\n4\n6\n8\n10\n12\n14\n16\n18\n20\n22\n24\n26\n28\n30\n32\n34\n36\n38\n40\n42\n44\n46\n48\n50\n52\n54\n56\n58\n60\n62\n64\n66\n68\n70\n72\n74\n76\n78\n80\n82\n84\n86\n88\n90\n92\n94\n96\n98\n100\n"
+      }
+    ],
+    "reference_solution": "n = int(input())\nfor i in range(1, n + 1):\n    if i % 2 == 0:\n        print(i)\n",
+    "wrong_solution": "n = int(input())\nfor i in range(1, n + 1):\n    print(i)\n",
+    "solution_explanation": "每轮先检查当前数能否被二整除，只在条件成立时输出；n+1 保证 n 被考虑。",
+    "source_url": "https://exercism.org/tracks/python/exercises/raindrops",
+    "story": "沿岸路标已经编号，Ottly 打算只给偶数编号的路标安装反光片。请按顺序列出需要安装的路标，让施工队不会遗漏最后一个符合条件的编号。",
+    "difficulty": 2,
+    "target_misconception_tags": [
+      "range_boundary",
+      "condition_error"
+    ]
   },
   {
-    "problem_id":"practice-07-3-v1","level_no":7,
-    "difficulty":1,"target_misconception_tags":["range_boundary"],
-    "title":"指定区间","focus":"根据输入确定起止，起点大于终点时执行零次循环。",
-    "description":"输入整数起点 a 和终点 b（均在 -100 到 100 之间）。从 a 到 b 每行输出一个整数；若 a>b 则不输出。",
-    "sample":{"stdin":"3\n5\n","stdout":"3\n4\n5\n"},"hidden":[{"stdin":"5\n3\n","stdout":""},{"stdin":"2\n2\n","stdout":"2\n"}],
-    "reference_solution":"a = int(input())\nb = int(input())\nfor i in range(a, b + 1):\n    print(i)\n","wrong_solution":"a = int(input())\nb = int(input())\nfor i in range(a, b):\n    print(i)\n",
-    "solution_explanation":"range(a,b+1) 从 a 开始，并让 b 也被取到；a>b 时范围自然为空。",
-    "source_url":"https://exercism.org/tracks/python/exercises/making-the-grade"
+    "problem_id": "practice-07-3-v1",
+    "level_no": 7,
+    "title": "指定区间",
+    "focus": "根据输入确定起止，起点大于终点时执行零次循环。",
+    "description": "第一行输入起点 a，第二行输入终点 b，均为 -100–100 的整数。\n从 a 开始按递增顺序逐行输出，直到 b，包含两端。\na 大于 b 时不输出任何内容；a 等于 b 时只输出该整数一行，不附其他文字。",
+    "sample": {
+      "stdin": "3\n5\n",
+      "stdout": "3\n4\n5\n"
+    },
+    "hidden": [
+      {
+        "stdin": "5\n3\n",
+        "stdout": ""
+      },
+      {
+        "stdin": "2\n2\n",
+        "stdout": "2\n"
+      },
+      {
+        "stdin": "-3\n2\n",
+        "stdout": "-3\n-2\n-1\n0\n1\n2\n"
+      },
+      {
+        "stdin": "-100\n-100\n",
+        "stdout": "-100\n"
+      },
+      {
+        "stdin": "0\n0\n",
+        "stdout": "0\n"
+      },
+      {
+        "stdin": "100\n-100\n",
+        "stdout": ""
+      },
+      {
+        "stdin": "-100\n100\n",
+        "stdout": "-100\n-99\n-98\n-97\n-96\n-95\n-94\n-93\n-92\n-91\n-90\n-89\n-88\n-87\n-86\n-85\n-84\n-83\n-82\n-81\n-80\n-79\n-78\n-77\n-76\n-75\n-74\n-73\n-72\n-71\n-70\n-69\n-68\n-67\n-66\n-65\n-64\n-63\n-62\n-61\n-60\n-59\n-58\n-57\n-56\n-55\n-54\n-53\n-52\n-51\n-50\n-49\n-48\n-47\n-46\n-45\n-44\n-43\n-42\n-41\n-40\n-39\n-38\n-37\n-36\n-35\n-34\n-33\n-32\n-31\n-30\n-29\n-28\n-27\n-26\n-25\n-24\n-23\n-22\n-21\n-20\n-19\n-18\n-17\n-16\n-15\n-14\n-13\n-12\n-11\n-10\n-9\n-8\n-7\n-6\n-5\n-4\n-3\n-2\n-1\n0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23\n24\n25\n26\n27\n28\n29\n30\n31\n32\n33\n34\n35\n36\n37\n38\n39\n40\n41\n42\n43\n44\n45\n46\n47\n48\n49\n50\n51\n52\n53\n54\n55\n56\n57\n58\n59\n60\n61\n62\n63\n64\n65\n66\n67\n68\n69\n70\n71\n72\n73\n74\n75\n76\n77\n78\n79\n80\n81\n82\n83\n84\n85\n86\n87\n88\n89\n90\n91\n92\n93\n94\n95\n96\n97\n98\n99\n100\n"
+      }
+    ],
+    "reference_solution": "a = int(input())\nb = int(input())\nfor i in range(a, b + 1):\n    print(i)\n",
+    "wrong_solution": "a = int(input())\nb = int(input())\nfor i in range(a, b):\n    print(i)\n",
+    "solution_explanation": "range(a,b+1) 从 a 开始，并让 b 也被取到；a>b 时范围自然为空。",
+    "source_url": "https://exercism.org/tracks/python/exercises/making-the-grade",
+    "story": "Ottly 负责整理一段连续编号的航线标记。起点和终点由输入指定，可能相同，也可能包含负数；如果起点已经超过终点，这次就没有需要整理的标记。",
+    "difficulty": 1,
+    "target_misconception_tags": [
+      "range_boundary"
+    ]
   },
   {
-    "problem_id":"practice-08-1-v1","level_no":8,
-    "difficulty":1,"target_misconception_tags":["accumulation_error"],
-    "title":"连续编号总和","focus":"累加器应在循环前初始化、在循环中更新、循环后输出。",
-    "description":"输入整数 n（0–100），输出 1 到 n 的整数之和，只输出一行；n=0 时输出 0。",
-    "sample":{"stdin":"4\n","stdout":"10\n"},"hidden":[{"stdin":"0\n","stdout":"0\n"},{"stdin":"1\n","stdout":"1\n"},{"stdin":"5\n","stdout":"15\n"}],
-    "reference_solution":"n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    total = total + i\nprint(total)\n","wrong_solution":"n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    total = i\nprint(total)\n",
-    "solution_explanation":"每轮把 i 加到旧 total 上，而非用当前 i 覆盖旧总和。",
-    "source_url":"https://exercism.org/tracks/python/exercises/difference-of-squares"
+    "problem_id": "practice-08-1-v1",
+    "level_no": 8,
+    "title": "连续编号总和",
+    "focus": "累加器应在循环前初始化、在循环中更新、循环后输出。",
+    "description": "输入一行整数 n（0–100）。\n计算从 1 到 n 的所有整数之和，只在计算结束后输出一行整数总和。\nn 为 0 时表示没有袋子，输出 0。不输出中间的累计过程或其他文字。",
+    "sample": {
+      "stdin": "4\n",
+      "stdout": "10\n"
+    },
+    "hidden": [
+      {
+        "stdin": "0\n",
+        "stdout": "0\n"
+      },
+      {
+        "stdin": "1\n",
+        "stdout": "1\n"
+      },
+      {
+        "stdin": "5\n",
+        "stdout": "15\n"
+      },
+      {
+        "stdin": "2\n",
+        "stdout": "3\n"
+      },
+      {
+        "stdin": "10\n",
+        "stdout": "55\n"
+      },
+      {
+        "stdin": "99\n",
+        "stdout": "4950\n"
+      },
+      {
+        "stdin": "100\n",
+        "stdout": "5050\n"
+      }
+    ],
+    "reference_solution": "n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    total = total + i\nprint(total)\n",
+    "wrong_solution": "n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    total = i\nprint(total)\n",
+    "solution_explanation": "每轮把 i 加到旧 total 上，而非用当前 i 覆盖旧总和。",
+    "source_url": "https://exercism.org/tracks/python/exercises/difference-of-squares",
+    "story": "Ottly 把收集袋从 1 开始依次编号，并在第 i 个袋子里放入 i 颗贝壳。她想统计前 n 个袋子里一共有多少颗，请帮她把每袋数量逐次加到总数中。",
+    "difficulty": 1,
+    "target_misconception_tags": [
+      "accumulation_error"
+    ]
   },
   {
-    "problem_id":"practice-08-2-v1","level_no":8,
-    "difficulty":2,"target_misconception_tags":["accumulation_error","condition_error"],
-    "title":"三的倍数总和","focus":"条件成立才累加，循环结束后输出总和。",
-    "description":"输入整数 n（0–100），输出 1 到 n 中全部 3 的倍数之和；没有符合的数则输出 0。",
-    "sample":{"stdin":"7\n","stdout":"9\n"},"hidden":[{"stdin":"2\n","stdout":"0\n"},{"stdin":"6\n","stdout":"9\n"},{"stdin":"9\n","stdout":"18\n"}],
-    "reference_solution":"n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    if i % 3 == 0:\n        total = total + i\nprint(total)\n","wrong_solution":"n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    total = total + i\nprint(total)\n",
-    "solution_explanation":"先用余数检查当前数，再在 if 的循环体里累加；不符合条件的数不进入总和。",
-    "source_url":"https://exercism.org/tracks/python/exercises/sum-of-multiples"
+    "problem_id": "practice-08-2-v1",
+    "level_no": 8,
+    "title": "三的倍数总和",
+    "focus": "条件成立才累加，循环结束后输出总和。",
+    "description": "输入一行整数 n（0–100）。\n计算 1 到 n 中所有 3 的倍数之和，范围包含 n。\n只输出一行整数总和；没有符合条件的数时输出 0，不输出各个编号或中间结果。",
+    "sample": {
+      "stdin": "7\n",
+      "stdout": "9\n"
+    },
+    "hidden": [
+      {
+        "stdin": "2\n",
+        "stdout": "0\n"
+      },
+      {
+        "stdin": "6\n",
+        "stdout": "9\n"
+      },
+      {
+        "stdin": "9\n",
+        "stdout": "18\n"
+      },
+      {
+        "stdin": "0\n",
+        "stdout": "0\n"
+      },
+      {
+        "stdin": "1\n",
+        "stdout": "0\n"
+      },
+      {
+        "stdin": "3\n",
+        "stdout": "3\n"
+      },
+      {
+        "stdin": "99\n",
+        "stdout": "1683\n"
+      },
+      {
+        "stdin": "100\n",
+        "stdout": "1683\n"
+      }
+    ],
+    "reference_solution": "n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    if i % 3 == 0:\n        total = total + i\nprint(total)\n",
+    "wrong_solution": "n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    total = total + i\nprint(total)\n",
+    "solution_explanation": "先用余数检查当前数，再在 if 的循环体里累加；不符合条件的数不进入总和。",
+    "source_url": "https://exercism.org/tracks/python/exercises/sum-of-multiples",
+    "story": "Ottly 在检查沿岸编号时，只记录编号为 3 的倍数的路标。她要把这些编号加起来作为本次巡查的校验值，请计算指定范围内的编号总和。",
+    "difficulty": 2,
+    "target_misconception_tags": [
+      "accumulation_error",
+      "condition_error"
+    ]
   },
   {
-    "problem_id":"practice-08-3-v1","level_no":8,
-    "difficulty":2,"target_misconception_tags":["accumulation_error"],
-    "title":"逐日翻倍的总数","focus":"区分当天片数与前 n 天的累计片数。",
-    "description":"输入天数 n（0–20）。第 1 天有 1 片，此后每天片数是前一天的两倍；输出前 n 天片数之和，n=0 时输出 0。",
-    "sample":{"stdin":"4\n","stdout":"15\n"},"hidden":[{"stdin":"0\n","stdout":"0\n"},{"stdin":"1\n","stdout":"1\n"},{"stdin":"5\n","stdout":"31\n"}],
-    "reference_solution":"n = int(input())\ntoday = 1\ntotal = 0\nfor i in range(n):\n    total = total + today\n    today = today * 2\nprint(total)\n","wrong_solution":"n = int(input())\ntoday = 1\ntotal = 0\nfor i in range(n):\n    total = today\n    today = today * 2\nprint(total)\n",
-    "solution_explanation":"today 表示当天片数；total 每天在旧总数上加上 today，之后再翻倍，为下一天做准备。",
-    "source_url":"https://exercism.org/tracks/python/exercises/grains"
+    "problem_id": "practice-08-3-v1",
+    "level_no": 8,
+    "title": "逐日翻倍的总数",
+    "focus": "区分当天片数与前 n 天的累计片数。",
+    "description": "输入一行整数天数 n（0–20）。\n第 1 天收集 1 片，此后每天收集数量翻倍。输出前 n 天收集数量之和，一行一个整数。\nn 为 0 时输出 0，不输出每天的明细或其他文字。",
+    "sample": {
+      "stdin": "4\n",
+      "stdout": "15\n"
+    },
+    "hidden": [
+      {
+        "stdin": "0\n",
+        "stdout": "0\n"
+      },
+      {
+        "stdin": "1\n",
+        "stdout": "1\n"
+      },
+      {
+        "stdin": "5\n",
+        "stdout": "31\n"
+      },
+      {
+        "stdin": "2\n",
+        "stdout": "3\n"
+      },
+      {
+        "stdin": "3\n",
+        "stdout": "7\n"
+      },
+      {
+        "stdin": "19\n",
+        "stdout": "524287\n"
+      },
+      {
+        "stdin": "20\n",
+        "stdout": "1048575\n"
+      }
+    ],
+    "reference_solution": "n = int(input())\ntoday = 1\ntotal = 0\nfor i in range(n):\n    total = total + today\n    today = today * 2\nprint(total)\n",
+    "wrong_solution": "n = int(input())\ntoday = 1\ntotal = 0\nfor i in range(n):\n    total = today\n    today = today * 2\nprint(total)\n",
+    "solution_explanation": "today 表示当天片数；total 每天在旧总数上加上 today，之后再翻倍，为下一天做准备。",
+    "source_url": "https://exercism.org/tracks/python/exercises/grains",
+    "story": "Ottly 参加贝壳收集挑战：第一天收集 1 片，以后每天新收集的片数都是前一天的两倍。她想统计挑战开始后前 n 天一共收集了多少片，而不是只看最后一天。",
+    "difficulty": 2,
+    "target_misconception_tags": [
+      "accumulation_error"
+    ]
   },
   {
-    "problem_id":"practice-09-1-v1","level_no":9,
-    "difficulty":1,"target_misconception_tags":["condition_error"],
-    "title":"存到目标","focus":"目标已达成时 while 执行零次，每轮要更新贝壳和天数。",
-    "description":"依次输入初始贝壳数、目标数、每天增加数（正整数），均不超过 10000。输出首次达到或超过目标所需天数。",
-    "sample":{"stdin":"1\n6\n2\n","stdout":"3\n"},"hidden":[{"stdin":"5\n5\n2\n","stdout":"0\n"},{"stdin":"8\n5\n1\n","stdout":"0\n"},{"stdin":"0\n3\n5\n","stdout":"1\n"}],
-    "reference_solution":"saved = int(input())\ntarget = int(input())\nper_day = int(input())\ndays = 0\nwhile saved < target:\n    saved = saved + per_day\n    days = days + 1\nprint(days)\n","wrong_solution":"saved = int(input())\ntarget = int(input())\nper_day = int(input())\ndays = 0\nwhile saved <= target:\n    saved = saved + per_day\n    days = days + 1\nprint(days)\n",
-    "solution_explanation":"只在 saved 小于 target 时继续；等于目标已经完成，不能再多算一天。",
-    "source_url":"https://exercism.org/tracks/python/exercises/making-the-grade"
+    "problem_id": "practice-09-1-v1",
+    "level_no": 9,
+    "title": "存到目标",
+    "focus": "目标已达成时 while 执行零次，每轮要更新贝壳和天数。",
+    "description": "依次输入三行整数：初始贝壳数、目标贝壳数、每天增加数。前两项为 0–10000，每天增加数为 1–10000。\n输出一行整数，表示首次达到或超过目标所需的天数。\n初始数量已经达到或超过目标时输出 0，不附其他文字。",
+    "sample": {
+      "stdin": "1\n6\n2\n",
+      "stdout": "3\n"
+    },
+    "hidden": [
+      {
+        "stdin": "5\n5\n2\n",
+        "stdout": "0\n"
+      },
+      {
+        "stdin": "8\n5\n1\n",
+        "stdout": "0\n"
+      },
+      {
+        "stdin": "0\n3\n5\n",
+        "stdout": "1\n"
+      },
+      {
+        "stdin": "0\n0\n1\n",
+        "stdout": "0\n"
+      },
+      {
+        "stdin": "0\n10000\n1\n",
+        "stdout": "10000\n"
+      },
+      {
+        "stdin": "0\n10000\n10000\n",
+        "stdout": "1\n"
+      },
+      {
+        "stdin": "4\n10\n3\n",
+        "stdout": "2\n"
+      },
+      {
+        "stdin": "4\n11\n3\n",
+        "stdout": "3\n"
+      }
+    ],
+    "reference_solution": "saved = int(input())\ntarget = int(input())\nper_day = int(input())\ndays = 0\nwhile saved < target:\n    saved = saved + per_day\n    days = days + 1\nprint(days)\n",
+    "wrong_solution": "saved = int(input())\ntarget = int(input())\nper_day = int(input())\ndays = 0\nwhile saved <= target:\n    saved = saved + per_day\n    days = days + 1\nprint(days)\n",
+    "solution_explanation": "只在 saved 小于 target 时继续；等于目标已经完成，不能再多算一天。",
+    "source_url": "https://exercism.org/tracks/python/exercises/making-the-grade",
+    "story": "Ottly 想攒够贝壳兑换一本航海图。她已经有一些贝壳，以后每天会增加固定数量。请计算她最早在哪一天达到目标；如果现在已经足够，就无需再等一天。",
+    "difficulty": 1,
+    "target_misconception_tags": [
+      "condition_error"
+    ]
   },
   {
-    "problem_id":"practice-09-2-v1","level_no":9,
-    "difficulty":2,"target_misconception_tags":["condition_error"],
-    "title":"半数收纳","focus":"while 中持续改变状态，并在数值变成 1 时终止。",
-    "description":"输入整数 n（1–100000）。每轮把 n 变为 n//2，直到 n 不大于 1；输出进行了几轮。",
-    "sample":{"stdin":"8\n","stdout":"3\n"},"hidden":[{"stdin":"1\n","stdout":"0\n"},{"stdin":"9\n","stdout":"3\n"},{"stdin":"2\n","stdout":"1\n"}],
-    "reference_solution":"n = int(input())\nrounds = 0\nwhile n > 1:\n    n = n // 2\n    rounds = rounds + 1\nprint(rounds)\n","wrong_solution":"n = int(input())\nrounds = 0\nwhile n >= 1:\n    n = n // 2\n    rounds = rounds + 1\nprint(rounds)\n",
-    "solution_explanation":"n 为 1 时不再需要收纳；每轮整除使 n 下降，最终结束循环。",
-    "source_url":"https://exercism.org/tracks/python/exercises/collatz-conjecture"
+    "problem_id": "practice-09-2-v1",
+    "level_no": 9,
+    "title": "半数收纳",
+    "focus": "while 中持续改变状态，并在数值变成 1 时终止。",
+    "description": "输入一行整数 n（1–100000）。\n每轮把当前 n 更新为 n // 2，直到 n 不大于 1。\n输出一行整数轮数；初始 n 为 1 时输出 0，不附其他文字。",
+    "sample": {
+      "stdin": "8\n",
+      "stdout": "3\n"
+    },
+    "hidden": [
+      {
+        "stdin": "1\n",
+        "stdout": "0\n"
+      },
+      {
+        "stdin": "9\n",
+        "stdout": "3\n"
+      },
+      {
+        "stdin": "2\n",
+        "stdout": "1\n"
+      },
+      {
+        "stdin": "3\n",
+        "stdout": "1\n"
+      },
+      {
+        "stdin": "7\n",
+        "stdout": "2\n"
+      },
+      {
+        "stdin": "16\n",
+        "stdout": "4\n"
+      },
+      {
+        "stdin": "99999\n",
+        "stdout": "16\n"
+      },
+      {
+        "stdin": "100000\n",
+        "stdout": "16\n"
+      }
+    ],
+    "reference_solution": "n = int(input())\nrounds = 0\nwhile n > 1:\n    n = n // 2\n    rounds = rounds + 1\nprint(rounds)\n",
+    "wrong_solution": "n = int(input())\nrounds = 0\nwhile n >= 1:\n    n = n // 2\n    rounds = rounds + 1\nprint(rounds)\n",
+    "solution_explanation": "n 为 1 时不再需要收纳；每轮整除使 n 下降，最终结束循环。",
+    "source_url": "https://exercism.org/tracks/python/exercises/collatz-conjecture",
+    "story": "仓库空间不足，Ottly 想分轮整理贝壳。每整理一轮，待整理数量就变成原来的一半，只保留整数部分。数量降到 1 或更少时就可以停止，请统计实际进行了多少轮。",
+    "difficulty": 2,
+    "target_misconception_tags": [
+      "condition_error"
+    ]
   },
   {
-    "problem_id":"practice-09-3-v1","level_no":9,
-    "difficulty":3,"target_misconception_tags":["condition_error","accumulation_error"],
-    "title":"逐位数贝壳","focus":"每轮取末位并用整除缩小数字，不能漏算最高位。",
-    "description":"输入非负整数 n（0–100000000），输出十进制各位数字之和；n=0 时输出 0。",
-    "sample":{"stdin":"507\n","stdout":"12\n"},"hidden":[{"stdin":"0\n","stdout":"0\n"},{"stdin":"10\n","stdout":"1\n"},{"stdin":"999\n","stdout":"27\n"}],
-    "reference_solution":"n = int(input())\ntotal = 0\nwhile n > 0:\n    total = total + n % 10\n    n = n // 10\nprint(total)\n","wrong_solution":"n = int(input())\ntotal = 0\nwhile n > 10:\n    total = total + n % 10\n    n = n // 10\nprint(total)\n",
-    "solution_explanation":"每轮加上最后一位，并把最后一位从 n 去掉；直到 n 为零才结束，最高位也要处理。",
-    "source_url":"https://exercism.org/tracks/python/exercises/armstrong-numbers"
+    "problem_id": "practice-09-3-v1",
+    "level_no": 9,
+    "title": "逐位数贝壳",
+    "focus": "每轮取末位并用整除缩小数字，不能漏算最高位。",
+    "description": "输入一行非负整数 n（0–100000000）。\n计算 n 的十进制各位数字之和，输出一行整数。\nn 为 0 时输出 0；数字中的零正常参与计算，不输出拆分过程或其他文字。",
+    "sample": {
+      "stdin": "507\n",
+      "stdout": "12\n"
+    },
+    "hidden": [
+      {
+        "stdin": "0\n",
+        "stdout": "0\n"
+      },
+      {
+        "stdin": "10\n",
+        "stdout": "1\n"
+      },
+      {
+        "stdin": "999\n",
+        "stdout": "27\n"
+      },
+      {
+        "stdin": "7\n",
+        "stdout": "7\n"
+      },
+      {
+        "stdin": "100000000\n",
+        "stdout": "1\n"
+      },
+      {
+        "stdin": "99999999\n",
+        "stdout": "72\n"
+      },
+      {
+        "stdin": "10001\n",
+        "stdout": "2\n"
+      },
+      {
+        "stdin": "90909\n",
+        "stdout": "27\n"
+      }
+    ],
+    "reference_solution": "n = int(input())\ntotal = 0\nwhile n > 0:\n    total = total + n % 10\n    n = n // 10\nprint(total)\n",
+    "wrong_solution": "n = int(input())\ntotal = 0\nwhile n > 10:\n    total = total + n % 10\n    n = n // 10\nprint(total)\n",
+    "solution_explanation": "每轮加上最后一位，并把最后一位从 n 去掉；直到 n 为零才结束，最高位也要处理。",
+    "source_url": "https://exercism.org/tracks/python/exercises/armstrong-numbers",
+    "story": "Ottly 给收集箱贴上了数字编号，并用编号各位数字的和做一个小小的校验。编号里可能夹着零，请从个位开始逐位检查，算出完整的校验值。",
+    "difficulty": 3,
+    "target_misconception_tags": [
+      "condition_error",
+      "accumulation_error"
+    ]
   },
   {
-    "problem_id":"practice-10-1-v1","level_no":10,
-    "difficulty":1,"target_misconception_tags":["accumulation_error"],
-    "title":"数出 A","focus":"逐个字符比较并计数，不能直接把字符串长度当出现次数。",
-    "description":"输入一行长度 0–100 的大写英文字母电报码，输出其中字母 A 出现的次数。空行输出 0。",
-    "sample":{"stdin":"ABAA\n","stdout":"3\n"},"hidden":[{"stdin":"BBB\n","stdout":"0\n"},{"stdin":"\n","stdout":"0\n"},{"stdin":"A\n","stdout":"1\n"}],
-    "reference_solution":"message = input()\ncount = 0\nfor char in message:\n    if char == 'A':\n        count = count + 1\nprint(count)\n","wrong_solution":"message = input()\nprint(len(message))\n",
-    "solution_explanation":"len 给出总长度；只有当前字符是 A 时才把计数加一。",
-    "source_url":"https://exercism.org/tracks/python/exercises/nucleotide-count"
+    "problem_id": "practice-10-1-v1",
+    "level_no": 10,
+    "title": "数出 A",
+    "focus": "逐个字符比较并计数，不能直接把字符串长度当出现次数。",
+    "description": "输入一行长度为 0–100 的文本，只包含大写英文字母。\n统计其中字母 A 出现的次数，输出一行整数。\n输入为空行时输出 0，不附其他文字，也不要把其他字母计入。",
+    "sample": {
+      "stdin": "ABAA\n",
+      "stdout": "3\n"
+    },
+    "hidden": [
+      {
+        "stdin": "BBB\n",
+        "stdout": "0\n"
+      },
+      {
+        "stdin": "\n",
+        "stdout": "0\n"
+      },
+      {
+        "stdin": "A\n",
+        "stdout": "1\n"
+      },
+      {
+        "stdin": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n",
+        "stdout": "100\n"
+      },
+      {
+        "stdin": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB\n",
+        "stdout": "0\n"
+      },
+      {
+        "stdin": "BAABAA\n",
+        "stdout": "4\n"
+      },
+      {
+        "stdin": "Z\n",
+        "stdout": "0\n"
+      }
+    ],
+    "reference_solution": "message = input()\ncount = 0\nfor char in message:\n    if char == 'A':\n        count = count + 1\nprint(count)\n",
+    "wrong_solution": "message = input()\nprint(len(message))\n",
+    "solution_explanation": "len 给出总长度；只有当前字符是 A 时才把计数加一。",
+    "source_url": "https://exercism.org/tracks/python/exercises/nucleotide-count",
+    "story": "海边电台用大写英文字母记录信号，Ottly 特别关心字母 A 出现了多少次。消息可能很长，也可能只是一行空白，请逐个检查字符后给出统计结果。",
+    "difficulty": 1,
+    "target_misconception_tags": [
+      "accumulation_error"
+    ]
   },
   {
-    "problem_id":"practice-10-2-v1","level_no":10,
-    "difficulty":2,"target_misconception_tags":["accumulation_error"],
-    "title":"长短信号分数","focus":"遍历字符串时按字符条件累加不同分值。",
-    "description":"输入一行长度 0–100 且只含 A、B 的信号。每个 A 得 1 分，每个 B 得 3 分；输出总分。",
-    "sample":{"stdin":"ABBA\n","stdout":"8\n"},"hidden":[{"stdin":"\n","stdout":"0\n"},{"stdin":"BBB\n","stdout":"9\n"},{"stdin":"AA\n","stdout":"2\n"}],
-    "reference_solution":"signal = input()\nscore = 0\nfor char in signal:\n    if char == 'A':\n        score = score + 1\n    else:\n        score = score + 3\nprint(score)\n","wrong_solution":"signal = input()\nprint(len(signal))\n",
-    "solution_explanation":"字符个数不一定等于分数；每看到一个 B，要累加三分。",
-    "source_url":"https://exercism.org/tracks/python/exercises/scrabble-score"
+    "problem_id": "practice-10-2-v1",
+    "level_no": 10,
+    "title": "长短信号分数",
+    "focus": "遍历字符串时按字符条件累加不同分值。",
+    "description": "输入一行长度为 0–100 的字符串，只包含 A 和 B。\n每个 A 加 1 分，每个 B 加 3 分，输出一行整数总分。\n输入为空行时输出 0，不输出各字符得分或其他文字。",
+    "sample": {
+      "stdin": "ABBA\n",
+      "stdout": "8\n"
+    },
+    "hidden": [
+      {
+        "stdin": "\n",
+        "stdout": "0\n"
+      },
+      {
+        "stdin": "BBB\n",
+        "stdout": "9\n"
+      },
+      {
+        "stdin": "AA\n",
+        "stdout": "2\n"
+      },
+      {
+        "stdin": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n",
+        "stdout": "100\n"
+      },
+      {
+        "stdin": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB\n",
+        "stdout": "300\n"
+      },
+      {
+        "stdin": "BA\n",
+        "stdout": "4\n"
+      },
+      {
+        "stdin": "B\n",
+        "stdout": "3\n"
+      }
+    ],
+    "reference_solution": "signal = input()\nscore = 0\nfor char in signal:\n    if char == 'A':\n        score = score + 1\n    else:\n        score = score + 3\nprint(score)\n",
+    "wrong_solution": "signal = input()\nprint(len(signal))\n",
+    "solution_explanation": "字符个数不一定等于分数；每看到一个 B，要累加三分。",
+    "source_url": "https://exercism.org/tracks/python/exercises/scrabble-score",
+    "story": "Ottly 把电台的两种信号记为 A 和 B：A 计 1 分，B 计 3 分。一段信号的得分是所有字符分数的总和，请按收到的顺序处理每个信号。",
+    "difficulty": 2,
+    "target_misconception_tags": [
+      "accumulation_error"
+    ]
   },
   {
-    "problem_id":"practice-10-3-v1","level_no":10,
-    "difficulty":2,"target_misconception_tags":["accumulation_error"],
-    "title":"替换电台字符","focus":"每轮转换一个字符并拼到已有结果之后，不能覆盖先前内容。",
-    "description":"输入一行长度 0–100、只含 A/C/G/T 的文本。逐字映射 A→U、C→G、G→C、T→A，按原顺序输出新字符串。空输入输出空行。",
-    "sample":{"stdin":"ACGT\n","stdout":"UGCA\n"},"hidden":[{"stdin":"AAAA\n","stdout":"UUUU\n"},{"stdin":"\n","stdout":"\n"},{"stdin":"TTAC\n","stdout":"AAUG\n"}],
-    "reference_solution":"message = input()\nresult = ''\nfor char in message:\n    if char == 'A':\n        result = result + 'U'\n    elif char == 'C':\n        result = result + 'G'\n    elif char == 'G':\n        result = result + 'C'\n    else:\n        result = result + 'A'\nprint(result)\n","wrong_solution":"message = input()\nresult = ''\nfor char in message:\n    if char == 'A':\n        result = 'U'\n    elif char == 'C':\n        result = 'G'\n    elif char == 'G':\n        result = 'C'\n    else:\n        result = 'A'\nprint(result)\n",
-    "solution_explanation":"结果初始为空字符串，循环中每次都在旧 result 后面追加转换后的字符。",
-    "source_url":"https://exercism.org/tracks/python/exercises/rna-transcription"
+    "problem_id": "practice-10-3-v1",
+    "level_no": 10,
+    "title": "替换电台字符",
+    "focus": "每轮转换一个字符并拼到已有结果之后，不能覆盖先前内容。",
+    "description": "输入一行长度为 0–100 的文本，只包含 A、C、G、T。\n按 A→U、C→G、G→C、T→A 逐字替换，输出转换后的字符串一行。\n输入为空行时输出一个空行，不打乱字符顺序，不附其他文字。",
+    "sample": {
+      "stdin": "ACGT\n",
+      "stdout": "UGCA\n"
+    },
+    "hidden": [
+      {
+        "stdin": "AAAA\n",
+        "stdout": "UUUU\n"
+      },
+      {
+        "stdin": "\n",
+        "stdout": "\n"
+      },
+      {
+        "stdin": "TTAC\n",
+        "stdout": "AAUG\n"
+      },
+      {
+        "stdin": "C\n",
+        "stdout": "G\n"
+      },
+      {
+        "stdin": "G\n",
+        "stdout": "C\n"
+      },
+      {
+        "stdin": "T\n",
+        "stdout": "A\n"
+      },
+      {
+        "stdin": "ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGT\n",
+        "stdout": "UGCAUGCAUGCAUGCAUGCAUGCAUGCAUGCAUGCAUGCAUGCAUGCAUGCAUGCAUGCAUGCAUGCAUGCAUGCAUGCAUGCAUGCAUGCAUGCAUGCA\n"
+      }
+    ],
+    "reference_solution": "message = input()\nresult = ''\nfor char in message:\n    if char == 'A':\n        result = result + 'U'\n    elif char == 'C':\n        result = result + 'G'\n    elif char == 'G':\n        result = result + 'C'\n    else:\n        result = result + 'A'\nprint(result)\n",
+    "wrong_solution": "message = input()\nresult = ''\nfor char in message:\n    if char == 'A':\n        result = 'U'\n    elif char == 'C':\n        result = 'G'\n    elif char == 'G':\n        result = 'C'\n    else:\n        result = 'A'\nprint(result)\n",
+    "solution_explanation": "结果初始为空字符串，循环中每次都在旧 result 后面追加转换后的字符。",
+    "source_url": "https://exercism.org/tracks/python/exercises/rna-transcription",
+    "story": "电台收到了一段只使用 A、C、G、T 的编码。Ottly 要按固定对照表将每个字符换成新字符，并保留原来的先后顺序，让接收站读到完整消息。",
+    "difficulty": 2,
+    "target_misconception_tags": [
+      "accumulation_error"
+    ]
   },
   {
-    "problem_id":"practice-11-1-v1","level_no":11,
-    "difficulty":1,"target_misconception_tags":["variable_error"],
-    "title":"记录最高温差","focus":"最大值应由真实列表元素初始化，不能固定从零开始。","assessment":"list_maximum",
-    "description":"先输入记录数 n（1–100），再逐行输入 n 个整数温差（-100 到 100）。先放进列表，再遍历列表输出其中最大值。",
-    "sample":{"stdin":"3\n-8\n-2\n-5\n","stdout":"-2\n"},"hidden":[{"stdin":"1\n-7\n","stdout":"-7\n"},{"stdin":"4\n3\n1\n8\n2\n","stdout":"8\n"}],
-    "reference_solution":"n = int(input())\nvalues = []\nfor i in range(n):\n    values.append(int(input()))\nlargest = values[0]\nfor value in values:\n    if value > largest:\n        largest = value\nprint(largest)\n","wrong_solution":"n = int(input())\nvalues = []\nfor i in range(n):\n    values.append(int(input()))\nlargest = 0\nfor value in values:\n    if value > largest:\n        largest = value\nprint(largest)\n",
-    "solution_explanation":"列表至少有一项，所以用第一项初始化最大值；这样全是负数时也能找到正确答案。",
-    "source_url":"https://exercism.org/tracks/python/exercises/high-scores"
+    "problem_id": "practice-11-1-v1",
+    "level_no": 11,
+    "title": "记录最高温差",
+    "focus": "最大值应由真实列表元素初始化，不能固定从零开始。",
+    "assessment": "list_maximum",
+    "description": "第一行输入记录数 n（1–100），接下来 n 行各输入一个整数温差（-100–100）。\n先把记录放进列表，再遍历列表，找出并输出最大值一行。\n列表至少有一项，请按要求使用列表和遍历，不用 max 代替遍历，不附其他文字。",
+    "sample": {
+      "stdin": "3\n-8\n-2\n-5\n",
+      "stdout": "-2\n"
+    },
+    "hidden": [
+      {
+        "stdin": "1\n-7\n",
+        "stdout": "-7\n"
+      },
+      {
+        "stdin": "4\n3\n1\n8\n2\n",
+        "stdout": "8\n"
+      },
+      {
+        "stdin": "1\n-100\n",
+        "stdout": "-100\n"
+      },
+      {
+        "stdin": "3\n0\n0\n0\n",
+        "stdout": "0\n"
+      },
+      {
+        "stdin": "3\n100\n2\n-100\n",
+        "stdout": "100\n"
+      },
+      {
+        "stdin": "4\n4\n9\n9\n1\n",
+        "stdout": "9\n"
+      },
+      {
+        "stdin": "100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n-100\n100\n",
+        "stdout": "100\n"
+      }
+    ],
+    "reference_solution": "n = int(input())\nvalues = []\nfor i in range(n):\n    values.append(int(input()))\nlargest = values[0]\nfor value in values:\n    if value > largest:\n        largest = value\nprint(largest)\n",
+    "wrong_solution": "n = int(input())\nvalues = []\nfor i in range(n):\n    values.append(int(input()))\nlargest = 0\nfor value in values:\n    if value > largest:\n        largest = value\nprint(largest)\n",
+    "solution_explanation": "列表至少有一项，所以用第一项初始化最大值；这样全是负数时也能找到正确答案。",
+    "source_url": "https://exercism.org/tracks/python/exercises/high-scores",
+    "story": "Ottly 把一段时间里的温差记录存入列表，想找出其中最高的一次。所有记录也可能都是负数，因此不能把没有出现过的零当作最高值。请先保存完整记录，再进行比较。",
+    "difficulty": 1,
+    "target_misconception_tags": [
+      "variable_error"
+    ]
   },
   {
-    "problem_id":"practice-11-2-v1","level_no":11,
-    "difficulty":1,"target_misconception_tags":["other"],
-    "title":"指定位置的记录","focus":"理解第 k 条记录对应列表索引 k-1。",
-    "description":"先输入记录数 n（1–100）和位置 k（1≤k≤n），再逐行读入 n 个整数并保存到列表；输出第 k 条记录。",
-    "sample":{"stdin":"3\n1\n4\n7\n9\n","stdout":"4\n"},"hidden":[{"stdin":"3\n3\n4\n7\n9\n","stdout":"9\n"},{"stdin":"2\n2\n-1\n-5\n","stdout":"-5\n"}],
-    "reference_solution":"n = int(input())\nk = int(input())\nvalues = []\nfor i in range(n):\n    values.append(int(input()))\nprint(values[k - 1])\n","wrong_solution":"n = int(input())\nk = int(input())\nvalues = []\nfor i in range(n):\n    values.append(int(input()))\nprint(values[k])\n",
-    "solution_explanation":"自然语言的第一条是列表索引零，因而第 k 条使用 k-1。",
-    "source_url":"https://exercism.org/tracks/python/exercises/card-games"
+    "problem_id": "practice-11-2-v1",
+    "level_no": 11,
+    "title": "指定位置的记录",
+    "focus": "理解第 k 条记录对应列表索引 k-1。",
+    "description": "第一行输入记录数 n（1–100），第二行输入位置 k（1≤k≤n），接下来 n 行各输入一个整数记录。\n将记录按输入顺序保存到列表，输出第 k 条记录的值，一行一个整数。\n位置 k 从 1 开始，重复值和负数都要保留，不附其他文字。",
+    "sample": {
+      "stdin": "3\n1\n4\n7\n9\n",
+      "stdout": "4\n"
+    },
+    "hidden": [
+      {
+        "stdin": "3\n3\n4\n7\n9\n",
+        "stdout": "9\n"
+      },
+      {
+        "stdin": "2\n2\n-1\n-5\n",
+        "stdout": "-5\n"
+      },
+      {
+        "stdin": "1\n1\n0\n",
+        "stdout": "0\n"
+      },
+      {
+        "stdin": "4\n2\n9\n-3\n7\n5\n",
+        "stdout": "-3\n"
+      },
+      {
+        "stdin": "3\n2\n4\n4\n4\n",
+        "stdout": "4\n"
+      },
+      {
+        "stdin": "100\n100\n0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23\n24\n25\n26\n27\n28\n29\n30\n31\n32\n33\n34\n35\n36\n37\n38\n39\n40\n41\n42\n43\n44\n45\n46\n47\n48\n49\n50\n51\n52\n53\n54\n55\n56\n57\n58\n59\n60\n61\n62\n63\n64\n65\n66\n67\n68\n69\n70\n71\n72\n73\n74\n75\n76\n77\n78\n79\n80\n81\n82\n83\n84\n85\n86\n87\n88\n89\n90\n91\n92\n93\n94\n95\n96\n97\n98\n99\n",
+        "stdout": "99\n"
+      }
+    ],
+    "reference_solution": "n = int(input())\nk = int(input())\nvalues = []\nfor i in range(n):\n    values.append(int(input()))\nprint(values[k - 1])\n",
+    "wrong_solution": "n = int(input())\nk = int(input())\nvalues = []\nfor i in range(n):\n    values.append(int(input()))\nprint(values[k])\n",
+    "solution_explanation": "自然语言的第一条是列表索引零，因而第 k 条使用 k-1。",
+    "source_url": "https://exercism.org/tracks/python/exercises/card-games",
+    "story": "航行日志中的记录按录入顺序排列。Ottly 想查看第 k 条记录，但列表的位置从零开始计数。请先把全部记录存好，再找到记录本中从 1 开始数的指定那一条。",
+    "difficulty": 1,
+    "target_misconception_tags": [
+      "other"
+    ]
   },
   {
-    "problem_id":"practice-11-3-v1","level_no":11,
-    "difficulty":2,"target_misconception_tags":["condition_error"],
-    "title":"保留达标记录","focus":"遍历原列表，把达标项按原顺序 append 到新列表。",
-    "description":"先输入记录数 n（0–100）和阈值 t，再逐行读入 n 个整数并放进列表；把大于或等于 t 的值放进新列表，最后按原顺序逐行输出。没有达标项则不输出。",
-    "sample":{"stdin":"4\n5\n3\n5\n7\n5\n","stdout":"5\n7\n5\n"},"hidden":[{"stdin":"2\n10\n1\n2\n","stdout":""},{"stdin":"0\n5\n","stdout":""},{"stdin":"3\n0\n0\n-1\n0\n","stdout":"0\n0\n"}],
-    "reference_solution":"n = int(input())\nlimit = int(input())\nvalues = []\nfor i in range(n):\n    values.append(int(input()))\nselected = []\nfor value in values:\n    if value >= limit:\n        selected.append(value)\nfor value in selected:\n    print(value)\n","wrong_solution":"n = int(input())\nlimit = int(input())\nvalues = []\nfor i in range(n):\n    values.append(int(input()))\nselected = []\nfor value in values:\n    if value > limit:\n        selected.append(value)\nfor value in selected:\n    print(value)\n",
-    "solution_explanation":"逐个检查原列表，大于或等于阈值才 append 到新列表；遍历新列表输出，保留原顺序。",
-    "source_url":"https://exercism.org/tracks/python/exercises/list-ops"
+    "problem_id": "practice-11-3-v1",
+    "level_no": 11,
+    "title": "保留达标记录",
+    "focus": "遍历原列表，把达标项按原顺序 append 到新列表。",
+    "description": "第一行输入记录数 n（0–100），第二行输入整数阈值 t，接下来 n 行各输入一个整数记录。\n先保存原列表，再把大于或等于 t 的值加入新列表，最后按原顺序逐行输出新列表中的值。\n没有达标项或 n 为 0 时不输出任何内容；不要去重或排序。",
+    "sample": {
+      "stdin": "4\n5\n3\n5\n7\n5\n",
+      "stdout": "5\n7\n5\n"
+    },
+    "hidden": [
+      {
+        "stdin": "2\n10\n1\n2\n",
+        "stdout": ""
+      },
+      {
+        "stdin": "0\n5\n",
+        "stdout": ""
+      },
+      {
+        "stdin": "3\n0\n0\n-1\n0\n",
+        "stdout": "0\n0\n"
+      },
+      {
+        "stdin": "3\n5\n5\n5\n5\n",
+        "stdout": "5\n5\n5\n"
+      },
+      {
+        "stdin": "3\n-2\n-3\n-2\n-1\n",
+        "stdout": "-2\n-1\n"
+      },
+      {
+        "stdin": "4\n0\n9\n2\n9\n1\n",
+        "stdout": "9\n2\n9\n1\n"
+      },
+      {
+        "stdin": "100\n99\n0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23\n24\n25\n26\n27\n28\n29\n30\n31\n32\n33\n34\n35\n36\n37\n38\n39\n40\n41\n42\n43\n44\n45\n46\n47\n48\n49\n50\n51\n52\n53\n54\n55\n56\n57\n58\n59\n60\n61\n62\n63\n64\n65\n66\n67\n68\n69\n70\n71\n72\n73\n74\n75\n76\n77\n78\n79\n80\n81\n82\n83\n84\n85\n86\n87\n88\n89\n90\n91\n92\n93\n94\n95\n96\n97\n98\n99\n",
+        "stdout": "99\n"
+      }
+    ],
+    "reference_solution": "n = int(input())\nlimit = int(input())\nvalues = []\nfor i in range(n):\n    values.append(int(input()))\nselected = []\nfor value in values:\n    if value >= limit:\n        selected.append(value)\nfor value in selected:\n    print(value)\n",
+    "wrong_solution": "n = int(input())\nlimit = int(input())\nvalues = []\nfor i in range(n):\n    values.append(int(input()))\nselected = []\nfor value in values:\n    if value > limit:\n        selected.append(value)\nfor value in selected:\n    print(value)\n",
+    "solution_explanation": "逐个检查原列表，大于或等于阈值才 append 到新列表；遍历新列表输出，保留原顺序。",
+    "source_url": "https://exercism.org/tracks/python/exercises/list-ops",
+    "story": "Ottly 要从一份测量记录中挑出达到标准的项目，另存成一份清单。达标记录可能重复出现，重复记录也应保留，清单里的顺序要与原记录一致。",
+    "difficulty": 2,
+    "target_misconception_tags": [
+      "condition_error"
+    ]
   },
   {
-    "problem_id":"practice-12-1-v1","level_no":12,
-    "difficulty":1,"target_misconception_tags":["other"],
-    "title":"姓名问候函数","focus":"函数应 return 字符串，函数内 print 不能代替返回值。",
-    "description":"补全 greet(name) 的函数体，返回 Hi, 加一个空格再加姓名。主程序输入一行姓名并打印函数返回值。保留提供的函数签名和调用代码。",
-    "starter_code":"def greet(name):\n    pass\n\nname = input()\nprint(greet(name))\n",
-    "function_name":"greet","direct_calls":[{"args":["Mia"],"expected":"Hi, Mia"},{"args":["Bo"],"expected":"Hi, Bo"}],
-    "sample":{"stdin":"Mia\n","stdout":"Hi, Mia\n"},"hidden":[{"stdin":"Bo\n","stdout":"Hi, Bo\n"},{"stdin":"Sea Otter\n","stdout":"Hi, Sea Otter\n"}],
-    "reference_solution":"def greet(name):\n    return 'Hi, ' + name\n\nname = input()\nprint(greet(name))\n","wrong_solution":"def greet(name):\n    print('Hi, ' + name)\n\nname = input()\nprint(greet(name))\n",
-    "solution_explanation":"return 把结果交给外部调用者，主程序再 print；函数内直接打印会让返回值成为 None。",
-    "source_url":"https://exercism.org/tracks/python/exercises/two-fer"
+    "problem_id": "practice-12-1-v1",
+    "level_no": 12,
+    "title": "姓名问候函数",
+    "focus": "函数应 return 字符串，函数内 print 不能代替返回值。",
+    "description": "补全 greet(name) 的函数体，返回字符串 Hi, 姓名，逗号后有一个空格，姓名替换为参数 name。\n主程序输入一行非空姓名并打印函数返回值；保留提供的函数签名和调用代码。\n函数内使用 return 返回字符串，不用 print 代替返回，不添加其他输出。",
+    "starter_code": "def greet(name):\n    pass\n\nname = input()\nprint(greet(name))\n",
+    "function_name": "greet",
+    "direct_calls": [
+      {
+        "args": [
+          "Mia"
+        ],
+        "expected": "Hi, Mia"
+      },
+      {
+        "args": [
+          "Bo"
+        ],
+        "expected": "Hi, Bo"
+      },
+      {
+        "args": [
+          "A"
+        ],
+        "expected": "Hi, A"
+      },
+      {
+        "args": [
+          "Sea Otter"
+        ],
+        "expected": "Hi, Sea Otter"
+      }
+    ],
+    "sample": {
+      "stdin": "Mia\n",
+      "stdout": "Hi, Mia\n"
+    },
+    "hidden": [
+      {
+        "stdin": "Bo\n",
+        "stdout": "Hi, Bo\n"
+      },
+      {
+        "stdin": "Sea Otter\n",
+        "stdout": "Hi, Sea Otter\n"
+      },
+      {
+        "stdin": "A\n",
+        "stdout": "Hi, A\n"
+      },
+      {
+        "stdin": "mIa\n",
+        "stdout": "Hi, mIa\n"
+      },
+      {
+        "stdin": "Ottly\n",
+        "stdout": "Hi, Ottly\n"
+      },
+      {
+        "stdin": "North Friend\n",
+        "stdout": "Hi, North Friend\n"
+      }
+    ],
+    "reference_solution": "def greet(name):\n    return 'Hi, ' + name\n\nname = input()\nprint(greet(name))\n",
+    "wrong_solution": "def greet(name):\n    print('Hi, ' + name)\n\nname = input()\nprint(greet(name))\n",
+    "solution_explanation": "return 把结果交给外部调用者，主程序再 print；函数内直接打印会让返回值成为 None。",
+    "source_url": "https://exercism.org/tracks/python/exercises/two-fer",
+    "story": "Ottly 希望多个页面都能使用同一种问候方式。她决定把拼接问候语的工作放进函数，调用时传入不同姓名。函数要把文字交还给调用者，再由主程序显示出来。",
+    "difficulty": 1,
+    "target_misconception_tags": [
+      "other"
+    ]
   },
   {
-    "problem_id":"practice-12-2-v1","level_no":12,
-    "difficulty":2,"target_misconception_tags":["condition_error"],
-    "title":"安全判断函数","focus":"用两个参数共同决定函数返回的布尔值。",
-    "description":"补全 can_sail(wind, wave)。仅当风速不超过 5 且浪高不超过 2 时返回布尔值 True，其他情况返回 False。主程序逐行读取两个整数并打印函数返回值。保留提供的函数签名和调用代码。",
-    "starter_code":"def can_sail(wind, wave):\n    pass\n\nwind = int(input())\nwave = int(input())\nprint(can_sail(wind, wave))\n",
-    "function_name":"can_sail","direct_calls":[{"args":[5,2],"expected":true},{"args":[6,2],"expected":false},{"args":[5,3],"expected":false}],
-    "sample":{"stdin":"5\n2\n","stdout":"True\n"},"hidden":[{"stdin":"6\n2\n","stdout":"False\n"},{"stdin":"5\n3\n","stdout":"False\n"},{"stdin":"1\n1\n","stdout":"True\n"}],
-    "reference_solution":"def can_sail(wind, wave):\n    return wind <= 5 and wave <= 2\n\nwind = int(input())\nwave = int(input())\nprint(can_sail(wind, wave))\n","wrong_solution":"def can_sail(wind, wave):\n    return wind <= 5 or wave <= 2\n\nwind = int(input())\nwave = int(input())\nprint(can_sail(wind, wave))\n",
-    "solution_explanation":"函数使用两个形参计算逻辑表达式，再把布尔结果返回；只满足其中一项不能出航。",
-    "source_url":"https://exercism.org/tracks/python/exercises/ghost-gobble-arcade-game"
+    "problem_id": "practice-12-2-v1",
+    "level_no": 12,
+    "title": "安全判断函数",
+    "focus": "用两个参数共同决定函数返回的布尔值。",
+    "description": "补全 can_sail(wind, wave)。仅当风速不超过 5 且浪高不超过 2 时返回布尔值 True，否则返回布尔值 False。\n主程序依次输入非负整数风速、浪高，每项一行，并打印函数返回值。保留提供的函数签名和调用代码。\n函数应返回真正的布尔值，不返回文字字符串，也不用 print 代替 return。",
+    "starter_code": "def can_sail(wind, wave):\n    pass\n\nwind = int(input())\nwave = int(input())\nprint(can_sail(wind, wave))\n",
+    "function_name": "can_sail",
+    "direct_calls": [
+      {
+        "args": [
+          5,
+          2
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          6,
+          2
+        ],
+        "expected": false
+      },
+      {
+        "args": [
+          5,
+          3
+        ],
+        "expected": false
+      },
+      {
+        "args": [
+          0,
+          0
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          6,
+          3
+        ],
+        "expected": false
+      }
+    ],
+    "sample": {
+      "stdin": "5\n2\n",
+      "stdout": "True\n"
+    },
+    "hidden": [
+      {
+        "stdin": "6\n2\n",
+        "stdout": "False\n"
+      },
+      {
+        "stdin": "5\n3\n",
+        "stdout": "False\n"
+      },
+      {
+        "stdin": "1\n1\n",
+        "stdout": "True\n"
+      },
+      {
+        "stdin": "0\n0\n",
+        "stdout": "True\n"
+      },
+      {
+        "stdin": "4\n2\n",
+        "stdout": "True\n"
+      },
+      {
+        "stdin": "5\n1\n",
+        "stdout": "True\n"
+      },
+      {
+        "stdin": "6\n3\n",
+        "stdout": "False\n"
+      },
+      {
+        "stdin": "0\n3\n",
+        "stdout": "False\n"
+      }
+    ],
+    "reference_solution": "def can_sail(wind, wave):\n    return wind <= 5 and wave <= 2\n\nwind = int(input())\nwave = int(input())\nprint(can_sail(wind, wave))\n",
+    "wrong_solution": "def can_sail(wind, wave):\n    return wind <= 5 or wave <= 2\n\nwind = int(input())\nwave = int(input())\nprint(can_sail(wind, wave))\n",
+    "solution_explanation": "函数使用两个形参计算逻辑表达式，再把布尔结果返回；只满足其中一项不能出航。",
+    "source_url": "https://exercism.org/tracks/python/exercises/ghost-gobble-arcade-game",
+    "story": "出航检查会在不同地方重复使用，Ottly 想把安全规则封装成函数。每次调用都传入风速和浪高，函数返回一个明确的真假结果，供其他程序继续判断。",
+    "difficulty": 2,
+    "target_misconception_tags": [
+      "condition_error"
+    ]
   },
   {
-    "problem_id":"practice-12-3-v1","level_no":12,
-    "difficulty":2,"target_misconception_tags":["condition_error","accumulation_error"],
-    "title":"达标人数函数","focus":"每次调用从零计数，包含等于阈值的成绩，并返回整数。",
-    "description":"补全 count_passed(scores, limit)，返回成绩列表中大于或等于 limit 的人数。主程序输入记录数 n（0–100）、阈值以及 n 个整数成绩，并打印返回值。保留提供的函数签名和调用代码。",
-    "starter_code":"def count_passed(scores, limit):\n    pass\n\nn = int(input())\nlimit = int(input())\nscores = []\nfor i in range(n):\n    scores.append(int(input()))\nprint(count_passed(scores, limit))\n",
-    "function_name":"count_passed","direct_calls":[{"args":[[59,60,80,60],60],"expected":3},{"args":[[],60],"expected":0},{"args":[[100,0],100],"expected":1}],
-    "sample":{"stdin":"4\n60\n59\n60\n80\n60\n","stdout":"3\n"},"hidden":[{"stdin":"0\n60\n","stdout":"0\n"},{"stdin":"3\n100\n99\n100\n101\n","stdout":"2\n"},{"stdin":"2\n-1\n-1\n-2\n","stdout":"1\n"}],
-    "reference_solution":"def count_passed(scores, limit):\n    count = 0\n    for score in scores:\n        if score >= limit:\n            count = count + 1\n    return count\n\nn = int(input())\nlimit = int(input())\nscores = []\nfor i in range(n):\n    scores.append(int(input()))\nprint(count_passed(scores, limit))\n","wrong_solution":"def count_passed(scores, limit):\n    count = 0\n    for score in scores:\n        if score > limit:\n            count = count + 1\n    return count\n\nn = int(input())\nlimit = int(input())\nscores = []\nfor i in range(n):\n    scores.append(int(input()))\nprint(count_passed(scores, limit))\n",
-    "solution_explanation":"函数内部每次从零开始计数，逐个比较列表中的成绩，等于阈值也达标；遍历完成后 return。",
-    "source_url":"https://exercism.org/tracks/python/exercises/making-the-grade"
+    "problem_id": "practice-12-3-v1",
+    "level_no": 12,
+    "title": "达标人数函数",
+    "focus": "每次调用从零计数，包含等于阈值的成绩，并返回整数。",
+    "description": "补全 count_passed(scores, limit)，返回 scores 中大于或等于 limit 的成绩数量，返回值为整数。\n主程序依次输入记录数 n（0–100）、整数分数线以及 n 个整数成绩，每项单独一行，再打印函数返回值。保留提供的函数签名和调用代码。\n恰好等于分数线也算达标，空列表返回 0，不修改传入列表，不添加其他输出。",
+    "starter_code": "def count_passed(scores, limit):\n    pass\n\nn = int(input())\nlimit = int(input())\nscores = []\nfor i in range(n):\n    scores.append(int(input()))\nprint(count_passed(scores, limit))\n",
+    "function_name": "count_passed",
+    "direct_calls": [
+      {
+        "args": [
+          [
+            59,
+            60,
+            80,
+            60
+          ],
+          60
+        ],
+        "expected": 3
+      },
+      {
+        "args": [
+          [],
+          60
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          [
+            100,
+            0
+          ],
+          100
+        ],
+        "expected": 1
+      },
+      {
+        "args": [
+          [
+            60,
+            60,
+            60
+          ],
+          60
+        ],
+        "expected": 3
+      },
+      {
+        "args": [
+          [
+            -1,
+            0,
+            1
+          ],
+          0
+        ],
+        "expected": 2
+      }
+    ],
+    "sample": {
+      "stdin": "4\n60\n59\n60\n80\n60\n",
+      "stdout": "3\n"
+    },
+    "hidden": [
+      {
+        "stdin": "0\n60\n",
+        "stdout": "0\n"
+      },
+      {
+        "stdin": "3\n100\n99\n100\n101\n",
+        "stdout": "2\n"
+      },
+      {
+        "stdin": "2\n-1\n-1\n-2\n",
+        "stdout": "1\n"
+      },
+      {
+        "stdin": "3\n60\n60\n60\n60\n",
+        "stdout": "3\n"
+      },
+      {
+        "stdin": "3\n60\n0\n1\n59\n",
+        "stdout": "0\n"
+      },
+      {
+        "stdin": "4\n0\n-1\n0\n1\n0\n",
+        "stdout": "3\n"
+      },
+      {
+        "stdin": "100\n50\n0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23\n24\n25\n26\n27\n28\n29\n30\n31\n32\n33\n34\n35\n36\n37\n38\n39\n40\n41\n42\n43\n44\n45\n46\n47\n48\n49\n50\n51\n52\n53\n54\n55\n56\n57\n58\n59\n60\n61\n62\n63\n64\n65\n66\n67\n68\n69\n70\n71\n72\n73\n74\n75\n76\n77\n78\n79\n80\n81\n82\n83\n84\n85\n86\n87\n88\n89\n90\n91\n92\n93\n94\n95\n96\n97\n98\n99\n",
+        "stdout": "50\n"
+      }
+    ],
+    "reference_solution": "def count_passed(scores, limit):\n    count = 0\n    for score in scores:\n        if score >= limit:\n            count = count + 1\n    return count\n\nn = int(input())\nlimit = int(input())\nscores = []\nfor i in range(n):\n    scores.append(int(input()))\nprint(count_passed(scores, limit))\n",
+    "wrong_solution": "def count_passed(scores, limit):\n    count = 0\n    for score in scores:\n        if score > limit:\n            count = count + 1\n    return count\n\nn = int(input())\nlimit = int(input())\nscores = []\nfor i in range(n):\n    scores.append(int(input()))\nprint(count_passed(scores, limit))\n",
+    "solution_explanation": "函数内部每次从零开始计数，逐个比较列表中的成绩，等于阈值也达标；遍历完成后 return。",
+    "source_url": "https://exercism.org/tracks/python/exercises/making-the-grade",
+    "story": "训练结束后，Ottly 要统计达到指定分数线的人数。不同批次的成绩列表和分数线可能不同，请把统计过程封装成函数，让它每次都根据传入参数重新计算。",
+    "difficulty": 2,
+    "target_misconception_tags": [
+      "condition_error",
+      "accumulation_error"
+    ]
   }
 ]

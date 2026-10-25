@@ -37,6 +37,10 @@ export default function PracticePage() {
   const activeIdRef = useRef(activeId)
   activeIdRef.current = activeId
   const currentSolution = solution?.problem_id === activeId ? solution : null
+  const embeddedTaskPrefix = `${lesson?.story}\n\n任务：`
+  const task = lesson?.description.startsWith(embeddedTaskPrefix)
+    ? lesson.description.slice(embeddedTaskPrefix.length)
+    : lesson?.description
 
   useEffect(() => {
     if (!activeId) {
@@ -118,7 +122,10 @@ export default function PracticePage() {
           setLesson(current => ({ ...current, completed: true }))
           setItems(current => current.map(item => item.problem_id === lesson.problem_id ? { ...item, completed: true } : item))
         }}>
-        <h3>任务</h3><p>{lesson.description}</p>
+        <div className="practice-statement">
+          <section aria-label="题目"><h3>题目</h3><p>{lesson.story}</p></section>
+          <section aria-label="任务"><h3>任务</h3><p>{task}</p></section>
+        </div>
         <h3>样例</h3>
         {lesson.examples.map((example, index) => <div className="judge-output-grid" key={index}>
           <div><span>输入</span><pre>{example.stdin || '（无需输入）'}</pre></div>

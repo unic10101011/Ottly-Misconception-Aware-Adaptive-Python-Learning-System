@@ -1,0 +1,94 @@
+{
+  "schema_version": "1.0.0",
+  "problem_id": "practice-07-5-v1",
+  "version": 1,
+  "level_no": 7,
+  "kind": "practice",
+  "target_misconception_tags": ["range_boundary"],
+  "source_url": "https://github.com/alexmojaki/futurecoder/blob/main/core/chapters/c04_for_loops.py",
+  "practice_focus": "将从零开始的循环序号用于计算票价；第一站不应额外增加一次金额，支持零增量与零站数。",
+  "title": "逐站票价表",
+  "difficulty": 2,
+  "knowledge_ids": [
+    "K07",
+    "K03"
+  ],
+  "prerequisite_knowledge_ids": [
+    "K03",
+    "K05"
+  ],
+  "prerequisite_problem_ids": [
+    "safe-sailing-v1"
+  ],
+  "published": true,
+  "story": "海边观光船要制作一张票价表。从起点到第一个停靠站的票价已经确定，此后每多坐一站，就在上一站票价的基础上增加固定金额。Ottly 想按停靠站的先后顺序，打印到达每一站的票价。",
+  "teaching": [
+    {
+      "title": "本题练习重点",
+      "text": "将从零开始的循环序号用于计算票价；第一站不应额外增加一次金额，支持零增量与零站数。",
+      "example": "先运行样例，再检查零值、边界和各分支的情况。"
+    }
+  ],
+  "description": "依次输入三个整数，每项单独一行：第一站票价 first（0–100）、每增加一站增加的金额 step（0–100）、停靠站数量 n（0–10）。使用 for 循环，按顺序输出到第 1 至 n 站的票价，每行一个整数。第 1 站票价为 first，第 2 站为 first + step，依此类推。n 为 0 时无输出，不附其他文字。",
+  "starter_code": "# 在这里编写 Python 代码\n",
+  "examples": [
+    {
+      "stdin": "3\n2\n4\n",
+      "stdout": "3\n5\n7\n9\n"
+    }
+  ],
+  "tests": [
+    {
+      "case_id": "sample-1",
+      "stdin": "3\n2\n4\n",
+      "expected_output": "3\n5\n7\n9\n",
+      "visibility": "public"
+    },
+    {
+      "case_id": "hidden-1",
+      "stdin": "5\n2\n0\n",
+      "expected_output": "",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-2",
+      "stdin": "7\n9\n1\n",
+      "expected_output": "7\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-3",
+      "stdin": "4\n0\n3\n",
+      "expected_output": "4\n4\n4\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-4",
+      "stdin": "0\n3\n4\n",
+      "expected_output": "0\n3\n6\n9\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-5",
+      "stdin": "1\n1\n10\n",
+      "expected_output": "1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-6",
+      "stdin": "100\n100\n2\n",
+      "expected_output": "100\n200\n",
+      "visibility": "hidden"
+    }
+  ],
+  "comparison": "exact",
+  "time_limit_seconds": 3,
+  "output_limit_chars": 8000,
+  "hints": {
+    "level1": "到第一站时，需要在首站票价之外再增加金额吗？",
+    "level2": "考虑用从零开始的序号，表示在第一站基础上多经过了几站。",
+    "level3": "检查只停一站、没有停靠站、每站增加金额为零三种情况。"
+  },
+  "reference_solution": "first = int(input())\nstep = int(input())\nn = int(input())\n\nfor i in range(n):\n    print(first + i * step)\n",
+  "solution_explanation": "range(n) 依次提供从 0 到 n-1 的序号。第一站对应 i 为 0，因此票价仍为 first；后续每站多加一次 step。step 为零时每站票价相同，n 为零时循环不执行。"
+}

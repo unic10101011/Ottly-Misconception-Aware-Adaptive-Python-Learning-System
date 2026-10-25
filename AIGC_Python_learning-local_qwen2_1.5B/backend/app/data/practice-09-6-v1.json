@@ -1,0 +1,102 @@
+{
+  "schema_version": "1.0.0",
+  "problem_id": "practice-09-6-v1",
+  "version": 1,
+  "level_no": 9,
+  "kind": "practice",
+  "target_misconception_tags": ["condition_error"],
+  "source_url": "https://github.com/Asabeneh/30-Days-Of-Python/blob/master/10_Day_Loops/10_loops.md",
+  "practice_focus": "根据奇偶分支更新 while 循环状态；所有分支都推进状态，并在一次实际变换后增加步数。",
+  "title": "奇偶变换机器",
+  "difficulty": 3,
+  "knowledge_ids": [
+    "K09",
+    "K04",
+    "K05",
+    "K08"
+  ],
+  "prerequisite_knowledge_ids": [
+    "K08",
+    "K05"
+  ],
+  "prerequisite_problem_ids": [
+    "shell-total-v1"
+  ],
+  "published": true,
+  "story": "Ottly 发现一台数字变换机器：数字为偶数时减半，为奇数时变为原数的三倍再加一。机器每次只做一次变换，直到数字变成 1 就停止。请统计它实际执行了多少次。",
+  "teaching": [
+    {
+      "title": "本题练习重点",
+      "text": "根据奇偶分支更新 while 循环状态；所有分支都推进状态，并在一次实际变换后增加步数。",
+      "example": "先运行样例，再检查空数据、边界值和每个分支。"
+    }
+  ],
+  "description": "输入一个整数 n（1–1000）。当 n 不为 1 时，若 n 为偶数就更新为 n // 2，否则更新为 3 * n + 1，每次更新计为一步。使用 while 循环，输出到达 1 所需的步数，一行一个整数。初始 n 为 1 时输出 0。输入范围指初始值，中间值可以超过 1000，不要截断，也不要计入最后未执行的检查。",
+  "starter_code": "# 在这里编写 Python 代码\n",
+  "examples": [
+    {
+      "stdin": "6\n",
+      "stdout": "8\n"
+    }
+  ],
+  "tests": [
+    {
+      "case_id": "sample-1",
+      "stdin": "6\n",
+      "expected_output": "8\n",
+      "visibility": "public"
+    },
+    {
+      "case_id": "hidden-1",
+      "stdin": "1\n",
+      "expected_output": "0\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-2",
+      "stdin": "2\n",
+      "expected_output": "1\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-3",
+      "stdin": "3\n",
+      "expected_output": "7\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-4",
+      "stdin": "7\n",
+      "expected_output": "16\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-5",
+      "stdin": "16\n",
+      "expected_output": "4\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-6",
+      "stdin": "27\n",
+      "expected_output": "111\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-7",
+      "stdin": "1000\n",
+      "expected_output": "111\n",
+      "visibility": "hidden"
+    }
+  ],
+  "comparison": "exact",
+  "time_limit_seconds": 3,
+  "output_limit_chars": 8000,
+  "hints": {
+    "level1": "每轮变换应该使用当前值的奇偶，还是最初输入的奇偶？",
+    "level2": "在循环内判断当前 n 的余数，并在两个分支完成后统一增加步数。",
+    "level3": "用 1 检查零步情况，再用 6 逐步追踪，确认没有重复计算到达终点后的操作。"
+  },
+  "reference_solution": "n = int(input())\nsteps = 0\n\nwhile n != 1:\n    if n % 2 == 0:\n        n = n // 2\n    else:\n        n = 3 * n + 1\n    steps = steps + 1\n\nprint(steps)\n",
+  "solution_explanation": "每轮先检查当前数的奇偶，再只执行对应的一次更新，最后计一步。6 的变化为 6、3、10、5、16、8、4、2、1，共 8 次。到达 1 就停止，因此初始值为 1 时不做变换。"
+}

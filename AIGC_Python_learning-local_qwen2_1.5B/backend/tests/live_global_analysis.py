@@ -54,15 +54,24 @@ def main():
             response.raise_for_status()
             data = response.json()['data']
             assert not data['judge']['passed'], problem_id
+            judge_seconds = round(time.monotonic() - started, 2)
             response = client.post(f"/api/v1/code/submissions/{data['submission_id']}/analysis")
             response.raise_for_status()
             data['analysis'] = response.json()['data']['analysis']
+            partial = 0 < data['judge']['passed_cases'] < data['judge']['total_cases']
+            analysis = data['analysis']
+            route_ok = (analysis.get('feedback_kind') == 'guidance' and analysis.get('content') is None
+                        and bool(analysis.get('guidance'))) if partial else (
+                        analysis.get('feedback_kind') == 'diagnosis' and bool(analysis.get('content')))
             save({'name': problem_id, 'code': code, 'expected_cause': case['expected_cause'],
+                  'judge_seconds': judge_seconds, 'route_passed': route_ok,
+                  'timings': response.json()['data']['timings'],
                   'seconds': round(time.monotonic() - started, 2), 'judge': data['judge'], 'analysis': data['analysis']})
             response = client.post('/api/v1/code/submit', json={
                 'problem_id': problem_id, 'code': lesson['reference_solution']})
             response.raise_for_status()
-            assert response.json()['data']['judge']['passed'], problem_id
+            correct = response.json()['data']
+            assert correct['judge']['passed'] and correct['analysis']['status'] == 'skipped', problem_id
         for name, payload in [
             ('run-invalid-input', {'problem_id': 'shell-shop-v1', 'code': 'price=int(input())', 'stdin': 'abc\n'}),
             ('run-free-practice', {'code': 'print(missing_value)', 'stdin': ''}),
@@ -72,11 +81,15 @@ def main():
             response = client.post('/api/v1/code/run', json={**payload, 'timeout': 3})
             response.raise_for_status()
             data = response.json()['data']
+            assert data['success'] is False and data['errors'], name
+            analysis = data.get('analysis', {})
             save({'name': name, 'code': payload['code'], 'stdin': payload['stdin'],
+                  'route_passed': analysis.get('feedback_kind') == 'diagnosis' and bool(analysis.get('content')),
                   'seconds': round(time.monotonic() - started, 2), 'judge': data.get('judge'),
-                  'analysis': data.get('analysis', {})})
+                  'analysis': analysis})
     assert all(item['analysis'].get('status') == 'ready' and item['analysis'].get('source') == 'ai'
-               for item in report['cases']), 'Some cases did not return a real AI diagnosis; see report'
+               and item.get('route_passed', True)
+               for item in report['cases']), 'Some cases did not return valid real AI feedback for their route; see report'
 
 
 if __name__ == '__main__':

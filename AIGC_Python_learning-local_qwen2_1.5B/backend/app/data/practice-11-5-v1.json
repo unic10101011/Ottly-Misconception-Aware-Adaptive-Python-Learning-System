@@ -1,0 +1,96 @@
+{
+  "schema_version": "1.0.0",
+  "problem_id": "practice-11-5-v1",
+  "version": 1,
+  "level_no": 11,
+  "kind": "practice",
+  "target_misconception_tags": ["other"],
+  "source_url": "https://github.com/alexmojaki/futurecoder/blob/main/core/chapters/c06_lists.py",
+  "practice_focus": "遍历列表中相邻的一对元素；正确安排起始索引，差值使用后一个减前一个而非绝对值。",
+  "title": "相邻温差变化",
+  "difficulty": 2,
+  "knowledge_ids": [
+    "K11",
+    "K03",
+    "K07"
+  ],
+  "prerequisite_knowledge_ids": [
+    "K03",
+    "K05",
+    "K07"
+  ],
+  "prerequisite_problem_ids": [
+    "radio-text-v1"
+  ],
+  "published": true,
+  "story": "Ottly 每小时记录一次温差。她现在想知道每次读数相对前一次上升或下降了多少，而不是只找最高读数。请根据相邻两条记录，依次计算带正负号的变化量。",
+  "teaching": [
+    {
+      "title": "本题练习重点",
+      "text": "遍历列表中相邻的一对元素；正确安排起始索引，差值使用后一个减前一个而非绝对值。",
+      "example": "先运行样例，再检查空数据、边界值和每个分支。"
+    }
+  ],
+  "description": "第一行输入记录数 n（1–100），接下来 n 行各输入一个整数温差（-100–100）。先保存到列表，再依次输出第 2 条减第 1 条、第 3 条减第 2 条，直到最后两条的差值，每个结果单独一行。下降时保留负号，相同则输出 0。n 为 1 时无输出，不附其他文字。",
+  "starter_code": "# 在这里编写 Python 代码\n",
+  "examples": [
+    {
+      "stdin": "3\n-2\n3\n1\n",
+      "stdout": "5\n-2\n"
+    }
+  ],
+  "tests": [
+    {
+      "case_id": "sample-1",
+      "stdin": "3\n-2\n3\n1\n",
+      "expected_output": "5\n-2\n",
+      "visibility": "public"
+    },
+    {
+      "case_id": "hidden-1",
+      "stdin": "1\n-100\n",
+      "expected_output": "",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-2",
+      "stdin": "2\n-100\n100\n",
+      "expected_output": "200\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-3",
+      "stdin": "2\n100\n-100\n",
+      "expected_output": "-200\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-4",
+      "stdin": "4\n5\n5\n5\n5\n",
+      "expected_output": "0\n0\n0\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-5",
+      "stdin": "5\n0\n-2\n4\n-6\n8\n",
+      "expected_output": "-2\n6\n-10\n14\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-6",
+      "stdin": "100\n-50\n-49\n-48\n-47\n-46\n-45\n-44\n-43\n-42\n-41\n-40\n-39\n-38\n-37\n-36\n-35\n-34\n-33\n-32\n-31\n-30\n-29\n-28\n-27\n-26\n-25\n-24\n-23\n-22\n-21\n-20\n-19\n-18\n-17\n-16\n-15\n-14\n-13\n-12\n-11\n-10\n-9\n-8\n-7\n-6\n-5\n-4\n-3\n-2\n-1\n0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23\n24\n25\n26\n27\n28\n29\n30\n31\n32\n33\n34\n35\n36\n37\n38\n39\n40\n41\n42\n43\n44\n45\n46\n47\n48\n49\n",
+      "expected_output": "1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n",
+      "visibility": "hidden"
+    }
+  ],
+  "comparison": "exact",
+  "time_limit_seconds": 3,
+  "output_limit_chars": 8000,
+  "hints": {
+    "level1": "第一条记录有没有前一条可以用来计算变化？",
+    "level2": "从第二条记录开始，用当前记录减去上一条。",
+    "level3": "检查下降和相等情况，确认没有取绝对值，也没有把第一条与最后一条错误相减。"
+  },
+  "reference_solution": "n = int(input())\nvalues = []\nfor i in range(n):\n    values.append(int(input()))\n\nfor i in range(1, n):\n    print(values[i] - values[i - 1])\n",
+  "solution_explanation": "第一条记录没有前一条可比较，因此从索引 1 开始。每次用当前值减去索引 i-1 的值，输出变化方向。共有 n-1 个结果，n 为 1 时不进行比较。"
+}

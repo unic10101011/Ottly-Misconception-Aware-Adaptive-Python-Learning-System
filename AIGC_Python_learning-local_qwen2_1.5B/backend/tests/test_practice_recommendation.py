@@ -44,7 +44,7 @@ async def test_unique_best_match_uses_tags_then_difficulty_without_model(monkeyp
         misconception_tag='accumulation_error', knowledge_ids={'K08'}, target_difficulty=1)
     assert result.status == 'ready'
     assert result.recommendation.problem_id == exact.problem_id
-    assert result.recommendation.model == ''
+    assert result.recommendation.model == 'rule'
 
 
 @pytest.mark.anyio
@@ -108,7 +108,7 @@ async def test_tied_model_failures_return_the_stable_rule_choice(monkeypatch, fa
         misconception_tag='accumulation_error', knowledge_ids={'K08'})
     assert result.status == 'ready'
     assert result.recommendation.problem_id == first.problem_id
-    assert result.recommendation.model == ''
+    assert result.recommendation.model == 'rule'
 
 
 @pytest.fixture
@@ -215,6 +215,31 @@ def test_old_cached_recommendation_remains_readable_without_reselection(client, 
     assert recommendation(client, headers, accepted['submission_id']).json()['data'] == cached
 
 
+def test_partial_pass_guidance_does_not_become_a_diagnosis_tag(client, monkeypatch):
+    from app.api import coding
+    from app.services.error_analysis import AnalysisResult
+    from app.services.practice_recommendation import RecommendationResult
+    from app.services.problem_catalog import PROBLEMS
+    headers = login(client)
+    submit(client, headers)
+    wrong = submit(client, headers, 'greeting-v1', 'print("Hello, Ottly!")')
+    assert wrong['analysis']['feedback_kind'] == 'guidance'
+    async def guidance(*args, **kwargs):
+        return AnalysisResult(status='ready', source='ai', message='', feedback_kind='guidance',
+            guidance={'hint': '换一个姓名时，输出也需要跟着改变。', 'knowledge_points': ['输入与变量']})
+    monkeypatch.setattr(coding, 'analyze_failure', guidance)
+    prepared = client.post(f"/api/v1/code/submissions/{wrong['submission_id']}/analysis", headers=headers)
+    assert prepared.status_code == 200
+    assert prepared.json()['data']['analysis']['content'] is None
+    accepted = submit(client, headers, 'greeting-v1', PROBLEMS['greeting-v1'].reference_solution)
+    async def observe(failure, candidates, **kwargs):
+        assert kwargs['misconception_tag'] is None and kwargs['knowledge_ids'] == {'K02'}
+        assert failure['suspected_cause'] is None
+        return RecommendationResult(status='skipped')
+    monkeypatch.setattr(coding, 'recommend_practice', observe)
+    assert recommendation(client, headers, accepted['submission_id']).status_code == 200
+
+
 def test_missing_model_configuration_still_recommends_and_practice_does_not_advance_main(client, monkeypatch):
     from app.services import error_analysis
     from app.services.problem_catalog import PROBLEMS
@@ -224,7 +249,7 @@ def test_missing_model_configuration_still_recommends_and_practice_does_not_adva
     headers = login(client)
     _, accepted = corrected(client, headers)
     data = recommendation(client, headers, accepted['submission_id']).json()['data']
-    assert data['status'] == 'ready' and data['recommendation']['model'] == ''
+    assert data['status'] == 'ready' and data['recommendation']['model'] == 'rule'
     assert '误区' not in data['recommendation']['reason']
     problem_id = data['recommendation']['problem_id']
     assert client.get('/api/v1/code/problems/' + problem_id, headers=headers).status_code == 200
@@ -336,7 +361,7 @@ def test_recommendation_failure_never_changes_a_saved_pass(client, monkeypatch, 
     _, accepted = corrected(client, headers)
     data = recommendation(client, headers, accepted['submission_id']).json()['data']
     assert data['status'] == 'ready' and data['recommendation']['problem_id'] == 'practice-01-1-v1'
-    assert data['recommendation']['model'] == ''
+    assert data['recommendation']['model'] == 'rule'
     assert 'PRIVATE_PROVIDER_MESSAGE' not in json.dumps(data)
     assert client.get('/api/v1/code/levels', headers=headers).json()['data']['items'][0]['status'] == 'completed'
     history = client.get('/api/v1/code/submissions', headers=headers).json()['data']['items']
@@ -347,7 +372,10 @@ def test_each_of_the_twelve_main_lessons_can_recommend_after_a_correction(client
     from app.services.problem_catalog import PROBLEMS
     from app.services.practice_recommendation import rank_candidates, practice_rank
     calls = []
-    install_choice(monkeypatch, calls)
+    install_choice(monkeypatch, calls, choose=lambda facts: next(
+        item['problem_id'] for item in reversed(facts['candidates'])
+        if PROBLEMS[item['problem_id']].level_no == PROBLEMS[facts['failure']['problem_id']].level_no
+    ))
     headers = login(client)
     cases = json.loads((Path(__file__).parent / 'data/global_analysis_cases.json').read_text(encoding='utf-8'))
     for case in cases:
@@ -360,13 +388,16 @@ def test_each_of_the_twelve_main_lessons_can_recommend_after_a_correction(client
         result = recommendation(client, headers, accepted['submission_id']).json()['data']
         assert result['status'] == 'ready', result
         assert result['recommendation']['level_no'] == lesson.level_no
-        related = [item for item in PROBLEMS.values() if item.kind == 'practice'
+        passed = set(client.get('/api/v1/code/progress', headers=headers).json()['data']['passed_problem_ids'])
+        related = [item for item in PROBLEMS.values() if item.kind == 'practice' and item.published
+                   and item.problem_id not in passed and set(item.prerequisite_problem_ids).issubset(passed)
                    and set(item.knowledge_ids).intersection(lesson.knowledge_ids)]
         ranked = rank_candidates(related, misconception_tag=None, knowledge_ids=set(lesson.knowledge_ids))
         best = practice_rank(ranked[0], misconception_tag=None, knowledge_ids=set(lesson.knowledge_ids))[:3]
         tied = [item for item in ranked if practice_rank(item, misconception_tag=None,
                 knowledge_ids=set(lesson.knowledge_ids))[:3] == best]
-        assert result['recommendation']['problem_id'] == tied[-1].problem_id
+        expected = next(item for item in reversed(tied) if item.level_no == lesson.level_no)
+        assert result['recommendation']['problem_id'] == expected.problem_id
         assert len(calls) == previous_calls + int(len(tied) > 1)
         if len(tied) > 1:
             assert [item['problem_id'] for item in calls[-1]['candidates']] == [item.problem_id for item in tied]

@@ -15,7 +15,7 @@ def test_all_practice_questions_have_recommendation_metadata():
     allowed = {'range_boundary', 'accumulation_error', 'condition_error',
                'variable_error', 'syntax_error', 'other'}
     practice = [item for item in PROBLEMS.values() if item.kind == 'practice']
-    assert len(practice) == 45
+    assert len(practice) == 66
     for item in practice:
         assert type(item.difficulty) is int and item.difficulty in {1, 2, 3}, item.problem_id
         assert 1 <= len(item.target_misconception_tags) <= 2, item.problem_id
@@ -67,18 +67,31 @@ def test_catalog_errors_identify_the_practice_with_unknown_tags(tmp_path, filena
 
 def test_each_level_has_expected_published_practice_questions():
     practice = [problem for problem in PROBLEMS.values() if problem.kind == 'practice']
-    assert len(practice) == 45
+    assert len(practice) == 66
     assert Counter(problem.level_no for problem in practice) == {
-        level: 6 if level in (3, 4, 5) else 3 for level in range(1, 13)
+        level: 6 if level >= 3 else 3 for level in range(1, 13)
     }
     assert all(problem.published and problem.practice_focus for problem in practice)
     assert all(problem.problem_id not in {slot.problem_id for slot in LEVELS} for problem in practice)
     for problem in practice:
-        assert problem.knowledge_ids == [f'K{problem.level_no:02d}']
+        assert f'K{problem.level_no:02d}' in problem.knowledge_ids
         assert problem.prerequisite_problem_ids == ([] if problem.level_no == 1 else
                                                      [LEVELS[problem.level_no - 2].problem_id])
         if problem.level_no > 1:
             assert any(case.visibility == 'hidden' for case in problem.tests)
+
+
+def test_original_practice_has_distinct_stories_and_boundary_cases():
+    specs = json.loads((DATA_DIR / 'practice.json').read_text(encoding='utf-8'))
+    for spec in specs:
+        lesson = PROBLEMS[spec['problem_id']]
+        assert lesson.story == spec['story'] and lesson.story != lesson.description
+        assert len(lesson.story) >= 40
+        if lesson.level_no == 1:
+            assert len(lesson.tests) == 1  # Fixed output has only one meaningful input.
+        else:
+            assert len(lesson.tests) >= 6
+            assert len({case.stdin for case in lesson.tests}) == len(lesson.tests)
 
 
 @pytest.mark.parametrize('problem_id', [

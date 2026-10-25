@@ -74,8 +74,10 @@ def test_six_step_flow_and_progress_survive_relogin(client):
     analyzed = client.post(f"/api/v1/code/submissions/{failed['submission_id']}/analysis", headers=headers)
     assert analyzed.status_code == 200, analyzed.text
     failed['analysis'] = analyzed.json()['data']['analysis']
-    assert failed['analysis']['source'] == 'fixed'
-    assert failed['analysis']['status'] == 'ready'
+    assert failed['analysis']['feedback_kind'] == 'guidance'
+    assert failed['analysis']['source'] is None
+    assert failed['analysis']['status'] == 'unavailable'
+    assert failed['analysis']['content'] is None
     for name in ('Amy', 'Sea Otter', '小海獭'):
         assert name not in json.dumps(failed, ensure_ascii=False)
     for case in failed['judge']['cases'][1:]:
@@ -85,7 +87,7 @@ def test_six_step_flow_and_progress_survive_relogin(client):
     for level in (1, 2, 3):
         result = client.patch(f"/api/v1/code/submissions/{failed['submission_id']}/hints",
                               headers=headers, json={'level': level})
-        assert result.json()['data']['hints_viewed_max'] == level
+        assert result.status_code == 409
 
     accepted = submit(client, headers, GREETING_ID, GREETING['reference_solution']).json()['data']
     assert accepted['judge']['passed'] and accepted['judge']['passed_cases'] == 4
@@ -103,7 +105,7 @@ def test_six_step_flow_and_progress_survive_relogin(client):
     assert levels[2]['status'] == 'current' and levels[2]['published'] is True
     history = client.get('/api/v1/code/submissions?problem_id=' + GREETING_ID, headers=renewed).json()['data']
     old = next(item for item in history['items'] if item['id'] == failed['submission_id'])
-    assert old['hints_viewed_max'] == 3 and old['resolved_later'] is True
+    assert old['hints_viewed_max'] == 0 and old['resolved_later'] is True
     assert 'Sea Otter' not in json.dumps(history, ensure_ascii=False)
     second = account(client, 'greeting_other', '13900000002')
     assert client.get(url, headers=second).status_code == 403

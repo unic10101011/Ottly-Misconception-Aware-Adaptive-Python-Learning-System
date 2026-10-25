@@ -1,0 +1,96 @@
+{
+  "schema_version": "1.0.0",
+  "problem_id": "practice-10-4-v1",
+  "version": 1,
+  "level_no": 10,
+  "kind": "practice",
+  "target_misconception_tags": ["condition_error"],
+  "source_url": "https://github.com/alexmojaki/futurecoder/blob/main/core/chapters/c04_for_loops.py",
+  "practice_focus": "逐字符筛选并拼接字符串；过滤噪声同时保留空格、顺序和空结果的换行。",
+  "title": "清除电台噪声",
+  "difficulty": 1,
+  "knowledge_ids": [
+    "K10",
+    "K07",
+    "K05"
+  ],
+  "prerequisite_knowledge_ids": [
+    "K02",
+    "K05",
+    "K08"
+  ],
+  "prerequisite_problem_ids": [
+    "shell-savings-v1"
+  ],
+  "published": true,
+  "story": "海边电台收到的消息里混入了一些井号噪声。Ottly 想删去所有 #，其余字母和空格都原样保留，不能顺便删掉首尾空格或改变消息顺序。请帮她恢复这段消息。",
+  "teaching": [
+    {
+      "title": "本题练习重点",
+      "text": "逐字符筛选并拼接字符串；过滤噪声同时保留空格、顺序和空结果的换行。",
+      "example": "先运行样例，再检查空数据、边界值和每个分支。"
+    }
+  ],
+  "description": "输入一行长度为 0–100 的文本，只含大写英文字母、空格和 #。逐字符检查，删除所有 #，将其余字符按原顺序组成新字符串并输出一行。保留所有原有空格；空输入或全部为 # 时输出一个空行，不附其他文字。",
+  "starter_code": "# 在这里编写 Python 代码\n",
+  "examples": [
+    {
+      "stdin": "A#B## C\n",
+      "stdout": "AB C\n"
+    }
+  ],
+  "tests": [
+    {
+      "case_id": "sample-1",
+      "stdin": "A#B## C\n",
+      "expected_output": "AB C\n",
+      "visibility": "public"
+    },
+    {
+      "case_id": "hidden-1",
+      "stdin": "\n",
+      "expected_output": "\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-2",
+      "stdin": "###\n",
+      "expected_output": "\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-3",
+      "stdin": "  A# B  \n",
+      "expected_output": "  A B  \n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-4",
+      "stdin": "####################################################################################################\n",
+      "expected_output": "\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-5",
+      "stdin": "#################################################A##################################################\n",
+      "expected_output": "A\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-6",
+      "stdin": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n",
+      "expected_output": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n",
+      "visibility": "hidden"
+    }
+  ],
+  "comparison": "exact",
+  "time_limit_seconds": 3,
+  "output_limit_chars": 8000,
+  "hints": {
+    "level1": "哪些字符需要删去，哪些字符即使看起来空白也要保留？",
+    "level2": "遍历原文本，只在字符不是噪声标记时追加到结果。",
+    "level3": "检查首尾空格、连续井号和全部为井号的输入，区分空行与完全无输出。"
+  },
+  "reference_solution": "message = input()\nresult = \"\"\n\nfor char in message:\n    if char != \"#\":\n        result = result + char\n\nprint(result)\n",
+  "solution_explanation": "使用空字符串保存结果，只把不是 # 的字符追加进去。空格同样是应保留的字符，不能对输入调用 strip 来消除首尾空格。最后使用一次 print，即使结果为空也会输出题目要求的一个空行。"
+}

@@ -1,0 +1,96 @@
+{
+  "schema_version": "1.0.0",
+  "problem_id": "practice-08-4-v1",
+  "version": 1,
+  "level_no": 8,
+  "kind": "practice",
+  "target_misconception_tags": ["accumulation_error"],
+  "source_url": "https://exercism.org/tracks/python/exercises/sum-of-multiples",
+  "practice_focus": "用两个独立累加器分别统计收入与支出；负数支出转换为正的支出金额，最后输出有符号净差额。",
+  "title": "航行收支账本",
+  "difficulty": 2,
+  "knowledge_ids": [
+    "K08",
+    "K03",
+    "K05",
+    "K07"
+  ],
+  "prerequisite_knowledge_ids": [
+    "K07",
+    "K03"
+  ],
+  "prerequisite_problem_ids": [
+    "coastal-markers-v1"
+  ],
+  "published": true,
+  "story": "航行途中，Ottly 会获得报酬，也会花费贝壳购买补给。她用正数记录收入，用负数记录支出，用 0 表示这一笔没有收支变化。请整理这些记录，分别统计总收入、总支出，以及最终的收支差额。",
+  "teaching": [
+    {
+      "title": "本题练习重点",
+      "text": "用两个独立累加器分别统计收入与支出；负数支出转换为正的支出金额，最后输出有符号净差额。",
+      "example": "先运行样例，再检查零值、边界和各分支的情况。"
+    }
+  ],
+  "description": "先输入记录数量 n（0–100），接下来 n 行每行输入一个整数 change（-100–100）。正数表示收入，负数表示支出，零表示没有变化。输出三行整数：总收入；以非负数表示的总支出；总收入减总支出的差额（可以为负数）。n 为 0 时三行均输出 0，不附其他文字。",
+  "starter_code": "# 在这里编写 Python 代码\n",
+  "examples": [
+    {
+      "stdin": "4\n10\n-3\n0\n-2\n",
+      "stdout": "10\n5\n5\n"
+    }
+  ],
+  "tests": [
+    {
+      "case_id": "sample-1",
+      "stdin": "4\n10\n-3\n0\n-2\n",
+      "expected_output": "10\n5\n5\n",
+      "visibility": "public"
+    },
+    {
+      "case_id": "hidden-1",
+      "stdin": "0\n",
+      "expected_output": "0\n0\n0\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-2",
+      "stdin": "3\n0\n0\n0\n",
+      "expected_output": "0\n0\n0\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-3",
+      "stdin": "3\n1\n2\n3\n",
+      "expected_output": "6\n0\n6\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-4",
+      "stdin": "2\n-4\n-6\n",
+      "expected_output": "0\n10\n-10\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-5",
+      "stdin": "2\n100\n-100\n",
+      "expected_output": "100\n100\n0\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-6",
+      "stdin": "2\n-100\n100\n",
+      "expected_output": "100\n100\n0\n",
+      "visibility": "hidden"
+    }
+  ],
+  "comparison": "exact",
+  "time_limit_seconds": 3,
+  "output_limit_chars": 8000,
+  "hints": {
+    "level1": "收入与支出是否应该分别保存总数？",
+    "level2": "支出记录本身是负数，想一想怎样让支出总额保持非负。",
+    "level3": "分别检查只有收入、只有支出和没有记录的情况，最后再计算差额。"
+  },
+  "reference_solution": "n = int(input())\n\nincome = 0\nexpense = 0\n\nfor i in range(n):\n    change = int(input())\n    if change >= 0:\n        income = income + change\n    else:\n        expense = expense - change\n\nprint(income)\nprint(expense)\nprint(income - expense)\n",
+  "solution_explanation": "income 与 expense 都从零开始。非负记录加入 income；负记录用 expense - change 累加为正的支出金额。全部记录处理完后，输出两个总数与差额。差额可以为负，不能强制改成零。"
+}

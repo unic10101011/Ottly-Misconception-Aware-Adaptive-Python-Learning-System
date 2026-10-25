@@ -1,0 +1,75 @@
+{
+  "schema_version": "1.0.0",
+  "problem_id": "practice-06-5-v1",
+  "version": 1,
+  "level_no": 6,
+  "kind": "practice",
+  "target_misconception_tags": ["condition_error"],
+  "source_url": "https://exercism.org/tracks/python/exercises/ghost-gobble-arcade-game",
+  "practice_focus": "表达恰好一个条件成立；区分只有一项为真与至少一项为真，覆盖两个都打开的情况。",
+  "title": "灯塔的双开关",
+  "difficulty": 2,
+  "knowledge_ids": [
+    "K06",
+    "K05"
+  ],
+  "prerequisite_knowledge_ids": [
+    "K05"
+  ],
+  "prerequisite_problem_ids": [
+    "badge-v1"
+  ],
+  "published": true,
+  "story": "灯塔的维修室里有两个开关。为了检查线路，维修员设置了一条特殊规则：只有两个开关中恰好一个打开时，测试灯才会亮。两个都关闭或者两个都打开，测试灯都不会亮。请帮助 Ottly 判断测试灯的状态。",
+  "teaching": [
+    {
+      "title": "本题练习重点",
+      "text": "表达恰好一个条件成立；区分只有一项为真与至少一项为真，覆盖两个都打开的情况。",
+      "example": "先运行样例，再检查零值、边界和各分支的情况。"
+    }
+  ],
+  "description": "依次输入两个整数，每项单独一行：左开关状态 left、右开关状态 right。两个值只能是 0 或 1，其中 0 表示关闭，1 表示打开。恰好一个打开时输出 ON，否则输出 OFF。请使用 and、or 组合条件，只输出一行，不附其他文字。",
+  "starter_code": "# 在这里编写 Python 代码\n",
+  "examples": [
+    {
+      "stdin": "1\n0\n",
+      "stdout": "ON\n"
+    }
+  ],
+  "tests": [
+    {
+      "case_id": "sample-1",
+      "stdin": "1\n0\n",
+      "expected_output": "ON\n",
+      "visibility": "public"
+    },
+    {
+      "case_id": "hidden-1",
+      "stdin": "0\n0\n",
+      "expected_output": "OFF\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-2",
+      "stdin": "0\n1\n",
+      "expected_output": "ON\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-3",
+      "stdin": "1\n1\n",
+      "expected_output": "OFF\n",
+      "visibility": "hidden"
+    }
+  ],
+  "comparison": "exact",
+  "time_limit_seconds": 3,
+  "output_limit_chars": 8000,
+  "hints": {
+    "level1": "恰好一个打开与至少一个打开有什么区别？",
+    "level2": "分别列出左开右关、左关右开这两种情况。",
+    "level3": "检查两项都为 1 时是否误输出 ON，并核对四种输入组合。"
+  },
+  "reference_solution": "left = int(input())\nright = int(input())\n\nif (left == 1 and right == 0) or (left == 0 and right == 1):\n    print(\"ON\")\nelse:\n    print(\"OFF\")\n",
+  "solution_explanation": "让灯亮的情况有两种：左开右关，或者左关右开。每种情况内部用 and 连接，两种情况之间用 or 连接。两个开关都打开时，两种情况均不成立，应输出 OFF。"
+}

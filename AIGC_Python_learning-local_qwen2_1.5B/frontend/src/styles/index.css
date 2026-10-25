@@ -998,6 +998,16 @@ body.eye-protection {
 .practice-circle > span { display: grid; place-items: center; }
 .practice-circle-caption { color: #31566d; font-size: 13px; font-weight: 600; }
 .practice-back-button { margin-bottom: 14px; }
+.guidance-question { margin-top: 16px; padding: 16px; border: 1px solid #c7dfec; border-radius: 12px; background: #f4faff; }
+.guidance-question fieldset { margin: 0 0 12px; padding: 0; border: 0; }
+.guidance-question legend { margin-bottom: 10px; font-size: 16px; font-weight: 700; }
+.guidance-question label { display: flex; align-items: flex-start; gap: 10px; min-height: 44px; padding: 10px 8px; cursor: pointer; }
+.guidance-question input { margin-top: 5px; flex-shrink: 0; }
+.guidance-question p[role="status"] { margin: 14px 0 0; }
+.practice-page .practice-statement h3 { margin: 0 0 12px; font-size: 22px; font-weight: 700; line-height: 1.4; }
+.practice-page .practice-statement p { margin: 0; font-size: 17px; line-height: 1.85; white-space: pre-line; }
+.practice-statement section + section { margin-top: 24px; }
+.practice-statement { margin-bottom: 24px; }
 .practice-recommendation-modal { position: fixed; inset: 0; width: min(460px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); margin: auto; padding: 50px 32px 32px; overflow-y: auto; border: 1px solid #cfe3ee; border-radius: 22px; background: #fff; color: #17394f; text-align: center; box-shadow: 0 22px 70px rgba(23, 57, 79, .2); }
 .practice-recommendation-modal::backdrop { background: rgba(23, 57, 79, .2); }
 .practice-recommendation-skip { position: absolute; top: 10px; right: 14px; min-height: 44px; padding: 8px 10px; border: 0; border-radius: 8px; background: transparent; color: #567386; font-size: 14px; cursor: pointer; }

@@ -35,7 +35,10 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, tit
   const mountedRef = useRef(false)
   const successTimerRef = useRef(null)
   const busy = running || submitting
-  const diagnosisReady = submission && !submission.judge.passed && submission.analysis?.status === 'ready' && submission.analysis.content
+  const diagnosisReady = submission && !submission.judge.passed && submission.analysis?.status === 'ready'
+    && (submission.analysis.content || submission.analysis.guidance)
+  const isPartialFailure = submission && !submission.judge.passed && submission.judge.passed_cases > 0
+    && submission.judge.passed_cases < submission.judge.total_cases
   const analysisPending = submission && !submission.judge.passed && submission.analysis?.status === 'preparing'
 
   // Update line numbers
@@ -218,7 +221,7 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, tit
           .catch(error => {
             if (!mountedRef.current || submissionRef.current !== result) return
             const updated = { ...result, analysis: {
-              status: 'unavailable', message: `错因分析暂时无法生成：${error.message} 判题结果已保留。`, content: null,
+              status: 'unavailable', message: `${result.analysis.feedback_kind === 'guidance' ? '思考提示' : '错因分析'}暂时无法生成：${error.message} 判题结果已保留。`, content: null,
             } }
             submissionRef.current = updated
             setSubmission(updated)
@@ -418,7 +421,7 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, tit
         {diagnosisReady && <details className="ottly-diagnosis" key={submission.submission_id}>
           <summary className="ottly-diagnosis-trigger">
             <img src={new URL('../pages/images/ottly-message.png', import.meta.url).href} alt="" />
-            <span><strong>查看错因分析</strong><small>Ottly有话要说！</small></span>
+            <span><strong>{isPartialFailure ? '查看思考提示' : '查看错因分析'}</strong><small>Ottly有话要说！</small></span>
           </summary>
           <div className="ottly-diagnosis-chat" onKeyDown={event => {
             if (event.key === 'Escape') {
@@ -429,8 +432,8 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, tit
           }}>
             <div className="ottly-message-heading">
               <img src={new URL('../pages/images/ottly-message.png', import.meta.url).href} alt="Ottly头像" />
-              <div><strong>Ottly</strong><small>来看看这次测试，我发现了这些线索。</small></div>
-              <button type="button" aria-label="收起错因分析" onClick={event => {
+              <div><strong>Ottly</strong><small>{isPartialFailure ? '已经通过了一部分，来想一想下一步。' : '来看看这次测试，我发现了这些线索。'}</small></div>
+              <button type="button" aria-label={isPartialFailure ? '收起思考提示' : '收起错因分析'} onClick={event => {
                 const details = event.currentTarget.closest('details')
                 details.open = false
                 details.querySelector('summary').focus()
@@ -539,7 +542,7 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, tit
               {submitting ? '提交中...' : '提交判题'}
             </button>
             {nextAction && <button type="button" className="btn-next-level" onClick={nextAction} disabled={busy}>前往下一关 →</button>}
-            {analysisPending && <span className="ottly-analysis-pending" role="status"><span aria-hidden="true" />Ottly正在分析错因</span>}
+            {analysisPending && <span className="ottly-analysis-pending" role="status"><span aria-hidden="true" />{isPartialFailure ? 'Ottly正在准备思考提示' : 'Ottly正在分析错因'}</span>}
             {recommendationPending && <span className="ottly-analysis-pending" role="status"><span aria-hidden="true" />Ottly正在挑选加练题</span>}
           </div>
           {submission && (

@@ -14,6 +14,11 @@ def install_model(monkeypatch, observed):
         payload = json.loads(request.content)
         facts = model_facts(payload)
         observed.append((payload, facts))
+        if 'public_cases' in facts:
+            return httpx.Response(200, json={'done': True, 'message': {'content': json.dumps({
+                'hint': '先对照题目要求，检查代码是否处理了不同输入。',
+                'knowledge_points': ['字符串与输出'], 'question': None,
+            })}})
         evidence = facts['allowed_evidence'][0]
         errors = [error['type'] for case in facts['failed_cases'] for error in case['errors']]
         cause = ('疑似引用了尚未定义的名字。' if 'NameError' in errors else
@@ -40,9 +45,19 @@ def test_all_lessons_and_an_unlisted_bank_id_share_the_same_analysis(client, mon
         assert data['analysis']['status'] == 'ready', lesson.problem_id
         assert data['analysis']['source'] == 'ai', lesson.problem_id
         payload, facts = observed[-1]
-        assert 'syntax_error' not in payload['format']['properties']['misconception_tag']['enum']
         assert facts['problem']['problem_id'] == lesson.problem_id
         assert 'reference_solution' not in facts['problem']
+        if 0 < data['judge']['passed_cases'] < data['judge']['total_cases']:
+            assert data['analysis']['feedback_kind'] == 'guidance'
+            assert data['analysis']['content'] is None
+            assert data['analysis']['guidance']['hint']
+            assert 'public_cases' in facts
+            assert 'hidden-' not in json.dumps(facts)
+            assert client.post('/api/v1/code/submit', headers=headers, json={
+                'problem_id': lesson.problem_id, 'code': lesson.reference_solution,
+            }).json()['data']['judge']['passed']
+            continue
+        assert 'syntax_error' not in payload['format']['properties']['misconception_tag']['enum']
         assert facts['execution_mode'] == 'submit'
         assert facts['related_history'] == []
         assert 'hints' not in payload['format']['properties']

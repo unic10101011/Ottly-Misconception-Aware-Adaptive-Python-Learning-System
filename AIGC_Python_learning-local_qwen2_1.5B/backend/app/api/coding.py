@@ -255,7 +255,8 @@ async def submit_code(request: SubmissionRequest, current_user: User = Depends(g
     model_judge = public_judge(judge)
     judge = contract_judge(model_judge, code=request.code)
     raw_analysis = (AnalysisResult(status='skipped', message='测试已通过，无需 AI 分析。') if judge.passed
-                    else AnalysisResult(status='preparing', message='正在准备提示'))
+                    else AnalysisResult(status='preparing', message='正在准备反馈',
+                                        feedback_kind='guidance' if judge.passed_cases > 0 else 'diagnosis'))
     analysis = contract_analysis(raw_analysis, analysis_knowledge_scope(problem))
     timings = {'judge_ms': judge_ms, 'model_load_ms': 0.0, 'hint_generation_ms': 0.0}
     analysis.timings = timings

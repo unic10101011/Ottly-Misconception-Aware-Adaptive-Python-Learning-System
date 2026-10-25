@@ -1,0 +1,81 @@
+{
+  "schema_version": "1.0.0",
+  "problem_id": "practice-07-4-v1",
+  "version": 1,
+  "level_no": 7,
+  "kind": "practice",
+  "target_misconception_tags": ["range_boundary"],
+  "source_url": "https://github.com/alexmojaki/futurecoder/blob/main/core/chapters/c04_for_loops.py",
+  "practice_focus": "使用 range 的负步长实现倒序循环；正确设置不包含的终点，让零也被输出。",
+  "title": "出航倒计时",
+  "difficulty": 1,
+  "knowledge_ids": [
+    "K07"
+  ],
+  "prerequisite_knowledge_ids": [
+    "K03",
+    "K05"
+  ],
+  "prerequisite_problem_ids": [
+    "safe-sailing-v1"
+  ],
+  "published": true,
+  "story": "小船准备出发，Ottly 要让屏幕从指定秒数开始倒计时。屏幕每次显示一个整数，依次减少，直到显示 0，表示倒计时结束。请按照从大到小的顺序打印完整倒计时。",
+  "teaching": [
+    {
+      "title": "本题练习重点",
+      "text": "使用 range 的负步长实现倒序循环；正确设置不包含的终点，让零也被输出。",
+      "example": "先运行样例，再检查零值、边界和各分支的情况。"
+    }
+  ],
+  "description": "输入一个整数 n（0–10）。使用 for 循环，从 n 开始逐行输出整数，每次减少 1，直到 0。起点 n 和终点 0 都要输出。n 为 0 时只输出一行 0。不额外输出“出发”等文字。",
+  "starter_code": "# 在这里编写 Python 代码\n",
+  "examples": [
+    {
+      "stdin": "3\n",
+      "stdout": "3\n2\n1\n0\n"
+    }
+  ],
+  "tests": [
+    {
+      "case_id": "sample-1",
+      "stdin": "3\n",
+      "expected_output": "3\n2\n1\n0\n",
+      "visibility": "public"
+    },
+    {
+      "case_id": "hidden-1",
+      "stdin": "0\n",
+      "expected_output": "0\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-2",
+      "stdin": "1\n",
+      "expected_output": "1\n0\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-3",
+      "stdin": "5\n",
+      "expected_output": "5\n4\n3\n2\n1\n0\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-4",
+      "stdin": "10\n",
+      "expected_output": "10\n9\n8\n7\n6\n5\n4\n3\n2\n1\n0\n",
+      "visibility": "hidden"
+    }
+  ],
+  "comparison": "exact",
+  "time_limit_seconds": 3,
+  "output_limit_chars": 8000,
+  "hints": {
+    "level1": "从较大的数数到较小的数时，每次应该怎样变化？",
+    "level2": "range 的步长要体现递减，结束值仍然不被包含。",
+    "level3": "确认起点被输出，最后一个数为 0，并单独检查 n 为 0 的情况。"
+  },
+  "reference_solution": "n = int(input())\n\nfor seconds in range(n, -1, -1):\n    print(seconds)\n",
+  "solution_explanation": "range(n, -1, -1) 从 n 开始，每次减少 1，在到达不包含的 -1 前结束，因此最后输出 0。n 为 0 时范围中仍有一个数 0，不能按空范围处理。"
+}

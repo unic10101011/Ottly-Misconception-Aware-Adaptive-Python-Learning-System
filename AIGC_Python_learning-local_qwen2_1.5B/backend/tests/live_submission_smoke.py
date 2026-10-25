@@ -26,6 +26,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--url", default="http://127.0.0.1:3000")
     parser.add_argument("--output", default="../docs/live-submission.json")
+    parser.add_argument("--require-ai", action="store_true", help="Reject fixed/offline feedback during real API acceptance")
     args = parser.parse_args()
     username = "smoke_" + secrets.token_hex(5)
     password = secrets.token_urlsafe(20)
@@ -52,6 +53,8 @@ def main():
                 data['timings'] = prepared.json()['data']['timings']
             expected_analysis = "skipped" if verdict == "accepted" else "ready"
             ok = data["judge"]["status"] == verdict and data["analysis"]["status"] == expected_analysis
+            if args.require_ai and verdict != 'accepted':
+                ok = ok and data['analysis']['source'] == 'ai'
             report["cases"].append({"name": name, "student_code": code, "judge_seconds": judge_seconds, "seconds": round(time.monotonic() - started, 2),
                                     "contract_passed": ok, "response": data})
             target = Path(args.output)

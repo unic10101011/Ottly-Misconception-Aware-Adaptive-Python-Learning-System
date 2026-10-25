@@ -1,0 +1,89 @@
+{
+  "schema_version": "1.0.0",
+  "problem_id": "practice-11-4-v1",
+  "version": 1,
+  "level_no": 11,
+  "kind": "practice",
+  "target_misconception_tags": ["range_boundary"],
+  "source_url": "https://github.com/alexmojaki/futurecoder/blob/main/core/chapters/c06_lists.py",
+  "practice_focus": "列表从末尾到开头的索引遍历；最后一个索引为 n-1，空列表不访问任何元素。",
+  "title": "倒序日志回放",
+  "difficulty": 1,
+  "knowledge_ids": [
+    "K11",
+    "K07"
+  ],
+  "prerequisite_knowledge_ids": [
+    "K03",
+    "K05",
+    "K07"
+  ],
+  "prerequisite_problem_ids": [
+    "radio-text-v1"
+  ],
+  "published": true,
+  "story": "Ottly 把航行日志中的测量值按时间顺序保存好了。回顾最近发生的情况时，她希望从最后一条开始往前看，但每条记录的值都要保持原样。请打印倒序回放的日志。",
+  "teaching": [
+    {
+      "title": "本题练习重点",
+      "text": "列表从末尾到开头的索引遍历；最后一个索引为 n-1，空列表不访问任何元素。",
+      "example": "先运行样例，再检查空数据、边界值和每个分支。"
+    }
+  ],
+  "description": "第一行输入记录数 n（0–100），接下来 n 行各输入一个整数记录（-100–100）。先按输入顺序保存到列表，再使用索引从末尾向前逐行输出。重复值和负数都要保留。n 为 0 时无输出，不附其他文字。",
+  "starter_code": "# 在这里编写 Python 代码\n",
+  "examples": [
+    {
+      "stdin": "3\n-2\n0\n9\n",
+      "stdout": "9\n0\n-2\n"
+    }
+  ],
+  "tests": [
+    {
+      "case_id": "sample-1",
+      "stdin": "3\n-2\n0\n9\n",
+      "expected_output": "9\n0\n-2\n",
+      "visibility": "public"
+    },
+    {
+      "case_id": "hidden-1",
+      "stdin": "0\n",
+      "expected_output": "",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-2",
+      "stdin": "1\n-7\n",
+      "expected_output": "-7\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-3",
+      "stdin": "3\n5\n5\n5\n",
+      "expected_output": "5\n5\n5\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-4",
+      "stdin": "4\n4\n3\n2\n1\n",
+      "expected_output": "1\n2\n3\n4\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-5",
+      "stdin": "100\n0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23\n24\n25\n26\n27\n28\n29\n30\n31\n32\n33\n34\n35\n36\n37\n38\n39\n40\n41\n42\n43\n44\n45\n46\n47\n48\n49\n50\n51\n52\n53\n54\n55\n56\n57\n58\n59\n60\n61\n62\n63\n64\n65\n66\n67\n68\n69\n70\n71\n72\n73\n74\n75\n76\n77\n78\n79\n80\n81\n82\n83\n84\n85\n86\n87\n88\n89\n90\n91\n92\n93\n94\n95\n96\n97\n98\n99\n",
+      "expected_output": "99\n98\n97\n96\n95\n94\n93\n92\n91\n90\n89\n88\n87\n86\n85\n84\n83\n82\n81\n80\n79\n78\n77\n76\n75\n74\n73\n72\n71\n70\n69\n68\n67\n66\n65\n64\n63\n62\n61\n60\n59\n58\n57\n56\n55\n54\n53\n52\n51\n50\n49\n48\n47\n46\n45\n44\n43\n42\n41\n40\n39\n38\n37\n36\n35\n34\n33\n32\n31\n30\n29\n28\n27\n26\n25\n24\n23\n22\n21\n20\n19\n18\n17\n16\n15\n14\n13\n12\n11\n10\n9\n8\n7\n6\n5\n4\n3\n2\n1\n0\n",
+      "visibility": "hidden"
+    }
+  ],
+  "comparison": "exact",
+  "time_limit_seconds": 3,
+  "output_limit_chars": 8000,
+  "hints": {
+    "level1": "列表的最后一条记录对应哪个索引？",
+    "level2": "先完整保存记录，再从 n-1 开始向前遍历到 0。",
+    "level3": "检查空列表和只有一条记录的列表，不要漏掉最前面的记录。"
+  },
+  "reference_solution": "n = int(input())\nvalues = []\nfor i in range(n):\n    values.append(int(input()))\n\nfor i in range(n - 1, -1, -1):\n    print(values[i])\n",
+  "solution_explanation": "先用 append 把输入放入列表。列表最后一项的索引是 n-1，从这里以步长 -1 遍历到索引 0，就能倒序打印。n 为零时范围为空，不访问 values[-1]，也不输出空行。"
+}

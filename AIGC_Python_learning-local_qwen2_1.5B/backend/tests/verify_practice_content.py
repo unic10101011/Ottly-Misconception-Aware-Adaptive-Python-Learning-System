@@ -1,5 +1,6 @@
 """Offline content acceptance: run from backend with any Python 3 interpreter."""
 import ast
+import copy
 import json
 from pathlib import Path
 import subprocess
@@ -21,6 +22,27 @@ FULL_PRACTICE_MISTAKES = {
     'practice-05-4-v1': ('ottly_count > friend_count', 'ottly_count >= friend_count'),
     'practice-05-5-v1': ('height <= 100', 'height < 100'),
     'practice-05-6-v1': ('print(current - target)', 'print(target - current)'),
+    'practice-06-4-v1': ('hour < 18', 'hour <= 18'),
+    'practice-06-5-v1': ('left == 1 and right == 0', 'left == 1'),
+    'practice-06-6-v1': ('and not sale == 1', ''),
+    'practice-07-4-v1': ('range(n, -1, -1)', 'range(n, 0, -1)'),
+    'practice-07-5-v1': ('first + i * step', 'first + (i + 1) * step'),
+    'practice-07-6-v1': ('weight > 0 and weight <= limit', 'weight <= limit'),
+    'practice-08-4-v1': ('expense = expense - change', 'expense = expense + change'),
+    'practice-08-5-v1': ('10 + (distance - 5) * 3', 'distance * 3'),
+    'practice-08-6-v1': ('    else:\n        streak = 0', '    else:\n        total = 0'),
+    'practice-09-4-v1': ('count = 0', 'count = 1'),
+    'practice-09-5-v1': ('print(a)', 'print(b)'),
+    'practice-09-6-v1': ('while n != 1:', 'while n > 2:'),
+    'practice-10-4-v1': ('char != "#"', 'char != "#" and char != " "'),
+    'practice-10-5-v1': ('    previous = char', '    previous = ""'),
+    'practice-10-6-v1': ('backward = char + backward', 'backward = backward + char'),
+    'practice-11-4-v1': ('range(n - 1, -1, -1)', 'range(n - 1, 0, -1)'),
+    'practice-11-5-v1': ('values[i] - values[i - 1]', 'values[i - 1] - values[i]'),
+    'practice-11-6-v1': ('(i + k) % n', '(i - k) % n'),
+    'practice-12-4-v1': ('return low', 'return high'),
+    'practice-12-5-v1': ('return longest', 'return current'),
+    'practice-12-6-v1': ('values[i] <= values[i - 1]', 'values[i] < values[i - 1]'),
 }
 
 
@@ -53,6 +75,12 @@ def check_function(spec):
     function = namespace[functions[0].name]
     if spec['level_no'] != 12:
         return
+    if spec.get('direct_function_tests'):
+        for test in spec['direct_function_tests']:
+            for call in test['calls']:
+                result = namespace[test['function_name']](*copy.deepcopy(call['args']))
+                assert type(result) is type(call['expected']) and result == call['expected'], spec['problem_id']
+        return
     if functions[0].name == 'greet':
         assert function('Mia') == 'Hi, Mia'
         assert function('Bo') == 'Hi, Bo'
@@ -83,7 +111,7 @@ def main():
         cases = [{'stdin': case['stdin'], 'stdout': case['expected_output']} for case in spec['tests']]
         specs.append({**spec, 'sample': cases[0], 'hidden': cases[1:],
                       'wrong_solution': spec['reference_solution'].replace(before, after, 1)})
-    assert len(specs) == 45
+    assert len(specs) == 66
     case_count = 0
     for spec in specs:
         validate_metadata(spec)
@@ -100,7 +128,7 @@ def main():
         if spec['level_no'] == 12:
             check_function(spec)
     print(f'PASS: {len(specs)} practice questions, {case_count} reference cases, '
-          f'{len(specs)} targeted wrong answers rejected, 3 direct function checks')
+          f'{len(specs)} targeted wrong answers rejected, 6 function exercises checked')
 
 
 if __name__ == '__main__':

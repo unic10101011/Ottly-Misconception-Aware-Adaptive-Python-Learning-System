@@ -1,0 +1,100 @@
+{
+  "schema_version": "1.0.0",
+  "problem_id": "practice-09-5-v1",
+  "version": 1,
+  "level_no": 9,
+  "kind": "practice",
+  "target_misconception_tags": ["variable_error"],
+  "source_url": "https://github.com/Asabeneh/30-Days-Of-Python/blob/master/10_Day_Loops/10_loops.md",
+  "practice_focus": "辗转相除中同时推进两个变量；先保存余数再更新旧值，第二个数为零时及时停止。",
+  "title": "统一分装规格",
+  "difficulty": 2,
+  "knowledge_ids": [
+    "K09",
+    "K04"
+  ],
+  "prerequisite_knowledge_ids": [
+    "K08",
+    "K05"
+  ],
+  "prerequisite_problem_ids": [
+    "shell-total-v1"
+  ],
+  "published": true,
+  "story": "仓库有两批贝壳，Ottly 想用容量完全相同的小袋分别装好，两批都不能剩余。为了尽量减少袋子数量，每袋容量应尽可能大。请找出能够同时整除两批数量的最大正整数。",
+  "teaching": [
+    {
+      "title": "本题练习重点",
+      "text": "辗转相除中同时推进两个变量；先保存余数再更新旧值，第二个数为零时及时停止。",
+      "example": "先运行样例，再检查空数据、边界值和每个分支。"
+    }
+  ],
+  "description": "依次输入两个正整数 a、b（1–10000），每项单独一行。输出一行整数，表示能同时整除 a 和 b 的最大袋子容量。可使用辗转相除：只要第二个数不为 0，就先计算第一个数对第二个数的余数，再把两个数更新为原第二个数和余数；第二个数为 0 时，第一个数就是答案。请用 while 与取余完成，不附其他文字。",
+  "starter_code": "# 在这里编写 Python 代码\n",
+  "examples": [
+    {
+      "stdin": "18\n24\n",
+      "stdout": "6\n"
+    }
+  ],
+  "tests": [
+    {
+      "case_id": "sample-1",
+      "stdin": "18\n24\n",
+      "expected_output": "6\n",
+      "visibility": "public"
+    },
+    {
+      "case_id": "hidden-1",
+      "stdin": "1\n1\n",
+      "expected_output": "1\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-2",
+      "stdin": "7\n13\n",
+      "expected_output": "1\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-3",
+      "stdin": "12\n36\n",
+      "expected_output": "12\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-4",
+      "stdin": "36\n12\n",
+      "expected_output": "12\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-5",
+      "stdin": "10000\n10000\n",
+      "expected_output": "10000\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-6",
+      "stdin": "10000\n1\n",
+      "expected_output": "1\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-7",
+      "stdin": "270\n192\n",
+      "expected_output": "6\n",
+      "visibility": "hidden"
+    }
+  ],
+  "comparison": "exact",
+  "time_limit_seconds": 3,
+  "output_limit_chars": 8000,
+  "hints": {
+    "level1": "什么样的袋容量可以让两批都没有剩余？",
+    "level2": "按照任务给出的更新规则，在修改变量前先保存余数。",
+    "level3": "检查第二个数为零时是否还执行了取余，并用 18、24 手算前两轮。"
+  },
+  "reference_solution": "a = int(input())\nb = int(input())\n\nwhile b != 0:\n    remainder = a % b\n    a = b\n    b = remainder\n\nprint(a)\n",
+  "solution_explanation": "每次更新前先用旧的 a 和 b 计算余数，再把 b 移到 a，把余数移到 b。重复后余数会变成零，此时 a 是最大公约数，也就是最大的统一袋容量。a 小于 b、两数相等或其中一数整除另一数时，同一流程都适用。"
+}

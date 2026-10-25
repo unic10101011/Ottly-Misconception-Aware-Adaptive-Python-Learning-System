@@ -82,6 +82,7 @@ def contract_analysis(analysis: AnalysisResult | dict | None, allowed_ids: list[
     data = analysis.model_dump(mode='json') if isinstance(analysis, AnalysisResult) else dict(analysis)
     if data.get('status') != 'ready':
         data['content'] = None
+        data['guidance'] = None
         data['source'] = None
         data['personalization'] = {'used': False, 'related_history_count': 0}
         if data.get('status') == 'skipped':

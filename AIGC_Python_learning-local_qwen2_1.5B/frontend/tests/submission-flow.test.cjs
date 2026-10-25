@@ -34,6 +34,55 @@ const failure = {
   } },
 }
 
+test('partial feedback offers a question and reveals explanation only after answering', () => {
+  const values = [null, false]
+  let index = 0
+  const hooks = { ...React, useState: () => {
+    const slot = index++
+    return [values[slot], value => { values[slot] = value }]
+  } }
+  const Feedback = loadJsx('../src/components/SubmissionFeedback.jsx', { react: hooks })
+  const result = { ...failure, submission_id: 700,
+    judge: { ...failure.judge, passed_cases: 5, total_cases: 7 },
+    analysis: { status: 'ready', feedback_kind: 'guidance', content: null, guidance: {
+      hint: '检查条件覆盖的范围。', knowledge_points: ['比较与条件分支'],
+      question: { prompt: '分支链会选择几个分支？', options: ['多个分支', '第一个成立的分支'],
+        correct_index: 1, explanation: 'ANSWER_EXPLANATION' },
+    } },
+  }
+  function find(node, predicate) {
+    if (!React.isValidElement(node)) return null
+    if (predicate(node)) return node
+    return React.Children.toArray(node.props.children).map(child => find(child, predicate)).find(Boolean)
+  }
+  const element = find(Feedback({ result, showJudge: false }), node => typeof node.type === 'function')
+  const render = () => { index = 0; return element.type(element.props) }
+  let tree = render()
+  assert.match(renderToStaticMarkup(tree), /思考提示/)
+  assert.doesNotMatch(renderToStaticMarkup(tree), /疑似原因|ANSWER_EXPLANATION/)
+  assert.equal(find(tree, node => node.type === 'button').props.disabled, true)
+  find(tree, node => node.type === 'input' && node.props.value === 0).props.onChange()
+  tree = render()
+  find(tree, node => node.type === 'button').props.onClick()
+  tree = render()
+  assert.match(renderToStaticMarkup(tree), /再想一想。.*ANSWER_EXPLANATION/)
+  find(tree, node => node.type === 'input' && node.props.value === 1).props.onChange()
+  tree = render()
+  assert.doesNotMatch(renderToStaticMarkup(tree), /ANSWER_EXPLANATION/)
+  find(tree, node => node.type === 'button').props.onClick()
+  assert.match(renderToStaticMarkup(render()), /回答正确。.*ANSWER_EXPLANATION/)
+})
+
+test('partial feedback pending state promises guidance instead of a diagnosis', () => {
+  const Feedback = loadJsx('../src/components/SubmissionFeedback.jsx')
+  const html = renderToStaticMarkup(React.createElement(Feedback, { result: {
+    ...failure, judge: { ...failure.judge, passed_cases: 5, total_cases: 7 },
+    analysis: { status: 'preparing', feedback_kind: 'guidance' },
+  } }))
+  assert.match(html, /正在准备思考提示/)
+  assert.doesNotMatch(html, /正在分析错因/)
+})
+
 test('snapshot metadata distinguishes known values from unavailable historical values', () => {
   const Metadata = loadJsx('../src/components/ProblemMetadata.jsx')
   const current = renderToStaticMarkup(React.createElement(Metadata, {
@@ -1007,11 +1056,14 @@ for (const problemId of ['practice-12-2-v1', 'level1', 'count-at-least-v1']) tes
   }
 })
 
-test('practice direct link opens the recommended question instead of the first one', () => {
+for (const embeddedTask of [false, true]) {
+test(`practice direct link separates story and task (embedded task: ${embeddedTask})`, () => {
   const items = ['A', 'B'].map(id => ({ problem_id: id, level_no: 1, title: id,
     practice_focus: id, available: true, completed: false }))
   const values = [items, { problem_id: 'B', title: 'B', completed: false,
-    starter_code: '', description: 'B_DIRECT_DETAIL', examples: [], teaching: [] }, null, '', false]
+    starter_code: '', story: 'B_STORY',
+    description: embeddedTask ? 'B_STORY\n\n任务：B_DIRECT_DETAIL' : 'B_DIRECT_DETAIL',
+    examples: [], teaching: [] }, null, '', false]
   let index = 0
   const hooks = { ...React,
     useState: () => [values[index++], () => {}], useRef: value => ({ current: value }),
@@ -1026,8 +1078,15 @@ test('practice direct link opens the recommended question instead of the first o
     '../components/CodeEditor.jsx': props => React.createElement('div', null, props.children),
     '../components/codeApi.mjs': {},
   })
-  assert.match(renderToStaticMarkup(Page()), /B_DIRECT_DETAIL/)
+  const html = renderToStaticMarkup(Page())
+  assert.match(html, /B_DIRECT_DETAIL/)
+  assert.match(html, /<h3>题目<\/h3>/)
+  assert.match(html, /<h3>任务<\/h3>/)
+  assert.equal((html.match(/B_STORY/g) || []).length, 1)
+  assert.ok(html.indexOf('B_STORY') < html.indexOf('B_DIRECT_DETAIL'))
+  assert.doesNotMatch(html, /任务：/)
 })
+}
 
 test('practice map groups all twelve levels and opens only the clicked circle, preserving completion on return', async () => {
   const items = Array.from({ length: 12 }, (_, level) => Array.from({ length: 3 }, (_, index) => ({

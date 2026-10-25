@@ -60,7 +60,7 @@ def rule_recommendation(item: Lesson, misconception_tag: str | None) -> Recommen
     reason = ('这道题和你刚才练习的知识点及疑似误区相关，可以用来巩固。' if matched else
               '这道题和你刚才练习的知识点相关，可以用来巩固。')
     return RecommendationResult(status='ready', recommendation=RecommendedPractice(
-        problem_id=item.problem_id, level_no=item.level_no, title=item.title, reason=reason, model='',
+        problem_id=item.problem_id, level_no=item.level_no, title=item.title, reason=reason, model='rule',
     ))
 
 

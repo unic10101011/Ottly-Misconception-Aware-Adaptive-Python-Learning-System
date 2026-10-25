@@ -1,0 +1,96 @@
+{
+  "schema_version": "1.0.0",
+  "problem_id": "practice-10-5-v1",
+  "version": 1,
+  "level_no": 10,
+  "kind": "practice",
+  "target_misconception_tags": ["variable_error"],
+  "source_url": "https://github.com/alexmojaki/futurecoder/blob/main/core/chapters/c04_for_loops.py",
+  "practice_focus": "比较当前字符与前一个字符；在发生变化时增加段数，并正确处理首字符和空文本。",
+  "title": "连续信号分段",
+  "difficulty": 2,
+  "knowledge_ids": [
+    "K10",
+    "K05",
+    "K08"
+  ],
+  "prerequisite_knowledge_ids": [
+    "K02",
+    "K05",
+    "K08"
+  ],
+  "prerequisite_problem_ids": [
+    "shell-savings-v1"
+  ],
+  "published": true,
+  "story": "Ottly 把电台信号写成一串大写字母。连续相同的字母属于同一段；字母一旦改变，就开始新的一段。相同字母隔开后再次出现，也应算作新段，请统计整条消息有多少段。",
+  "teaching": [
+    {
+      "title": "本题练习重点",
+      "text": "比较当前字符与前一个字符；在发生变化时增加段数，并正确处理首字符和空文本。",
+      "example": "先运行样例，再检查空数据、边界值和每个分支。"
+    }
+  ],
+  "description": "输入一行长度为 0–100 的大写英文字母。统计连续相同字母组成的段数并输出一行整数。例如 AAABBCCA 分为 AAA、BB、CC、A，共 4 段。空行输出 0，不要只统计不同字母种类，也不附其他文字。",
+  "starter_code": "# 在这里编写 Python 代码\n",
+  "examples": [
+    {
+      "stdin": "AAABBCCA\n",
+      "stdout": "4\n"
+    }
+  ],
+  "tests": [
+    {
+      "case_id": "sample-1",
+      "stdin": "AAABBCCA\n",
+      "expected_output": "4\n",
+      "visibility": "public"
+    },
+    {
+      "case_id": "hidden-1",
+      "stdin": "\n",
+      "expected_output": "0\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-2",
+      "stdin": "A\n",
+      "expected_output": "1\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-3",
+      "stdin": "AAA\n",
+      "expected_output": "1\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-4",
+      "stdin": "ABAB\n",
+      "expected_output": "4\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-5",
+      "stdin": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n",
+      "expected_output": "1\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-6",
+      "stdin": "ABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABAB\n",
+      "expected_output": "100\n",
+      "visibility": "hidden"
+    }
+  ],
+  "comparison": "exact",
+  "time_limit_seconds": 3,
+  "output_limit_chars": 8000,
+  "hints": {
+    "level1": "相同字母被其他字母隔开后，还应该属于同一段吗？",
+    "level2": "保存前一个字符，当前字符发生变化时才增加段数。",
+    "level3": "检查空文本、全部相同字母和交替字母，特别注意第一段是否被漏掉。"
+  },
+  "reference_solution": "message = input()\nprevious = \"\"\ngroups = 0\n\nfor char in message:\n    if char != previous:\n        groups = groups + 1\n    previous = char\n\nprint(groups)\n",
+  "solution_explanation": "用 previous 保存上一个字符，初始为空。当前字符不同时新增一段，再将当前字符保存为 previous。同一个字母重新出现时，如果紧邻的上一个字符不同，也需要开始新段。空文本不进入循环，段数保持零。"
+}

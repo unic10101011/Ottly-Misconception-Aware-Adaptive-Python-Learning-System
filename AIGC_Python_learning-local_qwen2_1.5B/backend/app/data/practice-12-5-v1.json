@@ -1,0 +1,154 @@
+{
+  "schema_version": "1.0.0",
+  "problem_id": "practice-12-5-v1",
+  "version": 1,
+  "level_no": 12,
+  "kind": "practice",
+  "target_misconception_tags": ["variable_error"],
+  "source_url": "https://github.com/alexmojaki/futurecoder/blob/main/core/chapters/c09_functions.py",
+  "practice_focus": "函数内维护当前单词长度和最长长度；多个空格重置当前长度，末尾没有空格也要更新最大值。",
+  "title": "最长单词长度函数",
+  "difficulty": 3,
+  "knowledge_ids": [
+    "K12",
+    "K10",
+    "K08",
+    "K05"
+  ],
+  "prerequisite_knowledge_ids": [
+    "K05",
+    "K08",
+    "K11"
+  ],
+  "prerequisite_problem_ids": [
+    "temperature-max-v1"
+  ],
+  "published": true,
+  "story": "Ottly 想给电台消息中的单词安排显示格。不同消息的单词长度各不相同，她决定编写一个函数，找出最长单词需要多少格。连续空格只表示间隔，不应该变成单词的一部分。",
+  "teaching": [
+    {
+      "title": "本题练习重点",
+      "text": "函数内维护当前单词长度和最长长度；多个空格重置当前长度，末尾没有空格也要更新最大值。",
+      "example": "先运行样例，再检查空数据、边界值和每个分支。"
+    }
+  ],
+  "description": "补全 longest_word_length(text)，返回最长单词的长度，返回值为整数。text 只包含英文字母和空格，长度为 0–100；单词由连续英文字母组成，一个或多个空格分隔单词。空字符串或全为空格时返回 0。主程序读取一行文本并打印返回值。请逐字符处理，保留函数签名和调用代码，不在函数内打印结果。",
+  "starter_code": "def longest_word_length(text):\n    pass\n\ntext = input()\nprint(longest_word_length(text))\n",
+  "examples": [
+    {
+      "stdin": "Sea otter swims\n",
+      "stdout": "5\n"
+    }
+  ],
+  "tests": [
+    {
+      "case_id": "sample-1",
+      "stdin": "Sea otter swims\n",
+      "expected_output": "5\n",
+      "visibility": "public"
+    },
+    {
+      "case_id": "hidden-1",
+      "stdin": "\n",
+      "expected_output": "0\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-2",
+      "stdin": "   \n",
+      "expected_output": "0\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-3",
+      "stdin": "Otter\n",
+      "expected_output": "5\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-4",
+      "stdin": "A B C\n",
+      "expected_output": "1\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-5",
+      "stdin": "longest a\n",
+      "expected_output": "7\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-6",
+      "stdin": "a longest\n",
+      "expected_output": "7\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-7",
+      "stdin": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n",
+      "expected_output": "100\n",
+      "visibility": "hidden"
+    },
+    {
+      "case_id": "hidden-8",
+      "stdin": "  a  bb   c \n",
+      "expected_output": "2\n",
+      "visibility": "hidden"
+    }
+  ],
+  "comparison": "exact",
+  "time_limit_seconds": 3,
+  "output_limit_chars": 8000,
+  "hints": {
+    "level1": "遇到空格时，当前单词长度和已经记录的最长长度是否都需要清零？",
+    "level2": "分别保存当前长度和最大长度，读到字母后立即比较更新。",
+    "level3": "检查最长单词位于末尾、多个连续空格、空字符串，以及连续多次调用。"
+  },
+  "reference_solution": "def longest_word_length(text):\n    current = 0\n    longest = 0\n    for char in text:\n        if char == \" \":\n            current = 0\n        else:\n            current = current + 1\n            if current > longest:\n                longest = current\n    return longest\n\ntext = input()\nprint(longest_word_length(text))\n",
+  "solution_explanation": "current 统计当前单词长度，遇到空格就归零。遇到字母先增加 current，再与 longest 比较。这样最后一个单词后即使没有空格也不会漏算。两个变量都在函数内初始化，使每次调用独立。",
+  "assessment": "practice_function",
+  "direct_function_tests": [
+    {
+      "case_id": "hidden-function-1",
+      "function_name": "longest_word_length",
+      "calls": [
+        {
+          "args": [
+            "Sea otter swims"
+          ],
+          "expected": 5
+        },
+        {
+          "args": [
+            ""
+          ],
+          "expected": 0
+        },
+        {
+          "args": [
+            "   "
+          ],
+          "expected": 0
+        },
+        {
+          "args": [
+            "a longest"
+          ],
+          "expected": 7
+        },
+        {
+          "args": [
+            "  a  bb   c "
+          ],
+          "expected": 2
+        },
+        {
+          "args": [
+            "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          ],
+          "expected": 100
+        }
+      ]
+    }
+  ]
+}
