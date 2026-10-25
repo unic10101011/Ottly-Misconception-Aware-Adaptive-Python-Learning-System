@@ -5,7 +5,7 @@ import PracticeRecommendationModal from './PracticeRecommendationModal.jsx'
 import { requestCode, requestAnalysis, requestPracticeRecommendation } from './codeApi.mjs'
 import { readCodeDraft, saveCodeDraft } from './codeDraft.mjs'
 
-function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, title, children, teaching, completionPanel, nextAction, acceptsInput = false, persistentOutput = acceptsInput, sampleInput = '', allowReset = false, resetMode = 'template' }) {
+function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, onSubmitted, title, children, teaching, completionPanel, nextAction, acceptsInput = false, persistentOutput = acceptsInput, sampleInput = '', allowReset = false, resetMode = 'template' }) {
   const navigate = useNavigate()
   const [code, setCode] = useState(() => readCodeDraft(userId, problemId)?.code ?? initialCode)
   const [stdin, setStdin] = useState(() => readCodeDraft(userId, problemId)?.stdin ?? sampleInput)
@@ -210,6 +210,7 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, tit
       submissionRef.current = result
       setSubmission(result)
       setOutputType('hidden')
+      const submissionGuided = onSubmitted?.(result) === true
       if (result.analysis?.status === 'preparing') {
         requestAnalysis(result.submission_id, localStorage.getItem('access_token'))
           .then(data => {
@@ -230,7 +231,7 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, tit
       if (result.judge.passed) {
         onAccepted?.(result)
         startConfetti()
-        if (result.practice_recommendation_eligible) {
+        if (!submissionGuided && result.practice_recommendation_eligible) {
           setRecommendationPending(true)
           requestPracticeRecommendation(result.submission_id, localStorage.getItem('access_token')).then(data => {
             if (!mountedRef.current || submissionRef.current !== result) return
@@ -242,8 +243,8 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, tit
             setRecommendationPending(false)
             setModal({ show: true, type: 'success', title: '通过', message: '恭喜！全部测试用例通过！' })
           })
-        } else setModal({ show: true, type: 'success', title: '通过', message: '恭喜！全部测试用例通过！' })
-        if (onSuccess && !result.practice_recommendation_eligible) successTimerRef.current = setTimeout(() => {
+        } else if (!submissionGuided) setModal({ show: true, type: 'success', title: '通过', message: '恭喜！全部测试用例通过！' })
+        if (onSuccess && !submissionGuided && !result.practice_recommendation_eligible) successTimerRef.current = setTimeout(() => {
           if (mountedRef.current) onSuccess()
         }, 3000)
       }
@@ -485,7 +486,7 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, tit
               </svg>
             </button>}
           </div>
-          <div className="code-editor-box">
+          <div className="code-editor-box" data-beginner-target="editor">
             <div className="code-line-numbers" ref={lineNumbersRef}>
               {Array.from({ length: Math.max(lineCount, 1) }, (_, i) => (
                 <div key={i}>{i + 1}</div>
@@ -521,7 +522,7 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, tit
               onClick={() => updateInput(sampleInput)}>填入样例输入</button>
           </div>}
 
-          {persistentOutput && <section className="lesson-output" aria-labelledby="lesson-output-title">
+          {persistentOutput && <section className="lesson-output" data-beginner-target="output" aria-labelledby="lesson-output-title">
             <h4 id="lesson-output-title">运行输出</h4>
             <div className={`output-box ${runOutput?.type || 'info'}`} role="status" aria-live="polite">
               {runOutput?.text || '点击“运行”后，这里会显示程序输出或错误信息。'}
@@ -535,10 +536,10 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, tit
           {authRequired && <button type="button" className="btn-hint" onClick={() => navigate('/auth')}>重新登录</button>}
 
           <div className="code-buttons">
-            <button className="btn-run" onClick={runCode} disabled={busy}>
+            <button className="btn-run" data-beginner-target="run" onClick={runCode} disabled={busy}>
               {running ? '运行中...' : '运行'}
             </button>
-            <button className="btn-submit" onClick={submitCode} disabled={busy}>
+            <button className="btn-submit" data-beginner-target="submit" onClick={submitCode} disabled={busy}>
               {submitting ? '提交中...' : '提交判题'}
             </button>
             {nextAction && <button type="button" className="btn-next-level" onClick={nextAction} disabled={busy}>前往下一关 →</button>}

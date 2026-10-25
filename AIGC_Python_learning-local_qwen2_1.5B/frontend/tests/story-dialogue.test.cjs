@@ -32,6 +32,7 @@ function harness(file, overrides) {
   loaded._compile(transformSync(fs.readFileSync(filename, 'utf8'), { loader: 'jsx', format: 'cjs' }).code, filename)
   const render = props => { cursor = 0; refCursor = 0; return loaded.exports.default(props) }
   render.mount = () => { collect = false; return effects.map(effect => effect()) }
+  render.effects = effects
   return render
 }
 function find(tree, predicate) {
@@ -55,6 +56,89 @@ function hearPresetQuestion(render, props) {
   }
   assert.fail('preset question should return to the question menu')
 }
+
+test('first-level tour precedes knowledge dialogue and can be replayed after completion', async () => {
+  const Tour = () => null
+  const Player = () => null
+  const originalStorage = global.localStorage
+  global.localStorage = { getItem: () => 'token' }
+  let completed = false
+  const overrides = { './StoryDialogue.jsx': Player, './BeginnerTour.jsx': Tour,
+    '../codeApi.mjs': { getGuide: async () => ({ story: { id: 'level1' }, completed }) } }
+  try {
+    const props = { problemId: 'level1', beginner: true }
+    const render = harness('../src/components/story/LessonIntro.jsx', overrides)
+    render(props); render.mount(); await new Promise(resolve => setImmediate(resolve))
+    let tree = render(props)
+    assert.ok(find(tree, node => node.type === Tour))
+    assert.equal(find(tree, node => node.type === Player), undefined)
+    find(tree, node => node.type === Tour).props.onFinish()
+    tree = render(props)
+    assert.equal(find(tree, node => node.type === Tour), undefined)
+    assert.equal(find(tree, node => node.type === Player).props.canSkip, false)
+    completed = true
+    const fresh = harness('../src/components/story/LessonIntro.jsx', overrides)
+    fresh(props); fresh.mount(); await new Promise(resolve => setImmediate(resolve))
+    assert.equal(find(fresh(props), node => node.type === Tour), undefined)
+    find(fresh(props), node => node.props['aria-label'] === '重看第一关操作指引').props.onClick()
+    assert.ok(find(fresh(props), node => node.type === Tour))
+  } finally { if (originalStorage === undefined) delete global.localStorage; else global.localStorage = originalStorage }
+})
+
+test('tour advances every two seconds, supports pausing and cancels old timers', () => {
+  const render = harness('../src/components/story/BeginnerTour.jsx', { './beginner-tour.css': {} })
+  const originalTimeout = global.setTimeout, originalClear = global.clearTimeout
+  let scheduled, cleared, finished = 0
+  global.setTimeout = (callback, ms) => { scheduled = { callback, ms }; return scheduled }
+  global.clearTimeout = timer => { cleared = timer }
+  const props = { onFinish: () => finished++ }
+  const timerEffect = () => render.effects.at(-2)()
+  try {
+    let tree = render(props)
+    assert.match(find(tree, node => node.type === 'img').props.src, /peek.png$/)
+    let cleanup = timerEffect()
+    assert.equal(scheduled.ms, 1000)
+    cleanup(); assert.equal(cleared, scheduled)
+    scheduled.callback()
+    tree = render(props)
+    assert.equal(find(tree, node => node.props.role === 'status').props.children, '欢迎来到编程世界！')
+    cleanup = timerEffect(); assert.equal(scheduled.ms, 2400)
+    cleanup(); scheduled.callback()
+    for (const text of ['这是代码编辑器，是你写程序的地方', '写完代码后，点击运行',
+      '你的程序得出的结果会显示在这里', '系统会测试你编写的代码']) {
+      tree = render(props)
+      assert.equal(find(tree, node => node.props.role === 'status').props.children, text)
+      cleanup = timerEffect(); assert.equal(scheduled.ms, 2000)
+      cleanup(); scheduled.callback()
+    }
+    tree = render(props)
+    assert.match(find(tree, node => node.props.role === 'status').props.children, /只有提交判题/)
+    button(tree, '暂停播放').props.onClick()
+    tree = render(props)
+    assert.equal(timerEffect(), undefined)
+    assert.ok(button(tree, '继续播放'))
+    button(tree, '下一步 →').props.onClick()
+    tree = render(props)
+    assert.equal(finished, 0)
+    button(tree, '开始知识点讲解 →').props.onClick()
+    assert.equal(finished, 1)
+  } finally { global.setTimeout = originalTimeout; global.clearTimeout = originalClear }
+})
+
+for (const passed of [false, true]) test(`first-submission encouragement explains the actual verdict (passed: ${passed})`, () => {
+  const render = harness('../src/components/story/BeginnerTour.jsx', { './beginner-tour.css': {} })
+  let finished = 0
+  const props = { result: { judge: { passed } }, onFinish: () => finished++ }
+  assert.equal(find(render(props), node => node.props.role === 'status').props.children, '恭喜你完成第一个代码的编写！')
+  button(render(props), '下一步 →').props.onClick()
+  assert.match(find(render(props), node => node.props.role === 'status').props.children, passed ? /全部测试通过/ : /还没有全部通过/)
+  button(render(props), '下一步 →').props.onClick()
+  assert.match(find(render(props), node => node.props.role === 'status').props.children, passed ? /前往下一关/ : /修改代码后/)
+  button(render(props), '下一步 →').props.onClick()
+  assert.equal(finished, 0)
+  button(render(props), '我知道啦，继续探索！').props.onClick()
+  assert.equal(finished, 1)
+})
 
 test('all twelve guides keep preset options and show input only after all preset explanations', async () => {
   const stories = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../backend/app/data/guides/catalog.json'), 'utf8'))
@@ -219,7 +303,7 @@ test('guide saves completion before entering code, retries failures and reads du
   const level1Story = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../backend/app/data/guides/catalog.json'), 'utf8')).level1
   const Player = () => null
   let saved = false, fail = true
-  const overrides = { './StoryDialogue.jsx': Player, '../codeApi.mjs': {
+  const overrides = { './StoryDialogue.jsx': Player, './BeginnerTour.jsx': () => null, '../codeApi.mjs': {
     getGuide: async () => ({ story: level1Story, completed: saved }),
     completeGuide: async (id, version, heard, answers) => {
       assert.equal(id, 'level1'); assert.deepEqual(answers, { q: 'a' })

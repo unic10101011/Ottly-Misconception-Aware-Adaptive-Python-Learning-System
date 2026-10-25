@@ -1,0 +1,42 @@
+.beginner-tour { position: fixed; inset: 0; width: 100vw; max-width: none; height: 100dvh; max-height: none; margin: 0; padding: 0; border: 0; overflow: hidden; background: transparent; color: #173d6a; font-family: inherit; }
+.beginner-tour::backdrop { background: rgba(13, 35, 58, .52); }
+.beginner-tour.is-pointing::backdrop { background: transparent; }
+.beginner-spotlight { position: absolute; border: 3px solid #ffcc65; border-radius: 13px; box-shadow: 0 0 0 9999px rgba(13, 35, 58, .58), 0 0 22px rgba(255, 204, 101, .8); pointer-events: none; box-sizing: border-box; }
+.beginner-controls { position: absolute; z-index: 3; top: 16px; left: 20px; right: 20px; display: flex; align-items: center; gap: 10px; color: #fff; font-size: 14px; }
+.beginner-controls > span { margin-right: auto; text-shadow: 0 1px 5px #173d6a; }
+.beginner-tour button { padding: 10px 15px; min-height: 44px; border: 1.5px solid #214c7a; border-radius: 7px; background: #f7fcff; color: #173d6a; font: inherit; cursor: pointer; }
+.beginner-tour button:hover { background: #dce8fc; }
+.beginner-tour button:focus-visible { outline: 3px solid #ffcc65; outline-offset: 3px; }
+.beginner-actor { position: absolute; left: calc(50% - 160px); top: calc(50% - 250px); width: 320px; height: 320px; transition: left .65s ease, top .65s ease, width .65s ease, height .65s ease; pointer-events: none; filter: drop-shadow(0 10px 16px #102e4933); animation: beginner-walk-in 900ms ease-out; }
+.beginner-actor img { width: 100%; height: 100%; object-fit: contain; }
+.beginner-actor.is-small { width: 150px; height: 150px; animation: none; }
+.beginner-actor.is-flipped img { transform: scaleX(-1); }
+.is-peeking .beginner-actor { width: 260px; height: 170px; left: calc(50% - 130px); top: calc(100% - 145px); animation: beginner-peek 700ms ease-out; }
+.beginner-bubble { position: absolute; left: calc(50% - 210px); top: calc(50% + 70px); width: min(420px, calc(100vw - 32px)); max-height: calc(100dvh - 120px); overflow-y: auto; box-sizing: border-box; padding: 22px 24px 16px; border: 2px solid #214c7a; border-radius: 18px; background: #f8fcff; box-shadow: 6px 6px 0 #8eafe9; }
+.beginner-bubble::before { content: ''; position: absolute; top: -12px; left: 40px; width: 20px; height: 20px; background: #f8fcff; border-top: 2px solid #214c7a; border-left: 2px solid #214c7a; transform: rotate(45deg); }
+.beginner-bubble strong { font-size: 18px; }
+.beginner-bubble small { margin-left: 8px; color: #547494; font-size: 12px; font-weight: 400; }
+.beginner-bubble p { margin: 14px 0 20px; font-size: 18px; line-height: 1.8; }
+.beginner-bubble footer { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 13px; }
+.beginner-bubble footer > span { color: #547494; }
+.is-pointing .beginner-bubble { width: min(380px, calc(100vw - 32px)); }
+.is-pointing .beginner-bubble::before { display: none; }
+@keyframes beginner-peek { from { transform: translateY(100%); } to { transform: translateY(0); } }
+@keyframes beginner-walk-in { from { transform: translateY(60vh) rotate(-6deg); } 55% { transform: translateY(8vh) rotate(5deg); } 80% { transform: translateY(2vh) rotate(-3deg); } to { transform: translateY(0) rotate(0); } }
+@media (max-width: 720px) {
+  .beginner-controls { top: 10px; left: 12px; right: 12px; flex-wrap: wrap; font-size: 12px; }
+  .beginner-controls > span { width: 100%; }
+  .beginner-controls button { padding: 7px 10px; }
+  .beginner-actor { width: 230px; height: 230px; left: calc(50% - 115px); top: calc(50% - 200px); }
+  .beginner-bubble { left: 16px; top: calc(50% + 35px); width: calc(100vw - 32px); padding: 16px 18px; }
+  .beginner-bubble p { font-size: 16px; margin: 10px 0; }
+  .beginner-actor.is-small { width: 110px; height: 110px; }
+}
+@media (max-height: 600px) {
+  .beginner-actor:not(.is-small) { width: 170px; height: 170px; left: calc(25% - 85px); top: calc(50% - 70px); }
+  .beginner-tour:not(.is-pointing) .beginner-bubble { left: 45%; top: 100px; width: 50%; }
+  .beginner-tour.is-peeking .beginner-actor { left: calc(50% - 85px); top: calc(100% - 100px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .beginner-actor { animation: none !important; transition: none; }
+}
