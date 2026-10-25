@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate, useOutletContext, useParams } from 'react-router-dom'
 import CodeEditor from '../components/CodeEditor.jsx'
 import LessonIntro from '../components/story/LessonIntro.jsx'
+import BeginnerTour from '../components/story/BeginnerTour.jsx'
 import { getLevels, getLesson, getSolution } from '../components/codeApi.mjs'
 
 const lessonIllustrations = [null,
@@ -27,6 +28,8 @@ function Lesson({ levelNo, userId, navigate }) {
   const [solutionError, setSolutionError] = useState('')
   const [solutionBusy, setSolutionBusy] = useState(false)
   const [guideReady, setGuideReady] = useState(false)
+  const [firstSubmission, setFirstSubmission] = useState(null)
+  const [submissionIntroduced, setSubmissionIntroduced] = useState(false)
 
   useEffect(() => {
     let active = true
@@ -41,6 +44,7 @@ function Lesson({ levelNo, userId, navigate }) {
         setNext(levels.items.find(item => item.id === levelNo + 1) || null)
         setLesson(data)
         setCompleted(data.completed)
+        setSubmissionIntroduced(data.completed)
       } catch (error) {
         if (!active) return
         setError(error.message)
@@ -80,7 +84,7 @@ function Lesson({ levelNo, userId, navigate }) {
       <button type="button" className="lesson-tool-icon" title="返回关卡" aria-label="返回关卡选择" onClick={() => navigate('/app/levels')}>
         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><path d="m14 5-7 7 7 7M7 12h14" /></svg>
       </button>
-      {lesson && <LessonIntro problemId={lesson.problem_id} onReady={setGuideReady} onExit={() => navigate('/app/levels')} />}
+      {lesson && <LessonIntro problemId={lesson.problem_id} beginner={levelNo === 1} onReady={setGuideReady} onExit={() => navigate('/app/levels')} />}
     </div>
     {error && <p role="alert">{error}</p>}
     {!lesson && !error && <p role="status">正在加载第 {levelNo} 关...</p>}
@@ -89,12 +93,18 @@ function Lesson({ levelNo, userId, navigate }) {
         allowReset resetMode="clear"
         title={`第 ${levelNo} 关 · ${lesson.title}`} acceptsInput={levelNo !== 1} persistentOutput
         sampleInput={lesson.examples[0]?.stdin || ''} onAccepted={() => setCompleted(true)}
+        onSubmitted={levelNo === 1 ? result => {
+          if (submissionIntroduced) return false
+          setSubmissionIntroduced(true)
+          setFirstSubmission(result)
+          return true
+        } : undefined}
         teaching={lesson.teaching.map(item => <section className="lesson-teaching" key={item.title}>
           <h4>{item.title}</h4><p>{item.text}</p><pre>{item.example}</pre>
         </section>)}
         nextAction={completed && next?.published ? () => navigate(`/app/levels/${next.id}`) : undefined}
         completionPanel={completionPanel}>
-        <h3>情境</h3><p>{lesson.story}</p>
+        <h3>情境</h3>{levelNo !== 1 && <p>{lesson.story}</p>}
         {lessonIllustrations[levelNo] && <figure className="lesson-illustration">
           <img src={`/lesson-illustrations/${lessonIllustrations[levelNo]}`}
             alt={`第 ${levelNo} 关 · ${lesson.title}的情境插图`} loading="lazy" decoding="async" />
@@ -110,5 +120,6 @@ function Lesson({ levelNo, userId, navigate }) {
         练习第 {levelNo} 关知识点
       </button>}
     </div>}
+    {firstSubmission && <BeginnerTour result={firstSubmission} onFinish={() => setFirstSubmission(null)} />}
   </div>
 }

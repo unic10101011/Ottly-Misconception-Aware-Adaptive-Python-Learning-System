@@ -16,7 +16,8 @@ function loadJsx(file, overrides = {}) {
   loaded.paths = Module._nodeModulePaths(path.dirname(filename))
   const nativeRequire = loaded.require.bind(loaded)
   loaded.require = id => Object.hasOwn(overrides, id) ? overrides[id]
-    : id === './PracticeRecommendationModal.jsx' ? { default: () => null } : nativeRequire(id)
+    : ['./PracticeRecommendationModal.jsx', '../components/EndlessChallengeModal.jsx'].includes(id)
+      ? { default: () => null } : nativeRequire(id)
   loaded._compile(compiled.code, filename)
   return loaded.exports.default
 }
@@ -876,13 +877,13 @@ test('opening an unfinished history entry resumes only that analysis', async () 
   }
 })
 
-for (const levelNo of [7, 12]) test(`shared lesson ${levelNo} loads content and gates reference and completion`, async () => {
+for (const levelNo of [1, 7, 12]) test(`shared lesson ${levelNo} loads content and gates reference and completion`, async () => {
   const values = []
   let index = 0
   const effects = []
   let collectEffects = true
   const calls = []
-  const lesson = JSON.parse(fs.readFileSync(path.resolve(__dirname, `../../backend/app/data/${levelNo === 7 ? 'coastal-markers-v1' : 'count-at-least-v1'}.json`), 'utf8'))
+  const lesson = JSON.parse(fs.readFileSync(path.resolve(__dirname, `../../backend/app/data/${levelNo === 1 ? 'level1' : levelNo === 7 ? 'coastal-markers-v1' : 'count-at-least-v1'}.json`), 'utf8'))
   const hooks = { ...React,
     useState: initial => {
       const slot = index++
@@ -894,6 +895,7 @@ for (const levelNo of [7, 12]) test(`shared lesson ${levelNo} loads content and 
   let editorProps
   const Page = loadJsx('../src/pages/LessonPage.jsx', {
     '../components/story/LessonIntro.jsx': () => null,
+    '../components/story/BeginnerTour.jsx': () => null,
     react: hooks,
     'react-router-dom': {
       useNavigate: () => () => {}, useParams: () => ({ levelId: String(levelNo) }),
@@ -924,15 +926,20 @@ for (const levelNo of [7, 12]) test(`shared lesson ${levelNo} loads content and 
     assert.doesNotMatch(html, /查看参考解与解析|关已通过/)
     assert.doesNotMatch(html, /练习第/)
     assert.equal(editorProps.problemId, lesson.problem_id)
-    assert.equal(editorProps.acceptsInput, true)
+    assert.equal(editorProps.acceptsInput, levelNo !== 1)
     assert.equal(editorProps.persistentOutput, true)
+    if (levelNo === 1) {
+      assert.equal(editorProps.onSubmitted(failure), true)
+      renderToStaticMarkup(render())
+      assert.equal(editorProps.onSubmitted(failure), false, 'later submissions do not repeat the first-program encouragement')
+    } else assert.equal(editorProps.onSubmitted, undefined)
     editorProps.onAccepted()
     tree = render()
     html = renderToStaticMarkup(tree)
     assert.match(html, new RegExp(`第 ${levelNo} 关已通过`))
     assert.match(html, new RegExp(`练习第 ${levelNo} 关知识点`))
     if (levelNo === 7) assert.match(html, /第 8 关内容待开放/)
-    else {
+    else if (levelNo === 12) {
       assert.match(html, /恭喜完成全部 12 关/)
       assert.doesNotMatch(html, /第 13 关/)
     }
@@ -941,7 +948,7 @@ for (const levelNo of [7, 12]) test(`shared lesson ${levelNo} loads content and 
     assert.ok(referenceButton)
     await referenceButton.props.onClick()
     assert.deepEqual(calls[1], ['solution', lesson.problem_id])
-    assert.match(renderToStaticMarkup(render()), /for i in range/)
+    assert.match(renderToStaticMarkup(render()), levelNo === 1 ? /print/ : /for i in range/)
     cleanups.forEach(cleanup => cleanup?.())
   } finally {
     if (originalStorage) Object.defineProperty(global, 'localStorage', originalStorage)
@@ -1127,7 +1134,7 @@ test('practice map groups all twelve levels and opens only the clicked circle, p
     effects[1]()
     assert.deepEqual(calls, [], 'the overview must not automatically fetch the first question')
     const html = renderToStaticMarkup(tree)
-    assert.equal((html.match(/class="practice-map-level"/g) || []).length, 12)
+    assert.equal((html.match(/class="practice-map-level"/g) || []).length, 13)
     assert.equal((html.match(/class="practice-circle /g) || []).length, 36)
     assert.doesNotMatch(html, /QUESTION_TITLE_ONLY_IN_DETAIL|FOCUS_ONLY_IN_DETAIL|SELECTED_DETAIL/)
     assert.match(circle(tree, 1).props.className, /is-completed/)
@@ -1222,9 +1229,9 @@ test('corrected-pass recommendations preserve the verdict, support skipping and 
   const originalStorage = Object.getOwnPropertyDescriptor(global, 'localStorage')
   Object.defineProperty(global, 'localStorage', { configurable: true, value: { getItem: () => 'student-token' } })
   try {
-    for (const action of ['skip', 'practice', 'edit', 'unmount', 'unavailable', 'first_pass']) {
+    for (const action of ['skip', 'practice', 'edit', 'unmount', 'unavailable', 'first_pass', 'guided_pass', 'guided_failure']) {
       const values = [], refs = [], effects = [], requests = [], navigations = []
-      let index = 0, refIndex = 0, collect = true, resolveRecommendation, acceptedCount = 0
+      let index = 0, refIndex = 0, collect = true, resolveRecommendation, acceptedCount = 0, submittedResult
       const hooks = { ...React,
         useState: initial => {
           const slot = index++
@@ -1237,7 +1244,7 @@ test('corrected-pass recommendations preserve the verdict, support skipping and 
       }
       const selected = { problem_id: 'practice-04-1-v1', level_no: 4, title: '装满的盒数', reason: '巩固整除。' }
       const accepted = { ...failure, submission_id: 81, practice_recommendation_eligible: action !== 'first_pass',
-        judge: { ...failure.judge, passed: true, status: 'accepted', passed_cases: 1 }, analysis: { status: 'skipped' } }
+        judge: { ...failure.judge, passed: action !== 'guided_failure', status: action === 'guided_failure' ? 'wrong_answer' : 'accepted', passed_cases: action === 'guided_failure' ? 0 : 1 }, analysis: { status: 'skipped' } }
       const Modal = () => null
       const Editor = loadJsx('../src/components/CodeEditor.jsx', {
         react: hooks, 'react-router-dom': { useNavigate: () => url => navigations.push(url) },
@@ -1254,6 +1261,7 @@ test('corrected-pass recommendations preserve the verdict, support skipping and 
       })
       const render = () => { index = 0; refIndex = 0; return Editor({
         initialCode: 'print(3)', problemId: 'shell-groups-v1', userId: 1, onAccepted: () => { acceptedCount++ },
+        onSubmitted: result => { submittedResult = result; return action.startsWith('guided_') },
       }) }
       const find = (node, predicate) => !React.isValidElement(node) ? null : predicate(node) ? node
         : React.Children.toArray(node.props.children).map(child => find(child, predicate)).find(Boolean)
@@ -1262,6 +1270,15 @@ test('corrected-pass recommendations preserve the verdict, support skipping and 
       collect = false
       await find(tree, node => node.props.className === 'btn-submit').props.onClick()
       tree = render()
+      assert.equal(submittedResult, accepted, 'the tour receives the real verdict only after submission returns')
+      if (action.startsWith('guided_')) {
+        assert.equal(acceptedCount, action === 'guided_failure' ? 0 : 1)
+        assert.deepEqual(requests, [], 'the tour does not compete with a recommendation popup')
+        assert.equal(find(tree, node => node.type === Modal), undefined)
+        assert.doesNotMatch(find(tree, node => node.props.className?.startsWith('result-modal-overlay')).props.className, /show/)
+        cleanups.forEach(fn => fn())
+        continue
+      }
       assert.equal(acceptedCount, 1)
       assert.match(renderToStaticMarkup(tree), /全部测试通过/)
       if (action === 'first_pass') {

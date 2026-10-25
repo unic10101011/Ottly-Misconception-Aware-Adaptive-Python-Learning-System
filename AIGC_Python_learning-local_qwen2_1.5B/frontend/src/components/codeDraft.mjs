@@ -10,6 +10,15 @@ export function readCodeDraft(userId, problemId) {
     const draft = JSON.parse(localStorage.getItem(key))
     if (typeof draft?.code !== 'string' || draft.code.length > 6000 ||
         typeof draft.stdin !== 'string' || draft.stdin.length > 8000) return null
+    if (problemId === 'level1') {
+      draft.code = draft.code.replace(/^# 请让 Ottly 说出她的第一句话(?=\r?\n|$)/, '#向编程世界说出你的第一句话吧！')
+    }
+    if (problemId === 'count-at-least-v1') {
+      draft.code = draft.code.replace(
+        /(^def count_at_least\(scores, threshold\):\r?\n    # begin\r?\n)    pass(\r?\n    # end)/,
+        '$1    $2',
+      )
+    }
     return draft
   } catch {
     return null

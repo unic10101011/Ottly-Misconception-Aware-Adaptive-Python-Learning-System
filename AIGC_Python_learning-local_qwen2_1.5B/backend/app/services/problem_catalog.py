@@ -84,7 +84,7 @@ class Lesson(CatalogModel):
     problem_id: str = Field(min_length=1, max_length=100)
     version: int = Field(strict=True, ge=1)
     level_no: int = Field(strict=True, ge=1, le=12)
-    kind: Literal['main', 'practice'] = 'main'
+    kind: Literal['main', 'practice', 'endless'] = 'main'
     practice_focus: str = ''
     target_misconception_tags: list[MisconceptionTag] = Field(default_factory=list, max_length=2)
     source_url: str | None = Field(default=None, pattern=r'^https://[^\s/]+(?:/\S*)?$')

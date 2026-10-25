@@ -19,6 +19,8 @@ from app.services.lesson_feedback import with_lesson_hints
 from app.services.personalized_history import select_related_history
 from app.services.practice_recommendation import RecommendationResult, recommend_practice
 from app.services.misconceptions import MISCONCEPTION_TAGS
+from app.services.endless import find_problem
+from app.services.endless_catalog import endless_lessons
 from app.services.problem_catalog import SCHEMA_VERSION, LEVELS, KNOWLEDGE, Problem, TestCase
 from app.services.learning_contract import (
     ContractJudge, ContractAnalysis, contract_judge, contract_analysis,
@@ -46,7 +48,7 @@ class CodeRunResponse(BaseModel):
 @router.post("/code/run")
 async def execute_code(request: CodeRunRequest, current_user: User = Depends(get_current_user),
                        db: Session = Depends(get_db), stream_analysis: bool = False):
-    lesson = (require_lesson(request.problem_id, passed_problem_ids(db, current_user.id))
+    lesson = (require_lesson(request.problem_id, passed_problem_ids(db, current_user.id), db=db, user_id=current_user.id)
               if request.problem_id else None)
     result = await run_in_threadpool(run_code_process, request.code, timeout=request.timeout, stdin=request.stdin)
     if any(error['type'] == 'RunnerError' for error in result['errors']):
@@ -132,8 +134,8 @@ def preceding_failure(db: Session, record: LearningSubmission) -> LearningSubmis
     return previous if previous is not None and not previous.passed else None
 
 
-def require_lesson(problem_id, passed, *, review=False):
-    problem = PROBLEMS.get(problem_id)
+def require_lesson(problem_id, passed, *, review=False, db=None, user_id=None):
+    problem = find_problem(db, user_id, problem_id) if db is not None else PROBLEMS.get(problem_id)
     if problem is None:
         raise HTTPException(status_code=404, detail='题目不存在')
     if review:
@@ -180,13 +182,21 @@ def practice_questions(level_no: int | None = Query(default=None, ge=1, le=12),
         if problem.kind == 'practice' and problem.published
         and (level_no is None or problem.level_no == level_no)]
     items.sort(key=lambda item: (item['level_no'], item['problem_id']))
+    if level_no is None:
+        items.extend({
+            'problem_id': problem.problem_id, 'level_no': problem.level_no,
+            'kind': 'endless', 'category': 'endless', 'title': problem.title,
+            'practice_focus': problem.practice_focus, 'knowledge_ids': problem.knowledge_ids,
+            'completed': problem.problem_id in passed,
+            'available': problem.published and set(problem.prerequisite_problem_ids).issubset(passed),
+        } for problem in endless_lessons(db, current_user.id))
     return {'schema_version': SCHEMA_VERSION, 'code': 200, 'data': {'items': items}}
 
 
 @router.get('/code/problems/{problem_id}')
 def lesson(problem_id: str, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     passed = passed_problem_ids(db, current_user.id)
-    problem = require_lesson(problem_id, passed)
+    problem = require_lesson(problem_id, passed, db=db, user_id=current_user.id)
     # Explicit allowlist: never include private tests, hints or solutions here.
     data = problem.model_dump(include={
         'schema_version', 'problem_id', 'version', 'level_no', 'kind', 'practice_focus',
@@ -200,7 +210,7 @@ def lesson(problem_id: str, current_user: User = Depends(get_current_user), db: 
 
 @router.get('/code/problems/{problem_id}/solution')
 def solution(problem_id: str, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
-    problem = PROBLEMS.get(problem_id)
+    problem = find_problem(db, current_user.id, problem_id)
     if problem is None:
         raise HTTPException(status_code=404, detail='题目不存在')
     passed = passed_problem_ids(db, current_user.id)
@@ -217,7 +227,7 @@ def solution(problem_id: str, current_user: User = Depends(get_current_user), db
 async def submit_code(request: SubmissionRequest, current_user: User = Depends(get_current_user),
                       db: Session = Depends(get_db),
                       review_source_id: int | None = Header(default=None, alias="X-Review-Source-Id")):
-    problem = PROBLEMS.get(request.problem_id)
+    problem = find_problem(db, current_user.id, request.problem_id)
     if problem is None:
         raise HTTPException(status_code=404, detail="题目不存在")
     user_id = current_user.id
@@ -230,7 +240,8 @@ async def submit_code(request: SubmissionRequest, current_user: User = Depends(g
         ).first()
         if source is None:
             raise HTTPException(status_code=404, detail="复习来源错题不存在")
-    require_lesson(request.problem_id, passed_problem_ids(db, current_user.id), review=review_source_id is not None)
+    require_lesson(request.problem_id, passed_problem_ids(db, current_user.id), review=review_source_id is not None,
+                   db=db, user_id=current_user.id)
     judge_started = perf_counter()
     judge = await run_in_threadpool(judge_submission, problem, request.code)
     judge_ms = round((perf_counter() - judge_started) * 1000, 2)
@@ -371,7 +382,7 @@ async def prepare_analysis(submission_id: int, current_user: User = Depends(get_
             'submission_id': record.id, 'analysis': analysis.model_dump(mode='json') if analysis else None,
             'timings': record.analysis_json.get('timings', {}),
         }}
-    problem = PROBLEMS.get(record.problem_id)
+    problem = find_problem(db, current_user.id, record.problem_id)
     if problem is None:
         raise HTTPException(status_code=404, detail='题目不存在')
     model_judge = JudgeResult.model_validate(record.judge_json)

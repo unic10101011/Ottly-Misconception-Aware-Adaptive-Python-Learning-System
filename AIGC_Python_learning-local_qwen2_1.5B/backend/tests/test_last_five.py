@@ -152,6 +152,21 @@ def test_function_execution_has_normal_module_namespace():
     assert result['success'] and result['output'] == '8\n'
 
 
+def test_blank_level_twelve_template_can_be_completed_without_breaking_frame_validation():
+    from app.services.lesson_assessment import requirement_error
+    lesson = PROBLEMS['count-at-least-v1']
+    assert '    # begin\n    \n    # end' in lesson.starter_code
+    assert '\n    pass\n' not in lesson.starter_code
+    body = ('    count = 0\n    for score in scores:\n'
+            '        if score >= threshold:\n            count += 1\n    return count\n')
+    completed = lesson.starter_code.replace('    # begin\n    \n    # end', '    # begin\n' + body + '    # end')
+    assert requirement_error(lesson, completed) is None
+    assert judge_submission(lesson, completed).passed
+    wrong_frame = completed.replace('threshold = int(input())', 'threshold = 60')
+    assert requirement_error(lesson, wrong_frame) is not None
+    assert not judge_submission(lesson, lesson.starter_code).passed
+
+
 @pytest.mark.parametrize('slot', LEVELS[7:])
 def test_sample_hardcoding_cannot_complete_new_lesson(slot):
     lesson = PROBLEMS[slot.problem_id]

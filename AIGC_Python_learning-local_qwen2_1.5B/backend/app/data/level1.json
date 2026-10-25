@@ -40,7 +40,7 @@
     }
   ],
   "description": "使用 print 函数输出 Hello, World!，没有输入。",
-  "starter_code": "# 请让 Ottly 说出她的第一句话\n",
+  "starter_code": "#向编程世界说出你的第一句话吧！\n",
   "examples": [
     {
       "stdin": "",
