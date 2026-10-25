@@ -23,7 +23,7 @@ function loadJsx(file, overrides = {}) {
   const nativeRequire = loaded.require.bind(loaded)
   loaded.require = id => Object.hasOwn(overrides, id) ? overrides[id]
     : id.endsWith('/PythonEditor.jsx') ? PythonEditorStub
-    : ['./PracticeRecommendationModal.jsx', '../components/EndlessChallengeModal.jsx'].includes(id)
+    : ['./PracticeRecommendationModal.jsx', '../components/EndlessChallengeModal.jsx', './ExecutionReplay.jsx'].includes(id)
       ? { default: () => null } : nativeRequire(id)
   loaded._compile(compiled.code, filename)
   return loaded.exports.default
