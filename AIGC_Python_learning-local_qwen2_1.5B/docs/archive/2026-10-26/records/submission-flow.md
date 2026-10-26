@@ -1,6 +1,6 @@
 # 提交判题与三级提示
 
-本文件保留上一轮链路验收记录；本轮三级提示质量优化和最新实测结果见 [phase1-hint-quality.md](archive/2026-10-25/phase1-hint-quality.md)。下方旧样例中的提示质量问题是优化前的观察。
+本文件保留上一轮链路验收记录；本轮三级提示质量优化和最新实测结果见 [phase1-hint-quality.md](../../2026-10-25/phase1-hint-quality.md)。下方旧样例中的提示质量问题是优化前的观察。
 
 ## 当前功能和复用范围
 
@@ -53,7 +53,7 @@ GGUF 手工导入需保留 `ollama/Modelfile` 中的 Qwen 对话模板。API 的
 
 ## 2026-10-12 实际验收记录
 
-真实 HTTP 验收经过 Nginx、注册登录、MySQL、FastAPI、子进程判题和 Windows Ollama，模型为 qwen2.5-coder:3b-instruct。完整响应见 [live-submission.json](live-submission.json)。没有使用预写 AI 答案代替模型响应。
+真实 HTTP 验收经过 Nginx、注册登录、MySQL、FastAPI、子进程判题和 Windows Ollama，模型为 qwen2.5-coder:3b-instruct。完整响应见 `live-submission.json`（历史本机报告，仓库未收录）。没有使用预写 AI 答案代替模型响应。
 
 | 提交样例 | 真实证据 | 后端结果 | 本次耗时 |
 | --- | --- | --- | --- |

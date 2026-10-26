@@ -1,4 +1,4 @@
-"""Exercise real lessons, progression, reviewed hints and boundary mistakes."""
+"""Exercise real lessons, progression, unavailable AI and boundary mistakes."""
 import pytest
 
 from test_greeting import client, account, submit
@@ -32,12 +32,10 @@ def test_first_seven_full_flow(client):
         prepared = client.post(f"/api/v1/code/submissions/{failed['submission_id']}/analysis", headers=headers)
         assert prepared.status_code == 200, prepared.text
         failed['analysis'] = prepared.json()['data']['analysis']
-        assert failed['analysis']['status'] == 'ready'
-        assert failed['analysis']['source'] == 'fixed'
-        assert failed['analysis']['model'] is None
-        assert failed['analysis']['content']['knowledge_ids'] == lesson.knowledge_ids
-        assert failed['analysis']['content']['evidence'][0]['case_id'] in {
-            case.case_id for case in lesson.tests if case.visibility == 'public'}
+        # The shared fixture disables cloud credentials. Missing AI must not
+        # fabricate the retired fixed feedback or block normal progression.
+        assert failed['analysis']['status'] == 'unavailable'
+        assert failed['analysis']['content'] is None
         for case in failed['judge']['cases']:
             if case['visibility'] == 'hidden':
                 assert case['actual_output'] == case['expected_output'] == ''
@@ -45,7 +43,7 @@ def test_first_seven_full_flow(client):
         for level in (1, 2, 3):
             saved = client.patch(f"/api/v1/code/submissions/{failed['submission_id']}/hints",
                                  headers=headers, json={'level': level})
-            assert saved.json()['data']['hints_viewed_max'] == level
+            assert saved.status_code == 409
         accepted = submit(client, headers, lesson.problem_id, lesson.reference_solution).json()['data']
         assert accepted['judge']['passed'] and accepted['judge']['failed_tests'] == []
         assert accepted['analysis']['status'] == 'skipped'
@@ -53,7 +51,7 @@ def test_first_seven_full_flow(client):
         history = client.get('/api/v1/code/submissions?problem_id=' + lesson.problem_id, headers=headers).json()['data']
         assert history['total'] == 2
         old = next(item for item in history['items'] if item['id'] == failed['submission_id'])
-        assert old['hints_viewed_max'] == 3 and old['resolved_later']
+        assert old['hints_viewed_max'] == 0 and old['resolved_later']
         assert old['schema_version'] == '1.0.0' and old['difficulty'] == lesson.difficulty
         assert old['knowledge_ids'] == lesson.knowledge_ids and old['version'] == 1
 
@@ -96,20 +94,3 @@ def test_hardcoding_sample_cannot_complete_lesson(problem_id):
     sample_code = 'print(' + repr(lesson.examples[0].stdout) + ", end='')"
     result = judge_submission(lesson, sample_code)
     assert result.passed_cases > 0 and not result.passed
-
-
-def test_fallback_preserves_ready_ai_and_never_uses_hidden_or_uncollected_output():
-    from app.services.error_analysis import AnalysisResult
-    from app.services.lesson_feedback import with_lesson_hints
-    from app.services.submission import public_judge
-    lesson = PROBLEMS['shell-shop-v1']
-    judge = public_judge(judge_submission(lesson, 'print(0)'))
-    ready = AnalysisResult(status='ready', message='existing analysis')
-    assert with_lesson_hints(lesson, ready, judge) is ready
-    unavailable = AnalysisResult(status='unavailable', message='offline')
-    judge.cases = [case for case in judge.cases if case.visibility == 'hidden']
-    assert with_lesson_hints(lesson, unavailable, judge) is unavailable
-    judge = public_judge(judge_submission(lesson, 'print(0)'))
-    for case in judge.cases:
-        case.output_available = False
-    assert with_lesson_hints(lesson, unavailable, judge) is unavailable

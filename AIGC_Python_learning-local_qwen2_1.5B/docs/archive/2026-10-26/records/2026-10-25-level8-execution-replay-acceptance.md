@@ -1,6 +1,6 @@
 # 第8关代码执行回放试用说明
 
-后续扩展：前四关也已开放回放。本文保留第8关首批验收记录，当前支持范围与新增验收见 `docs/2026-10-25-first-four-execution-replay-acceptance.md`。
+后续扩展：前四关也已开放回放。本文保留第8关首批验收记录，当前支持范围与新增验收见 `docs/archive/2026-10-26/records/2026-10-25-first-four-execution-replay-acceptance.md`。
 
 ## 怎么试
 

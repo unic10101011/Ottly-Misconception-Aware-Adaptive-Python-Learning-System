@@ -7,3 +7,5 @@ tests
 .pytest_cache
 _audit_sandbox.py
 _audit_sandbox2.py
+.pytest_cache
+.pytest_tmp*

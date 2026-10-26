@@ -1,6 +1,6 @@
 # 前四关执行回放试用与验收
 
-后续已补齐正式12关，本文保留前四关首批记录；当前总体验收见 `docs/2026-10-25-all-lessons-execution-replay-acceptance.md`。
+后续已补齐正式12关，本文保留前四关首批记录；当前总体验收见 `docs/archive/2026-10-26/records/2026-10-25-all-lessons-execution-replay-acceptance.md`。
 
 ## 使用方式
 

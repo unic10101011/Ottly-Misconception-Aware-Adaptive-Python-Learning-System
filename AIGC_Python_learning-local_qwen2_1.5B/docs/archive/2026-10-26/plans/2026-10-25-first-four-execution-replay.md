@@ -14,6 +14,6 @@
 - [x] 回归、构建、本机更新，浏览器验证原题页打开/关闭和四关真实数据回放。
 - [x] 审查，记录结果及真实账号验收边界。不提交、不推送。
 
-验收明细见 `docs/2026-10-25-first-four-execution-replay-acceptance.md`。
+验收明细见 `docs/archive/2026-10-26/records/2026-10-25-first-four-execution-replay-acceptance.md`。
 
 工作区已有一份DeepSeek文档改名/修改，属于其他工作，本轮不触碰。

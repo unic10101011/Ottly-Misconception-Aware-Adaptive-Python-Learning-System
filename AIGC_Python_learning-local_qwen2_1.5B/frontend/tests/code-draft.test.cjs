@@ -48,12 +48,12 @@ test('deleting an account clears only that account drafts on this browser', asyn
     saveCodeDraft(1, 'level1', 'print(1)', '')
     saveCodeDraft(1, 'greeting-v1', 'print(2)', 'test')
     saveCodeDraft(2, 'level1', 'print(3)', '')
-    localStorage.setItem('eyeProtectionEnabled', 'true')
+    localStorage.setItem('unrelated-setting', 'true')
     clearUserCodeDrafts(1)
     assert.equal(readCodeDraft(1, 'level1'), null)
     assert.equal(readCodeDraft(1, 'greeting-v1'), null)
     assert.deepEqual(readCodeDraft(2, 'level1'), { code: 'print(3)', stdin: '' })
-    assert.equal(localStorage.getItem('eyeProtectionEnabled'), 'true')
+    assert.equal(localStorage.getItem('unrelated-setting'), 'true')
   } finally {
     if (original) Object.defineProperty(global, 'localStorage', original)
     else delete global.localStorage
