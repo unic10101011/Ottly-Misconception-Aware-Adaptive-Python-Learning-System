@@ -11,42 +11,42 @@
         "id": "hello",
         "type": "line",
         "speaker": "Ottly",
-        "text": "你好！我是 Ottly。今天我们先教 Python 说一句话。",
+        "text": "嗨，小伙伴！我是小海獭 Ottly。今天一起让电脑说声“你好”吧，只要写一行代码哦！",
         "next": "print"
       },
       {
         "id": "print",
         "type": "line",
         "speaker": "Ottly",
-        "text": "print() 就像一个小扩音器：把括号里指定的内容显示出来。",
+        "text": "认识一下 print()，它像个小喇叭，能把括号里的内容显示出来。这就叫“输出”。",
         "next": "hi-example"
       },
       {
         "id": "hi-example",
         "type": "line",
         "speaker": "Ottly",
-        "text": "比如 print(\"Hi\")，运行后看到的是 Hi。代码里有引号，输出结果里却不会带上引号。",
+        "text": "比如 print(\"Hi\")，运行后就会看到 Hi。print 要小写，括号和引号用英文符号哦。",
         "next": "sea-example"
       },
       {
         "id": "sea-example",
         "type": "line",
         "speaker": "Ottly",
-        "text": "像素小练习：print('Sea') 会显示 Sea，而不是把括号和引号一起显示出来。",
+        "text": "引号里装着一段文字，叫“字符串”。引号要一左一右配成对，输出时它们自己不会跟着跑出来。",
         "next": "exact-text"
       },
       {
         "id": "exact-text",
         "type": "line",
         "speaker": "Ottly",
-        "text": "只差一个字符，电脑也会当成不同结果。所以先观察示例，再仔细核对要输出的文字。",
+        "text": "字母、标点和空格，都是文字里的小成员，叫“字符”。待会儿照着问候语写，别把逗号后的小空格落下啦！",
         "next": "questions"
       },
       {
         "id": "questions",
         "type": "choice",
         "speaker": "Ottly",
-        "text": "你想先问哪一个问题？两个都可以问。",
+        "text": "小喇叭准备好啦！你还想问问引号或空格吗？也可以直接去做三个小练习。",
         "next": "challenge",
         "options": [
           {
@@ -65,7 +65,7 @@
         "id": "quotes-answer",
         "type": "line",
         "speaker": "Ottly",
-        "text": "引号告诉 Python：这是一段文字，也就是字符串。少了引号，Python 可能把它当成变量名。",
+        "text": "引号像一对小围栏，告诉电脑：“这里面是我要说的话！”比如 print(\"Sea\")，说出来的就是 Sea。",
         "next": "quotes-example"
       },
       {
@@ -73,14 +73,14 @@
         "type": "line",
         "speaker": "Ottly",
         "completesOption": "quotes",
-        "text": "如果没有引号，Sea 可能被理解成某个变量；如果没有定义它，运行就会报错。",
+        "text": "围栏要成对出现哦。写 print(\"Hi\") 就能输出 Hi；别漏掉引号，也别把圆括号换成等号。",
         "next": "questions"
       },
       {
         "id": "spacing-answer",
         "type": "line",
         "speaker": "Ottly",
-        "text": "当然！空格、逗号、感叹号都属于输出内容。大小写也要看清楚。",
+        "text": "算呀！空格虽然看不见，也有自己的位置。\"Hi!\" 和 \"Hi !\"，就差了一个小空格。",
         "next": "spacing-example"
       },
       {
@@ -88,14 +88,14 @@
         "type": "line",
         "speaker": "Ottly",
         "completesOption": "spacing",
-        "text": "注意英文逗号 , 和中文逗号 ， 不相同，空格数量也不能随意增减。",
+        "text": "还有两个长得像的小伙伴：英文逗号 , 和中文逗号 ，。这次请用英文逗号，再给后面留一个空格。",
         "next": "questions"
       },
       {
         "id": "challenge",
         "type": "line",
         "speaker": "Ottly",
-        "text": "本关要你精确输出 Hello, World!。别小看这句话，标点和空格的位置都很重要。",
+        "text": "这次想说的是 Hello, World!。把它放进引号，再交给 print 吧。先做三个小练习，接着就轮到你敲代码啦！",
         "next": "quiz-1"
       },
       {
@@ -107,21 +107,21 @@
           {
             "id": "a",
             "text": "Sea",
-            "explanation": "对啦！print 显示括号里的字符串内容，引号本身不会显示。"
+            "explanation": "对啦！小喇叭说出了 Sea，引号不会跟着显示。"
           },
           {
             "id": "b",
             "text": "\"Sea\"",
-            "explanation": "引号在代码里标明字符串边界，不属于这次输出的文字。"
+            "explanation": "再看看，引号帮忙标出文字，自己不会显示出来哦。"
           },
           {
             "id": "c",
             "text": "print(\"Sea\")",
-            "explanation": "print 是执行输出的函数，运行后显示内容，不是整段代码。"
+            "explanation": "print 是给电脑的指令，显示出来的只有引号里的文字。"
           }
         ],
         "correct": "a",
-        "review": "print() 会把指定的内容显示出来。引号告诉 Python 这里是字符串，输出不带这对引号。",
+        "review": "想一想 print(\"Hi\")：屏幕上只有 Hi。引号和括号是帮电脑读懂指令的，不会一起显示。",
         "next": "quiz-2"
       },
       {
@@ -133,21 +133,21 @@
           {
             "id": "a",
             "text": "print(Hi)",
-            "explanation": "没有引号时，Hi 会被当作名字。这里没有定义这个变量，不能输出指定文字。"
+            "explanation": "给 Hi 加上一对引号吧，这样电脑才知道你要说这两个字母。"
           },
           {
             "id": "b",
             "text": "print(\"Hi\")",
-            "explanation": "对啦！用引号包住文字，再交给 print 输出。"
+            "explanation": "对啦！文字住在引号里，再放进 print 的圆括号。"
           },
           {
             "id": "c",
             "text": "print = \"Hi\"",
-            "explanation": "这只是赋值，会把 print 这个名字改成字符串，没有执行输出。"
+            "explanation": "这次要用圆括号请小喇叭说话，等号不会帮你输出哦。"
           }
         ],
         "correct": "b",
-        "review": "文字用引号包住。print(\"Hi\") 调用输出函数；print = \"Hi\" 则是赋值，两者不同。",
+        "review": "小喇叭的写法是 print(\"Hi\")：一对圆括号里面，放好带引号的文字。",
         "next": "quiz-3"
       },
       {
@@ -159,28 +159,28 @@
           {
             "id": "a",
             "text": "print(\"Hello,World!\")",
-            "explanation": "逗号后少了一个空格。空格也是输出内容，精确比较时不能漏掉。"
+            "explanation": "小空格掉队啦！逗号后面还需要一个空格。"
           },
           {
             "id": "b",
             "text": "print(\"Hello， World!\")",
-            "explanation": "这里用了中文逗号。题目中的英文逗号 , 和中文逗号 ， 是不同字符。"
+            "explanation": "这位是中文逗号 ，。请换成题目里的英文逗号 , 哦。"
           },
           {
             "id": "c",
             "text": "print(\"Hello, World!\")",
-            "explanation": "对啦！大小写、英文逗号、逗号后的一个空格和感叹号都一致。"
+            "explanation": "找对啦！字母、逗号、空格和感叹号，都到齐了。"
           }
         ],
         "correct": "c",
-        "review": "精确输出要核对大小写、空格和标点，英文符号与中文符号不同。",
+        "review": "再和 Hello, World! 对一对：H 和 W 大写，英文逗号后有一个空格，最后是感叹号。",
         "next": "ready"
       },
       {
         "id": "ready",
         "type": "end",
         "speaker": "Ottly",
-        "text": "准备好了吗？我们让第一段 Python 代码开口说话吧！"
+        "text": "到你啦，小程序员！慢慢敲下第一行，点“运行”听电脑打招呼。少个符号也没关系，Ottly 陪你一起找。"
       }
     ],
     "levelNo": 1,
@@ -200,42 +200,112 @@
         "id": "intro-1",
         "type": "line",
         "speaker": "Ottly",
-        "text": "刚才是我们替程序说话。这次，让程序先听听朋友叫什么名字。",
+        "text": "小伙伴，上一关我们说的是一句固定的问候。这次让程序先读入朋友的姓名，再根据这次输入说一句问候；换个姓名，程序也应该能用。",
         "next": "intro-2"
       },
       {
         "id": "intro-2",
         "type": "line",
         "speaker": "Ottly",
-        "text": "input() 可以读取输入的一行文字；变量就像贴了名字的小盒子，把这段文字保存起来。",
+        "text": "来认识负责“读入”的小帮手 input()，它也是一个函数。它每次读取输入区的一行内容，得到一个字符串。print() 负责显示结果，input() 负责接收内容，两者的方向不同。",
         "next": "intro-3"
       },
       {
         "id": "intro-3",
         "type": "line",
         "speaker": "Ottly",
-        "text": "比如 friend = input()，输入的姓名就保存到 friend 里了。",
+        "text": "朋友的姓名先别放跑啦！后面的代码还要用，我们给它起个名字保存起来。这个名字叫“变量”，你可以先把它想成贴在一份数据上的标签。",
         "next": "intro-4"
       },
       {
         "id": "intro-4",
         "type": "line",
         "speaker": "Ottly",
-        "text": "再看个小例子：name = 'Mimi' 是把文字存起来，后面写 print(name) 才会显示 Mimi。",
+        "text": "一起看 name = \"Mimi\"，单个等号 = 叫作“赋值”：先取得右边的值，再把它交给左边的变量名。这里 name 保存的是字符串 \"Mimi\"，不是显示文字。",
         "next": "intro-5"
       },
       {
         "id": "intro-5",
         "type": "line",
         "speaker": "Ottly",
-        "text": "这次我们要把输入、保存和输出连在一起，不是提前把某个姓名写死。",
+        "text": "给变量存东西，也要按顺序来哦。程序通常从上到下执行，先写 name = \"Mimi\"，后面才能用 name；如果还没给 name 赋值就使用它，程序不知道它代表什么，会报错。",
+        "next": "intro-detail-1"
+      },
+      {
+        "id": "intro-detail-1",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "这两个长得像的小伙伴，我们来分清：print(name) 会取出 name 保存的值，显示 Mimi；print(\"name\") 则显示四个字母 name，因为引号表示按原样使用文字。",
+        "next": "intro-detail-2"
+      },
+      {
+        "id": "intro-detail-2",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "现在让读取和保存牵起手来：name = input()。先执行右边的 input() 读一行，再让 name 保存结果。输入 A Li 时，保存的就是字符串 \"A Li\"。",
+        "next": "intro-detail-3"
+      },
+      {
+        "id": "intro-detail-3",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "记住哦，input() 得到的是字符串，即使输入 12，得到的也是文字 \"12\"，不会自动变成可做算术的整数。先保存本次姓名即可，数字转换留到下一关讲。",
+        "next": "intro-detail-4"
+      },
+      {
+        "id": "intro-detail-4",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "变量还可以换一份内容，也就是重新赋值：先写 name = \"Mimi\"，再写 name = \"Tim\"，之后 print(name) 就显示 Tim。名字没变，关联的值可以变；重新赋值会替换它之前保存的值。",
+        "next": "intro-detail-5"
+      },
+      {
+        "id": "intro-detail-5",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "给变量取个好记的名字吧，可以用 name、friend 这样有含义的英文名字。大小写有区别，name 和 Name 不是同一个名字；本关先用同一个名字前后一致地读写。",
+        "next": "intro-detail-6"
+      },
+      {
+        "id": "intro-detail-6",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "怎样让问候语和姓名手拉手呢？两个字符串之间的 + 表示“拼接”，会按顺序连接文字。例如 \"Hi, \" + \"Mimi\" 得到 \"Hi, Mimi\"，不会自动补空格。",
+        "next": "intro-detail-7"
+      },
+      {
+        "id": "intro-detail-7",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "变量里存着的字符串，也能加入拼接队伍哦。name 是 \"Mimi\" 时，\"Hi, \" + name + \"!\" 得到 \"Hi, Mimi!\"；标点和空格要由固定文字自己带上。",
+        "next": "intro-detail-8"
+      },
+      {
+        "id": "intro-detail-8",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "这里有个小提醒，输入区和代码区可不一样：输入姓名时直接写 Mimi，不要给姓名加引号。引号是代码里标记字符串的写法；如果在输入区写 \"Mimi\"，那对引号也会被读进内容。",
+        "next": "intro-detail-9"
+      },
+      {
+        "id": "intro-detail-9",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "朋友的姓名里，也可能藏着小空格呢。input() 去掉一行结尾的换行，保留姓名中的空格；读取后按原样使用，不要删除 A Li 中间的空格，也不要改变大小写。",
+        "next": "intro-detail-10"
+      },
+      {
+        "id": "intro-detail-10",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "这一关不用额外说“请输入”哦。直接使用 input()，再输出问候即可；如果写 input(\"请输入姓名\")，这句提示也会显示出来，成为题目没有要求的额外输出。",
         "next": "questions"
       },
       {
         "id": "questions",
         "type": "choice",
         "speaker": "Ottly",
-        "text": "你想先问哪一个问题？两个都可以问。",
+        "text": "变量负责保存，input 负责读取，+ 负责拼接。你想再聊变量的用途或姓名里的空格吗？也可以直接去做小练习啦。",
         "next": "challenge",
         "options": [
           {
@@ -254,14 +324,14 @@
         "id": "answer-a-1",
         "type": "line",
         "speaker": "Ottly",
-        "text": "因为我们要在后面用到这份输入。把姓名存起来，才能把它接在问候语后面。",
+        "text": "姓名读进来后还要参与拼接，我们就用变量把它留住吧。name = input() 先保存这次输入，后面的代码再通过 name 使用同一份内容，不必重新读一行。",
         "next": "answer-a-2"
       },
       {
         "id": "answer-a-2",
         "type": "line",
         "speaker": "Ottly",
-        "text": "变量不需要自己知道名字含义，它只负责记住输入的那份文字。换个姓名，程序也应该能正常问候。",
+        "text": "变量名是个小标签，可不会替你变出姓名哦。name 保存什么，取出时就是什么；换成其他合法姓名，程序仍按相同的拼接规则工作，而不是始终显示 Mimi。",
         "next": "questions",
         "completesOption": "question-a"
       },
@@ -269,14 +339,14 @@
         "id": "answer-b-1",
         "type": "line",
         "speaker": "Ottly",
-        "text": "它仍是一段字符串。题目要求保留姓名原来的大小写和内部空格，不要擅自替它改动。",
+        "text": "姓名里带着小空格，也还是一个字符串呀。例如输入 A Li，input() 会读取整行，不会只留下 A。用 name 保存后，拼接时也要保留中间的空格。",
         "next": "answer-b-2"
       },
       {
         "id": "answer-b-2",
         "type": "line",
         "speaker": "Ottly",
-        "text": "例如 A Li 中间有一个空格，保存后不该把它删掉；这和问候语逗号后的固定空格是两回事。",
+        "text": "我们来找找两处小空格各住在哪里：\"Hello, \" 末尾的空格来自固定问候，A Li 中间的空格来自输入。+ 只负责连接，不会自动增加或删除它们。",
         "next": "questions",
         "completesOption": "question-b"
       },
@@ -284,7 +354,7 @@
         "id": "challenge",
         "type": "line",
         "speaker": "Ottly",
-        "text": "字符串可以拼在一起，但 Hello, 后面该留几个空格、末尾是否有感叹号，都要跟题目要求一致。",
+        "text": "跟着这条小路线走吧：“读取姓名 → 保存到变量 → 拼接问候 → 输出”。用 \"Hello, \" + name + \"!\" 表达问候，逗号后一个空格，姓名内部的空格保持原样。",
         "next": "quiz-1"
       },
       {
@@ -296,21 +366,21 @@
           {
             "id": "a",
             "text": "字符串",
-            "explanation": "对啦！input 返回文字，即使看起来像数字也先是字符串。"
+            "explanation": "对啦，找到啦！input 返回文字，即使看起来像数字也先是字符串。"
           },
           {
             "id": "b",
             "text": "整数",
-            "explanation": "input 不会自动转成整数；需要计算时再用 int 转换。"
+            "explanation": "一起核对一下：input 不会自动转成整数；需要计算时再用 int 转换。"
           },
           {
             "id": "c",
             "text": "变量名",
-            "explanation": "input 返回输入内容，变量名由代码中的赋值语句指定。"
+            "explanation": "别急，我们再看看：input 返回输入内容，变量名由代码中的赋值语句指定。"
           }
         ],
         "correct": "a",
-        "review": "name = input() 会把读到的那行字符串存入变量 name。",
+        "review": "我们一起回顾一下：name = input() 会把读到的那行字符串存入变量 name。",
         "next": "quiz-2"
       },
       {
@@ -322,21 +392,21 @@
           {
             "id": "a",
             "text": "print(\"name\")",
-            "explanation": "引号包住的是文字 name，不会取出变量的值。"
+            "explanation": "一起核对一下：引号包住的是文字 name，不会取出变量的值。"
           },
           {
             "id": "b",
             "text": "print(name)",
-            "explanation": "对啦！不加引号的 name 表示取出变量保存的值。"
+            "explanation": "没错，就是这样！不加引号的 name 表示取出变量保存的值。"
           },
           {
             "id": "c",
             "text": "name = input()",
-            "explanation": "这会等待并保存新的输入，本身没有输出名字。"
+            "explanation": "小提醒：这会等待并保存新的输入，本身没有输出名字。"
           }
         ],
         "correct": "b",
-        "review": "变量名不加引号时代表它保存的值；加引号后则是原样文字。",
+        "review": "我们一起回顾一下：变量名不加引号时代表它保存的值；加引号后则是原样文字。",
         "next": "quiz-3"
       },
       {
@@ -348,12 +418,12 @@
           {
             "id": "a",
             "text": "Hello,A Li!",
-            "explanation": "逗号后少了题目要求的一个空格。"
+            "explanation": "别急，我们再看看：逗号后少了题目要求的一个空格。"
           },
           {
             "id": "b",
             "text": "Hello, ALi!",
-            "explanation": "姓名中原有的内部空格被删掉了，不能擅自修改姓名。"
+            "explanation": "小提醒：姓名中原有的内部空格被删掉了，不能擅自修改姓名。"
           },
           {
             "id": "c",
@@ -362,14 +432,14 @@
           }
         ],
         "correct": "c",
-        "review": "用 \"Hello, \" + name + \"!\" 拼接；姓名内部空格应原样保留，不额外打印提示语。",
+        "review": "我们一起回顾一下：用 \"Hello, \" + name + \"!\" 拼接；姓名内部空格应原样保留，不额外打印提示语。",
         "next": "ready"
       },
       {
         "id": "ready",
         "type": "end",
         "speaker": "Ottly",
-        "text": "这次就让程序叫出朋友的名字吧！记得不要多打印一句‘请输入姓名’。"
+        "text": "轮到你啦，让程序认识这次输入的朋友吧！记住：不加引号的变量名取出值，加引号的文字按原样使用。"
       }
     ]
   },
@@ -387,42 +457,112 @@
         "id": "intro-1",
         "type": "line",
         "speaker": "Ottly",
-        "text": "海边开了一家贝壳小商店！算账的时候，光会打印文字可不够。",
+        "text": "叮咚，贝壳小商店开张啦！前面我们处理的是文字，这次要计算总价和差额。开始前先分清：看起来像数字的文字，并不等于能直接做算术的数值。",
         "next": "intro-2"
       },
       {
         "id": "intro-2",
         "type": "line",
         "speaker": "Ottly",
-        "text": "input() 读进来的内容默认是字符串。要拿它做整数运算，通常先用 int() 转换。",
+        "text": "来认识几个数字朋友：像 0、3、12、-2 这样没有小数部分的数，叫“整数”。0 表示没有，正数可以表示拥有的数量，负数可以表示不足的差额；Python 中整数这一类数据叫 int。",
         "next": "intro-3"
       },
       {
         "id": "intro-3",
         "type": "line",
         "speaker": "Ottly",
-        "text": "买了几件、每件多少钱，可以用乘法算总价；再用支付金额减总价，得到差额。",
+        "text": "数据也有自己的“类型”，告诉我们它是什么、适合做什么哦。例如 3 是整数，\"3\" 是字符串。字符串这一类也叫 str；外表相似的内容，类型不同，运算含义也可能不同。",
         "next": "intro-4"
       },
       {
         "id": "intro-4",
         "type": "line",
         "speaker": "Ottly",
-        "text": "小试一下：'2' + '3' 得到的是文字 23，而 2 + 3 得到整数 5。",
+        "text": "一起看看 + 的两种小本领：2 + 3 做数值加法，得到整数 5；\"2\" + \"3\" 做文字拼接，得到字符串 \"23\"。代码里引号的有无，决定了这里是在算数还是接文字。",
         "next": "intro-5"
       },
       {
         "id": "intro-5",
         "type": "line",
         "speaker": "Ottly",
-        "text": "做算术前先想清楚：现在手里的是数字，还是看起来像数字的文字？",
+        "text": "别忘啦，input() 读到的始终是字符串。所以输入一行 3 时，变量先拿到的是 \"3\"。把它和整数 1 直接相加，并不会自动变成 4，而是会报类型不匹配的错误。",
+        "next": "intro-detail-1"
+      },
+      {
+        "id": "intro-detail-1",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "请 int() 来帮个忙，它能把符合整数格式的字符串变成整数：int(\"3\") 得到 3，int(\"-2\") 得到 -2。本关保证输入是合法整数，不需要自己处理其他格式的文字。",
+        "next": "intro-detail-2"
+      },
+      {
+        "id": "intro-detail-2",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "price = int(input()) 看着有点长？我们由内向外一步步读：input() 先读一行，int(...) 再把读到的文字转成整数，最后 = 把这个整数交给 price 保存。",
+        "next": "intro-detail-3"
+      },
+      {
+        "id": "intro-detail-3",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "这一关，单价、数量、支付金额依次来报到，每次 input() 只读取一行。需要三个数据，就按题目顺序分别读取并转换，别把它们与各自的变量名弄反。",
+        "next": "intro-detail-4"
+      },
+      {
+        "id": "intro-detail-4",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "帮数字做计算的这些符号，有个名字叫“运算符”。+ 是加法，- 是减法，* 是乘法。Python 乘号使用英文星号 *，不是字母 x，也不是纸上写的 ×。",
+        "next": "intro-detail-5"
+      },
+      {
+        "id": "intro-detail-5",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "算总价的小办法是：单价乘数量。例如每件 4 枚、买 3 件，4 * 3 得到 12；如果买 0 件，4 * 0 就是 0。把结果赋给 total，后面就能继续使用它。",
+        "next": "intro-detail-6"
+      },
+      {
+        "id": "intro-detail-6",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "再来算差额吧，用支付金额减去总价。例如支付 15、总价 12，差额是 3；如果只支付 10，10 - 12 就是 -2，表示还差 2。减法交换顺序，结果会改变。",
+        "next": "intro-detail-7"
+      },
+      {
+        "id": "intro-detail-7",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "“表达式”听着陌生，其实就是能算出一个结果的写法，比如 price * quantity。写 total = price * quantity 时，仍然先计算右边，再把结果交给左边，不是让两边建立永久联系。",
+        "next": "intro-detail-8"
+      },
+      {
+        "id": "intro-detail-8",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "运算符排在同一行时，也要轮流来：先乘除、后加减；英文圆括号可以指定先算哪一部分。2 + 3 * 4 得到 14，而 (2 + 3) * 4 得到 20。也可以分几行保存中间结果。",
+        "next": "intro-detail-9"
+      },
+      {
+        "id": "intro-detail-9",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "我们的小喇叭 print 既能显示数值，也能显示字符串。print(total) 会显示算出的数；print(\"total\") 只显示文字 total，不会自动取出变量的内容。",
+        "next": "intro-detail-10"
+      },
+      {
+        "id": "intro-detail-10",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "这一关请让总价先出场、差额后出场，分别调用一次 print 就能各占一行。只输出整数，不加“元”、标签或说明；负差额也按真实结果输出，不擅自改成 0。",
         "next": "questions"
       },
       {
         "id": "questions",
         "type": "choice",
         "speaker": "Ottly",
-        "text": "你想先问哪一个问题？两个都可以问。",
+        "text": "我们已经把“读到的文字”转换成“计算用的整数”了。关于 int 或负差额，你想再听哪一点？也可以直接去做小练习啦。",
         "next": "challenge",
         "options": [
           {
@@ -441,14 +581,14 @@
         "id": "answer-a-1",
         "type": "line",
         "speaker": "Ottly",
-        "text": "因为看起来像数字的文字，和真正的整数不是一回事。比如字符串 '3' 还不能直接按整数规则做所有计算。",
+        "text": "因为 input() 会把键盘输入的那行内容当作字符串来读呀，不会因为都是数字字符就自动改变类型。\"3\" + \"2\" 是 \"32\"，所以算钱前需要先转换成整数。",
         "next": "answer-a-2"
       },
       {
         "id": "answer-a-2",
         "type": "line",
         "speaker": "Ottly",
-        "text": "所以需要用 int() 把符合整数格式的输入转换，再做乘减运算。",
+        "text": "让 int(input()) 接力，就能先读文字、再转整数啦。转换后 3 + 2 才得到 5。注意不要给 input() 整体加引号：\"input()\" 只是普通文字，不会执行读取。",
         "next": "questions",
         "completesOption": "question-a"
       },
@@ -456,14 +596,14 @@
         "id": "answer-b-1",
         "type": "line",
         "speaker": "Ottly",
-        "text": "差额可能是负数。题目没有要求把负数变成零，所以要保留实际计算结果。",
+        "text": "钱还不够时，“支付金额减总价”就会得到负数哦。整数包括负数，本关允许这种结果；它能准确表达不足的差额，不需要改成 0。",
         "next": "answer-b-2"
       },
       {
         "id": "answer-b-2",
         "type": "line",
         "speaker": "Ottly",
-        "text": "比如应付 10、实际只有 8，按‘支付金额减总价’计算，结果就是 -2，不必把负数藏起来。",
+        "text": "一起算算，总价 10、支付 8，按规定是 8 - 10，得到 -2。若反过来写 10 - 8，虽然得到正数 2，却不是题目要求的差额方向。",
         "next": "questions",
         "completesOption": "question-b"
       },
@@ -471,7 +611,7 @@
         "id": "challenge",
         "type": "line",
         "speaker": "Ottly",
-        "text": "注意运算顺序：总价来自单价和数量；差额来自支付金额与总价。减法顺序颠倒，符号就会变。",
+        "text": "现在到你当小账房啦，按顺序读取三个整数，先求单价乘数量，再求支付金额减总价。最后分两行输出这两个数，检查变量对应关系、减法顺序和输出顺序。",
         "next": "quiz-1"
       },
       {
@@ -483,21 +623,21 @@
           {
             "id": "a",
             "text": "price = int(input())",
-            "explanation": "对啦！input 读字符串，int 把合法整数字符串转换为整数。"
+            "explanation": "对啦，找到啦！input 读字符串，int 把合法整数字符串转换为整数。"
           },
           {
             "id": "b",
             "text": "price = input()",
-            "explanation": "这仍是字符串，不会自动变成整数。"
+            "explanation": "一起核对一下：这仍是字符串，不会自动变成整数。"
           },
           {
             "id": "c",
             "text": "price = \"input()\"",
-            "explanation": "引号里的 input() 是固定文字，不会执行读入。"
+            "explanation": "别急，我们再看看：引号里的 input() 是固定文字，不会执行读入。"
           }
         ],
         "correct": "a",
-        "review": "用于整数算术的数据应先通过 int(input()) 读取并转换。",
+        "review": "我们一起回顾一下：用于整数算术的数据应先通过 int(input()) 读取并转换。",
         "next": "quiz-2"
       },
       {
@@ -509,21 +649,21 @@
           {
             "id": "a",
             "text": "4 + 3",
-            "explanation": "加法只得到 7，不能表示三件商品的总价。"
+            "explanation": "一起核对一下：加法只得到 7，不能表示三件商品的总价。"
           },
           {
             "id": "b",
             "text": "4 * 3",
-            "explanation": "对啦！总价等于单价乘数量，结果是 12。"
+            "explanation": "没错，就是这样！总价等于单价乘数量，结果是 12。"
           },
           {
             "id": "c",
             "text": "4 - 3",
-            "explanation": "减法是求差，不能计算总价。"
+            "explanation": "小提醒：减法是求差，不能计算总价。"
           }
         ],
         "correct": "b",
-        "review": "先算 total = price * quantity，再计算支付金额与总价的差。",
+        "review": "我们一起回顾一下：先算 total = price * quantity，再计算支付金额与总价的差。",
         "next": "quiz-3"
       },
       {
@@ -535,12 +675,12 @@
           {
             "id": "a",
             "text": "2",
-            "explanation": "差额规定为支付金额减总价，顺序反过来会改变正负。"
+            "explanation": "别急，我们再看看：差额规定为支付金额减总价，顺序反过来会改变正负。"
           },
           {
             "id": "b",
             "text": "0",
-            "explanation": "本关允许差额为负数，不应强行把不足金额改为零。"
+            "explanation": "小提醒：本关允许差额为负数，不应强行把不足金额改为零。"
           },
           {
             "id": "c",
@@ -549,14 +689,14 @@
           }
         ],
         "correct": "c",
-        "review": "差额是 budget - total；支付不足时保留负数，不添加单位。",
+        "review": "我们一起回顾一下：差额是 budget - total；支付不足时保留负数，不添加单位。",
         "next": "ready"
       },
       {
         "id": "ready",
         "type": "end",
         "speaker": "Ottly",
-        "text": "小店的账本交给你啦。输出结果时，也别加题目没要求的单位说明。"
+        "text": "小账本准备好啦！把文字转换成整数，再让运算符帮你算账吧！别忘了数量为 0 和支付不足时，仍然按同样的规则计算。"
       }
     ]
   },
@@ -574,42 +714,91 @@
         "id": "intro-1",
         "type": "line",
         "speaker": "Ottly",
-        "text": "有一堆贝壳，要分装进小袋子里。最后可能装不满一袋，怎么办？",
+        "text": "小袋子准备好，商店里的贝壳要分袋啦！这次有两个问题：能装满几袋，以及装完后还剩几个。它们都和除法有关，却要用不同的运算符回答。",
         "next": "intro-2"
       },
       {
         "id": "intro-2",
         "type": "line",
         "speaker": "Ottly",
-        "text": "普通除法 / 可以得到小数；整除 // 关注能分出多少个完整的份数。",
+        "text": "先请普通除法 / 来打个招呼。例如 7 / 2 得到 3.5，表示数学上的除法结果。像 3.5 这样的小数，Python 常用“浮点数”这一类型表示，类型名叫 float。",
         "next": "intro-3"
       },
       {
         "id": "intro-3",
         "type": "line",
         "speaker": "Ottly",
-        "text": "取余 % 则告诉我们：分完完整的袋子，还剩多少个贝壳。",
+        "text": "这里有个小细节：Python 的 / 对整数做普通除法时，也会给出浮点数哦。例如 8 / 2 显示 4.0。它数值上等于 4，但写法不是本关要求的整数袋数。",
         "next": "intro-4"
       },
       {
         "id": "intro-4",
         "type": "line",
         "speaker": "Ottly",
-        "text": "比如 8 个贝壳，每袋 3 个：8 // 3 是 2，8 % 3 是 2。",
+        "text": "想数装满了几袋，就请 // 来帮忙，读作“整除”。本关数量非负、容量为正，10 // 3 得到 3，表示能装满三袋；不足一袋的那部分不再算一袋。",
         "next": "intro-5"
       },
       {
         "id": "intro-5",
         "type": "line",
         "speaker": "Ottly",
-        "text": "把‘装满的袋数’和‘落单的贝壳’分别记下，就不容易选错运算符。",
+        "text": "给整除记一张小卡片：它的通用规则是向下取整。本关不涉及负的数量，所以可以直接用“能装满几袋”来理解；不要把这个说法当成所有负数运算也适用的规则。",
+        "next": "intro-detail-1"
+      },
+      {
+        "id": "intro-detail-1",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "想看看还剩多少，就轮到 % 出场，读作“取余”。10 % 3 得到 1：三袋共装走 9 个，原来的 10 个还剩 1 个。这里 % 不是把数变成百分比。",
+        "next": "intro-detail-2"
+      },
+      {
+        "id": "intro-detail-2",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "来，把两个结果摆在一起看看：10 个贝壳，每袋 3 个。完整袋数是 10 // 3，也就是 3；剩余数是 10 % 3，也就是 1。这两个结果的含义不同。",
+        "next": "intro-detail-3"
+      },
+      {
+        "id": "intro-detail-3",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "有时两个结果会碰巧“撞脸”哦，例如 8 // 3 和 8 % 3 都是 2。一个 2 代表袋数，另一个 2 代表剩余贝壳数；不能因为一次数值相同就混用运算符。",
+        "next": "intro-detail-4"
+      },
+      {
+        "id": "intro-detail-4",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "我们还能把贝壳拼回去检查：完整袋数 * 每袋容量 + 剩余数量，应等于原来的贝壳总数。刚才的例子就是 3 * 3 + 1，重新得到 10。",
+        "next": "intro-detail-5"
+      },
+      {
+        "id": "intro-detail-5",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "剩下的贝壳，已经装不满一袋啦。对于本关的非负数量和正容量，余数至少是 0，并且一定小于容量；如果还剩一整袋的量，就说明完整袋数少算了。",
+        "next": "intro-detail-6"
+      },
+      {
+        "id": "intro-detail-6",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "如果恰好全部装完，会怎样呢？一起看看：12 个、每袋 3 个，12 // 3 是 4，12 % 3 是 0。余数为 0 表示没有剩余，不代表没有完整袋子。",
+        "next": "intro-detail-7"
+      },
+      {
+        "id": "intro-detail-7",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "换个小例子，只有 2 个、每袋要 3 个时，完整袋数是 0，余数是 2；如果总数为 0，两项结果都是 0。题目保证容量至少为 1，不会要求除以 0。",
         "next": "questions"
       },
       {
         "id": "questions",
         "type": "choice",
         "speaker": "Ottly",
-        "text": "你想先问哪一个问题？两个都可以问。",
+        "text": "普通除法、整除和取余，分别回答不同的问题。你想再分清完整袋数和剩余数量吗？可以选择下面的问题，也可以直接去做小练习啦。",
         "next": "challenge",
         "options": [
           {
@@ -628,14 +817,14 @@
         "id": "answer-a-1",
         "type": "line",
         "speaker": "Ottly",
-        "text": "这关问的是装满的袋数，所以不行。没装满的贝壳要放到‘剩余’里。",
+        "text": "这一关，我们只数“装满的袋数”哦。10 个贝壳每袋 3 个，完整装满的是 3 袋，剩下 1 个不能再算完整的一袋，所以结果不是 4。",
         "next": "answer-a-2"
       },
       {
         "id": "answer-a-2",
         "type": "line",
         "speaker": "Ottly",
-        "text": "如果算的是‘至少要多少个袋子才能装下全部’，那是另一道题；本关只计算装满几袋。",
+        "text": "如果问“至少准备几个袋子才能全部装下”，才会把最后没装满的一袋也算上，那是另一种任务。先看清本题问的是完整组数，才能选对 //，并用 % 单独记录剩余。",
         "next": "questions",
         "completesOption": "question-a"
       },
@@ -643,14 +832,14 @@
         "id": "answer-b-1",
         "type": "line",
         "speaker": "Ottly",
-        "text": "它们看的是同一次分组的两个结果：// 得到完整份数，% 得到剩余数量。",
+        "text": "它们是同一次分组的两个小答案，分别是整商和余数。17 个每袋 5 个，17 // 5 是 3 袋，17 % 5 是 2 个；不要用普通除法得到的 3.4 来输出袋数。",
         "next": "answer-b-2"
       },
       {
         "id": "answer-b-2",
         "type": "line",
         "speaker": "Ottly",
-        "text": "完整袋数和剩余数是一对：2 袋装了 6 个，再加剩余 2 个，恰好是 8 个。",
+        "text": "我们用 3 * 5 + 2 = 17 数回去看看：三袋装走 15 个，加上剩余 2 个，还原成总数。在这里，余数 2 也确实小于每袋容量 5。",
         "next": "questions",
         "completesOption": "question-b"
       },
@@ -658,7 +847,7 @@
         "id": "challenge",
         "type": "line",
         "speaker": "Ottly",
-        "text": "试想 10 个贝壳，每袋装 3 个：能装满 3 袋，还剩 1 个。这样想就不容易混淆啦。",
+        "text": "小袋子排好队啦，先把两行输入转成整数，分别用 // 和 % 计算。输出时第一行是完整袋数，第二行是剩余数量；不要把剩余再算作一袋，也不要输出小数。",
         "next": "quiz-1"
       },
       {
@@ -670,21 +859,21 @@
           {
             "id": "a",
             "text": "8 / 3",
-            "explanation": "普通除法产生小数，不直接表示装满的完整袋数。"
+            "explanation": "小提醒：普通除法产生小数，不直接表示装满的完整袋数。"
           },
           {
             "id": "b",
             "text": "8 // 3",
-            "explanation": "对啦！整除得到 2，表示两袋装满。"
+            "explanation": "对啦，找到啦！整除得到 2，表示两袋装满。"
           },
           {
             "id": "c",
             "text": "8 % 3",
-            "explanation": "取余得到剩余贝壳数；这个例子虽也为 2，含义却不同。"
+            "explanation": "别急，我们再看看：取余得到剩余贝壳数；这个例子虽也为 2，含义却不同。"
           }
         ],
         "correct": "b",
-        "review": "// 求完整份数，% 求剩余数量；不要因为某个例子的数值相同就混淆。",
+        "review": "我们一起回顾一下：// 求完整份数，% 求剩余数量；不要因为某个例子的数值相同就混淆。",
         "next": "quiz-2"
       },
       {
@@ -696,21 +885,21 @@
           {
             "id": "a",
             "text": "1",
-            "explanation": "对啦！三袋用了 9 个，还剩 1 个。"
+            "explanation": "没错，就是这样！三袋用了 9 个，还剩 1 个。"
           },
           {
             "id": "b",
             "text": "3",
-            "explanation": "3 是 10 // 3 得到的完整袋数。"
+            "explanation": "别急，我们再看看：3 是 10 // 3 得到的完整袋数。"
           },
           {
             "id": "c",
             "text": "4",
-            "explanation": "不能把剩余的 1 个再算作装满的一袋。"
+            "explanation": "小提醒：不能把剩余的 1 个再算作装满的一袋。"
           }
         ],
         "correct": "a",
-        "review": "满足 n = (n // k) * k + n % k，余数小于正的容量 k。",
+        "review": "我们一起回顾一下：满足 n = (n // k) * k + n % k，余数小于正的容量 k。",
         "next": "quiz-3"
       },
       {
@@ -722,12 +911,12 @@
           {
             "id": "a",
             "text": "0 和 3",
-            "explanation": "没有贝壳时不会凭空剩下 3 个。"
+            "explanation": "别急，我们再看看：没有贝壳时不会凭空剩下 3 个。"
           },
           {
             "id": "b",
             "text": "1 和 0",
-            "explanation": "空袋不算已装满的一袋。"
+            "explanation": "小提醒：空袋不算已装满的一袋。"
           },
           {
             "id": "c",
@@ -736,14 +925,14 @@
           }
         ],
         "correct": "c",
-        "review": "容量 k 至少为1；贝壳数允许为0，这时完整袋和剩余量都是0。",
+        "review": "我们一起回顾一下：容量 k 至少为1；贝壳数允许为0，这时完整袋和剩余量都是0。",
         "next": "ready"
       },
       {
         "id": "ready",
         "type": "end",
         "speaker": "Ottly",
-        "text": "现在轮到你帮小海獭把贝壳分好袋！"
+        "text": "轮到你动动小手，分装贝壳啦！先问自己“要算完整份数还是剩余数量”，再选对应的运算符。"
       }
     ]
   },
@@ -761,42 +950,119 @@
         "id": "intro-1",
         "type": "line",
         "speaker": "Ottly",
-        "text": "徽章发放站开门了！分数不同，拿到的徽章也不同。",
+        "text": "叮，徽章发放站开门啦！前几关的指令基本从上到下执行，这次要根据分数作选择：不同分数走不同路线，这就叫“条件分支”。",
         "next": "intro-2"
       },
       {
         "id": "intro-2",
         "type": "line",
         "speaker": "Ottly",
-        "text": "if、elif、else 就像几条岔路：程序从上往下检查条件，走进第一个满足条件的分支。",
+        "text": "先和电脑玩个“对不对”的问答吧。score >= 60 表示“分数是否大于或等于 60”。这种写法叫“比较表达式”，计算结果不是新的分数，而是一个真假结论。",
         "next": "intro-3"
       },
       {
         "id": "intro-3",
         "type": "line",
         "speaker": "Ottly",
-        "text": "比较符号很重要：> 和 >= 只差一个等号，刚好踩在分界线上的分数，结果可能就不同。",
+        "text": "这对真假小伙伴，真用 True 表示，意思是条件成立；假用 False 表示，意思是条件不成立。这类只有两种取值的数据叫“布尔值”，类型名是 bool，首字母要大写，不加引号。",
         "next": "intro-4"
       },
       {
         "id": "intro-4",
         "type": "line",
         "speaker": "Ottly",
-        "text": "想象分数卡片沿着一条路线依次经过 if、elif、else 的检查口。",
+        "text": "一起认认比较符号吧：> 表示大于，< 表示小于；>= 表示大于或等于，<= 表示小于或等于。60 > 60 为 False，60 >= 60 为 True，多出来的等号决定是否包含边界。",
         "next": "intro-5"
       },
       {
         "id": "intro-5",
         "type": "line",
         "speaker": "Ottly",
-        "text": "如果前面一个条件已经匹配，互斥分支就不会再继续挑第二枚徽章。",
+        "text": "再认识两个小伙伴：== 表示是否相等，!= 表示是否不相等。例如 60 == 60 为 True，60 != 60 为 False。单个 = 用于赋值，两个 == 才用于比较是否相等。",
+        "next": "intro-detail-1"
+      },
+      {
+        "id": "intro-detail-1",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "请 if 来守住小路口，把条件放在它后面，语句就会“成立时才执行”。例如 if score >= 60: 的意思是：只有比较结果为 True，才执行下面属于这个分支的代码。",
+        "next": "intro-detail-2"
+      },
+      {
+        "id": "intro-detail-2",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "给 if 这一行的末尾带上英文冒号 :，下一行向右缩进四个空格，再写要执行的语句。缩进不只是排版，它告诉 Python 哪些语句属于这个分支。",
+        "next": "intro-detail-3"
+      },
+      {
+        "id": "intro-detail-3",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "我们拿 score 是 70 来走一遍，if score >= 60: 的条件为真，下面缩进的 print(\"达标\") 就会执行；score 是 50 时条件为假，这条打印语句就会被跳过。",
+        "next": "intro-detail-4"
+      },
+      {
+        "id": "intro-detail-4",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "“不满足”的情况也有去处，请 else: 来接住它。else 与 if 对齐，下面也缩进四个空格。它不再写条件，只有前面的 if 条件不成立时才执行。",
+        "next": "intro-detail-5"
+      },
+      {
+        "id": "intro-detail-5",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "有三种情况时，再请 elif 加入队伍，意思是“否则，再判断这个条件”。if、elif、else 对齐，每个分支内部的语句分别缩进；同一组中只会选择一条路线。",
+        "next": "intro-detail-6"
+      },
+      {
+        "id": "intro-detail-6",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "小路口要从上到下依次经过哦：先看 if，条件为假才继续看 elif；遇到第一个真条件，执行它的分支并跳过后面的分支。都不满足时，才执行最后的 else。",
+        "next": "intro-detail-7"
+      },
+      {
+        "id": "intro-detail-7",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "把这一关的徽章规则放在手边吧：90～100 得 GOLD，60～89 得 SILVER，0～59 得 TRY_AGAIN。先判断 score >= 90，再判断 score >= 60，最后处理其余情况。",
+        "next": "intro-detail-8"
+      },
+      {
+        "id": "intro-detail-8",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "让 70 分的小卡片来走一遍：它不满足 >= 90，才走到 >= 60。能来到第二个条件，已经说明分数小于 90，因此第二个分支对应的是 60～89，而不是所有 60 分以上。",
+        "next": "intro-detail-9"
+      },
+      {
+        "id": "intro-detail-9",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "要留意路口的顺序哦：如果先用 >= 60 发 SILVER，95 分也会在第一关口通过，后面的 GOLD 就没有机会了。Python 不会自动挑最高等级，所以条件的书写顺序很重要。",
+        "next": "intro-detail-10"
+      },
+      {
+        "id": "intro-detail-10",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "这两种写法可不是同一支队伍哦，几个单独的 if 与一组 if / elif / else 不同：每个独立 if 都会检查。95 同时满足 >= 60 和 >= 90，写成两个独立 if 就可能打印两次，不符合本关只发一枚徽章的要求。",
+        "next": "intro-detail-11"
+      },
+      {
+        "id": "intro-detail-11",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "最后看看分界线旁的几张小卡片：59 还没到银牌，60 已经到了；89 还没到金牌，90 已经到了。分界线两侧都推演一次，才能确认 > 和 >= 没有用反。",
         "next": "questions"
       },
       {
         "id": "questions",
         "type": "choice",
         "speaker": "Ottly",
-        "text": "你想先问哪一个问题？两个都可以问。",
+        "text": "我们已经把比较结果变成了三条路线。你想再检查分界分数或分支顺序吗？可以选择下面的问题，也可以直接去做小练习啦。",
         "next": "challenge",
         "options": [
           {
@@ -815,14 +1081,14 @@
         "id": "answer-a-1",
         "type": "line",
         "speaker": "Ottly",
-        "text": "对！它们正好在分界线上。写条件前，先确认题目要求把边界值放进哪个区间。",
+        "text": "对呀，分界线值得我们多看一眼。>= 会包含等于边界的情况，> 则不会。score 恰好是 60 时，score >= 60 为 True，所以应进入 SILVER，而不是 TRY_AGAIN。",
         "next": "answer-a-2"
       },
       {
         "id": "answer-a-2",
         "type": "line",
         "speaker": "Ottly",
-        "text": "尤其要把 60、90 放进测试里，检查它们有没有走到题目规定的分支。",
+        "text": "再让 90 来试一试：它满足 score >= 90，应先得到 GOLD。你还可以一起试想 59、60、89、90，确保分界线附近的分数都只落入一条正确路线。",
         "next": "questions",
         "completesOption": "question-a"
       },
@@ -830,14 +1096,14 @@
         "id": "answer-b-1",
         "type": "line",
         "speaker": "Ottly",
-        "text": "因为这关每个分数只能拿到一种结果。互斥分支可以避免重复判断后输出多个结果。",
+        "text": "单独的 if 会各自检查一遍哦。比如 95 既满足 >= 90 又满足 >= 60，如果两条 if 都各自打印徽章，就会得到两行结果。",
         "next": "answer-b-2"
       },
       {
         "id": "answer-b-2",
         "type": "line",
         "speaker": "Ottly",
-        "text": "独立的 if 会分别检查；在互斥分级题中，如果条件写得不合适，可能多次执行或造成混乱。",
+        "text": "而一组 if / elif / else 只会选中第一条匹配的小路哦。把高门槛放在前面，就能在匹配 GOLD 后跳过 SILVER，最后只输出一枚徽章。",
         "next": "questions",
         "completesOption": "question-b"
       },
@@ -845,7 +1111,7 @@
         "id": "challenge",
         "type": "line",
         "speaker": "Ottly",
-        "text": "这关输出的是 GOLD、SILVER 或 TRY_AGAIN，字母要完全一致；分支里的缩进也要对。",
+        "text": "小徽章等着出发啦，先读取整数分数，再从高分到低分安排 if、elif、else。冒号和缩进要正确，GOLD、SILVER、TRY_AGAIN 是输出文字，要加引号，最后只输出其中一行。",
         "next": "quiz-1"
       },
       {
@@ -857,21 +1123,21 @@
           {
             "id": "a",
             "text": "TRY_AGAIN",
-            "explanation": "TRY_AGAIN 对应 0～59，60 已达到银徽章下界。"
+            "explanation": "小提醒：TRY_AGAIN 对应 0～59，60 已达到银徽章下界。"
           },
           {
             "id": "b",
             "text": "SILVER",
-            "explanation": "对啦！60～89 属于 SILVER，等于60也包含在内。"
+            "explanation": "对啦，找到啦！60～89 属于 SILVER，等于60也包含在内。"
           },
           {
             "id": "c",
             "text": "GOLD",
-            "explanation": "GOLD 的下界是90，60还未达到。"
+            "explanation": "别急，我们再看看：GOLD 的下界是90，60还未达到。"
           }
         ],
         "correct": "b",
-        "review": "分界是60和90，写比较时应包含等于边界的情况。",
+        "review": "我们一起回顾一下：分界是60和90，写比较时应包含等于边界的情况。",
         "next": "quiz-2"
       },
       {
@@ -883,21 +1149,21 @@
           {
             "id": "a",
             "text": "仍执行所有满足条件的分支",
-            "explanation": "这条分支链只进入第一个匹配分支，不会继续重复发徽章。"
+            "explanation": "一起核对一下：这条分支链只进入第一个匹配分支，不会继续重复发徽章。"
           },
           {
             "id": "b",
             "text": "只执行 else",
-            "explanation": "else 是前面都不满足时才执行的兜底分支。"
+            "explanation": "别急，我们再看看：else 是前面都不满足时才执行的兜底分支。"
           },
           {
             "id": "c",
             "text": "跳过后续 elif 和 else",
-            "explanation": "对啦！一条 if/elif/else 链只走一条匹配分支。"
+            "explanation": "没错，就是这样！一条 if/elif/else 链只走一条匹配分支。"
           }
         ],
         "correct": "c",
-        "review": "先判断较高分段，再判断较低分段；同一分支链只执行第一个匹配结果。",
+        "review": "我们一起回顾一下：先判断较高分段，再判断较低分段；同一分支链只执行第一个匹配结果。",
         "next": "quiz-3"
       },
       {
@@ -914,23 +1180,23 @@
           {
             "id": "b",
             "text": "输出 GOLD，Python 会自动选最高档",
-            "explanation": "Python 不会自动比较档次，只按书写顺序寻找第一个匹配。"
+            "explanation": "小提醒：Python 不会自动比较档次，只按书写顺序寻找第一个匹配。"
           },
           {
             "id": "c",
             "text": "输出两行 SILVER 和 GOLD",
-            "explanation": "elif 属于同一条链，首个条件匹配后不会再执行后续分支。"
+            "explanation": "一起核对一下：elif 属于同一条链，首个条件匹配后不会再执行后续分支。"
           }
         ],
         "correct": "a",
-        "review": "先判断 score >= 90，再 elif score >= 60，最后 else；缩进控制各分支的语句范围。",
+        "review": "我们一起回顾一下：先判断 score >= 90，再 elif score >= 60，最后 else；缩进控制各分支的语句范围。",
         "next": "ready"
       },
       {
         "id": "ready",
         "type": "end",
         "speaker": "Ottly",
-        "text": "让我们看看每个分数应该通向哪枚徽章吧！"
+        "text": "到你啦，带每个分数走进自己的小路吧！先检查条件是否包含边界，再看分支顺序是否会提前截走高分。"
       }
     ]
   },
@@ -948,42 +1214,105 @@
         "id": "intro-1",
         "type": "line",
         "speaker": "Ottly",
-        "text": "今天能不能出航？光看一项天气条件可不够。",
+        "text": "小船准备好啦，今天能不能出航呢？上一关我们判断一个分数，这次需要同时考虑潮汐和风力。先分别判断每项是否安全，再把结论组合起来。",
         "next": "intro-2"
       },
       {
         "id": "intro-2",
         "type": "line",
         "speaker": "Ottly",
-        "text": "一个比较条件的结果要么是真，要么是假。我们可以把多个条件组合起来。",
+        "text": "先和真假小伙伴打个招呼：比较表达式会得到 True 或 False，它们是布尔值。\"True\" 加上引号只是字符串，并不是布尔值 True；本关用比较表达式直接得到判断结论。",
         "next": "intro-3"
       },
       {
         "id": "intro-3",
         "type": "line",
         "speaker": "Ottly",
-        "text": "and 表示‘都满足’，or 表示‘至少满足一个’，not 则把真假反过来。",
+        "text": "我们一起读读“潮汐不超过 2”，“不超过”包含等于，所以写 tide <= 2。同样，“风力不超过 3”写 wind <= 3。先把每句话分别翻成一个完整的比较。",
         "next": "intro-4"
       },
       {
         "id": "intro-4",
         "type": "line",
         "speaker": "Ottly",
-        "text": "我们做个口头测试：潮汐安全、风力不安全，安全 and 安全 的第二部分不成立，所以不能出航。",
+        "text": "把真假条件牵在一起的词，叫“逻辑运算符”。and 表示“而且，两项都要成立”；只有两边的比较结果都是 True，组合结果才是 True。",
         "next": "intro-5"
       },
       {
         "id": "intro-5",
         "type": "line",
         "speaker": "Ottly",
-        "text": "判断前先把两条条件分别算出来，再看该用哪个逻辑词连接。",
+        "text": "来试试四种小组合：True and True 是 True；True and False、False and True、False and False 都是 False。只满足一项，还不算“两项都安全”。",
+        "next": "intro-detail-1"
+      },
+      {
+        "id": "intro-detail-1",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "这一关，让 (tide <= 2) and (wind <= 3) 来守护小船。括号把两项小条件分别圈起来，帮助我们阅读；and 连接的是两项比较，不是直接比较潮汐和风力的数值。",
+        "next": "intro-detail-2"
+      },
+      {
+        "id": "intro-detail-2",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "一起看看潮汐和风力这组搭档，tide 是 2、wind 是 4：2 <= 2 得 True，4 <= 3 得 False。把它们用 and 连接，得到 False，所以不能出航。",
+        "next": "intro-detail-3"
+      },
+      {
+        "id": "intro-detail-3",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "再请 or 来比一比，它表示“至少一项成立”。True or False 是 True，False or True 也是 True；两项都为 True 仍是 True，只有两项都为 False 才为 False。",
+        "next": "intro-detail-4"
+      },
+      {
+        "id": "intro-detail-4",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "所以这里说“或者”，两项一起成立也算数哦。不过本关要求都安全，不能换成 or；否则潮汐合格但风太大时，也会被错误地允许出航。",
+        "next": "intro-detail-5"
+      },
+      {
+        "id": "intro-detail-5",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "not 像个翻面小开关，表示“取反”，也就是把真假翻过来：not True 是 False，not False 是 True。它作用在一个条件上，不像 and、or 那样用来连接两项条件。",
+        "next": "intro-detail-6"
+      },
+      {
+        "id": "intro-detail-6",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "一步一步来，先算括号，再取反。例如 not (2 <= 2 and 3 <= 3)：两项比较都得到 True，and 得到 True，最后 not 把它变成 False。",
+        "next": "intro-detail-7"
+      },
+      {
+        "id": "intro-detail-7",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "翻转真假时，也别把边界丢下哦：not (wind <= 3) 表示风力大于 3，而不是大于或等于 3。因为 wind 是 3 时原条件为 True，取反后应该为 False。",
+        "next": "intro-detail-8"
+      },
+      {
+        "id": "intro-detail-8",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "现在把组合条件交给 if，成立就输出 \"YES\"，否则用 else 输出 \"NO\"。True、False 是内部的判断结果，YES、NO 才是本关要求显示的字符串。",
+        "next": "intro-detail-9"
+      },
+      {
+        "id": "intro-detail-9",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "动手前，陪小船试试四种天气吧：两项都合格、只有潮汐合格、只有风力合格、两项都不合格。只有第一种可以出航；潮汐 2、风力 3 也包含在安全边界内。",
         "next": "questions"
       },
       {
         "id": "questions",
         "type": "choice",
         "speaker": "Ottly",
-        "text": "你想先问哪一个问题？两个都可以问。",
+        "text": "先比较，再组合，我们已经能表达“两项都安全”了。你想再推演一真一假的天气，还是分清 and 和 or？也可以直接去做小练习啦。",
         "next": "challenge",
         "options": [
           {
@@ -1002,14 +1331,14 @@
         "id": "answer-a-1",
         "type": "line",
         "speaker": "Ottly",
-        "text": "只满足一项还不够。这关要求两个条件都安全，才能出航。",
+        "text": "还要照顾风力这个小伙伴哦，不能只看潮汐。比如 tide=1、wind=5，潮汐条件为 True，但风力条件为 False，True and False 得到 False，最终应输出 NO。",
         "next": "answer-a-2"
       },
       {
         "id": "answer-a-2",
         "type": "line",
         "speaker": "Ottly",
-        "text": "哪怕其中一项表现很好，只要另一个必要条件不满足，整体结果仍为假。",
+        "text": "把两项换个位置看看，也是一样的哦：风力合格但潮汐不合格，False and True 仍为 False。and 不会把“一项表现很好”当成补偿，必须每一项必要条件都成立。",
         "next": "questions",
         "completesOption": "question-a"
       },
@@ -1017,14 +1346,14 @@
         "id": "answer-b-1",
         "type": "line",
         "speaker": "Ottly",
-        "text": "记住两个词就好：and 是‘而且’，or 是‘或者’。再对照题目里的‘都’和‘至少一个’判断。",
+        "text": "让“一真一假”帮我们认清它们吧：True and False 是 False，因为没有都满足；True or False 是 True，因为已经至少满足一项。",
         "next": "answer-b-2"
       },
       {
         "id": "answer-b-2",
         "type": "line",
         "speaker": "Ottly",
-        "text": "or 通常只要求至少一项为真；你可以把两种写法放到‘一真一假’的情景里比较。",
+        "text": "小提醒，两项都为 True 时，and 和 or 都得到 True，所以只试“两项都好”看不出区别。读题时先找“都”“且”或“至少一个”，再选对应连接词；not 则用于翻转一个结论。",
         "next": "questions",
         "completesOption": "question-b"
       },
@@ -1032,7 +1361,7 @@
         "id": "challenge",
         "type": "line",
         "speaker": "Ottly",
-        "text": "这关要在潮汐、风力都满足条件时输出 YES。先把两个小条件想清楚，再把它们连起来。",
+        "text": "轮到你给小船把关啦，把两行输入转成整数，用 tide <= 2 和 wind <= 3 分别比较，再用 and 连接。将组合结果交给 if / else，只输出一行大写 YES 或 NO。",
         "next": "quiz-1"
       },
       {
@@ -1044,21 +1373,21 @@
           {
             "id": "a",
             "text": "or",
-            "explanation": "or 只要求至少一个条件成立，不能表达两个都满足。"
+            "explanation": "小提醒：or 只要求至少一个条件成立，不能表达两个都满足。"
           },
           {
             "id": "b",
             "text": "and",
-            "explanation": "对啦！and 连接的两个条件都为真，整体才为真。"
+            "explanation": "对啦，找到啦！and 连接的两个条件都为真，整体才为真。"
           },
           {
             "id": "c",
             "text": "not",
-            "explanation": "not 用于取反，不能单独连接这两个条件。"
+            "explanation": "别急，我们再看看：not 用于取反，不能单独连接这两个条件。"
           }
         ],
         "correct": "b",
-        "review": "安全出航必须 tide <= 2 and wind <= 3，两个限制缺一不可。",
+        "review": "我们一起回顾一下：安全出航必须 tide <= 2 and wind <= 3，两个限制缺一不可。",
         "next": "quiz-2"
       },
       {
@@ -1070,21 +1399,21 @@
           {
             "id": "a",
             "text": "YES",
-            "explanation": "风力4超过上限3，即使潮汐合格也不能出航。"
+            "explanation": "一起核对一下：风力4超过上限3，即使潮汐合格也不能出航。"
           },
           {
             "id": "b",
             "text": "2",
-            "explanation": "题目要输出 YES 或 NO，不能输出输入数值。"
+            "explanation": "别急，我们再看看：题目要输出 YES 或 NO，不能输出输入数值。"
           },
           {
             "id": "c",
             "text": "NO",
-            "explanation": "对啦！风力条件不成立，and 的整体结果为假。"
+            "explanation": "没错，就是这样！风力条件不成立，and 的整体结果为假。"
           }
         ],
         "correct": "c",
-        "review": "and 的任意一个条件不满足，整体就不满足；边界2与3本身允许。",
+        "review": "我们一起回顾一下：and 的任意一个条件不满足，整体就不满足；边界2与3本身允许。",
         "next": "quiz-3"
       },
       {
@@ -1101,23 +1430,23 @@
           {
             "id": "b",
             "text": "True",
-            "explanation": "先算括号内得到True，not 会把它反过来。"
+            "explanation": "小提醒：先算括号内得到True，not 会把它反过来。"
           },
           {
             "id": "c",
             "text": "3",
-            "explanation": "比较和逻辑运算产生布尔值，不返回风力数值。"
+            "explanation": "一起核对一下：比较和逻辑运算产生布尔值，不返回风力数值。"
           }
         ],
         "correct": "a",
-        "review": "先计算括号内的比较与and，再由not翻转真假。",
+        "review": "我们一起回顾一下：先计算括号内的比较与and，再由not翻转真假。",
         "next": "ready"
       },
       {
         "id": "ready",
         "type": "end",
         "speaker": "Ottly",
-        "text": "安全第一。出航决定交给你！"
+        "text": "先替小船看看每一项，再决定整体是否安全。用四种真假组合检查你的出航规则吧！"
       }
     ]
   },
@@ -1135,42 +1464,105 @@
         "id": "intro-1",
         "type": "line",
         "speaker": "Ottly",
-        "text": "海岸边立着一排路标。如果一个个写 print()，手都要酸了。",
+        "text": "跟我沿着海岸走走吧，一排路标等着我们从 1 开始依次报数。数量来自输入，写程序时还不知道有多少个；与其复制很多次 print，不如让同一个步骤重复执行。",
         "next": "intro-2"
       },
       {
         "id": "intro-2",
         "type": "line",
         "speaker": "Ottly",
-        "text": "for 循环可以让同一段代码重复执行，循环变量每次会拿到一个新值。",
+        "text": "让同一个动作重复起来，就叫“循环”，每重复一次叫“一轮”。for 循环可以从一个范围依次取值，每取到一个值，就执行一遍下面的代码。",
         "next": "intro-3"
       },
       {
         "id": "intro-3",
         "type": "line",
         "speaker": "Ottly",
-        "text": "range(1, 4) 生成的是 1、2、3；它包含起点，但不包含右边的结束值 4。",
+        "text": "先请 range(1, 4) 带我们走一小段。它会依次给出整数 1、2、3：前一个数 1 是起点，后一个数 4 是停止边界。默认每次增加 1，包含起点，但不包含停止边界。",
         "next": "intro-4"
       },
       {
         "id": "intro-4",
         "type": "line",
         "speaker": "Ottly",
-        "text": "比如 range(2, 5) 会依次给出 2、3、4，走完就停；5 是停止界线，不是下一块路标。",
+        "text": "换成 range(2, 5)，它会带来 2、3、4。这里的逗号是代码中分隔两个值的符号，不会被当作要输出的字符；函数调用里的英文逗号与字符串内部的逗号作用不同。",
         "next": "intro-5"
       },
       {
         "id": "intro-5",
         "type": "line",
         "speaker": "Ottly",
-        "text": "除了数值范围，也留意 print() 是否缩进在循环里面，才能每到一块路标就输出一次。",
+        "text": "来看看整支小队怎样排好：for marker in range(1, 4):，下一行缩进四个空格写 print(marker)。for、in 是 Python 规定的关键字，按这个顺序、小写书写，行末要有英文冒号。",
+        "next": "intro-detail-1"
+      },
+      {
+        "id": "intro-detail-1",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "负责接住每轮数值的 marker 叫“循环变量”，名字可以自己取。in 可以先读成“依次从……中取值”：for 会自动让 marker 先保存 1，再保存 2，最后保存 3。",
+        "next": "intro-detail-2"
+      },
+      {
+        "id": "intro-detail-2",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "我们一轮轮跟着走：第一轮 marker 是 1，print(marker) 显示 1；第二轮变成 2，显示 2；第三轮变成 3，显示 3。每次 print 默认换行，所以每个编号单独占一行。",
+        "next": "intro-detail-3"
+      },
+      {
+        "id": "intro-detail-3",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "这里要让变量报出自己现在的值，所以写 print(marker)，不能写 print(\"marker\")。后者会在每一轮都显示相同的文字 marker，不会报出路标编号。",
+        "next": "intro-detail-4"
+      },
+      {
+        "id": "intro-detail-4",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "排在 for 下面、往右站一步的语句叫“循环体”，每轮都会执行。与 for 对齐的后续语句已经在循环外，必须等所有轮次结束后才继续执行，不会每轮跟着重复。",
+        "next": "intro-detail-5"
+      },
+      {
+        "id": "intro-detail-5",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "给语句安排好位置吧：通常把读取 n 的 input() 放在循环前，只读一次；把输出当前编号的 print 放在循环体里，才能对每个编号分别输出。缩进位置决定执行次数。",
+        "next": "intro-detail-6"
+      },
+      {
+        "id": "intro-detail-6",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "range 还有另一种小写法，只写一个数：range(3) 默认从 0 开始，给出 0、1、2，常用来重复三次。它与 range(1, 4) 都有三项，但实际取值不同。",
+        "next": "intro-detail-7"
+      },
+      {
+        "id": "intro-detail-7",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "这一关，我们要从 1 一路报到 n，n 也不能掉队哦。由于 range 不包含停止边界，需要把它设成 n + 1，也就是 range(1, n + 1)；这里先算 n + 1，再把结果交给 range。",
+        "next": "intro-detail-8"
+      },
+      {
+        "id": "intro-detail-8",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "一起代进去看看，n=3 时，range(1, n + 1) 就是 range(1, 4)，最后一项恰好是 3。如果写 range(1, n)，就会漏掉 n；写 range(n + 1)，又会多报一个 0。",
+        "next": "intro-detail-9"
+      },
+      {
+        "id": "intro-detail-9",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "这一关，我们默认一步加 1，如果起点已经不小于停止边界，就没有可取的值。n=0 时得到 range(1, 1)，循环体一次都不执行，因此什么都不输出，包括额外的空行。",
         "next": "questions"
       },
       {
         "id": "questions",
         "type": "choice",
         "speaker": "Ottly",
-        "text": "你想先问哪一个问题？两个都可以问。",
+        "text": "我们已经分清循环变量、范围和缩进了。你想再检查停止边界或零次循环吗？可以选择下面的问题，也可以直接去做小练习啦。",
         "next": "challenge",
         "options": [
           {
@@ -1189,14 +1581,14 @@
         "id": "answer-a-1",
         "type": "line",
         "speaker": "Ottly",
-        "text": "这就是 range 的规则：右端不包含。遇到‘数到某个数字为止’的题，要额外留意边界。",
+        "text": "range(1, 4) 里的 4 像一块“到这里就停”的小牌子，是停止边界，不会作为实际值交给循环变量。实际只给出 1、2、3；这不是少执行一次，而是 range 规定的范围写法。",
         "next": "answer-a-2"
       },
       {
         "id": "answer-a-2",
         "type": "line",
         "speaker": "Ottly",
-        "text": "你可以把终点当成一道‘不能跨过去的线’，先写出实际取值，再对照题目要不要包含终点。",
+        "text": "想让 4 也加入队伍的话，就写 range(1, 5)。同理，想从 1 包含到 n，就写 range(1, n + 1)。先列出实际取值，再检查最后一个编号是否符合题目。",
         "next": "questions",
         "completesOption": "question-a"
       },
@@ -1204,14 +1596,14 @@
         "id": "answer-b-1",
         "type": "line",
         "speaker": "Ottly",
-        "text": "本关的路标从 1 开始。如果 n=0，就没有需要输出的路标，所以应该什么都不输出。",
+        "text": "n=0 时，海岸上没有要报数的路标呀。range(1, n + 1) 成为 range(1, 1)，没有任何值，所以循环体里的 print 一次也不会执行。",
         "next": "answer-b-2"
       },
       {
         "id": "answer-b-2",
         "type": "line",
         "speaker": "Ottly",
-        "text": "当 n 为 0 时，从 1 开始的路标一个也没有，不需要为了凑数字而额外输出 0。",
+        "text": "这几个小动作可不一样：什么都不输出、输出一个 0、输出一个空行。本关只要求报出实际存在的编号，所以没有编号时，不要额外补一行结果。",
         "next": "questions",
         "completesOption": "question-b"
       },
@@ -1219,7 +1611,7 @@
         "id": "challenge",
         "type": "line",
         "speaker": "Ottly",
-        "text": "记住：写在循环体里的语句才会每轮执行。题目要求每个数字独占一行。",
+        "text": "出发报数前，先读取整数 n，再让 for 从 range(1, n + 1) 依次取编号。把 print 放进循环体，每个编号单独一行，最后不再额外打印说明或结束标记。",
         "next": "quiz-1"
       },
       {
@@ -1231,21 +1623,21 @@
           {
             "id": "a",
             "text": "1、2、3、4",
-            "explanation": "range 不包含右端4。"
+            "explanation": "小提醒：range 不包含右端4。"
           },
           {
             "id": "b",
             "text": "1、2、3",
-            "explanation": "对啦！从1开始，到4之前结束。"
+            "explanation": "对啦，找到啦！从1开始，到4之前结束。"
           },
           {
             "id": "c",
             "text": "0、1、2、3",
-            "explanation": "这里显式指定起点1，不从0开始。"
+            "explanation": "别急，我们再看看：这里显式指定起点1，不从0开始。"
           }
         ],
         "correct": "b",
-        "review": "range(start, stop) 包含start，不包含stop。",
+        "review": "我们一起回顾一下：range(start, stop) 包含start，不包含stop。",
         "next": "quiz-2"
       },
       {
@@ -1257,21 +1649,21 @@
           {
             "id": "a",
             "text": "range(1, n)",
-            "explanation": "右端n不包含，会漏掉n。"
+            "explanation": "一起核对一下：右端n不包含，会漏掉n。"
           },
           {
             "id": "b",
             "text": "range(n + 1)",
-            "explanation": "这从0开始，会多输出一个0。"
+            "explanation": "别急，我们再看看：这从0开始，会多输出一个0。"
           },
           {
             "id": "c",
             "text": "range(1, n + 1)",
-            "explanation": "对啦！右端取n+1，最后一个实际值就是n。"
+            "explanation": "没错，就是这样！右端取n+1，最后一个实际值就是n。"
           }
         ],
         "correct": "c",
-        "review": "从1开始，并用n+1作为不包含的右边界。",
+        "review": "我们一起回顾一下：从1开始，并用n+1作为不包含的右边界。",
         "next": "quiz-3"
       },
       {
@@ -1288,23 +1680,23 @@
           {
             "id": "b",
             "text": "输出一行 0",
-            "explanation": "题面要求无输出，0也是一个多余字符。"
+            "explanation": "小提醒：题面要求无输出，0也是一个多余字符。"
           },
           {
             "id": "c",
             "text": "输出一个空行",
-            "explanation": "空行仍包含换行字符，与完全无输出不同。"
+            "explanation": "一起核对一下：空行仍包含换行字符，与完全无输出不同。"
           }
         ],
         "correct": "a",
-        "review": "空范围不进入循环，循环内的print也不会执行。",
+        "review": "我们一起回顾一下：空范围不进入循环，循环内的print也不会执行。",
         "next": "ready"
       },
       {
         "id": "ready",
         "type": "end",
         "speaker": "Ottly",
-        "text": "沿着海岸，把每个路标都数出来吧！"
+        "text": "轮到你带队啦，沿着海岸逐个报出编号吧！用 n=0、n=1 和一个较大的 n，先在心里检查循环会执行几轮。"
       }
     ]
   },
@@ -1322,42 +1714,105 @@
         "id": "intro-1",
         "type": "line",
         "speaker": "Ottly",
-        "text": "刚才我们学会了一个个数路标。这次要把每天捡到的贝壳全部加起来。",
+        "text": "上一关我们每轮报出一个编号，这次要把 1 到 n 全部加起来，最后只报一次总数。循环仍提供每个数，我们再用一个变量记住已经加到哪里。",
         "next": "intro-2"
       },
       {
         "id": "intro-2",
         "type": "line",
         "speaker": "Ottly",
-        "text": "先准备一个‘总数’变量，从 0 开始；每次循环都把新捡到的数量加进去。",
+        "text": "把总数收好的这个变量，有个名字叫“累加器”。先在循环开始前写 total = 0，这叫“初始化”：给变量一个计算开始时的值。还没捡到贝壳，总数自然从 0 开始。",
         "next": "intro-3"
       },
       {
         "id": "intro-3",
         "type": "line",
         "speaker": "Ottly",
-        "text": "total = i 是把旧值覆盖掉；total += i 才是在原来的总数上继续增加。",
+        "text": "先别急着用简写，我们一起看完整的更新写法：total = total + day。右边的 total 表示更新前的旧值；先算旧值加上当天数量，再把结果赋给左边的 total，替换旧值。",
         "next": "intro-4"
       },
       {
         "id": "intro-4",
         "type": "line",
         "speaker": "Ottly",
-        "text": "想象空桶一开始装着 0 枚贝壳，第一轮加 1，第二轮再加 2，桶里就有 3 枚。",
+        "text": "这可不是数学里要解的等式哦，而是在请程序更新一次。比如旧 total 是 4、day 是 3，先算 4 + 3 得到 7，再保存，所以更新后的 total 是 7。",
         "next": "intro-5"
       },
       {
         "id": "intro-5",
         "type": "line",
         "speaker": "Ottly",
-        "text": "关键是每轮在‘上一次的结果’上更新，而不是每轮拿一个新空桶。",
+        "text": "先给变量准备好初值吧。由于右边需要先读旧 total，所以必须提前初始化。还没给 total 赋值，就写 total = total + day，Python 会因为找不到旧值而报错。",
+        "next": "intro-detail-1"
+      },
+      {
+        "id": "intro-detail-1",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "现在请简写小帮手 += 出场，读作“加后赋值”。对于本关的整数，total += day 就是 total = total + day 的简写：取旧值、相加、存回同一个变量。",
+        "next": "intro-detail-2"
+      },
+      {
+        "id": "intro-detail-2",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "把 += 看成手拉手的一个完整符号吧，两部分之间不要插空格或交换顺序。total += 3 是给旧总数加 3；total = 3 则是直接把总数设为 3，不会保留之前的累计。",
+        "next": "intro-detail-3"
+      },
+      {
+        "id": "intro-detail-3",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "再让 total = day 来比一比：它只是把当天数量存入 total。第一天是 1、第二天是 2 时，这种写法最后只留下 2，并没有得到 1 + 2 的总和。",
+        "next": "intro-detail-4"
+      },
+      {
+        "id": "intro-detail-4",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "一起数着每轮装进来的贝壳吧：从 total=0 开始，第一轮 day=1，更新成 0+1=1；第二轮 day=2，旧值是 1，更新成 1+2=3；第三轮 day=3，更新成 3+3=6。",
+        "next": "intro-detail-5"
+      },
+      {
+        "id": "intro-detail-5",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "这支小队里有两个不同角色哦：day 是 for 每轮自动给出的当前数，total 是我们自己更新的累计结果。循环自动改变 day，不会自动替我们把它加进 total。",
+        "next": "intro-detail-6"
+      },
+      {
+        "id": "intro-detail-6",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "空桶只准备一次就好：初始化放在循环前，只做一次。如果把 total = 0 放进循环体，每轮都先清零，再加当前数，前面收集的数量就丢失了，无法积累。",
+        "next": "intro-detail-7"
+      },
+      {
+        "id": "intro-detail-7",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "每轮都要接住新数量，所以更新要放在循环体里，保证每个数都加一次；最终的 print(total) 则与 for 对齐，放在循环外，等全部累加完成后再执行一次。",
+        "next": "intro-detail-8"
+      },
+      {
+        "id": "intro-detail-8",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "如果把 print(total) 也放在循环里，让它跟着每轮报数，就会依次输出 1、3、6 这样的中间结果。它们可以帮你观察过程，但本关判题只需要最终总和，不能保留额外输出。",
+        "next": "intro-detail-9"
+      },
+      {
+        "id": "intro-detail-9",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "范围还是老朋友 range(1, n + 1) 哦，确保 n 也被加进去。n=0 时循环不执行，total 保持初值 0；这关仍要输出总和 0，与上一关没有编号就不输出不同。",
         "next": "questions"
       },
       {
         "id": "questions",
         "type": "choice",
         "speaker": "Ottly",
-        "text": "你想先问哪一个问题？两个都可以问。",
+        "text": "从完整赋值到 +=，它们怎样保留旧总数已经推演过了。你想再检查初始化或输出的位置吗？可以选择下面的问题，也可以直接去做小练习啦。",
         "next": "challenge",
         "options": [
           {
@@ -1376,14 +1831,14 @@
         "id": "answer-a-1",
         "type": "line",
         "speaker": "Ottly",
-        "text": "因为如果每轮都把总数重新设为 0，前面累积的贝壳就‘丢了’。",
+        "text": "total = 0 就像开始前准备一只空桶，只需执行一次。如果放进循环，每一轮都会把前面的累计抹掉，total += day 就只能在新的 0 上加当天数量。",
         "next": "answer-a-2"
       },
       {
         "id": "answer-a-2",
         "type": "line",
         "speaker": "Ottly",
-        "text": "初始化放在循环前，只做一次；否则每轮清零，最终通常只剩最后一次加进去的值。",
+        "text": "我们拿 1、2、3 再数一次，正确结果依次是 1、3、6。若每轮清零，就变成 1、2、3。把初始化放在 for 前面，循环里面只更新，才能保留累计。",
         "next": "questions",
         "completesOption": "question-a"
       },
@@ -1391,14 +1846,14 @@
         "id": "answer-b-1",
         "type": "line",
         "speaker": "Ottly",
-        "text": "可以用来自己调试，但这关最终只要求输出一次总和，多余的中间结果会影响判题。",
+        "text": "当然可以先试着打印每一轮，观察 total 的变化，这叫“调试”，就是检查程序的执行过程。不过本题正式结果只要最后一个总和，中间输出会被当成多余内容。",
         "next": "answer-b-2"
       },
       {
         "id": "answer-b-2",
         "type": "line",
         "speaker": "Ottly",
-        "text": "想调试可以临时观察每轮的总数，但正式输出需要严格符合题目的要求。",
+        "text": "准备正式提交时，记得让 print(total) 与 for 对齐，放到循环结束后。这样 n=3 只输出 6；n=0 即使没有进入循环，也能输出初始总数 0。",
         "next": "questions",
         "completesOption": "question-b"
       },
@@ -1406,7 +1861,7 @@
         "id": "challenge",
         "type": "line",
         "speaker": "Ottly",
-        "text": "本关要把从 1 到 n 的数字累计起来。除了更新总数，也要记得检查循环有没有包含最后一个数字。",
+        "text": "沿着这条小路线写吧：“循环前初始化 → 循环内累加 → 循环后输出”。先理解 total = total + day，再选用等价的整数简写 total += day，不要把累加误写成 total = day。",
         "next": "quiz-1"
       },
       {
@@ -1418,21 +1873,21 @@
           {
             "id": "a",
             "text": "循环体内每轮最前面",
-            "explanation": "这样每轮都会抹掉以前的和，无法累计。"
+            "explanation": "小提醒：这样每轮都会抹掉以前的和，无法累计。"
           },
           {
             "id": "b",
             "text": "循环开始之前",
-            "explanation": "对啦！初始化一次，后面每轮在旧结果上增加。"
+            "explanation": "对啦，找到啦！初始化一次，后面每轮在旧结果上增加。"
           },
           {
             "id": "c",
             "text": "循环结束之后",
-            "explanation": "结束后才清零会丢掉计算结果。"
+            "explanation": "别急，我们再看看：结束后才清零会丢掉计算结果。"
           }
         ],
         "correct": "b",
-        "review": "累计变量在循环前初始化，循环内只更新，不反复归零。",
+        "review": "我们一起回顾一下：累计变量在循环前初始化，循环内只更新，不反复归零。",
         "next": "quiz-2"
       },
       {
@@ -1444,21 +1899,21 @@
           {
             "id": "a",
             "text": "3",
-            "explanation": "这是只保留最后一个i的结果，+=会保留之前的总和。"
+            "explanation": "一起核对一下：这是只保留最后一个i的结果，+=会保留之前的总和。"
           },
           {
             "id": "b",
             "text": "5",
-            "explanation": "三轮应分别得到1、3、6，不能漏掉第一轮。"
+            "explanation": "别急，我们再看看：三轮应分别得到1、3、6，不能漏掉第一轮。"
           },
           {
             "id": "c",
             "text": "6",
-            "explanation": "对啦！0+1+2+3=6，每轮都加在旧结果上。"
+            "explanation": "没错，就是这样！0+1+2+3=6，每轮都加在旧结果上。"
           }
         ],
         "correct": "c",
-        "review": "total += i 相当于 total = total + i，与 total = i 不同。",
+        "review": "我们一起回顾一下：total += i 相当于 total = total + i，与 total = i 不同。",
         "next": "quiz-3"
       },
       {
@@ -1475,23 +1930,23 @@
           {
             "id": "b",
             "text": "不输出任何字符",
-            "explanation": "这道题要求输出总和，与上一关逐项输出的规则不同。"
+            "explanation": "小提醒：这道题要求输出总和，与上一关逐项输出的规则不同。"
           },
           {
             "id": "c",
             "text": "1",
-            "explanation": "没有执行任何一次加法，不能凭空加1。"
+            "explanation": "一起核对一下：没有执行任何一次加法，不能凭空加1。"
           }
         ],
         "correct": "a",
-        "review": "总和先设为0，空循环后在循环外输出最终总和。",
+        "review": "我们一起回顾一下：总和先设为0，空循环后在循环外输出最终总和。",
         "next": "ready"
       },
       {
         "id": "ready",
         "type": "end",
         "speaker": "Ottly",
-        "text": "让小海獭的贝壳计数器开始工作吧！"
+        "text": "小桶准备好啦，让总数在每一轮的旧结果上继续增加吧！写完后按轮跟踪变量，就能看出自己是在累计，还是在覆盖。"
       }
     ]
   },
@@ -1509,42 +1964,119 @@
         "id": "intro-1",
         "type": "line",
         "speaker": "Ottly",
-        "text": "这次我们不知道具体要循环多少天，只知道要一直存到达成目标。",
+        "text": "这次陪我攒贝壳吧！想攒够一个目标数量，我们每天存 3 枚贝壳。我们先不计算要循环几天，而是让程序反复检查“够了吗”，没够就再存一天。",
         "next": "intro-2"
       },
       {
         "id": "intro-2",
         "type": "line",
         "speaker": "Ottly",
-        "text": "while 很适合这种情况：只要条件仍然成立，就继续执行循环体。",
+        "text": "还记得 for 吗？它会依次取出范围里的数；while 适合按条件重复。它在每轮开始前判断条件：结果为 True 就执行循环体，为 False 就停止循环，继续执行后面的代码。",
         "next": "intro-3"
       },
       {
         "id": "intro-3",
         "type": "line",
         "speaker": "Ottly",
-        "text": "但是！循环里必须让情况发生变化，不然条件可能永远成立，程序就停不下来。",
+        "text": "先给循环排好队，结构是 while 条件:，下一行缩进四个空格写这一轮要做的事。while 要小写，行末有英文冒号；缩进的循环体可以包含多条语句。",
         "next": "intro-4"
       },
       {
         "id": "intro-4",
         "type": "line",
         "speaker": "Ottly",
-        "text": "比如目标是 7 枚，每天存 3 枚：第 1 天 3 枚、第 2 天 6 枚、第 3 天 9 枚，终于达到目标。",
+        "text": "先准备两张小记录卡：saved 表示已经存了几枚，days 表示已经经过几天。开始时还没存过，两个变量都在循环前赋值为 0；target 保存题目输入的目标。",
         "next": "intro-5"
       },
       {
         "id": "intro-5",
         "type": "line",
         "speaker": "Ottly",
-        "text": "while 的重点是：每次检查条件、做一轮、改变状态，再回来检查。",
+        "text": "“还没攒够，就再来一天”，这就是继续循环的小口令。saved < target 就表达这个条件：已存数量小于目标。只要已经等于或超过目标，条件就为 False，不再多存一天。",
+        "next": "intro-detail-1"
+      },
+      {
+        "id": "intro-detail-1",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "过完一天，要给两张记录卡都更新一下哦：saved = saved + 3 增加贝壳，days = days + 1 增加天数。数量和天数单位不同，不能拿其中一个代替另一个。",
+        "next": "intro-detail-2"
+      },
+      {
+        "id": "intro-detail-2",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "把上一关的整数简写请回来，也可以写 saved += 3、days += 1。它们分别把旧数量加 3、旧天数加 1；不是每次把变量固定设成 3 和 1。",
+        "next": "intro-detail-3"
+      },
+      {
+        "id": "intro-detail-3",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "这里有个小提醒，while 与 for 分工不同：while 只负责检查条件，不会自动帮你增加数量或天数。让变量发生变化的更新语句，需要我们自己放进循环体。",
+        "next": "intro-detail-4"
+      },
+      {
+        "id": "intro-detail-4",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "我们陪 target=7 走一遍吧：开始 saved=0、days=0。先检查 0 < 7 为 True，存完第一天变成 saved=3、days=1，再回到 while 的条件处。",
+        "next": "intro-detail-5"
+      },
+      {
+        "id": "intro-detail-5",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "继续看看，第二次检查 3 < 7 仍为 True，存完第二天变成 6 枚、2 天；第三次检查 6 < 7 仍为 True，再存一天，变成 9 枚、3 天。",
+        "next": "intro-detail-6"
+      },
+      {
+        "id": "intro-detail-6",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "再来检查，9 < 7 为 False，循环停止。所以最少需要 3 天。达到或超过目标都算完成，不需要恰好等于 7，也不能在只有 6 枚时提前结束。",
+        "next": "intro-detail-7"
+      },
+      {
+        "id": "intro-detail-7",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "换成目标 6，两天就攒够啦。此时 6 < 6 为 False，会正常停止；若错写 saved <= target，等于目标时条件仍为 True，就会多存一天。",
+        "next": "intro-detail-8"
+      },
+      {
+        "id": "intro-detail-8",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "别让 saved 忘记长大哦！如果不更新，它就一直是 0。目标大于 0 时，0 < target 会始终为 True，循环可能一直停不下来，这叫“无限循环”。每轮必须让已存数量向目标推进。",
+        "next": "intro-detail-9"
+      },
+      {
+        "id": "intro-detail-9",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "天数记录也不能落下：如果更新了 saved 却忘了更新 days，循环虽然能结束，得到的天数仍然不对。所以循环体里要同时维护数量与天数两份记录。",
+        "next": "intro-detail-10"
+      },
+      {
+        "id": "intro-detail-10",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "再看看目标为 0 的小情况：第一次检查 0 < 0 就为 False，循环一次也不执行，days 仍是 0。while 是先检查、后执行，不保证至少执行一轮。",
+        "next": "intro-detail-11"
+      },
+      {
+        "id": "intro-detail-11",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "等循环结束，再请 days 报出结果吧，表示最少天数；不要输出 saved，它可能已经超过目标。如果把输出放在循环内，又会显示多个中间天数，而不是本关要求的一行答案。",
         "next": "questions"
       },
       {
         "id": "questions",
         "type": "choice",
         "speaker": "Ottly",
-        "text": "你想先问哪一个问题？两个都可以问。",
+        "text": "我们已经走过“检查 → 存一天 → 更新 → 再检查”的过程。你想再确认刚好存够或目标为 0 时会怎样吗？可以选择下面的问题，也可以直接去做小练习啦。",
         "next": "challenge",
         "options": [
           {
@@ -1563,14 +2095,14 @@
         "id": "answer-a-1",
         "type": "line",
         "speaker": "Ottly",
-        "text": "不用。想想循环条件应该表达‘还没达到目标’，还是‘已经达到目标’。",
+        "text": "不用啦，攒够就可以停下休息。比如目标为 6，第二天结束 saved=6；下一次判断 saved < target 得到 False，循环就停止，days 保持为 2。",
         "next": "answer-a-2"
       },
       {
         "id": "answer-a-2",
         "type": "line",
         "speaker": "Ottly",
-        "text": "当恰好达到目标时，下一次检查应发现已经够了，而不是再多存一天。",
+        "text": "留意这个小差别哦，如果用了 <=，6 <= 6 仍然是 True，就会错误地再执行一轮。用 < 表达“还没达到”，才能在恰好达到或已经超过目标时都停止。",
         "next": "questions",
         "completesOption": "question-a"
       },
@@ -1578,14 +2110,14 @@
         "id": "answer-b-1",
         "type": "line",
         "speaker": "Ottly",
-        "text": "那一开始就已经满足目标了，不需要等任何一天，答案应是 0。",
+        "text": "刚开始 saved=0，而 target 也是 0，已经满足目标。第一次检查 0 < 0 为 False，因此不进入循环，days 保持初值 0。",
         "next": "answer-b-2"
       },
       {
         "id": "answer-b-2",
         "type": "line",
         "speaker": "Ottly",
-        "text": "目标是 0，意味着从一开始就完成了，所以循环体应该一次也不执行。",
+        "text": "这也提醒我们给语句站好位置：初始化在循环前，输出在循环后。即使循环执行零次，days 也已经有值，可以正确输出 0，不必先存一天再把结果改回去。",
         "next": "questions",
         "completesOption": "question-b"
       },
@@ -1593,7 +2125,7 @@
         "id": "challenge",
         "type": "line",
         "speaker": "Ottly",
-        "text": "这关每天存入 3 枚贝壳。别忘了同时更新‘已经存了多少’和‘经过几天’。",
+        "text": "小记录卡准备好，先读取整数目标，初始化 saved 和 days。只在 saved < target 时循环，每轮数量加 3、天数加 1；循环结束后只输出天数，检查目标为 0、恰好存够和超过目标的情况。",
         "next": "quiz-1"
       },
       {
@@ -1605,21 +2137,21 @@
           {
             "id": "a",
             "text": "saved > target",
-            "explanation": "这表示已经超过目标，与继续存钱的条件相反。"
+            "explanation": "小提醒：这表示已经超过目标，与继续存钱的条件相反。"
           },
           {
             "id": "b",
             "text": "saved < target",
-            "explanation": "对啦！只在存量还小于目标时继续下一天。"
+            "explanation": "对啦，找到啦！只在存量还小于目标时继续下一天。"
           },
           {
             "id": "c",
             "text": "saved <= target",
-            "explanation": "等于目标也会继续，恰好存够时会多存一天。"
+            "explanation": "别急，我们再看看：等于目标也会继续，恰好存够时会多存一天。"
           }
         ],
         "correct": "b",
-        "review": "循环开始前检查还没达到目标，达到或超过就停止。",
+        "review": "我们一起回顾一下：循环开始前检查还没达到目标，达到或超过就停止。",
         "next": "quiz-2"
       },
       {
@@ -1631,21 +2163,21 @@
           {
             "id": "a",
             "text": "2",
-            "explanation": "两天只有6枚，还没达到7。"
+            "explanation": "一起核对一下：两天只有6枚，还没达到7。"
           },
           {
             "id": "b",
             "text": "7",
-            "explanation": "7是贝壳目标，不是天数；每天会存3枚。"
+            "explanation": "别急，我们再看看：7是贝壳目标，不是天数；每天会存3枚。"
           },
           {
             "id": "c",
             "text": "3",
-            "explanation": "对啦！三天累计9枚，第一次达到或超过7。"
+            "explanation": "没错，就是这样！三天累计9枚，第一次达到或超过7。"
           }
         ],
         "correct": "c",
-        "review": "每轮同时把saved增加3、days增加1，再重新判断条件。",
+        "review": "我们一起回顾一下：每轮同时把saved增加3、days增加1，再重新判断条件。",
         "next": "quiz-3"
       },
       {
@@ -1662,23 +2194,23 @@
           {
             "id": "b",
             "text": "while 至少执行一次，但把天数改回0",
-            "explanation": "while 是先检查条件，并不保证执行一次。"
+            "explanation": "小提醒：while 是先检查条件，并不保证执行一次。"
           },
           {
             "id": "c",
             "text": "要先存一天再判断",
-            "explanation": "先存一天会多算，目标0无需行动。"
+            "explanation": "一起核对一下：先存一天会多算，目标0无需行动。"
           }
         ],
         "correct": "a",
-        "review": "while 先判断再执行；循环内还必须更新变量，否则可能无法终止。",
+        "review": "我们一起回顾一下：while 先判断再执行；循环内还必须更新变量，否则可能无法终止。",
         "next": "ready"
       },
       {
         "id": "ready",
         "type": "end",
         "speaker": "Ottly",
-        "text": "看看最少需要多少天才能攒够目标吧！"
+        "text": "轮到你啦，让程序自己判断还需不需要再存一天吧！每轮先检查，再完成更新，达到目标就停下。"
       }
     ]
   },
@@ -1696,42 +2228,98 @@
         "id": "intro-1",
         "type": "line",
         "speaker": "Ottly",
-        "text": "欢迎收听海边电台！今天我们要认真数一数一段消息里的字符。",
+        "text": "滋啦，欢迎收听海边电台！前面我们用循环累计贝壳，这次换成一段留言：先数它一共有多少个字符，再数指定字符出现了几次。",
         "next": "intro-2"
       },
       {
         "id": "intro-2",
         "type": "line",
         "speaker": "Ottly",
-        "text": "len(text) 可以得到字符串长度；for ch in text 可以让我们逐个查看字符。",
+        "text": "先把两个小问题分开放好：“一共有多长”要看所有字符；“某个字符出现几次”只看符合条件的字符。这两个结果不一定相同。",
         "next": "intro-3"
       },
       {
         "id": "intro-3",
         "type": "line",
         "speaker": "Ottly",
-        "text": "想知道某个字符出现几次，就准备一个计数器，遇到符合条件的字符再加一。",
+        "text": "字符串就像一队按顺序站好的字符。例如 text = \"a A\"，里面依次是小写 a、一个空格、大写 A。引号用来标记文字的边界，不属于字符串内容。",
         "next": "intro-4"
       },
       {
         "id": "intro-4",
         "type": "line",
         "speaker": "Ottly",
-        "text": "看个例子：字符串 a A 的长度是 3；两个字母之间的空格也算一个字符。",
+        "text": "请 len(text) 帮我们数数，它能得到字符总数。所以 len(\"a A\") 是 3，而不是 2；空格虽然看不见，也占一个字符的位置。",
         "next": "intro-5"
       },
       {
         "id": "intro-5",
         "type": "line",
         "speaker": "Ottly",
-        "text": "当你统计某个字母时，可以逐个查看并决定计数器要不要加一。",
+        "text": "这一关，让两次 input() 分别接住留言和目标字符。input() 会去掉输入结尾的换行，但保留空格；首尾空格也是留言的一部分，不要再用 strip() 把它们删掉。",
+        "next": "intro-6"
+      },
+      {
+        "id": "intro-6",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "知道队伍有多长后，怎样找到目标字符呢？写 for ch in text:，每轮循环里的 ch 就会依次代表留言中的一个字符，不需要我们手动挪到下一个位置。",
+        "next": "intro-7"
+      },
+      {
+        "id": "intro-7",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "我们跟着 \"a A\" 这支小队走一遍，ch 第一轮是 \"a\"，第二轮是 \" \"，第三轮是 \"A\"。字符串遍历和之前的循环一样，缩进的循环体会为每个字符执行一次。",
+        "next": "intro-8"
+      },
+      {
+        "id": "intro-8",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "接着请 ch == target 认一认，判断当前字符是不是目标。这里用两个等号比较是否相等；一个等号用于赋值。Python 区分大小写，\"A\" == \"a\" 的结果是 False。",
+        "next": "intro-9"
+      },
+      {
+        "id": "intro-9",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "比较只负责回答“是不是”哦，不会自动累计次数。先在循环外写 count = 0，表示还没检查任何字符时，找到的次数是 0。",
+        "next": "intro-10"
+      },
+      {
+        "id": "intro-10",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "每轮先和当前字符打个招呼，检查一下；只有 if ch == target: 成立时，才执行 count = count + 1。if 放在 for 里面，累加语句再比 if 多缩进一级。",
+        "next": "intro-11"
+      },
+      {
+        "id": "intro-11",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "一起把小计数器走过的路数一遍：留言是 \"a A\"，目标是 \"a\"。计数从 0 开始，遇到小写 a 变成 1；遇到空格和大写 A 都保持 1。最后，长度是 3，匹配次数是 1。",
+        "next": "intro-12"
+      },
+      {
+        "id": "intro-12",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "小提醒，初始化要站对位置哦：如果每轮都执行 count = 0，之前的累计就丢了；如果把加一放在 if 外面，不匹配的字符也会被算进去。",
+        "next": "intro-13"
+      },
+      {
+        "id": "intro-13",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "再看看空留言这个小情况：直接按回车输入空文本，得到的是空字符串 \"\"。它的长度是 0，for 一次也不执行，计数器自然保持 0。",
         "next": "questions"
       },
       {
         "id": "questions",
         "type": "choice",
         "speaker": "Ottly",
-        "text": "你想先问哪一个问题？两个都可以问。",
+        "text": "长度、逐字检查和条件计数，我们已经串起来了。你想再听听空格或大小写的细节吗？可以选择下面的问题，也可以直接去做小练习啦。",
         "next": "challenge",
         "options": [
           {
@@ -1741,7 +2329,7 @@
           },
           {
             "id": "question-b",
-            "text": "大写 a 和小写 a 是一样的吗？",
+            "text": "大写 A 和小写 a，统计时要分开吗？",
             "next": "answer-b-1"
           }
         ]
@@ -1750,14 +2338,14 @@
         "id": "answer-a-1",
         "type": "line",
         "speaker": "Ottly",
-        "text": "算！比如 A B 长度是 3，其中那个空格也占一个位置。",
+        "text": "算呀，首尾的小空格也要一起数。例如 \" B \" 依次是空格、B、空格，长度为 3。input() 保留这些空格；strip() 会删除首尾空格，所以本关不要使用它。",
         "next": "answer-a-2"
       },
       {
         "id": "answer-a-2",
         "type": "line",
         "speaker": "Ottly",
-        "text": "字符长度按实际字符数计算，不只是数看起来明显的字母。",
+        "text": "目标字符自己也可能是一个小空格 \" \" 哦。这时遍历 \" B \"，两个空格各匹配一次，得到次数 2；B 不匹配。统计依据是字符是否相等，而不是它看起来是否明显。",
         "next": "questions",
         "completesOption": "question-a"
       },
@@ -1765,14 +2353,14 @@
         "id": "answer-b-1",
         "type": "line",
         "speaker": "Ottly",
-        "text": "这关的字符比较区分大小写，所以 A 和 a 不能随便当成同一个字符。",
+        "text": "大写 A 和小写 a 长得像，却是不同的字符哦。例如 \"a A\" 中各有一个；当 target 是 \"a\" 时，只能统计小写 a，大写 A 不计入。",
         "next": "answer-b-2"
       },
       {
         "id": "answer-b-2",
         "type": "line",
         "speaker": "Ottly",
-        "text": "只有确实要求不区分大小写时才会统一大小写；这一关不能擅自这么做。",
+        "text": "这一关，让字符保留自己的模样来比较吧，不要先调用 lower() 或 upper()。统一大小写会改变题目要统计的内容。直接判断 ch == target，就能同时处理字母和空格。",
         "next": "questions",
         "completesOption": "question-b"
       },
@@ -1780,7 +2368,7 @@
         "id": "challenge",
         "type": "line",
         "speaker": "Ottly",
-        "text": "统计次数时别忘了从 0 开始，并在符合条件时累计，不能每次都覆盖之前的结果。",
+        "text": "动手前，跟着这条小路线想一遍：读入两行，计数从 0 开始，逐字比较并累计。循环全部结束后，再分两行输出：先输出文本长度，再输出目标字符的次数。",
         "next": "quiz-1"
       },
       {
@@ -1792,21 +2380,21 @@
           {
             "id": "a",
             "text": "2",
-            "explanation": "中间的空格也是字符，不能漏算。"
+            "explanation": "小提醒：中间的空格也是字符，不能漏算。"
           },
           {
             "id": "b",
             "text": "3",
-            "explanation": "对啦！A、空格、B共三个字符。"
+            "explanation": "对啦，找到啦！A、空格、B共三个字符。"
           },
           {
             "id": "c",
             "text": "4",
-            "explanation": "引号是代码边界，不算字符串里的字符。"
+            "explanation": "别急，我们再看看：引号是代码边界，不算字符串里的字符。"
           }
         ],
         "correct": "b",
-        "review": "len 统计实际字符串字符，空格计入，引号不计入。",
+        "review": "我们一起回顾一下：len 统计实际字符串字符，空格计入，引号不计入。",
         "next": "quiz-2"
       },
       {
@@ -1818,21 +2406,21 @@
           {
             "id": "a",
             "text": "2",
-            "explanation": "本关区分大小写，大写A不等于小写a。"
+            "explanation": "一起核对一下：本关区分大小写，大写A不等于小写a。"
           },
           {
             "id": "b",
             "text": "3",
-            "explanation": "空格既不等于a，也不能计入匹配次数。"
+            "explanation": "别急，我们再看看：空格既不等于a，也不能计入匹配次数。"
           },
           {
             "id": "c",
             "text": "1",
-            "explanation": "对啦！只有第一个小写a与目标相同。"
+            "explanation": "没错，就是这样！只有第一个小写a与目标相同。"
           }
         ],
         "correct": "c",
-        "review": "逐字符比较 char == target，只在确实相等时增加次数，不改变大小写。",
+        "review": "我们一起回顾一下：逐字符比较 char == target，只在确实相等时增加次数，不改变大小写。",
         "next": "quiz-3"
       },
       {
@@ -1849,23 +2437,23 @@
           {
             "id": "b",
             "text": "1、0",
-            "explanation": "空文本没有字符，input去掉换行后长度是0。"
+            "explanation": "小提醒：空文本没有字符，input去掉换行后长度是0。"
           },
           {
             "id": "c",
             "text": "0、1",
-            "explanation": "没有字符可以匹配a，出现次数不能为1。"
+            "explanation": "一起核对一下：没有字符可以匹配a，出现次数不能为1。"
           }
         ],
         "correct": "a",
-        "review": "长度和出现次数是两个独立结果；空文本的两个结果都是0。",
+        "review": "我们一起回顾一下：长度和出现次数是两个独立结果；空文本的两个结果都是0。",
         "next": "ready"
       },
       {
         "id": "ready",
         "type": "end",
         "speaker": "Ottly",
-        "text": "让我们一起解读这条海边消息！"
+        "text": "小电台等着你啦，现在试着解读留言吧！先区分“总长度”和“匹配次数”，再用每轮只检查一个字符的办法完成统计。"
       }
     ]
   },
@@ -1883,42 +2471,105 @@
         "id": "intro-1",
         "type": "line",
         "speaker": "Ottly",
-        "text": "海边每天的温差都不一样，我们需要一个地方，把这些数据按顺序保存起来。",
+        "text": "上一关，我们和字符串里的字符挨个打过招呼啦。这次我想记录几天的海水温度变化：先保存一组整数，再逐个查看，找出其中最大的值。",
         "next": "intro-2"
       },
       {
         "id": "intro-2",
         "type": "line",
         "speaker": "Ottly",
-        "text": "列表就像一排可以装数据的小格子；append() 能把新数据添加到列表末尾。",
+        "text": "每天都起一个变量名，记录一多就忙不过来啦。列表可以把多个值按顺序放在一起，像一张记录表；values = [] 就是准备一张还没有数据的空表。",
         "next": "intro-3"
       },
       {
         "id": "intro-3",
         "type": "line",
         "speaker": "Ottly",
-        "text": "然后我们可以用 for 一个个查看，边比较边记住目前见过的最大值。",
+        "text": "往记录表里添一条新数据，试试 values.append(5)。如果接着执行 values.append(-2)，列表就变成 [5, -2]。append 每次把一个新元素加到末尾，原来的记录还在。",
         "next": "intro-4"
       },
       {
         "id": "intro-4",
         "type": "line",
         "speaker": "Ottly",
-        "text": "想象记录了 [-4, -2, -7]，这里最大的是 -2，而不是 0。",
+        "text": "这里有个小提醒，append 是直接修改列表，不会返回一张新表。单独写 values.append(value) 即可；不要写 values = values.append(value)，否则 values 会变成 None。",
         "next": "intro-5"
       },
       {
         "id": "intro-5",
         "type": "line",
         "speaker": "Ottly",
-        "text": "所以比较之前要想清楚：用什么值作为目前的最大值才合理？",
+        "text": "这一关，先让记录数 n 来报到，再用循环读取 n 条记录。每条输入先用 int(input()) 转成整数，再添加到列表，后面才能按数字大小比较。",
+        "next": "intro-6"
+      },
+      {
+        "id": "intro-6",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "一起看看读到 -4、-2、-7 的小记录表，列表就是 [-4, -2, -7]。len(values) 是 3，表示有三条记录；列表长度和列表里的最大值是两个不同的结果。",
+        "next": "intro-7"
+      },
+      {
+        "id": "intro-7",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "想找到第一条记录，去哪里找呢？用 values[0]。方括号里的数字叫索引，Python 从 0 开始编号，所以第一项是 values[0]，第二项才是 values[1]。",
+        "next": "intro-8"
+      },
+      {
+        "id": "intro-8",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "放心，这一关至少有一条记录，因此第一项一定存在。我们可以先写 largest = values[0]，把它当作“到目前为止见过的最大值”，再检查其他记录。",
+        "next": "intro-9"
+      },
+      {
+        "id": "intro-9",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "请 for value in values: 带队，就能按顺序取出列表里的每个整数。这里的 value 是当前元素本身，不是位置编号；遍历字符串取出字符，遍历这个列表就取出整数。",
+        "next": "intro-10"
+      },
+      {
+        "id": "intro-10",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "每遇到一个 value，就请 value > largest 比一比。只有新值更大时才把 largest 更新为 value；如果它更小或相等，就保留原来的 largest。",
+        "next": "intro-11"
+      },
+      {
+        "id": "intro-11",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "我们陪 [-4, -2, -7] 这组记录走一遍：largest 先是 -4；检查 -4 时保持不变；看到 -2，它比 -4 大，就更新成 -2；再看到 -7，它更小，于是仍保留 -2。",
+        "next": "intro-12"
+      },
+      {
+        "id": "intro-12",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "现在来找找“随便从 0 开始”的小陷阱吧。这些记录全是负数，都会比 0 小，结果就会错误地停在 0。用真实的第一条记录起步，才能避免加入一个不存在的值。",
+        "next": "intro-13"
+      },
+      {
+        "id": "intro-13",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "再看看只有一条记录的小情况，例如 [-5]，第一项就是最大值；如果最大的数出现多次，相等时不更新也没关系。我们要找的是最大数值，不是它出现的位置或次数。",
+        "next": "intro-14"
+      },
+      {
+        "id": "intro-14",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "这一关，我们一起走完“保存列表、遍历、比较、更新”这条小路线，请自己用 for 完成比较，不使用 max()、sorted() 或 sort()，也不通过自行排序来代替比较。",
         "next": "questions"
       },
       {
         "id": "questions",
         "type": "choice",
         "speaker": "Ottly",
-        "text": "你想先问哪一个问题？两个都可以问。",
+        "text": "我们已经从保存记录走到逐项比较了。关于初始最大值和本关的写法要求，你还想了解哪一点？可以选择下面的问题，也可以直接去做小练习啦。",
         "next": "challenge",
         "options": [
           {
@@ -1937,14 +2588,14 @@
         "id": "answer-a-1",
         "type": "line",
         "speaker": "Ottly",
-        "text": "本关保证记录数至少为1，可以把列表第一项作为初值。若温差全为负数，初值设为0会得到数据中不存在的结果。",
+        "text": "记录全是负数时，可不能这样做哦。例如 [-4, -2, -7] 中，每个数都小于 0，largest 如果从 0 开始就不会更新，最后会得到记录里根本没有的 0。",
         "next": "answer-a-2"
       },
       {
         "id": "answer-a-2",
         "type": "line",
         "speaker": "Ottly",
-        "text": "0 可能根本没出现在列表里。可以从列表中一个实际存在的值开始比较，并留意题目给定的数据范围。",
+        "text": "放心，这一关保证 n 至少为 1，所以可以用 values[0] 作为初值。随后把列表完整遍历一遍也没问题：第一项和自己比较不会触发更新；只有更大的值才会替换它。",
         "next": "questions",
         "completesOption": "question-a"
       },
@@ -1952,14 +2603,14 @@
         "id": "answer-b-1",
         "type": "line",
         "speaker": "Ottly",
-        "text": "平时当然可以认识这个函数，但本关明确要求用循环自己比较，不能用 max() 或排序代替练习。",
+        "text": "max(values) 是 Python 准备好的求最大值工具哦，平时可以使用；不过本关要求自己用 for 逐项比较，帮助你理解最大值是怎样一步步确定的。",
         "next": "answer-b-2"
       },
       {
         "id": "answer-b-2",
         "type": "line",
         "speaker": "Ottly",
-        "text": "这关刻意让我们练习列表保存和手动遍历比较；直接调用 max() 会绕过要掌握的技能。",
+        "text": "sorted()、sort() 和自行排序，这一关也先请它们休息，这些做法都不符合本关要求哦。你只需要记住一个 largest，每轮决定是否更新它，不需要改变记录顺序，也不需要先把全部数字排好。",
         "next": "questions",
         "completesOption": "question-b"
       },
@@ -1967,7 +2618,7 @@
         "id": "challenge",
         "type": "line",
         "speaker": "Ottly",
-        "text": "别只顾着比较，也别忘了先把读到的数据存进列表。最后输出的是最大值，不是整张列表。",
+        "text": "开始前，和我一起看看这条小路线：先把 n 条输入转成整数并存入列表，再用第一项初始化 largest，接着用 for 比较更新。全部检查完后，只输出一次最大值，不输出列表或中间结果。",
         "next": "quiz-1"
       },
       {
@@ -1979,21 +2630,21 @@
           {
             "id": "a",
             "text": "[]",
-            "explanation": "append 会原地加入元素，不会保持空列表。"
+            "explanation": "小提醒：append 会原地加入元素，不会保持空列表。"
           },
           {
             "id": "b",
             "text": "[-4]",
-            "explanation": "对啦！append 把新元素加入列表末尾。"
+            "explanation": "对啦，找到啦！append 把新元素加入列表末尾。"
           },
           {
             "id": "c",
             "text": "None",
-            "explanation": "append 的返回值是None，但列表本身已变成[-4]；不要赋回返回值。"
+            "explanation": "别急，我们再看看：append 的返回值是None，但列表本身已变成[-4]；不要赋回返回值。"
           }
         ],
         "correct": "b",
-        "review": "直接调用 values.append(value)，不要写 values = values.append(value)。",
+        "review": "我们一起回顾一下：直接调用 values.append(value)，不要写 values = values.append(value)。",
         "next": "quiz-2"
       },
       {
@@ -2005,21 +2656,21 @@
           {
             "id": "a",
             "text": "0",
-            "explanation": "0不在数据里且比所有负数都大，会得到不存在的结果。"
+            "explanation": "一起核对一下：0不在数据里且比所有负数都大，会得到不存在的结果。"
           },
           {
             "id": "b",
             "text": "-1",
-            "explanation": "-1仍不在数据中，随意固定初值不能适应任意整数。"
+            "explanation": "别急，我们再看看：-1仍不在数据中，随意固定初值不能适应任意整数。"
           },
           {
             "id": "c",
             "text": "values[0]，即 -8",
-            "explanation": "对啦！本关保证n至少为1，第一项一定存在，是有效初值。"
+            "explanation": "没错，就是这样！本关保证n至少为1，第一项一定存在，是有效初值。"
           }
         ],
         "correct": "c",
-        "review": "从真实第一项开始，再逐项用更大的值更新；本关保证至少一条记录。",
+        "review": "我们一起回顾一下：从真实第一项开始，再逐项用更大的值更新；本关保证至少一条记录。",
         "next": "quiz-3"
       },
       {
@@ -2036,23 +2687,23 @@
           {
             "id": "b",
             "text": "直接 print(max(values))",
-            "explanation": "本关明确禁止max，要练习手动遍历比较。"
+            "explanation": "小提醒：本关明确禁止max，要练习手动遍历比较。"
           },
           {
             "id": "c",
             "text": "排序后取最后一项",
-            "explanation": "本关也禁止sorted和sort，不能通过排序绕过逐项比较。"
+            "explanation": "一起核对一下：本关也禁止sorted和sort，不能通过排序绕过逐项比较。"
           }
         ],
         "correct": "a",
-        "review": "本关禁止max、sorted和sort；读取列表后，使用for逐个比较并更新最大值。",
+        "review": "我们一起回顾一下：本关禁止max、sorted和sort；读取列表后，使用for逐个比较并更新最大值。",
         "next": "ready"
       },
       {
         "id": "ready",
         "type": "end",
         "speaker": "Ottly",
-        "text": "准备好当海边气象记录员了吗？"
+        "text": "小记录员，准备好整理温差记录了吗？一条条保存，再一条条比较；每看完一项，都让 largest 记住目前见过的最大值。"
       }
     ]
   },
@@ -2070,42 +2721,112 @@
         "id": "intro-1",
         "type": "line",
         "speaker": "Ottly",
-        "text": "最后一关！以前我们写一段代码完成一次任务，现在把它装进一个能反复使用的小工具。",
+        "text": "小伙伴，我们走到最后一关啦！你已经会用循环检查数据、用条件决定是否计数。这次我们把这套计算装进一个函数，让同一个小工具能处理不同的成绩和达标线。",
         "next": "intro-2"
       },
       {
         "id": "intro-2",
         "type": "line",
         "speaker": "Ottly",
-        "text": "用 def 定义函数；参数是函数收到的输入；局部变量在每次调用时帮助它完成自己的计算。",
+        "text": "先聊聊为什么要准备函数这个小工具：今天统计一组成绩，明天换一组，如果每次都复制代码就很容易漏改。函数让我们把计算规则写一次，每次使用时再交给它新的数据。",
         "next": "intro-3"
       },
       {
         "id": "intro-3",
         "type": "line",
         "speaker": "Ottly",
-        "text": "return 会把结果交还给调用函数的地方。它和 print() 不一样：打印出来不等于返回了值。",
+        "text": "用 def 来定义函数、准备这个小工具吧，后面是函数名、圆括号和冒号。例如 def add_one(number):，意思是准备一个叫 add_one 的工具，接收一个名叫 number 的参数。",
         "next": "intro-4"
       },
       {
         "id": "intro-4",
         "type": "line",
         "speaker": "Ottly",
-        "text": "举个例子：print(3) 只是把 3 显示出来，而 return 3 会把值送回调用者。",
+        "text": "给函数体往右挪一步，记得缩进哦。比如在 add_one 的下一行缩进四个空格，写 return number + 1，就表示这个工具会把收到的数加一，再把结果交回来。",
         "next": "intro-5"
       },
       {
         "id": "intro-5",
         "type": "line",
         "speaker": "Ottly",
-        "text": "这关要把前面学到的循环和条件判断，封装成一个能反复调用的小工具。",
+        "text": "小提醒，定义函数只是把工具准备好，不会立刻执行里面的计算。写 add_one(4) 才是调用：把 4 交给 number，执行函数体，并得到返回值 5。",
+        "next": "intro-6"
+      },
+      {
+        "id": "intro-6",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "来，让 result = add_one(4) 接一下结果，result 就接住返回的 5。参数负责把数据送进去，return 负责把计算结果送出来；调用者还可以继续使用这个结果。",
+        "next": "intro-7"
+      },
+      {
+        "id": "intro-7",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "这一关的小工具叫 count_at_least(scores, threshold)。scores 接收成绩列表，threshold 接收达标线。函数应使用本次传入的这两个参数，而不是把示例里的成绩或 60 写死。",
+        "next": "intro-8"
+      },
+      {
+        "id": "intro-8",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "一起试试调用 count_at_least([55, 70, 85], 70)，scores 这次就是 [55, 70, 85]，threshold 是 70。70 和 85 都达标，所以应返回整数 2；等于达标线也要算进去。",
+        "next": "intro-9"
+      },
+      {
+        "id": "intro-9",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "接下来，把学过的小本领搬进函数里：每次开始计算时先准备一个从 0 开始的计数器，然后用 for 逐个查看 scores 中的成绩，再用 >= 判断是否达到 threshold。",
+        "next": "intro-10"
+      },
+      {
+        "id": "intro-10",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "等每个成绩都检查完，再用 return 把累计次数送回调用者。return 一执行，本次函数调用就结束了；如果把它缩进到 for 里面，就可能只检查第一项便提前离开。",
+        "next": "intro-11"
+      },
+      {
+        "id": "intro-11",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "再认一认 return 和小喇叭 print() 的分工：return 2 是把整数交回去，供其他代码使用；print(2) 只是显示文字。如果函数只打印却没有返回值，调用者得到的会是 None。",
+        "next": "intro-12"
+      },
+      {
+        "id": "intro-12",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "外部的小喇叭 print(count_at_least(scores, threshold)) 已经准备好啦。它先调用函数拿到结果，再负责显示；因此函数内部只需返回整数，不需要重复打印或再次 input()。",
+        "next": "intro-13"
+      },
+      {
+        "id": "intro-13",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "小工具可能会被连续请来帮忙哦。计数器要在函数内部初始化，这样每次都从 0 重新统计，不会把上一组成绩的计数带进来，也不依赖函数外的累计变量。",
+        "next": "intro-14"
+      },
+      {
+        "id": "intro-14",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "小工具只要看看成绩就好，不要向 scores 添加元素、删除元素或改写成绩。调用者之后可能还要使用原列表，我们应把它按原样保留下来。",
+        "next": "intro-15"
+      },
+      {
+        "id": "intro-15",
+        "type": "line",
+        "speaker": "Ottly",
+        "text": "如果 scores 里空空的，一个成绩也没有呢？for 会执行零次，从 0 开始的计数保持不变。只要把 return 放在循环外，就仍能返回整数 0，不需要临时往列表里补数据。",
         "next": "questions"
       },
       {
         "id": "questions",
         "type": "choice",
         "speaker": "Ottly",
-        "text": "你想先问哪一个问题？两个都可以问。",
+        "text": "从定义工具、传入参数，到计算并返回结果，我们已经走过一遍。关于 return 或多次调用，你想再听哪一部分？可以选择下面的问题，也可以直接去做小练习啦。",
         "next": "challenge",
         "options": [
           {
@@ -2124,14 +2845,14 @@
         "id": "answer-a-1",
         "type": "line",
         "speaker": "Ottly",
-        "text": "因为这关的判题需要拿到函数返回的整数，而不是只看屏幕上显示了什么。",
+        "text": "屏幕上说出来的话，和函数真正交回的值，可不是一回事哦。比如函数内部只执行 print(2)，你虽然看到了 2，但写 result = 函数调用 时，result 得到的仍是 None。",
         "next": "answer-a-2"
       },
       {
         "id": "answer-a-2",
         "type": "line",
         "speaker": "Ottly",
-        "text": "如果外部程序要拿这个结果继续比较，函数必须真正返回值，而不只是打印。",
+        "text": "试着换成 return 2，调用者才能真正拿到整数 2，再决定打印还是继续计算。本关外部的 print(...) 已经提供，请让函数返回计数，由外部代码负责显示。",
         "next": "questions",
         "completesOption": "question-a"
       },
@@ -2139,14 +2860,14 @@
         "id": "answer-b-1",
         "type": "line",
         "speaker": "Ottly",
-        "text": "不应该。每次调用都要重新开始本次计数，不要沿用上一次的累计结果。",
+        "text": "给 count = 0 在函数体内部安个家，每次调用执行到这句时都会重新开始计数。例如先统计 [70, 85]、阈值 70，得到 2；再统计 [55]、阈值 70，应得到 0。",
         "next": "answer-b-2"
       },
       {
         "id": "answer-b-2",
         "type": "line",
         "speaker": "Ottly",
-        "text": "计数器如果在函数内部每次从 0 开始，就不会把前一次调用的结果带到新一次调用中。",
+        "text": "第二次来帮忙，就只看第二次收到的参数哦，不沿用上次的 2。也别把 count = 0 放进遍历循环，否则每看一项都会清空累计；正确的位置是函数内部、循环开始之前。",
         "next": "questions",
         "completesOption": "question-b"
       },
@@ -2154,14 +2875,14 @@
         "id": "challenge",
         "type": "line",
         "speaker": "Ottly",
-        "text": "本关函数叫 count_at_least(scores, threshold)：统计成绩里大于或等于阈值的数量，不能漏掉刚好等于阈值的成绩。",
+        "text": "现在请 count_at_least(scores, threshold) 这个小工具上场：逐项统计大于或等于达标线的成绩，遍历结束后返回整数。只在 begin 和 end 之间补函数体，保留函数签名和下方已经提供的输入输出代码。",
         "next": "challenge-2"
       },
       {
         "id": "challenge-2",
         "type": "line",
         "speaker": "Ottly",
-        "text": "注意不要修改输入列表；如果列表为空，计数结果就是 0。",
+        "text": "写完后，陪小工具试试三种情况吧：刚好等于达标线、空列表、连续两次使用不同参数。检查计数是否每次重置、return 是否在循环外，以及原成绩列表是否保持不变。",
         "next": "quiz-1"
       },
       {
@@ -2173,21 +2894,21 @@
           {
             "id": "a",
             "text": "print(count)",
-            "explanation": "print只显示内容，不能把整数作为函数返回值交给调用方。"
+            "explanation": "小提醒：print只显示内容，不能把整数作为函数返回值交给调用方。"
           },
           {
             "id": "b",
             "text": "return count",
-            "explanation": "对啦！return把整数交给调用方，并结束本次函数调用。"
+            "explanation": "对啦，找到啦！return把整数交给调用方，并结束本次函数调用。"
           },
           {
             "id": "c",
             "text": "只写 count，不写 return",
-            "explanation": "单独写变量不会返回结果；函数结束时默认返回None。"
+            "explanation": "别急，我们再看看：单独写变量不会返回结果；函数结束时默认返回None。"
           }
         ],
         "correct": "b",
-        "review": "return与print不同，本关要求返回整数，不在函数内额外打印。",
+        "review": "我们一起回顾一下：return与print不同，本关要求返回整数，不在函数内额外打印。",
         "next": "quiz-2"
       },
       {
@@ -2199,21 +2920,21 @@
           {
             "id": "a",
             "text": "1",
-            "explanation": "等于60也达标，不能只使用大于号。"
+            "explanation": "一起核对一下：等于60也达标，不能只使用大于号。"
           },
           {
             "id": "b",
             "text": "3",
-            "explanation": "59小于阈值，不能计入达标数。"
+            "explanation": "别急，我们再看看：59小于阈值，不能计入达标数。"
           },
           {
             "id": "c",
             "text": "2",
-            "explanation": "对啦！60和80都大于或等于阈值，共两项。"
+            "explanation": "没错，就是这样！60和80都大于或等于阈值，共两项。"
           }
         ],
         "correct": "c",
-        "review": "条件使用>=，每次调用在函数内部把计数初始化为0，遍历后return。",
+        "review": "我们一起回顾一下：条件使用>=，每次调用在函数内部把计数初始化为0，遍历后return。",
         "next": "quiz-3"
       },
       {
@@ -2230,23 +2951,23 @@
           {
             "id": "b",
             "text": "返回None，因为没有元素",
-            "explanation": "题目要求返回整数，即使空列表也应返回0。"
+            "explanation": "小提醒：题目要求返回整数，即使空列表也应返回0。"
           },
           {
             "id": "c",
             "text": "向列表添加0后返回1",
-            "explanation": "不能修改传入列表，也不能人为增加达标项目。"
+            "explanation": "一起核对一下：不能修改传入列表，也不能人为增加达标项目。"
           }
         ],
         "correct": "a",
-        "review": "计数放在函数内，return放在循环外；不改变列表，空列表也返回整数0。",
+        "review": "我们一起回顾一下：计数放在函数内，return放在循环外；不改变列表，空列表也返回整数0。",
         "next": "ready"
       },
       {
         "id": "ready",
         "type": "end",
         "speaker": "Ottly",
-        "text": "让我们把学到的循环、判断和变量知识，封装成一个真正能重复使用的函数吧！"
+        "text": "轮到你啦，把循环、判断和计数装进自己的小工具吧！让它每次接收新参数，独立完成统计，再把整数结果交还给调用者。"
       }
     ]
   }
