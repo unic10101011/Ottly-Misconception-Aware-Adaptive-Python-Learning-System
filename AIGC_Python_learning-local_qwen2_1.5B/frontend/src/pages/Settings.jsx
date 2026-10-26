@@ -45,12 +45,10 @@ function Settings() {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [deletePassword, setDeletePassword] = useState('')
   const [deleteConfirm, setDeleteConfirm] = useState('')
-  const [eyeProtectionEnabled, setEyeProtectionEnabled] = useState(false)
   const [busy, setBusy] = useState(false)
   const [notice, setNotice] = useState('')
 
   useEffect(() => {
-    setEyeProtectionEnabled(localStorage.getItem('eyeProtectionEnabled') === 'true')
     fetch('/api/v1/auth/me', {
       headers: { Authorization: `Bearer ${localStorage.getItem('access_token')}` },
     }).then(async response => {
@@ -145,13 +143,6 @@ function Settings() {
     finally { setBusy(false) }
   }
 
-  const toggleEyeProtection = event => {
-    const enabled = event.target.checked
-    setEyeProtectionEnabled(enabled)
-    document.body.classList.toggle('eye-protection', enabled)
-    localStorage.setItem('eyeProtectionEnabled', String(enabled))
-  }
-
   return <main className="account-page">
     <h1>个人中心</h1>
     {notice && <p className="account-notice" role="status">{notice}</p>}
@@ -182,10 +173,6 @@ function Settings() {
           <label>确认新密码<input required type="password" minLength="8" autoComplete="new-password" value={confirmPassword} onChange={event => setConfirmPassword(event.target.value)} /></label>
           <button className="btn btn-primary" disabled={busy}>修改密码并重新登录</button>
         </form>
-      </section>
-      <section className="account-card">
-        <h2>学习偏好</h2>
-        <label className="account-toggle"><input type="checkbox" checked={eyeProtectionEnabled} onChange={toggleEyeProtection} />护眼模式（仅当前浏览器）</label>
       </section>
       <section className="account-card">
         <h2>退出登录</h2>

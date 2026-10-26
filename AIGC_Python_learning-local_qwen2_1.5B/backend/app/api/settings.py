@@ -34,33 +34,14 @@ class UserSettingsUpdate(BaseModel):
     eye_protection: bool = False
     volume: int = 50
 
-class UserSettingsResponse(BaseModel):
-    id: int
-    user_id: int
-    eye_protection: bool
-    volume: int
-
 class NotificationPreferencesUpdate(BaseModel):
     email_notifications: bool = True
     push_notifications: bool = True
     sms_notifications: bool = False
 
-class NotificationPreferencesResponse(BaseModel):
-    id: int
-    user_settings_id: int
-    email_notifications: bool
-    push_notifications: bool
-    sms_notifications: bool
-
 class LanguageSettingsUpdate(BaseModel):
     language: str = "zh-CN"
     timezone: str = "Asia/Shanghai"
-
-class LanguageSettingsResponse(BaseModel):
-    id: int
-    user_settings_id: int
-    language: str
-    timezone: str
 
 class SettingsResponse(BaseModel):
     code: int = 200

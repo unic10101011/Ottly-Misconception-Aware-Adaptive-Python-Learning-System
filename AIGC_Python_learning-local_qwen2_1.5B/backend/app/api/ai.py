@@ -1,12 +1,11 @@
 # ==================== 完整的 ai.py ====================
-from fastapi import APIRouter, HTTPException, status, Depends, Query
+from fastapi import APIRouter, HTTPException, Depends, Query
 from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
 from app.core.database import get_db
 from app.models.user import AIChatRecord
 from pydantic import BaseModel, Field
 import json
-import asyncio
 import uuid
 from datetime import datetime
 from typing import List, Optional

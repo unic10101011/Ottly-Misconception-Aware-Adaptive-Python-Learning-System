@@ -6,7 +6,7 @@ import sys
 import io
 import threading
 import time
-from typing import Dict, Any, Optional, Callable
+from typing import Dict, Any
 from contextlib import redirect_stdout, redirect_stderr
 
 from .security_check import SecurityChecker

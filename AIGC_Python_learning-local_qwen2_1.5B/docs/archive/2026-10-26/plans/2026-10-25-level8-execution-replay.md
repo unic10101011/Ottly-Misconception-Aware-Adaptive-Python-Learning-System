@@ -17,4 +17,4 @@
 
 先用真实采样结果验证total=i在n=3时最终为3、total+=i最终为6，再检查异常和资源上限。未授权本轮提交或推送。
 
-实施结果与已知限制见 `docs/2026-10-25-level8-execution-replay-acceptance.md`。
+实施结果与已知限制见 `docs/archive/2026-10-26/records/2026-10-25-level8-execution-replay-acceptance.md`。

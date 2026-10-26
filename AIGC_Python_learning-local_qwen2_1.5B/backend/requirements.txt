@@ -1,12 +1,9 @@
 fastapi
 uvicorn
 sqlalchemy
-mysql-connector-python
 pymysql
 python-dotenv
 argon2-cffi
 python-jose[cryptography]
 pydantic
-pydantic-settings
-openai
 httpx

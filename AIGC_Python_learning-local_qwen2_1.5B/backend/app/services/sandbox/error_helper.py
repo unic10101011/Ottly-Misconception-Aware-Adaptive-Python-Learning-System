@@ -170,19 +170,3 @@ class ErrorHelper:
             ]
         
         return friendly_msg, suggestions
-    
-    @classmethod
-    def format_for_display(cls, error_info: Dict) -> str:
-        """格式化显示给用户的错误信息"""
-        lines = []
-        
-        lines.append(f"⚠️ {error_info['type']}")
-        if error_info['line']:
-            lines.append(f"📍 第 {error_info['line']} 行")
-        lines.append(f"❌ {error_info['friendly_message']}")
-        lines.append("")
-        lines.append("💡 建议修改：")
-        for i, suggestion in enumerate(error_info['suggestions'], 1):
-            lines.append(f"  {i}. {suggestion}")
-        
-        return '\n'.join(lines)

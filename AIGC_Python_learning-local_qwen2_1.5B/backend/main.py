@@ -1,7 +1,5 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
-from fastapi.responses import HTMLResponse
 import uvicorn
 from app.api import auth, class_selection, settings, ai, coding, learning_history, guides, endless, execution_trace
 from app.core.database import engine, Base

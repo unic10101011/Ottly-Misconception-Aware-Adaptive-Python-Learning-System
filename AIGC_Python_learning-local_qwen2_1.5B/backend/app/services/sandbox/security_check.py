@@ -3,8 +3,7 @@
 拦截危险代码和非法操作
 """
 import ast
-import builtins
-from typing import Tuple, Optional
+from typing import Tuple
 
 # 危险模块黑名单
 DANGEROUS_MODULES = {
