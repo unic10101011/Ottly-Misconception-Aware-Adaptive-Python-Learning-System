@@ -13,6 +13,7 @@ def test_real_line_semantics_and_final_output():
     assert wrong['steps'][-1]['event'] == 'end'
     assert wrong['steps'][-1]['stdout'] == '3\n'
     assert wrong['steps'][-1]['variables']['total'] == '3'
+    assert wrong['steps'][-1]['visual_values']['total'] == {'kind': 'number', 'text': '3'}
     correct = run_trace_process(WRONG.replace('total = i', 'total += i'), '3\n')
     assert correct['steps'][-1]['stdout'] == '6\n'
     assert line4[0]['variables']['total'] == '0', 'old snapshots cannot change later'
@@ -180,6 +181,16 @@ def test_all_lesson_examples_and_list_snapshots():
     assert result['steps'][1]['variables']['values'] == '[]'
     assert result['steps'][2]['variables']['values'] == '[2]'
     assert result['steps'][-1]['variables']['values'] == '[2, 9]'
+    assert result['steps'][1]['visual_values']['values']['items'] == []
+    assert result['steps'][2]['visual_values']['values']['items'] == ['2']
+    assert result['steps'][3]['list_accesses'] == [{'name': 'values', 'index': 1, 'mode': 'read'}]
+
+
+def test_skipped_list_reads_are_not_highlighted():
+    from app.services.sandbox.trace_runner import run_trace_process
+    for expression in ['False and a[0]', 'True or a[0]', 'print(1 // 0, a[0])']:
+        result = run_trace_process('a = [7]\nx = ' + expression, '', supports_text=True, supports_structures=True)
+        assert all(not step['list_accesses'] for step in result['steps'])
 
 
 def test_function_calls_returns_errors_and_limits():

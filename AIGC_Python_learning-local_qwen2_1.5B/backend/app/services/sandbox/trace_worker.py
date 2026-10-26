@@ -8,6 +8,7 @@ import time
 from types import FunctionType
 
 from .security_check import SecurityChecker
+from .trace_actions import ActionRecorder
 
 FILENAME = '<ottly-trace>'
 STEP_LIMIT = 300
@@ -240,9 +241,23 @@ def main():
     if unsupported or not safe:
         finish('unsupported', exception={'type': 'UnsupportedSyntax', 'message': unsupported or errors[0]['message'], 'line': None})
         return
+    action_recorder = ActionRecorder(ast.parse(code, filename=FILENAME))
     if supports_text or supports_structures:
+        # Only mark direct reads. A nested subscript may be skipped by short
+        # circuit evaluation or an earlier exception on the same source line.
+        original_subscripts = []
+        for statement in ast.walk(tree):
+            value = statement.value if isinstance(statement, (ast.Assign, ast.Expr)) else None
+            if (isinstance(statement, ast.Expr) and isinstance(value, ast.Call)
+                    and isinstance(value.func, ast.Name) and value.func.id == 'print'
+                    and len(value.args) == 1 and not value.keywords):
+                value = value.args[0]
+            if isinstance(value, ast.Subscript) and isinstance(value.value, ast.Name):
+                original_subscripts.append(value)
         tree = ast.fix_missing_locations(TextConstants().visit(tree))
         compiled = compile(tree, FILENAME, 'exec')
+    else:
+        original_subscripts = []
     output = TraceOutput()
     inputs = io.StringIO(request['stdin'])
     started = time.monotonic()
@@ -253,6 +268,7 @@ def main():
     active_calls = []
     failed_frames = set()
     call_count = 0
+    input_reads = []
 
     def read_input(prompt=''):
         if prompt:
@@ -261,6 +277,7 @@ def main():
         if not line:
             raise EOFError('演示输入已用完，每次input需要一行。')
         value = line.rstrip('\n').removesuffix('\r')
+        input_reads.append(value)
         return BoundedText(value) if supports_text else value
 
     def bounded_range(*args):
@@ -306,16 +323,34 @@ def main():
         if time.monotonic() - started > 1.5:
             raise TraceLimit('wall_time_limit')
         variables = {}
+        visual_values = {}
         for name, value in values.items():
             if name.startswith('__'):
                 continue
             if len(variables) >= 32:
                 raise TraceLimit('variable_limit')
             variables[name] = describe(value)
+            if type(value) in (int, float):
+                visual_values[name] = {'kind': 'number', 'text': variables[name]}
+            elif isinstance(value, BoundedList):
+                visual_values[name] = {'kind': 'list', 'items': [describe(item) for item in value]}
+        accesses = []
+        if event == 'line':
+            for node in original_subscripts:
+                if node.lineno != line:
+                    continue
+                target = values.get(node.value.id)
+                index = node.slice.value if isinstance(node.slice, ast.Constant) else values.get(node.slice.id) if isinstance(node.slice, ast.Name) else None
+                if isinstance(target, BoundedList) and type(index) is int and -len(target) <= index < len(target):
+                    accesses.append({'name': node.value.id, 'index': index % len(target), 'mode': 'read' if isinstance(node.ctx, ast.Load) else 'write'})
         count += 1
         info = info or {'function': '<module>', 'scope_id': 'module'}
         old = previous.get(info['scope_id'], {})
+        action = action_recorder.record(values, event, line, info['scope_id'], output.getvalue(), input_reads,
+                                        variables, describe(return_value) if event == 'return' else None)
         emit({'kind': 'step', 'step': count, 'event': event, 'line': line, **info, 'variables': variables,
+              **({'action': action} if action else {}),
+              'visual_values': visual_values, 'list_accesses': accesses,
               'changed_variables': [name for name in variables if variables[name] != old.get(name)],
               'call_stack': [{'function': '<module>', 'scope_id': 'module'}, *(stack if stack is not None else [entry[1] for entry in active_calls])],
               'return_value': describe(return_value) if event == 'return' else None,

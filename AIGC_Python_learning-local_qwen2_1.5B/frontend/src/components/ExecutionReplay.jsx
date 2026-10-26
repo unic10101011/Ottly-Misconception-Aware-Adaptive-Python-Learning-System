@@ -1,6 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { requestExecutionTrace } from './codeApi.mjs'
 import { executionReplayLessons } from './executionReplayConfig.mjs'
+import TraceVisuals from './TraceVisuals.jsx'
+import TraceStepInsight from './TraceStepInsight.jsx'
+import TraceAction from './TraceAction.jsx'
 
 const statusText = {
   completed: '回放就绪', runtime_error: '运行时出错，已停在异常处', syntax_error: '语法错误，无法执行回放',
@@ -19,8 +22,9 @@ export function TracePlayer({ trace, showContext = true }) {
   const steps = trace.steps || []
   const step = steps[index]
   const previous = steps.slice(0, index).reverse().find(item => item.scope_id === step?.scope_id)
+  const previousInTime = steps[index - 1]
   const variables = step?.variables || {}
-  const line = step?.line ?? (trace.trace_status === 'syntax_error' ? trace.exception?.line : null)
+  const line = step?.line ?? (step?.event === 'end' ? step.action?.line : trace.trace_status === 'syntax_error' ? trace.exception?.line : null)
   const position = step?.event === 'line' ? `即将执行第 ${line} 行`
     : step?.event === 'end' ? '程序已结束 · 以下为执行结束后的状态'
       : step?.event === 'call' ? `进入函数 ${step.function}`
@@ -30,7 +34,7 @@ export function TracePlayer({ trace, showContext = true }) {
   const sourceTitle = trace.code_source === 'submission' ? `提交代码 #${trace.submission_id}`
     : trace.code_source === 'demo' ? '示例代码' : '当前代码'
   return <div className="trace-player">
-    <div className="trace-summary"><span className="trace-status">{statusText[trace.trace_status] || '回放状态未知'}</span>
+    <div className="trace-summary"><span className="trace-status">{statusText[trace.trace_status] || '回放状态未知'}</span><strong>当前步骤 {steps.length ? index + 1 : 0} / {steps.length}</strong>
       <div className="trace-step-label" aria-live="polite">{position}</div></div>
     {showContext && <div className="trace-context"><span>{sourceTitle}</span><span>{trace.test_case_label}</span></div>}
     {trace.truncated && <p className="trace-warning" role="status">{reasonText[trace.truncation_reason] || '已达到执行限制'}。这里只展示停止前采集到的步骤，不能视为完整执行结果。</p>}
@@ -39,17 +43,19 @@ export function TracePlayer({ trace, showContext = true }) {
       item.function === '<module>' ? '主程序' : `${item.function} (${item.scope_id})`).join(' → ')}</div>}
     <div className="trace-grid">
       <section className="trace-code-pane" aria-label="回放代码，只读">
-        <div className="trace-pane-title"><strong>{sourceTitle}</strong><small>高亮行即将执行</small></div>
+        <div className="trace-pane-title"><strong>{sourceTitle}</strong><small>{step?.event === 'line' ? '高亮行即将执行' : step?.event === 'exception' ? '高亮行发生异常' : step?.event === 'call' ? '进入函数' : '高亮行为已完成位置'}</small></div>
         <ol className="trace-code">{trace.code.split('\n').map((text, offset) => <li key={offset} ref={offset + 1 === line ? activeLine : null}
           className={`${offset + 1 === line ? 'is-current' : ''}${trace.exception?.line === offset + 1 ? ' has-error' : ''}`}
           aria-current={offset + 1 === line ? 'step' : undefined}>
           <span aria-hidden="true">{offset + 1}</span><code>{text || ' '}</code>
         </li>)}</ol>
       </section>
+      <TraceAction action={step?.action} step={step} code={trace.code} />
       <div className="trace-data-pane">
         <section className="trace-variables" aria-label="当前变量">
           <div className="trace-pane-title"><strong>变量</strong><small>当前作用域：{scope}</small></div>
-          {Object.keys(variables).length ? <dl>{Object.entries(variables).map(([name, value]) => {
+          {trace.problem_id === 'temperature-max-v1' && step?.visual_values
+            ? <TraceVisuals trace={trace} step={step} previous={previous} /> : Object.keys(variables).length ? <dl>{Object.entries(variables).map(([name, value]) => {
             const old = previous?.variables?.[name]
             const changed = old !== value
             return <div key={name} className={changed ? 'is-changed' : ''}><dt>{name}</dt><dd>
@@ -59,11 +65,12 @@ export function TracePlayer({ trace, showContext = true }) {
           })}</dl> : <p className="trace-empty">这一刻还没有可展示的变量。</p>}
         </section>
         <section className="trace-output" aria-label="真实输出">
-          <div className="trace-pane-title"><strong>截至当前步骤的输出</strong></div>
+          <div className="trace-pane-title"><strong>累积输出</strong><small>{step?.stdout && step.stdout !== previousInTime?.stdout ? '本步有新输出' : '暂无新输出'}</small></div>
           <pre aria-label="当前步骤输出">{step?.stdout || '（当前尚无输出）'}</pre>
         </section>
       </div>
     </div>
+    <TraceStepInsight key={trace.trace_id || trace.playbackId || 'preview'} trace={trace} index={index} previous={previous} />
     <div className="trace-controls">
       <button type="button" disabled={index === 0 || !steps.length} onClick={() => setIndex(value => Math.max(0, value - 1))}>上一步</button>
       <button type="button" disabled={!steps.length || index >= steps.length - 1}

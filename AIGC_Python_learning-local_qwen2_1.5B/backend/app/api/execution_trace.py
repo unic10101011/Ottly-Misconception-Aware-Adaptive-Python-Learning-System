@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy.orm import Session
 from starlette.concurrency import run_in_threadpool
 
@@ -10,6 +10,8 @@ from app.models.learning_submission import LearningSubmission
 from app.models.user import User
 from app.services.sandbox.trace_runner import run_trace_process
 from app.services.problem_catalog import LEVELS, PROBLEMS
+from app.services import trace_sessions
+from app.services.trace_explanation import explain_step
 
 router = APIRouter(dependencies=[Depends(get_current_user)])
 REPLAY_LEVELS = {slot.problem_id: slot.id for slot in LEVELS}
@@ -56,4 +58,27 @@ async def execution_trace(body: TraceRequest, current_user: User = Depends(get_c
                 test_case_label=('本题无需输入（演示不代表全部正式测试）' if body.problem_id == 'level1'
                                  else f'自选演示输入 n={stdin.strip()}（不代表全部正式测试）' if body.problem_id == 'shell-total-v1'
                                  else '使用下方演示输入（不代表全部正式测试）'))
-    return {'code': 200, 'data': data}
+    trace_id = trace_sessions.remember_trace(current_user.id, data)
+    return {'code': 200, 'data': {**data, 'trace_id': trace_id}}
+
+
+class ExplanationRequest(BaseModel):
+    model_config = ConfigDict(extra='forbid')
+    step_index: int = Field(ge=0, lt=300)
+
+
+@router.post('/code/execution-trace/{trace_id}/explanation')
+async def trace_explanation(trace_id: str, body: ExplanationRequest, current_user: User = Depends(get_current_user),
+                            db: Session = Depends(get_db)):
+    session = trace_sessions.owned_trace(trace_id, current_user.id)
+    data = session.data
+    require_lesson(data['problem_id'], passed_problem_ids(db, current_user.id))
+    index = body.step_index
+    if index >= len(data['steps']):
+        raise HTTPException(422, '这一步没有实际执行快照，无法解释。')
+    async with session.lock:
+        if index in session.answers:
+            return {'code': 200, 'data': {**session.answers[index], 'cached': True}}
+        answer = await explain_step(PROBLEMS[data['problem_id']], data, index)
+        trace_sessions.cache_answer(session, index, answer)
+        return {'code': 200, 'data': {**answer, 'cached': False}}

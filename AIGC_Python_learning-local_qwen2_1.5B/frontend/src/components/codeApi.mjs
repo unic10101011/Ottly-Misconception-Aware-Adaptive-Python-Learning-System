@@ -237,3 +237,7 @@ export function completeGuide(problemId, version, heard, answers, token) {
 export function requestExecutionTrace(body, token) {
   return requestLearningHistory('/code/execution-trace', 'POST', token, body)
 }
+
+export function requestTraceExplanation(traceId, stepIndex, token) {
+  return requestLearningHistory(`/code/execution-trace/${encodeURIComponent(traceId)}/explanation`, 'POST', token, { step_index: stepIndex }, 35000)
+}

@@ -20,7 +20,8 @@ function setup() {
   loaded.filename = filename; loaded.paths = Module._nodeModulePaths(path.dirname(filename))
   const nativeRequire = loaded.require.bind(loaded)
   loaded.require = id => id === 'react' ? hooks : id === './codeApi.mjs'
-    ? { requestExecutionTrace: async body => { requests++; bodies.push(body); return new Promise(resolve => { finishRequest = resolve }) } } : nativeRequire(id)
+    ? { requestExecutionTrace: async body => { requests++; bodies.push(body); return new Promise(resolve => { finishRequest = resolve }) } }
+      : ['./TraceVisuals.jsx', './TraceStepInsight.jsx', './TraceAction.jsx'].includes(id) ? () => null : nativeRequire(id)
   loaded._compile(transformSync(fs.readFileSync(filename, 'utf8'), { loader: 'jsx', format: 'cjs' }).code, filename)
   return { render: (name, props) => { cursor = 0; refCursor = 0; effects.length = 0; return loaded.exports[name](props) },
     effects, bodies, requests: () => requests, finish: data => finishRequest(data) }
@@ -68,6 +69,21 @@ test('empty syntax and limited traces have truthful status and valid controls', 
     assert.ok(find(tree, node => node.props.className === 'trace-status'))
     assert.equal(app.requests(), 0)
   }
+})
+
+test('returning to the caller does not repeat output produced in a function', () => {
+  const app = setup()
+  const props = { trace: { ...trace, steps: [
+    { step: 1, event: 'line', line: 1, scope_id: 'module', variables: {}, stdout: '' },
+    { step: 2, event: 'return', line: 2, scope_id: 'call-1', function: 'f', variables: {}, stdout: '1\n' },
+    { step: 3, event: 'line', line: 3, scope_id: 'module', variables: { a: '2' }, stdout: '1\n' },
+  ] } }
+  let tree = app.render('TracePlayer', props)
+  button(tree, '下一步').props.onClick()
+  tree = app.render('TracePlayer', props)
+  button(tree, '下一步').props.onClick()
+  tree = app.render('TracePlayer', props)
+  assert.equal(find(tree, node => node.type === 'small' && node.props.children === '本步有新输出'), undefined)
 })
 
 test('closing the dialog restores focus and ignores a late trace response', async () => {
