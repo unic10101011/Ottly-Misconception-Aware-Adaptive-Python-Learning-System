@@ -8,7 +8,7 @@ export default function TraceAction({ action, step, code }) {
   const text = action?.line ? code.split('\n')[action.line - 1]?.trim() : null
   const short = value => String(value).length > 100 ? String(value).slice(0, 100) + '…' : String(value)
   return <section className="trace-action-pane" aria-label="动作演示">
-    <div className="trace-pane-title"><strong>动作演示</strong><small>{action?.round ? `第 ${action.round} 轮` : '真实执行数据'}</small></div>
+    <div className="trace-pane-title"><strong>动作演示</strong>{action?.round && <small>{`第 ${action.round} 轮`}</small>}</div>
     <div className={`trace-action-content is-${kind || 'start'}`} key={`${step?.step}-${kind}`}>
       <p className="trace-action-timing">{action ? kind === 'exception' ? `第 ${action.line} 行中断` : ['call', 'return'].includes(kind) ? '当前函数事件' : `刚执行完第 ${action.line} 行` : step?.step > 1 ? '该步骤没有可还原的动作' : '尚未执行第一行'}</p>
       {text && <code className="trace-action-source">{text}</code>}

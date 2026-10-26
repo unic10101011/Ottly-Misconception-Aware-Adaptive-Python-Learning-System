@@ -114,10 +114,10 @@ test('closing the dialog restores focus and ignores a late trace response', asyn
 
 test('first four replay dialogs use the lesson title and preserve multiline or name input', () => {
   const cases = [
-    ['level1', '第 1 关 · 初识小海獭', '', false],
-    ['greeting-v1', '第 2 关 · 打招呼', ' Li Ming ', true],
-    ['shell-shop-v1', '第 3 关 · 贝壳小商店', '4\n3\n20\n', true],
-    ['shell-groups-v1', '第 4 关 · 贝壳分组', '17\n5\n', true],
+    ['level1', '第一关·代码执行回放', '', false],
+    ['greeting-v1', '第二关·代码执行回放', ' Li Ming ', true],
+    ['shell-shop-v1', '第三关·代码执行回放', '4\n3\n20\n', true],
+    ['shell-groups-v1', '第四关·代码执行回放', '17\n5\n', true],
   ]
   const oldStorage = global.localStorage, oldDocument = global.document
   global.localStorage = { getItem: () => 'test-token' }
@@ -125,7 +125,7 @@ test('first four replay dialogs use the lesson title and preserve multiline or n
     for (const [problemId, title, initialInput, hasInput] of cases) {
       const app = setup()
       const tree = app.render('default', { code: 'print(1)', problemId, initialInput, onClose() {} })
-      assert.ok(find(tree, node => node.type === 'small' && node.props.children === title))
+      assert.ok(find(tree, node => node.type === 'h2' && node.props.children === title))
       assert.equal(Boolean(find(tree, node => node.type === 'textarea')), hasInput)
       global.document = { activeElement: null, body: { style: { overflow: '' } } }
       tree.ref.current = { showModal() {}, close() {} }

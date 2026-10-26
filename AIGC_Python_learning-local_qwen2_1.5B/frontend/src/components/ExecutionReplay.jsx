@@ -14,6 +14,7 @@ const reasonText = { step_limit: '达到300步上限', output_limit: '输出达�
   integer_limit: '整数过大', text_limit: '字符串超过2000字符上限', variable_limit: '变量过多', trace_size_limit: '轨迹数据达到上限',
   list_limit: '列表超过100项上限', call_depth_limit: '函数调用超过16层上限',
   wall_time_limit: '达到时间上限', worker_limit: '执行进程被限制或停止' }
+const lessonNumbers = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二']
 
 export function TracePlayer({ trace, showContext = true }) {
   const [index, setIndex] = useState(0)
@@ -30,7 +31,6 @@ export function TracePlayer({ trace, showContext = true }) {
       : step?.event === 'call' ? `进入函数 ${step.function}`
         : step?.event === 'return' ? `函数 ${step.function} 返回 ${step.return_value ?? 'None'}`
       : step?.event === 'exception' ? `第 ${line} 行发生异常` : '没有可播放的执行步骤'
-  const scope = step?.function && step.function !== '<module>' ? `函数 ${step.function} · ${step.scope_id}` : '主程序'
   const sourceTitle = trace.code_source === 'submission' ? `提交代码 #${trace.submission_id}`
     : trace.code_source === 'demo' ? '示例代码' : '当前代码'
   return <div className="trace-player">
@@ -43,7 +43,7 @@ export function TracePlayer({ trace, showContext = true }) {
       item.function === '<module>' ? '主程序' : `${item.function} (${item.scope_id})`).join(' → ')}</div>}
     <div className="trace-grid">
       <section className="trace-code-pane" aria-label="回放代码，只读">
-        <div className="trace-pane-title"><strong>{sourceTitle}</strong><small>{step?.event === 'line' ? '高亮行即将执行' : step?.event === 'exception' ? '高亮行发生异常' : step?.event === 'call' ? '进入函数' : '高亮行为已完成位置'}</small></div>
+        <div className="trace-pane-title"><strong>{sourceTitle}</strong></div>
         <ol className="trace-code">{trace.code.split('\n').map((text, offset) => <li key={offset} ref={offset + 1 === line ? activeLine : null}
           className={`${offset + 1 === line ? 'is-current' : ''}${trace.exception?.line === offset + 1 ? ' has-error' : ''}`}
           aria-current={offset + 1 === line ? 'step' : undefined}>
@@ -53,7 +53,7 @@ export function TracePlayer({ trace, showContext = true }) {
       <TraceAction action={step?.action} step={step} code={trace.code} />
       <div className="trace-data-pane">
         <section className="trace-variables" aria-label="当前变量">
-          <div className="trace-pane-title"><strong>变量</strong><small>当前作用域：{scope}</small></div>
+          <div className="trace-pane-title"><strong>变量</strong></div>
           {trace.problem_id === 'temperature-max-v1' && step?.visual_values
             ? <TraceVisuals trace={trace} step={step} previous={previous} /> : Object.keys(variables).length ? <dl>{Object.entries(variables).map(([name, value]) => {
             const old = previous?.variables?.[name]
@@ -70,7 +70,7 @@ export function TracePlayer({ trace, showContext = true }) {
         </section>
       </div>
     </div>
-    <TraceStepInsight key={trace.trace_id || trace.playbackId || 'preview'} trace={trace} index={index} previous={previous} />
+    <TraceStepInsight key={trace.trace_id || trace.playbackId || 'preview'} trace={trace} index={index} />
     <div className="trace-controls">
       <button type="button" disabled={index === 0 || !steps.length} onClick={() => setIndex(value => Math.max(0, value - 1))}>上一步</button>
       <button type="button" disabled={!steps.length || index >= steps.length - 1}
@@ -85,6 +85,7 @@ export function TracePlayer({ trace, showContext = true }) {
 
 export default function ExecutionReplay({ code, problemId, submissionId, initialInput, onClose }) {
   const settings = executionReplayLessons[problemId]
+  const lessonNumber = Number(settings.title.match(/\d+/)[0])
   const dialog = useRef(null)
   const generation = useRef(0)
   const [draft] = useState(code)
@@ -130,19 +131,21 @@ export default function ExecutionReplay({ code, problemId, submissionId, initial
     onCancel={event => { event.preventDefault(); onClose() }} onKeyDown={event => {
       if (event.key === 'Escape') { event.preventDefault(); onClose() }
     }}>
-    <header className="trace-header"><div><small>{settings.title}</small><h2 id="execution-replay-title">代码执行回放</h2></div>
+    <header className="trace-header"><h2 id="execution-replay-title">{`第${lessonNumbers[lessonNumber - 1]}关·代码执行回放`}</h2>
       <button type="button" onClick={onClose} autoFocus>返回做题</button></header>
-    {trace && <p className="trace-input-overview">{settings.inputKind === 'none' ? '本题无需输入'
-      : `本次输入：${trace.replayInput.trimEnd().replace(/\r?\n/g, ' · ') || '（空）'}`}</p>}
+    {trace && settings.inputKind === 'none' && !submissionId && <p className="trace-input-overview">本题无需输入</p>}
     {(settings.inputKind !== 'none' || submissionId) && <details className="trace-options">
-      <summary>{submissionId ? '调整输入或代码版本' : '调整输入'}</summary>
+      <summary>{trace && <span className="trace-input-overview">{settings.inputKind === 'none' ? '本题无需输入'
+        : `本次输入：${trace.replayInput.trimEnd().replace(/\r?\n/g, ' · ') || '（空）'}`}</span>}
+        <span className="trace-input-toggle">{settings.inputKind === 'none' ? '调整代码版本' : '调整输入'} <span aria-hidden="true">→</span></span></summary>
     <form className="trace-request" onSubmit={event => { event.preventDefault(); if (!loading) load() }}>
       <div className="trace-settings-bar">
         {submissionId ? <label className="trace-source-label">回放代码<select value={source} disabled={loading} onChange={event => setSource(event.target.value)}>
           <option value="draft">当前代码</option><option value="submission">提交代码 #{submissionId}</option>
-        </select></label> : <span className="trace-source-note">使用当前代码</span>}
+        </select></label> : null}
         <details className="trace-help"><summary>回放说明</summary><div>
-          <p>回放使用打开窗口时的代码，不会修改原代码。高亮行即将执行，右侧显示此前步骤的变量和输出。</p>
+          <p>默认使用打开窗口时的当前代码，可在有提交记录时切换版本；回放不会修改原代码。高亮行即将执行，右侧显示此前步骤的变量和输出。</p>
+          {settings.inputHelp && <p id="trace-input-help">{settings.inputHelp}</p>}
           <p>这里只运行填写的输入，不代表全部判题测试；回放不会改变通关成绩。</p>
           <p>{settings.inputKind === 'integer' ? '第8关支持整数和基本循环。' : ['temperature-max-v1', 'count-at-least-v1'].includes(problemId)
             ? '支持基本列表和普通函数，列表最多100项、调用最多16层。' : '支持基本字符串、数值运算与输入输出。'}</p>
@@ -152,12 +155,10 @@ export default function ExecutionReplay({ code, problemId, submissionId, initial
       {settings.inputKind === 'integer' && <label className="trace-number-label">运行输入 n<input type="number" min="0" max="100" step="1" required value={input}
         disabled={loading} onChange={event => setInput(event.target.value)} /></label>}
       {settings.inputKind === 'text' && <label className={`trace-input-label${problemId === 'greeting-v1' ? ' is-single-line' : ''}`}>运行输入<textarea rows={problemId === 'greeting-v1' ? 1 : 3} maxLength={2000} value={input}
-        disabled={loading} onChange={event => setInput(event.target.value)} aria-describedby="trace-input-help" />
-        <small id="trace-input-help">{settings.inputHelp}</small></label>}
+        disabled={loading} onChange={event => setInput(event.target.value)} aria-describedby="trace-input-help" /></label>}
       {settings.inputKind === 'none' && <span className="trace-no-input">本题无需输入</span>}
       <div className="trace-generate"><button type="submit" disabled={loading}>{loading ? '准备中…' : '应用并重新运行'}</button></div>
       </div>
-      <p className="trace-input-notice">只运行这里的输入，不代表全部判题测试。</p>
     </form></details>}
     {loading && <p className="trace-empty" role="status">正在准备回放，请稍候…</p>}
     {error && <div className="trace-warning" role="alert"><p>{error}</p><button type="button" disabled={loading} onClick={load}>重试</button></div>}
