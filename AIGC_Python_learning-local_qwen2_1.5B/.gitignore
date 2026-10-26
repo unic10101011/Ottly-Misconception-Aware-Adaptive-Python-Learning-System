@@ -66,3 +66,6 @@ htmlcov/
 /backend/tests/data/diagnosis_cases_50*
 /docs/two-stage-diagnosis-experiment.md
 /docs/live-ai-*.json
+
+# Local research snapshots; never publish raw experiment material automatically
+/research-archive/

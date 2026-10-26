@@ -18,7 +18,7 @@ from app.models.learning_submission import LearningSubmission
 from app.models.learning_review import LearningReview
 from app.models.guide_progress import GuideProgress
 from app.models.generated_problem import GeneratedProblem
-from app.models.settings import UserSettings, NotificationPreferences, LanguageSettings
+from app.core.legacy_preferences import delete_legacy_preferences
 
 
 router = APIRouter()
@@ -228,11 +228,7 @@ def delete_account(request: AccountDelete, current_user: User = Depends(get_curr
         raise HTTPException(status_code=401, detail="账号已注销")
     if not verify_password(request.current_password, user.password):
         raise HTTPException(status_code=403, detail="当前密码错误")
-    settings_ids = [row.id for row in db.query(UserSettings.id).filter(UserSettings.user_id == user_id)]
-    if settings_ids:
-        db.query(NotificationPreferences).filter(NotificationPreferences.user_settings_id.in_(settings_ids)).delete(synchronize_session=False)
-        db.query(LanguageSettings).filter(LanguageSettings.user_settings_id.in_(settings_ids)).delete(synchronize_session=False)
-    db.query(UserSettings).filter(UserSettings.user_id == user_id).delete(synchronize_session=False)
+    delete_legacy_preferences(db, user_id)
     db.query(UserProfile).filter(UserProfile.user_id == user_id).delete(synchronize_session=False)
     db.query(LearningReview).filter(LearningReview.user_id == user_id).delete(synchronize_session=False)
     db.query(GuideProgress).filter(GuideProgress.user_id == user_id).delete(synchronize_session=False)

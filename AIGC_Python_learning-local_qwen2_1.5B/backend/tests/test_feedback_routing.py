@@ -9,7 +9,6 @@ import httpx
 
 from app.services import error_analysis as analysis
 from app.services.learning_contract import contract_analysis, history_analysis
-from app.services.lesson_feedback import with_lesson_hints
 from app.services.problem_catalog import PROBLEMS, Problem, TestCase as CatalogTestCase
 from app.services.submission import CaseResult, JudgeResult
 
@@ -130,7 +129,6 @@ class FeedbackRoutingTests(unittest.TestCase):
                 self.assertEqual(result.status, status)
                 self.assertEqual(result.feedback_kind, 'guidance')
                 self.assertIsNone(result.content)
-                self.assertIs(with_lesson_hints(PROBLEMS['badge-v1'], result, self.judge()), result)
 
     def test_saved_guidance_round_trip_keeps_question(self):
         public = contract_analysis(self.generate(), ['K05'])

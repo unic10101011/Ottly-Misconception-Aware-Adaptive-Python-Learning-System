@@ -98,7 +98,6 @@ def test_chat_history_and_class_records_are_user_isolated(client):
     try:
         first = db.query(User).filter(User.username == "student_one").one()
         second = db.query(User).filter(User.username == "student_two").one()
-        first_id = first.id
         db.add(AIChatRecord(
             user_id=first.id, conversation_id=1, session_id="shared-session",
             question="my question", question_type="text", answer="my answer",
@@ -123,8 +122,6 @@ def test_chat_history_and_class_records_are_user_isolated(client):
     assert selected.status_code == 200
     assert len(client.get("/api/v1/class/records", headers=auth(first_token)).json()["data"]) == 1
     assert client.get("/api/v1/class/records", headers=auth(second_token)).json()["data"] == []
-    assert client.post("/api/v1/settings", headers=auth(second_token),
-                       json={"user_id": first_id}).status_code == 403
 
 
 def test_unverified_password_reset_is_disabled(client):
@@ -139,11 +136,11 @@ def test_account_update_password_and_permanent_deletion(client):
     from app.models.class_selection import ClassSelection
     from app.models.learning_review import LearningReview
     from app.models.learning_submission import LearningSubmission
-    from app.models.settings import UserSettings, NotificationPreferences, LanguageSettings
+    from sqlalchemy import text
     from app.models.user import AIChatRecord, User
 
     user_id, token = register_and_login(client, "account_owner", "13800000008")
-    _, other_token = register_and_login(client, "account_other", "13800000009")
+    other_id, other_token = register_and_login(client, "account_other", "13800000009")
     headers = auth(token)
     assert client.patch("/api/v1/auth/me", headers=headers, json={
         "username": "account_owner_new", "phone": "13800000018", "current_password": "wrong",
@@ -175,12 +172,14 @@ def test_account_update_password_and_permanent_deletion(client):
         db.add(AIChatRecord(user_id=user_id, conversation_id=1, session_id="remove-me",
                             question="question", question_type="text", answer="answer"))
         db.add(ClassSelection(user_id=user_id, class_name="变量巫师"))
-        settings = UserSettings(user_id=user_id)
-        db.add(settings)
-        db.flush()
-        db.add(NotificationPreferences(user_settings_id=settings.id))
-        db.add(LanguageSettings(user_settings_id=settings.id))
-        settings_id = settings.id
+        # Simulate rows left by an older deployment, without registering retired ORM models.
+        db.execute(text('CREATE TABLE user_settings (id INTEGER PRIMARY KEY, user_id INTEGER NOT NULL)'))
+        db.execute(text('CREATE TABLE notification_preferences (id INTEGER PRIMARY KEY, user_settings_id INTEGER NOT NULL REFERENCES user_settings(id))'))
+        db.execute(text('CREATE TABLE language_settings (id INTEGER PRIMARY KEY, user_settings_id INTEGER NOT NULL REFERENCES user_settings(id))'))
+        db.execute(text('INSERT INTO user_settings (id, user_id) VALUES (501, :owner), (502, :other)'),
+                   {'owner': user_id, 'other': other_id})
+        for name in ('notification_preferences', 'language_settings'):
+            db.execute(text(f'INSERT INTO {name} (id, user_settings_id) VALUES (501, 501), (502, 502)'))
         wrong = LearningSubmission(user_id=user_id, problem_id="level1", problem_title="t",
                                    problem_description="d", code="bad", judge_json={}, passed=False)
         db.add(wrong)
@@ -204,13 +203,15 @@ def test_account_update_password_and_permanent_deletion(client):
     assert client.get("/api/v1/auth/me", headers=headers).status_code == 401
     db = SessionLocal()
     try:
-        for model in (User, AIChatRecord, ClassSelection, UserSettings, NotificationPreferences,
-                      LanguageSettings, LearningSubmission, LearningReview):
+        for model in (User, AIChatRecord, ClassSelection, LearningSubmission, LearningReview):
             key = User.id if model is User else model.user_id if hasattr(model, "user_id") else None
             if key is not None:
                 assert db.query(model).filter(key == user_id).count() == 0
-        assert db.query(NotificationPreferences).filter_by(user_settings_id=settings_id).count() == 0
-        assert db.query(LanguageSettings).filter_by(user_settings_id=settings_id).count() == 0
+        assert db.execute(text('SELECT COUNT(*) FROM user_settings WHERE user_id = :id'), {'id': user_id}).scalar() == 0
+        assert db.execute(text('SELECT COUNT(*) FROM user_settings WHERE user_id = :id'), {'id': other_id}).scalar() == 1
+        for name in ('notification_preferences', 'language_settings'):
+            assert db.execute(text(f'SELECT COUNT(*) FROM {name} WHERE user_settings_id = 501')).scalar() == 0
+            assert db.execute(text(f'SELECT COUNT(*) FROM {name} WHERE user_settings_id = 502')).scalar() == 1
     finally:
         db.close()
 
@@ -229,18 +230,16 @@ def test_account_update_password_and_permanent_deletion(client):
     assert client.get("/api/v1/ai/history", headers=auth(new_token)).json()["total"] == 0
 
 
-def test_settings_can_only_be_read_or_changed_by_owner(client):
-    owner_id, owner_token = register_and_login(client, "settings_owner", "13800000003")
-    _, other_token = register_and_login(client, "settings_other", "13800000004")
-    created = client.post("/api/v1/settings", headers=auth(owner_token),
-                          json={"user_id": owner_id, "eye_protection": True})
-    assert created.json()["code"] == 201
-    own = client.get(f"/api/v1/settings/{owner_id}", headers=auth(owner_token))
-    assert own.status_code == 200
-    assert own.json()["data"]["settings"]["user_id"] == owner_id
-    assert client.get(f"/api/v1/settings/{owner_id}", headers=auth(other_token)).status_code == 403
-    assert client.put(f"/api/v1/settings/{owner_id}", headers=auth(other_token),
-                      json={"eye_protection": False}).status_code == 403
+def test_retired_preferences_have_no_routes_or_registered_models(client):
+    from app.core.database import Base
+    assert {'user_settings', 'notification_preferences', 'language_settings'}.isdisjoint(Base.metadata.tables)
+    for method, path in [
+        ('POST', '/api/v1/settings'),
+        ('GET', '/api/v1/settings/1'), ('PUT', '/api/v1/settings/1'),
+        ('GET', '/api/v1/settings/1/notifications'), ('PUT', '/api/v1/settings/1/notifications'),
+        ('GET', '/api/v1/settings/1/language'), ('PUT', '/api/v1/settings/1/language'),
+    ]:
+        assert client.request(method, path).status_code == 404
 
 
 def test_delayed_judge_cannot_write_after_account_delete(client, monkeypatch):

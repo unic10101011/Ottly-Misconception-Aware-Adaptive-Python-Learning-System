@@ -1,12 +1,11 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
-from app.api import auth, class_selection, settings, ai, coding, learning_history, guides, endless, execution_trace
+from app.api import auth, class_selection, ai, coding, learning_history, guides, endless, execution_trace
 from app.core.database import engine, Base
 # 导入模型类，确保SQLAlchemy知道需要创建哪些表
 from app.models.user import User, AIChatRecord, UserProfile
 from app.models.class_selection import ClassSelection
-from app.models.settings import UserSettings, NotificationPreferences, LanguageSettings
 from app.models.learning_submission import LearningSubmission
 from app.models.learning_review import LearningReview
 from app.models.guide_progress import GuideProgress
@@ -20,7 +19,7 @@ require_current_schema(engine)
 # 创建FastAPI应用
 app = FastAPI(
     title="AIGC后端系统",
-    description="整合认证、职业选择、设置和AI对话功能的后端系统",
+    description="整合认证、职业选择和AI对话功能的后端系统",
     version="1.0.0"
 )
 
@@ -36,7 +35,6 @@ app.add_middleware(
 # 注册路由
 app.include_router(auth.router, prefix="/api/v1", tags=["认证"])
 app.include_router(class_selection.router, prefix="/api/v1", tags=["职业选择"])
-app.include_router(settings.router, prefix="/api/v1", tags=["设置"])
 app.include_router(ai.router, prefix="/api/v1", tags=["AI对话"])
 app.include_router(coding.router, prefix="/api/v1", tags=["代码执行"])
 app.include_router(learning_history.router, prefix="/api/v1", tags=["学习记录"])

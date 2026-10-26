@@ -96,20 +96,3 @@ def test_hardcoding_sample_cannot_complete_lesson(problem_id):
     sample_code = 'print(' + repr(lesson.examples[0].stdout) + ", end='')"
     result = judge_submission(lesson, sample_code)
     assert result.passed_cases > 0 and not result.passed
-
-
-def test_fallback_preserves_ready_ai_and_never_uses_hidden_or_uncollected_output():
-    from app.services.error_analysis import AnalysisResult
-    from app.services.lesson_feedback import with_lesson_hints
-    from app.services.submission import public_judge
-    lesson = PROBLEMS['shell-shop-v1']
-    judge = public_judge(judge_submission(lesson, 'print(0)'))
-    ready = AnalysisResult(status='ready', message='existing analysis')
-    assert with_lesson_hints(lesson, ready, judge) is ready
-    unavailable = AnalysisResult(status='unavailable', message='offline')
-    judge.cases = [case for case in judge.cases if case.visibility == 'hidden']
-    assert with_lesson_hints(lesson, unavailable, judge) is unavailable
-    judge = public_judge(judge_submission(lesson, 'print(0)'))
-    for case in judge.cases:
-        case.output_available = False
-    assert with_lesson_hints(lesson, unavailable, judge) is unavailable

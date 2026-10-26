@@ -21,4 +21,4 @@
 
 ## 本机研究资料
 
-被 Git 忽略的 `live-ai-*.json` 和 `two-stage-diagnosis-experiment.md` 保持原位置，未加入仓库；是否继续保留或迁入单独研究目录，可另行讨论。
+Git 忽略的实验、数据与本机报告已整包移至 `research-archive/2026-10-26/`，原始文件内容保持不变。目录与复现边界见[本机研究资料归档说明](research-archive.md)。真实 DeepSeek 全流程验收要求继续留在现行文档中，待后续讨论完整测试方案。
