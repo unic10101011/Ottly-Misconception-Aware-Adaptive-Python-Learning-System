@@ -26,6 +26,7 @@ class TraceRequest(BaseModel):
 
 @router.post('/code/execution-trace')
 async def execution_trace(body: TraceRequest, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    user_id = current_user.id
     if body.problem_id not in REPLAY_LEVELS:
         raise HTTPException(status_code=422, detail='执行回放仅支持正式12关。')
     if (body.code is None) == (body.submission_id is None):
@@ -50,6 +51,7 @@ async def execution_trace(body: TraceRequest, current_user: User = Depends(get_c
     if len(code) > 6000:
         raise HTTPException(status_code=422, detail='首版回放只支持6000字符以内的代码。')
     require_lesson(body.problem_id, passed_problem_ids(db, current_user.id))
+    db.rollback()
     data = await run_in_threadpool(run_trace_process, code, stdin, supports_text=body.problem_id != 'shell-total-v1',
                                    supports_structures=REPLAY_LEVELS[body.problem_id] in {11, 12})
     data.update(problem_id=body.problem_id, submission_id=body.submission_id, code=code,
@@ -58,7 +60,7 @@ async def execution_trace(body: TraceRequest, current_user: User = Depends(get_c
                 test_case_label=('本题无需输入（演示不代表全部正式测试）' if body.problem_id == 'level1'
                                  else f'自选演示输入 n={stdin.strip()}（不代表全部正式测试）' if body.problem_id == 'shell-total-v1'
                                  else '使用下方演示输入（不代表全部正式测试）'))
-    trace_id = trace_sessions.remember_trace(current_user.id, data)
+    trace_id = trace_sessions.remember_trace(user_id, data)
     return {'code': 200, 'data': {**data, 'trace_id': trace_id}}
 
 
@@ -76,6 +78,7 @@ async def trace_explanation(trace_id: str, body: ExplanationRequest, current_use
     index = body.step_index
     if index >= len(data['steps']):
         raise HTTPException(422, '这一步没有实际执行快照，无法解释。')
+    db.rollback()
     async with session.lock:
         if index in session.answers:
             return {'code': 200, 'data': {**session.answers[index], 'cached': True}}

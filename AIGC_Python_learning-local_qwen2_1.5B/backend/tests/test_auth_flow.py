@@ -155,7 +155,7 @@ def test_account_update_password_and_permanent_deletion(client):
     assert client.get("/api/v1/auth/me", headers=auth(other_token)).json()["data"]["username"] == "account_other"
 
     changed = client.post("/api/v1/auth/change-password", headers=headers, json={
-        "current_password": "TestPass1234!", "new_password": "NewPass123!",
+        "current_password": "TestPass1234!", "new_password": "NewPassword123!",
     })
     assert changed.status_code == 200
     assert client.get("/api/v1/auth/me", headers=headers).status_code == 401
@@ -163,7 +163,7 @@ def test_account_update_password_and_permanent_deletion(client):
         "username": "account_owner_new", "password": "TestPass1234!",
     }).status_code == 401
     token = client.post("/api/v1/auth/login", json={
-        "username": "account_owner_new", "password": "NewPass123!",
+        "username": "account_owner_new", "password": "NewPassword123!",
     }).json()["data"]["access_token"]
     headers = auth(token)
 
@@ -199,7 +199,7 @@ def test_account_update_password_and_permanent_deletion(client):
     assert client.request("DELETE", "/api/v1/auth/me", headers=headers,
                           json={"current_password": "wrong"}).status_code == 403
     assert client.request("DELETE", "/api/v1/auth/me", headers=headers,
-                          json={"current_password": "NewPass123!"}).status_code == 200
+                          json={"current_password": "NewPassword123!"}).status_code == 200
     assert client.get("/api/v1/auth/me", headers=headers).status_code == 401
     db = SessionLocal()
     try:

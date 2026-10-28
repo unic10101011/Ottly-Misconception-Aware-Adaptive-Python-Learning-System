@@ -1,0 +1,108 @@
+{
+  "source": "Captured D06/D07 retest on 2026-10-28; public evidence only. No live calls.",
+  "cases": [
+    {
+      "id": "D06",
+      "problem_id": "coastal-markers-v1",
+      "code": "n = int(input())\nfor i in range(1, n + 2):\n    print(i)",
+      "judge": {
+        "status": "wrong_answer",
+        "passed": false,
+        "passed_cases": 0,
+        "total_cases": 5,
+        "cases": [
+          {
+            "case_id": "sample-1",
+            "passed": false,
+            "expected_output": "1\n2\n3\n",
+            "actual_output": "1\n2\n3\n4\n",
+            "output_available": true,
+            "errors": [],
+            "execution_time": 0.0,
+            "visibility": "public"
+          },
+          {
+            "case_id": "sample-2",
+            "passed": false,
+            "expected_output": "",
+            "actual_output": "1\n",
+            "output_available": true,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "public"
+          }
+        ],
+        "failed_tests": [
+          "sample-1",
+          "sample-2"
+        ]
+      },
+      "candidate": {
+        "code_observation": "代码用 for i in range(1, n + 2) 控制输出范围；range 的终点不包含。当 sample-1 的 n=3 时，range(1,5) 依次得到 1、2、3、4，所以前 3 行正确，但多输出第 4 行 4。当 sample-2 的 n=0 时，range(1,2) 仍得到 1，因而输出第 1 行 1，而题目要求不输出任何字符。",
+        "suspected_cause": "range 的上界多加了 1：range(1, n + 2) 会输出到 n+1，应让终点为 n+1（即 range(1, n + 1)）才能只包含 1 到 n；n=0 时当前写法也会错误输出 1。",
+        "evidence": [
+          {
+            "case_id": "sample-1",
+            "field": "actual_output",
+            "quote": "1\n2\n3\n4",
+            "explanation": "n=3 时 range(1, n+2)=range(1,5)，除正确的 1、2、3 外多产生 4，形成第 4 行错误输出。"
+          },
+          {
+            "case_id": "sample-2",
+            "field": "actual_output",
+            "quote": "1",
+            "explanation": "n=0 时 range(1, n+2)=range(1,2) 仍产生 1，因此本应无输出却输出了第 1 行 1。"
+          }
+        ],
+        "knowledge_points": [
+          "for 循环与 range"
+        ],
+        "misconception_tag": "range_boundary"
+      }
+    },
+    {
+      "id": "D07",
+      "problem_id": "shell-total-v1",
+      "code": "n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    total = i\nprint(total)",
+      "judge": {
+        "status": "wrong_answer",
+        "passed": false,
+        "passed_cases": 2,
+        "total_cases": 5,
+        "cases": [
+          {
+            "case_id": "sample-1",
+            "passed": false,
+            "expected_output": "10\n",
+            "actual_output": "4\n",
+            "output_available": true,
+            "errors": [],
+            "execution_time": 0.001,
+            "visibility": "public"
+          }
+        ],
+        "failed_tests": [
+          "sample-1"
+        ]
+      },
+      "candidate": {
+        "hint": "你的循环确实遍历了 1 到 n，但请逐轮观察 total 的变化：每轮结束后，total 里保存的是前面所有数的和，还是变成了某个单个数？想一想累加器变量在每次迭代时该如何更新。",
+        "knowledge_points": [
+          "累加器与变量更新",
+          "for 循环与 range"
+        ],
+        "question": {
+          "prompt": "使用累加器模式求和时，循环体内对累加器变量（如 total）的正确处理方式是？",
+          "options": [
+            "用当前元素的值直接替换累加器",
+            "把当前元素加到累加器已有的值上，并保存回累加器",
+            "在循环结束后再一次性把累加器设为最后一个元素",
+            "每轮开始前把累加器重置为 0"
+          ],
+          "correct_index": 1,
+          "explanation": "累加器的含义是“已经积累的和”。每轮应把当前元素叠加到已积累的值上并写回同一变量（如 total = total + i），若用当前元素直接替换，旧的和就丢失了，最终只剩最后一个元素。"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+
+> aigc-frontend@1.0.0 build
+> vite build
+
+The CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.
+vite v5.4.21 building for production...
+transforming...
+✓ 94 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                               0.50 kB │ gzip:   0.38 kB
+dist/assets/yonghu-0iptb1OH.png               7.47 kB
+dist/assets/chathaita-Cd3UDMcc.png            8.21 kB
+dist/assets/yunduo-CV19mzyN.png              72.59 kB
+dist/assets/xingxing-DmQlu4O3.png           101.87 kB
+dist/assets/ottly-message-CdMWUgRf.png      105.81 kB
+dist/assets/loginhaita-C1m6GWF3.png         161.75 kB
+dist/assets/sea_otter-CfIZFMgD.png          228.29 kB
+dist/assets/ottly-exercise-UVSToRlx.png   1,053.45 kB
+dist/assets/chatbeijing-BHG_ig1e.png      2,426.28 kB
+dist/assets/index-BpXMooIh.css               85.99 kB │ gzip:  18.62 kB
+dist/assets/index-GvKajEjC.js               282.32 kB │ gzip:  92.46 kB
+dist/assets/PythonEditorView-DtFWkvCW.js    376.32 kB │ gzip: 127.94 kB
+✓ built in 1.81s

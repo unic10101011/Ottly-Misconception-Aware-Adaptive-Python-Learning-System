@@ -1,0 +1,1551 @@
+{
+  "baseline_tag": "acceptance-baseline-2026-10-28",
+  "parent_commit": "921fd5d86eae02144b633a56739e04882fc1f2fa",
+  "backend_runtime_source_sha256": "6f5c639acf3831a9132568a9e3cfc6c1314ae9b09a4c8c4c5eb0565559a9c79d",
+  "backend_runtime_source_sha256_lf": "d58663f456514224746e08fff82be03433b426aabd816a115284f3e117a9b38b",
+  "normalization_note": "sha256 is the measured Windows working-file byte hash; sha256_lf normalizes CRLF to LF for source comparison after Git checkout. Acceptance evidence is preserved with -text attributes.",
+  "files": [
+    {
+      "path": "backend/.dockerignore",
+      "sha256": "ad5a7e17b94c245186d811571aa645f83c6048b946d7de235e6f1073f6ea01b3",
+      "sha256_lf": "1424bc7b5518b95aaf8969c1d266b270cd7d040ef83836d715c5f7cb788e2969",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/__init__.py",
+      "sha256": "dd2d11e422291a9e117500f2bc8feee4161fcbb64285692a731e0d9a79b1dbd1",
+      "sha256_lf": "dd2d11e422291a9e117500f2bc8feee4161fcbb64285692a731e0d9a79b1dbd1",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/api/__init__.py",
+      "sha256": "54b7525fc99f2773fdba5fd73b0e748344f36a9c1f16d12ba5522eb3c113e290",
+      "sha256_lf": "54b7525fc99f2773fdba5fd73b0e748344f36a9c1f16d12ba5522eb3c113e290",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/api/ai.py",
+      "sha256": "cc7356aa4b9aef44c45961ee174cf0c3eeb69858dd864222d6a8faad45704a4e",
+      "sha256_lf": "cc7356aa4b9aef44c45961ee174cf0c3eeb69858dd864222d6a8faad45704a4e",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/api/auth.py",
+      "sha256": "bbd3bd3a1a170b8ef46b912621d6556b693593dc3fa40c4def2bd235cd4d6d22",
+      "sha256_lf": "bbd3bd3a1a170b8ef46b912621d6556b693593dc3fa40c4def2bd235cd4d6d22",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/api/class_selection.py",
+      "sha256": "48df2d764930d836b1b850ebf3d61bacabe168dca01aaff98d9f486906387a7f",
+      "sha256_lf": "1b3ade93e5da5de771434e69bf566a146bd51884a48aa3188f169a510712a815",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/api/coding.py",
+      "sha256": "843b95a72b3550d7368d92bf49525a4c9500de6d70dfb63cefd86ebbe4c21f45",
+      "sha256_lf": "843b95a72b3550d7368d92bf49525a4c9500de6d70dfb63cefd86ebbe4c21f45",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/api/endless.py",
+      "sha256": "436f0c6615558ff7272dc964c265274dd874a2f652e3bff473ea3e185e95b63c",
+      "sha256_lf": "436f0c6615558ff7272dc964c265274dd874a2f652e3bff473ea3e185e95b63c",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/api/execution_trace.py",
+      "sha256": "4329a5696c1a65e42ee0b6268e04ce21a0853b9a89b9fd5d2febbb1edd928344",
+      "sha256_lf": "ef0e0f4935e4d6b928710a33ee628f15b7f985ef8e299c72f1fc5db331dd5e94",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/api/guides.py",
+      "sha256": "d8278265a00fe3bf9aa12f29f03fa8bc1043261170709d1cf624c7217156e3b4",
+      "sha256_lf": "273a6ab654ad86ec3a027d33820d53d6935eeb0073e61eb574b2a754c1696b49",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/api/learning_history.py",
+      "sha256": "f4926a85b348d597f5598e16939c7a3aa3e2c5e3729d34594929acd1d96846fb",
+      "sha256_lf": "f5d60250dae4b65e4d38f0ac2785b5f9e855e94483e218ccebf5b4f4ae14b853",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/core/__init__.py",
+      "sha256": "e5b3c6479b6a1ee642eb397ce5b9d20dce7a98e605c9095f67bddf984542f5aa",
+      "sha256_lf": "e5b3c6479b6a1ee642eb397ce5b9d20dce7a98e605c9095f67bddf984542f5aa",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/core/auth.py",
+      "sha256": "841fa8db2af99dd6eef8d066478050f6f7071a68c7f0bbb3ba97f72303145261",
+      "sha256_lf": "57483585b15ea67788cfd1a377061100350c451b6fd606b8901af4ab13c63876",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/core/database.py",
+      "sha256": "94283e88b5befc734c3283d1648177527ee28fb7772c4b085f40aeb6991ed350",
+      "sha256_lf": "d8f4b370b66a456a57e0a25531eae867e31038b1b38df30fff4a8ec63c1413b6",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/core/legacy_preferences.py",
+      "sha256": "5b96b2966907b39016a2f5e0aa8a4bd6960965d6f3821383f30acba377a6dadf",
+      "sha256_lf": "5b96b2966907b39016a2f5e0aa8a4bd6960965d6f3821383f30acba377a6dadf",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/core/submission_migration.py",
+      "sha256": "a76915593602dd36aa8742454beec1c69bfa9caf827cbacc2b9c83a400d7fcca",
+      "sha256_lf": "7491154c28fd5bd64e2a8c667b4f165cee2106be4cb780ea19d5313e21fe5fd5",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/data/badge-v1.json",
+      "sha256": "7c4d636feca1294fa1db26fc3065a5edde65a1157bd14ba8068bb4312656d21a",
+      "sha256_lf": "7c4d636feca1294fa1db26fc3065a5edde65a1157bd14ba8068bb4312656d21a",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/data/coastal-markers-v1.json",
+      "sha256": "a2b511d6dad792cf9db90212cebe152f6516630cd3b86306c899b3125225da93",
+      "sha256_lf": "a2b511d6dad792cf9db90212cebe152f6516630cd3b86306c899b3125225da93",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/data/count-at-least-v1.json",
+      "sha256": "41dff8fd55d291d229e9cdf02710fecebdade566123eec19852396371a818e70",
+      "sha256_lf": "41dff8fd55d291d229e9cdf02710fecebdade566123eec19852396371a818e70",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/data/greeting-v1.json",
+      "sha256": "eac14de2fb87f9beee7425f6a2e0034246884975e2714017befc3011e2ad9f07",
+      "sha256_lf": "39cf9bae423927ada79392d20434f44563dd4e92a0f824f8cc72da4ae0ad9047",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/data/guides/catalog.json",
+      "sha256": "70f529c4e6d5d2259f887a67540b53becf70f0bd700e99a82770f8323eaf4973",
+      "sha256_lf": "70f529c4e6d5d2259f887a67540b53becf70f0bd700e99a82770f8323eaf4973",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/data/knowledge.json",
+      "sha256": "4b3c5df6e3f632dabf83b73d57f70234f580989b84fb601cc745f2cd307143fc",
+      "sha256_lf": "7b11efaf4ea4b455fbafd52e4dabc9fed092372ec5621313f0157628d6ea2cb7",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/data/level1.json",
+      "sha256": "ea72b1988fc19a9d2978ae39cc3024179a1dc5a1e159496e4f675cf82b9e4f53",
+      "sha256_lf": "6341188147cb10dfddb0505c201069de325d1520555aaa81f2fdceaa7efcfe17",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/data/level2.json",
+      "sha256": "7ab6f43ae4e863c50e1290acbcf349d6e6191b49a84a68027ce2a92c6f7d21ee",
+      "sha256_lf": "5e235f527248b16989077cb77f5b903c5371cc5e602ca2e91433ca4f4a12d188",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/data/levels.json",
+      "sha256": "c2830aea99e322d069cd5b3fef90ab59f0c2dab0ceebb696ea4cc322c363f333",
+      "sha256_lf": "9720702398af025a2904b3ff85d71a7355c66ed7668591c1fcc69cfe452b5016",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/data/practice-03-4-v1.json",
+      "sha256": "f4571c1475fcfb01cbb2996a219a72fd668e218011b0b541aa7b205d6fd208cf",
+      "sha256_lf": "1a0b02b07b8433d4a11fc05a1365ebf65a9fd56d965e5bf449b6366f09d44f51",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/data/practice-03-5-v1.json",
+      "sha256": "c954306f61a3e7bb6c53f0ed4bc50aced671b43f806710d04f4be8de9e603f57",
+      "sha256_lf": "458efa7338b35c67df659fd5442b6b403aeca1837359aa8e1d31b4a2138473ca",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/data/practice-03-6-v1.json",
+      "sha256": "f1b51d5c9771e7d2585e932ea56904bcd3a542661de276231aa4e384cf392d34",
+      "sha256_lf": "4dbdc0549d4546b62140c90a0b048312bab03ccce5d1d206aebb0401443110db",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/data/practice-04-4-v1.json",
+      "sha256": "00d31d6fb082adcbec91e3ef6330a059422b37b09febb969d4f3fa6df9c731c4",
+      "sha256_lf": "407b136d6912d186577dad662eaa48df6508bdd548e888738867e524b8d15549",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/data/practice-04-5-v1.json",
+      "sha256": "89c78ca2bd3ec3a6a1bbc2a099f9845c4eec4d48432cca9005cd2e2414c1963e",
+      "sha256_lf": "27cb7a6af68ffceddaedbbe4326748408cf433b6b212ffb2a9c116cd3c71ecea",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/data/practice-04-6-v1.json",
+      "sha256": "d665402bc99744340d7eeb84a706020a9e17d9f4e146593abc3539e18231efad",
+      "sha256_lf": "8cb2129cca4b901e6a112eb3a734cc4525b9f7257855639a6d8085e830cb167e",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/data/practice-05-4-v1.json",
+      "sha256": "09c6de9685bb10739dfc1cb453db69d64c418b3913fde3f8e300583db864e7ee",
+      "sha256_lf": "408b3eff7d7662cde90417ab3062cb818dbfeccd061d06814fe8c0e71ddeeafd",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/data/practice-05-5-v1.json",
+      "sha256": "11256a905171ef9be85ce7b355b92f24a09d7537b83c5295c66a4db4dc740637",
+      "sha256_lf": "f8e8efbfc8c7b4f37aa1d6c8cc64c47f63f8b41e1d7e19643913c871fe9ac0fa",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/data/practice-05-6-v1.json",
+      "sha256": "30af4530c2112d9e442a45a186bbf1c100cae87ef087cc568b0667a5abf86ddc",
+      "sha256_lf": "c5982d1483fc986bb2aed1eee0ba3b849f886f35eea53a2629f2e34ec71d5222",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/data/practice-06-4-v1.json",
+      "sha256": "d566520145c14337d982269ba82dada2319b5e55a3a9709c150c08a90dc2c106",
+      "sha256_lf": "b3971f0a33c93542d443e9bbfbb3cd6ec1ca948ea346a1b71cda9518d89a203b",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/data/practice-06-5-v1.json",
+      "sha256": "eacd1f69a2e2ef9ca3ee78d9392d1889f2f0351e5694ff52daa47a8769ef3098",
+      "sha256_lf": "eb9d51618d53e85d58b403dbb56dcc6003c32e27e0e0165dc760bb09cd065890",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/data/practice-06-6-v1.json",
+      "sha256": "cb13ef57cb84e74b9fede3f00ecd7086b9e9ee5166c5305c523b3ba9f43dbd16",
+      "sha256_lf": "f7b9f06d17b8c867c74d8ed67d018d7d64f259a57d016aaadab6b2442e9def64",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/data/practice-07-4-v1.json",
+      "sha256": "7453dbb99eb19068dca82d642b2fafd697d2501fcdc66f09a0b553975f7b8b4d",
+      "sha256_lf": "83679cfbb07e8afaa21ad25e11e8af1e75a27458f265fb72e5c74b0ab6de7f62",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/data/practice-07-5-v1.json",
+      "sha256": "10501b5c047f0b3acd796d02374f5bf822dc8aac2861877ad28eaa2e67ad5ae8",
+      "sha256_lf": "ad7e9c2bebb17c208da8fed38a68deece3c8281fbee0789ba6c2a8d7b9babb49",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/data/practice-07-6-v1.json",
+      "sha256": "346ce8a8da788b6b0f1b668145284fa21d1b10c515252c5394f340aa9f99ff46",
+      "sha256_lf": "f6683e8bc17a85fc711abc0a182cbd3850e6d953064b55f4b47630d50046ed63",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/data/practice-08-4-v1.json",
+      "sha256": "1ed5e88c2617ced9c0cf888f6cbeba575c0db5a8accc7c68a149f401ca0ff026",
+      "sha256_lf": "ea7339799a8491f20016ef4c22d6c14ae382a6010f091b53373f41ff3a6cc3fa",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/data/practice-08-5-v1.json",
+      "sha256": "b344a8b2e160d7e0df016d713f7c5e454b32e82c4ca0edb9ff630d398ecb932e",
+      "sha256_lf": "6a95587ccccad8bc6caa812cc0179bb8a186c6d6c52f9b163cceca1b90f9321a",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/data/practice-08-6-v1.json",
+      "sha256": "94a09883e77bda8ca58cbb83a1e549bb8e2848c094003b3a0e8abdfcc6d301f4",
+      "sha256_lf": "1b27f7041847668a905aed96cf954a8c3fcf8833d6c058aa850f02443b9e3f28",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/data/practice-09-4-v1.json",
+      "sha256": "c368ebacd7871c1c9623642924b5a13c432be62813a93da622bf3e6ffdc05647",
+      "sha256_lf": "00d265bfd18fe73726e38ea08b2e7a7cdf19139aaeea73109bc17975356a19e1",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/data/practice-09-5-v1.json",
+      "sha256": "b0567166c974af05ac4901b4b9c2e3201462d69158a615589ca5dae934fd4bf3",
+      "sha256_lf": "992703940943a05232c146807a493cc449841ddd400853f07b4014cf8b85debf",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/data/practice-09-6-v1.json",
+      "sha256": "b11cce270931845a1370091a2d667202c0b60abcaa6a93b1aca05fe8ee5d9d7f",
+      "sha256_lf": "ae451af8e19d17408ebd6cef482e51db0f5aabc00d2fab31fdc69d0bee7fcc27",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/data/practice-10-4-v1.json",
+      "sha256": "e98ffb0a3030ac0c9f2028a59d817cbdc584e8369c113544ce2b62f2df047da3",
+      "sha256_lf": "3d8ded367cf2539c35ee97b7718f8b0d0990e5f36fb106894c18a807c952490c",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/data/practice-10-5-v1.json",
+      "sha256": "513dbeaede075efb11218a35d8935363b4c400c1daa4c3e7b13135cf9f071d5d",
+      "sha256_lf": "773cc6898db0da5327f9cbd16fa15c78c12e808854413cea80e473607de73708",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/data/practice-10-6-v1.json",
+      "sha256": "e814f9a5aad5a7687f3e16a775ed34121f97a51e18eb0424e1e829cc7022d5e4",
+      "sha256_lf": "fc4be9aa22eef59a75fd9c54e335470ab1d9a17083cd047ca72df5e00f9c6350",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/data/practice-11-4-v1.json",
+      "sha256": "54da5fe9d734c3f9f6e69375bb6a54075245ffacba2e7f56feb77ef710b68fcf",
+      "sha256_lf": "173a2f11816699da6f165576177adb4217305f8ceddeff547a50f182861ccbd8",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/data/practice-11-5-v1.json",
+      "sha256": "f4bf8f31550523c088972f1632393b9a1b1637a6c47944308b926342fbc607f5",
+      "sha256_lf": "02882cdbc66d0c6e9af7ce6263c5d3419d84ad3c8d2ad00ee1dda9741bd4de08",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/data/practice-11-6-v1.json",
+      "sha256": "3baf8b6c34eb39f421a4891d73dbdbf433e71fb65e62de15c4203e0964735473",
+      "sha256_lf": "a6cc75e172c73939812ac0994eb099f82ac750add3d130213fc4c8e3996f7d4a",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/data/practice-12-4-v1.json",
+      "sha256": "32dc12fb76e6590d47ad9281e7e45c5c12f5b99c7578059ff11d2ef3b59e6257",
+      "sha256_lf": "a6abbd9b15fe5fa4ac20ed9f471096a4841887b49af0f0f807a65622a3f23170",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/data/practice-12-5-v1.json",
+      "sha256": "e1b105d4d44308b18f9c192f7444b026c619358463dbe3823399c2aade35affc",
+      "sha256_lf": "dab097ba64be2e6433e773a00f250e0ebe68e08b345ead800da3828d6d07ba92",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/data/practice-12-6-v1.json",
+      "sha256": "5fa4a5a234dc707005f5c3c04fa3547006627b9013218a36ef17007c8c0fb927",
+      "sha256_lf": "faf01d025b1fdd3f3536bd3e999d932139d9c6f6e8c25d0950fa3dbb379e39ea",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/data/practice.json",
+      "sha256": "979aa38888b57acccf4eda3d0028c44ddfa5663e7e4a7733f42c77fc3517c981",
+      "sha256_lf": "a3ce46bd09f4201155fe2eaa805ebca59758fb8fb9345c215a8dbb4593b3d712",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/data/radio-text-v1.json",
+      "sha256": "f9dd5e438937e7f8f0a2c98bc918a1f0b836a77772912df2952dd762f0162ae8",
+      "sha256_lf": "f9dd5e438937e7f8f0a2c98bc918a1f0b836a77772912df2952dd762f0162ae8",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/data/safe-sailing-v1.json",
+      "sha256": "4994fa02bf0c1f7f9e36be872a50d071018650760de5b1931871d840b64edcae",
+      "sha256_lf": "4994fa02bf0c1f7f9e36be872a50d071018650760de5b1931871d840b64edcae",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/data/shell-groups-v1.json",
+      "sha256": "b112f6799fc371b3298c90b197371229afc5243fdc8519cf0ea70b992e2ab418",
+      "sha256_lf": "b112f6799fc371b3298c90b197371229afc5243fdc8519cf0ea70b992e2ab418",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/data/shell-savings-v1.json",
+      "sha256": "43db00657e726e2486db3e09da0a683e5e03e88cf68de3f48ae2d10a30a373b1",
+      "sha256_lf": "43db00657e726e2486db3e09da0a683e5e03e88cf68de3f48ae2d10a30a373b1",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/data/shell-shop-v1.json",
+      "sha256": "18838862144ab3d11f78b75ad40e377c052705b85b23e1a1abd71570a3a7c31b",
+      "sha256_lf": "18838862144ab3d11f78b75ad40e377c052705b85b23e1a1abd71570a3a7c31b",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/data/shell-total-v1.json",
+      "sha256": "09c78b44f564c380998462f2f0384c6a4afea55ee219f13b5a2c28153bedbb2e",
+      "sha256_lf": "c7d3bccb353c829122398fa67b766b2bad9e7e3c7a8aef336de61af999979019",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/data/temperature-max-v1.json",
+      "sha256": "9d5eaf459fb2ac5381d94517a9e50b411a390e9df5d4cd390d88609d6e470b27",
+      "sha256_lf": "9d5eaf459fb2ac5381d94517a9e50b411a390e9df5d4cd390d88609d6e470b27",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/models/__init__.py",
+      "sha256": "32776921e414591a71557e6d79a8b8d480bd6acdc8584fde81a9a33223616b85",
+      "sha256_lf": "32776921e414591a71557e6d79a8b8d480bd6acdc8584fde81a9a33223616b85",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/models/class_selection.py",
+      "sha256": "544bab10a4dc550ae35046307c9b26e4ee361f67acfc29ba965e44b5457f3083",
+      "sha256_lf": "f9ffc4531745c446cd317100e62627ec2a94d35714cc07d71a5c0a8ca7421df5",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/models/generated_problem.py",
+      "sha256": "07899ea605aab35520e413b8b3f8a5b5a1fa59f81dbb32a92c797cbc6d99c570",
+      "sha256_lf": "07899ea605aab35520e413b8b3f8a5b5a1fa59f81dbb32a92c797cbc6d99c570",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/models/guide_progress.py",
+      "sha256": "d97ffa41c17ad9f84f0cd78e8f40fb76c68115585bd485003e5544400e2b70d1",
+      "sha256_lf": "feda751804fc764f043a48f088864a25b6a8de00e5aa458f8b1c2dd1eaff29d3",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/models/learning_review.py",
+      "sha256": "ac6a292c41ea5e9c883fd2f4cdfbc92e513b2a821ae39a5d70788e72e7ba37d4",
+      "sha256_lf": "339391302d311b1ceb4c0ea3e3ab82d339d957d3c2d7b3a5a3e652fd24855177",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/models/learning_submission.py",
+      "sha256": "aebfaec8822284e539c500b1c3ebe14f10ceaef0d27321a5ae040d6d720e1343",
+      "sha256_lf": "e38501ba841b86f0a727e693b0df20946f75405accbf3bc986478cbe222e0cc7",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/models/user.py",
+      "sha256": "61aef1279ba404102e07dec01d7c98986a2b9b8d82a644062f609b27e2304e8e",
+      "sha256_lf": "cf1f2ad43d3001dcf7f50bc429809468f3012aa6fc4d1e115e98bb4cea188c93",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/services/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256_lf": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/services/ai_acceptance.py",
+      "sha256": "d3edbb15f4dc3caf994660f8c3f52ce87c3fe25f87d6c7e3558644b816cdc4af",
+      "sha256_lf": "d3edbb15f4dc3caf994660f8c3f52ce87c3fe25f87d6c7e3558644b816cdc4af",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/services/ai_operations.py",
+      "sha256": "6f216fe88561288b15066a7079c791885500868d5260415a0b6403966e43fb5b",
+      "sha256_lf": "6f216fe88561288b15066a7079c791885500868d5260415a0b6403966e43fb5b",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/services/endless.py",
+      "sha256": "3a07f097dde0092752884ca29dedfd7c26268459d9c9e6f2be4881299c348aed",
+      "sha256_lf": "3a07f097dde0092752884ca29dedfd7c26268459d9c9e6f2be4881299c348aed",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/services/endless_catalog.py",
+      "sha256": "78ee260120202c6a15fc3d2f594824616bcd6ca23454ceafeac87ea6092ea530",
+      "sha256_lf": "78ee260120202c6a15fc3d2f594824616bcd6ca23454ceafeac87ea6092ea530",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/services/error_analysis.py",
+      "sha256": "529301c398f8c7d79f6037a3ad1e0f9b2e083472cea4b438d7b70fddf8e230a3",
+      "sha256_lf": "deb9ea36d4133d08b718e3e2e19d3827c8d14210c0711e9c555fa8bfb39298c0",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/services/guide_questions.py",
+      "sha256": "4e6dcb698bba7de7ec5c36a868891dcdc823378738c054ab19593efeb8b670ff",
+      "sha256_lf": "53f1ad443383e7982a70653527c2562bee219456ff1d015fc6072c01fda0b86f",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/services/hint_quality.py",
+      "sha256": "2aae3efa6df765b1352e1919bb2892217fb36e8cba00471ac680a706af1791e1",
+      "sha256_lf": "ba1579bee3e592417df1262a1e051eea162e357c8b4358a02840c27fd3e14224",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/services/learning_contract.py",
+      "sha256": "4bf1c0a02dffc552fd48016e1ab4a47d2b1fa671720f9cec27f59c28339ba526",
+      "sha256_lf": "d85e67108603be9d2941f8940c00151cf7c30c19f8b1428dd76d2b51aa1f4af1",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/services/lesson_assessment.py",
+      "sha256": "c40910a51272e16585d65b2439a2dff9cdf747d0ca241d1d17889dcc3210d300",
+      "sha256_lf": "11ec248f2ed22f3a49176c5c3ce3befdf26b616065667fdd75876b56784961ea",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/services/misconceptions.py",
+      "sha256": "c448f50137a1985a463ddfdea79f6febc789aba995d2fcf26cbbeb90dec4011b",
+      "sha256_lf": "d6824effe662b7bd1a0465046ab63d58973bd1969bd48ee26c46a8b3ffc63e93",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/services/personalized_history.py",
+      "sha256": "08e9ac1d6ea63d3c4e1acde562c69931847f3bec648c149fecc89969a19727c3",
+      "sha256_lf": "9df86169f42f66bc4622968f86e14d90ce58a3756699dbe720c8e2735284984c",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/services/practice_recommendation.py",
+      "sha256": "f63b21cc0eae9142ae5cde5b7af7a49c6d363b2adb63dd593d5182562dbf92ae",
+      "sha256_lf": "f6cdd8220df76a3bff670c765bfe7e347575c7ec4c54e07b1bc646c194b0b06f",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/services/problem_catalog.py",
+      "sha256": "265205c9826d1cc6bd4d85a4ecd5307ba7ad65c4a2f4b0c9252717e27446ebcd",
+      "sha256_lf": "0acb7c55d01caf035aa2c37937a1a79f115c579023a7fcc4c9b55e8f6c3dea62",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/services/sandbox/__init__.py",
+      "sha256": "452b6d5ced2f6fd684c0d661ebfc5a5a8037559532340c66696a8347a6c0a1cf",
+      "sha256_lf": "964e646c840195e3922332f102544b704db3be2c4741bece215fa2200721fe66",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/services/sandbox/error_helper.py",
+      "sha256": "358a6b514b68a9da13f6d229b934d076b533938ff1ba275d0cb882ae013298ef",
+      "sha256_lf": "358a6b514b68a9da13f6d229b934d076b533938ff1ba275d0cb882ae013298ef",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/services/sandbox/limits.py",
+      "sha256": "f5b5fb77d483c319a9c1f95a94dc74628dceb89378f5fb2a56ead7463775a92a",
+      "sha256_lf": "f5b5fb77d483c319a9c1f95a94dc74628dceb89378f5fb2a56ead7463775a92a",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/services/sandbox/runner.py",
+      "sha256": "28c976355da36ff967f63fe9f1832da6d9982a8e6247d3b63a87ce8c8973f848",
+      "sha256_lf": "ff4e1b2aabc1cd19416c9c01e84309d8624322d0cc9566390921ac9bf10b3482",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/services/sandbox/sandbox.py",
+      "sha256": "892488c173ed63042c9a5eb25fd47288b108e730931359e6df9bd60878ce6e43",
+      "sha256_lf": "892488c173ed63042c9a5eb25fd47288b108e730931359e6df9bd60878ce6e43",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/services/sandbox/security_check.py",
+      "sha256": "61172d733d6a4ecb4c4f4c39a8d5bf97aedf4a6840a5d30334650b8fc33df651",
+      "sha256_lf": "61172d733d6a4ecb4c4f4c39a8d5bf97aedf4a6840a5d30334650b8fc33df651",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/services/sandbox/trace_actions.py",
+      "sha256": "0854b776935124e507e9980ba25b1465cd3b283af4f4ad72351ec6da9a25f11b",
+      "sha256_lf": "617f7125ec06f2b3bbb22a8c7ea7232d6ce5eeae6848195d79414ab6574c9a3c",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/services/sandbox/trace_runner.py",
+      "sha256": "579570b9b136c7b703ffe33fdd9e538030758874e6b42271f4481a478f1b57e6",
+      "sha256_lf": "50ecd7feee7812471d3e58fe180199146ad65dab63dcb09c776ada64a7f9693a",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/services/sandbox/trace_worker.py",
+      "sha256": "ead761e547d028a83a4e46c58fca027de228ab3d5ccdf76f54eb30b6e0b3f7af",
+      "sha256_lf": "fa957d48047c98fe7a4827c676be07be40afab58af70689396cfee29074db980",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/services/sandbox/worker.py",
+      "sha256": "c41a11b015f4886123944966916cb1589d229bb24cb21987f4912a3f8d46a95f",
+      "sha256_lf": "274186e5e56b67a9268b3959da818be3f13e14b84cd6802f3d9dea1644f73604",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/services/submission.py",
+      "sha256": "c0e2884a28dd252062a3ec35c9648bfa914f6d91002cb4270dc779a418e67745",
+      "sha256_lf": "95358ab7cb0cafc38f9af783a9b9c456d595f9681001ef3a79f4f47e55953e81",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/services/trace_explanation.py",
+      "sha256": "8115da8212a21f447adabee18dc23a76faf4ccad6fac52556b302145e83971e2",
+      "sha256_lf": "9bb23339f890073e778df1019a0f3e9ecff0843161935d3d47be9b8cb589e703",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/app/services/trace_sessions.py",
+      "sha256": "57803716ede475ce8362bd38409a11b64132be1ad205a635a181d4100cd85bc4",
+      "sha256_lf": "f30f50a4d0599866037d15eea0012c3ad20fc0836267836f228d30b2906e6376",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/Dockerfile",
+      "sha256": "e936280c0ec0df6722bae02f1d61e07b68cdc7976848dc59d5431df393c2acac",
+      "sha256_lf": "16b3ce914dfd1fc29473a1ea6bad272cad45f43adac91f246bf33da6b530a674",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/main.py",
+      "sha256": "2ef0720167c838bfb08615bcec5f3d9d31e198d2c89cb5ccd7790ec88439ae54",
+      "sha256_lf": "2ef0720167c838bfb08615bcec5f3d9d31e198d2c89cb5ccd7790ec88439ae54",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/migrate_submissions.py",
+      "sha256": "053a854ef1272ba3982a1dce02069412d405dfb8cb1635c29a326611b8c65558",
+      "sha256_lf": "0388e15cd59d9a86e6f75008e9612c4eac975e1a3ce93691d83da6c9d0af7d1d",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/requirements.lock.txt",
+      "sha256": "b0fdf63f0d6e7e02e37f3777a03279bd6b5b71c330af6e85dc47f8d9aa440593",
+      "sha256_lf": "b0fdf63f0d6e7e02e37f3777a03279bd6b5b71c330af6e85dc47f8d9aa440593",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/requirements.txt",
+      "sha256": "2828c9d921fe8f495e2c8dee76af8e926c6ec91d5acd9e9e4e7c4d5b1158b225",
+      "sha256_lf": "2828c9d921fe8f495e2c8dee76af8e926c6ec91d5acd9e9e4e7c4d5b1158b225",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/tests/data/dev12_ai_cases.json",
+      "sha256": "cd13cc392188c35f8bdffb6f628704c601d44c5a86f73a60d207975e0723233a",
+      "sha256_lf": "cd13cc392188c35f8bdffb6f628704c601d44c5a86f73a60d207975e0723233a",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/tests/data/feedback_validation_regressions.json",
+      "sha256": "9ce3c4b88e27913c9a39516a61d5108b8aad82fa7d03a4154724d7992681eea6",
+      "sha256_lf": "302e0c4513e7f28f52f486c41eb251fe8745550a6bf55e865fa0be20d089b7ee",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/tests/data/global_analysis_cases.json",
+      "sha256": "71dc971609cd0b075599eaa326204dc4699eb211a06cab266854d8a57de1fda3",
+      "sha256_lf": "71dc971609cd0b075599eaa326204dc4699eb211a06cab266854d8a57de1fda3",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/tests/live_dev12_ai.py",
+      "sha256": "7f7340b385cd25792c36d501971f65cf0dda0394ec716cbfdbc4e45ceef8b082",
+      "sha256_lf": "7f7340b385cd25792c36d501971f65cf0dda0394ec716cbfdbc4e45ceef8b082",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/tests/live_global_analysis.py",
+      "sha256": "7e65b3b3ad221f9722549a75d4abc26ec417bb881ed62e2a46c7371c7e118b61",
+      "sha256_lf": "faf715056b72ecdb1837a07e953573f244d06e103b9f9c088335ea25472b4531",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/tests/live_hint_quality.py",
+      "sha256": "8941e998f3c020fac45f170d66e9616057d6aa471f882e94531ce5fa0fad2bb7",
+      "sha256_lf": "b74218176383901ea6106d8b84aa5d7a554cd00a27ad233518925e7809e295d2",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/tests/live_personalized_acceptance.py",
+      "sha256": "fafef816e1de01faf686329681f1a62a8be770e4a9cdbb7dc80baaba0019316e",
+      "sha256_lf": "cff482752e8eac6040737fca3783549c9f8d8cdf6d4d22dce45961a76c0daec6",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/tests/live_submission_smoke.py",
+      "sha256": "ce0582c3cb11b563c7cca719b6f2820d30ba6210724d1b0b2fd6cfd1bdc64ac0",
+      "sha256_lf": "f1c6b1f7f66c26be04101ed0a317172fc8bdd00efaddbd635a8c2fb820568c08",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/tests/mysql_contract_smoke.py",
+      "sha256": "7354a799d70e88d672e5724a21fd88554656bd843abf981e7c06b9504446cd72",
+      "sha256_lf": "3b79a93a664f82494b2074658b03688c8f10f1827f91c074e3b244f03e1add12",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/tests/mysql_security_smoke.py",
+      "sha256": "2b45b21b30227210a5764b1de0c9136b3a5314fdb572a6fffe8b9f3617d2abbb",
+      "sha256_lf": "2b45b21b30227210a5764b1de0c9136b3a5314fdb572a6fffe8b9f3617d2abbb",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/tests/personalized_hint_eval_cases.py",
+      "sha256": "766fb362a1699f9520af415c52d5b5abd9be3a058e7c0838108df16dcf05b8b8",
+      "sha256_lf": "a9cd6fc750845121833c16d07ed1b41c6dddaa73cbcff3d89b756a4d6cd8b8e3",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/tests/run_personalized_hint_eval.py",
+      "sha256": "cec7768289997c86f86b6ee5a205f9052f1994e4b2e97070c08bea5965e03156",
+      "sha256_lf": "63fe370fcc148ea78011528de67d44405bf061482a6ee05cad3f52d9dd7905d5",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/tests/test_ai_acceptance.py",
+      "sha256": "b76ad1ca5d5bcdaffa2ec7c0589ca8167bb9fa9bc26b1f6eb776bf42a0f40dd3",
+      "sha256_lf": "b76ad1ca5d5bcdaffa2ec7c0589ca8167bb9fa9bc26b1f6eb776bf42a0f40dd3",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/tests/test_auth_flow.py",
+      "sha256": "318e12e222ae5c22d766fab019fdf59e99be0f477dedbb5f20f1bc2672762b8a",
+      "sha256_lf": "318e12e222ae5c22d766fab019fdf59e99be0f477dedbb5f20f1bc2672762b8a",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/tests/test_chat_session.py",
+      "sha256": "c9046f7c05f1782be7c453fe6ed1655c3d0f3c49943ccc8eeaacd20755b41468",
+      "sha256_lf": "206654a7f984756bd17316953318756b69dabf89ec63b7bbecfad516417c4ed6",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/tests/test_cloud_chat.py",
+      "sha256": "df66f8c0b76090202f8cc1f2d6bf6c9c9117d764f1017179e2a68d4a98e1e231",
+      "sha256_lf": "4d268ca4c95e4526ce911f7c388599dc037ce05cdeb272bd7db4ebe201399a9e",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/tests/test_deepseek_analysis.py",
+      "sha256": "a1451f1111431b961dd44c6132c2ad82dff1370ae129e2161eede3ee9385d4da",
+      "sha256_lf": "0cc9dbe71966c40f3ccee2a8695ee91270669f574309be42369cf2573c4f1dd8",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/tests/test_endless.py",
+      "sha256": "53edc91f5465e401159e6c65973f85918dbe9c8019c4cf47e5ed082fd4c653c5",
+      "sha256_lf": "53edc91f5465e401159e6c65973f85918dbe9c8019c4cf47e5ed082fd4c653c5",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/tests/test_endless_catalog.py",
+      "sha256": "4107b73abdd7ab9f11d59215ca669956783fbe617ce85e5322b4b7aa03b1ab12",
+      "sha256_lf": "4107b73abdd7ab9f11d59215ca669956783fbe617ce85e5322b4b7aa03b1ab12",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/tests/test_execution_trace.py",
+      "sha256": "e08a23e541e04dc56409eeaa54b2d59851442e3237fd745cfaf725d64faec8eb",
+      "sha256_lf": "41aad63e8e5c84893e58e664604f9f0470ac83fab624484511472f1cdf51908a",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/tests/test_feedback_routing.py",
+      "sha256": "cc5afacf3e7d1767258a1d9f4b1fd10a5d7f051245a50ef2f8a384beb41e3067",
+      "sha256_lf": "cc5afacf3e7d1767258a1d9f4b1fd10a5d7f051245a50ef2f8a384beb41e3067",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/tests/test_feedback_validation.py",
+      "sha256": "4580a24ef761f1c7d7e60bd5390d762b3ad66e6eecd2d092b793c0dc9d4aa190",
+      "sha256_lf": "4580a24ef761f1c7d7e60bd5390d762b3ad66e6eecd2d092b793c0dc9d4aa190",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/tests/test_first_seven.py",
+      "sha256": "1213a8155b77018ef6ea8155d074ea69accfb414d5e92ce210eda391854c6dca",
+      "sha256_lf": "17a43225b7001febadc8f004c927178f54edf8fcbd4e450fa18981a6955042e0",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/tests/test_global_analysis.py",
+      "sha256": "6b064550523b2a2867190ce70b75e5f4565a4a62897014e3a848063efd2099a4",
+      "sha256_lf": "bfa628c0e1493a7269bd85ea9144b267a06733590b5cc76d15e0af12808c373d",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/tests/test_greeting.py",
+      "sha256": "84a88b9f388c7de7c84a7efa02c9bab998f289c809616ef5e419b7c4f712d8f5",
+      "sha256_lf": "808788518eb991010981da8ea7a295b011a9286e0c3105efd4b14eead8953b0a",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/tests/test_guide_questions.py",
+      "sha256": "b663b55dedf3bc3760f034f5dc40404b63796a6a400afb5abd22945726d14ef1",
+      "sha256_lf": "b663b55dedf3bc3760f034f5dc40404b63796a6a400afb5abd22945726d14ef1",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/tests/test_guides.py",
+      "sha256": "b3164976fa5cc2404841e4ef7e675c4cc92f4d549bd47868887ae772e35c1231",
+      "sha256_lf": "412fc983618fdeb22732debabc78f55e9aca6f65c910a6a37b924fe31295104e",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/tests/test_hint_quality.py",
+      "sha256": "2f4ad39723d1070eb8135e3c500498788af062a4c77f11d8993364ce5851acbf",
+      "sha256_lf": "302ffa9356ee9758c3a1eabe61f9436ebba089dda8b41c41c09d48915b798570",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/tests/test_last_five.py",
+      "sha256": "1e5497013c8ab1f77bfb0c73efc2ecb849b0ca4d2346280db7224aa3bd1fb28b",
+      "sha256_lf": "1e5497013c8ab1f77bfb0c73efc2ecb849b0ca4d2346280db7224aa3bd1fb28b",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/tests/test_learning_contract.py",
+      "sha256": "34326b6ac9d971c30ba32c5cb66b89f27f158f8adb32f3270fe0ca5ec2f6b076",
+      "sha256_lf": "2c4c67009f6db3ef5b9955764d38298cb205a0b072bb853edcfa469d675d5344",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/tests/test_learning_history.py",
+      "sha256": "fdea4212b1cb82cad2ae2c73cb8cbbf87bc8808126b770e12fce49b3bc74e16d",
+      "sha256_lf": "10860b24e5c3af3fbdf7fe8d95b8d6121a67e7bdb27eb6dcab0aafe1b507b499",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/tests/test_legacy_preferences.py",
+      "sha256": "a56552b3db8f16a14e4e65509ae058db47efb04f6bcb28be4f86b96a8264e9d9",
+      "sha256_lf": "a56552b3db8f16a14e4e65509ae058db47efb04f6bcb28be4f86b96a8264e9d9",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/tests/test_personalized_hint_eval_cases.py",
+      "sha256": "75a9baa8eda279be3a1fa34d004787a69e91534cd99db832dd4d6a6f0d588b75",
+      "sha256_lf": "3938425530ed893b32e66050c6d7dd08d3e572a854774be54e4fb0e22e0ee031",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/tests/test_personalized_history.py",
+      "sha256": "f6d913a2a15556c73ebaaa40912245dcb94fe3e490bc8605fce0902266d2f33b",
+      "sha256_lf": "037e1c37a83344a3ccb8525522fdb4077390a671ad2805ff1c67701ee710ff91",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/tests/test_practice_catalog.py",
+      "sha256": "d1916e7343981dc37bbffebad1c596c6fa7ca9cc143925f783184a156f6e6a9f",
+      "sha256_lf": "0f6de52284e1eb9bae34b50d52ac0ceece2e94f7458f5a5e7499e994f2705e01",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/tests/test_practice_recommendation.py",
+      "sha256": "c055361d0a53e1b389d409f734a2e12a5eb0de1eed906f4f9a8aeeea61028ea8",
+      "sha256_lf": "c6c4d94403b6708161b1be346cb64612d69a27fa2cd5d46ffd094c698fb3ff16",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/tests/test_problem_catalog.py",
+      "sha256": "93b8b2cb5c5a300a92ac792f8bc505f5dae2a3a8481cc8210d28e95b34fca5a5",
+      "sha256_lf": "1d5bed38045ffbe2f489e1feef15482ab347ea002f60325ad7fb6c77cd441ea3",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/tests/test_profile.py",
+      "sha256": "174ebcecd2f90270765724b0dbcd12f76a88a3dc70782d333f13c966f5e92288",
+      "sha256_lf": "b920cf8b112aa4857d98729b4ee094763d9203454608d057b091a686e640da7a",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/tests/test_runner.py",
+      "sha256": "ba565e289d359c9e00860fccc9abdf4331aec5fda9124f1fd6d46b9322fa8f4b",
+      "sha256_lf": "a5b9d0fdfb2f426cf288bc85dd0a4d9ab7d1b6c87be960fd0341b71ca416dad9",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/tests/test_security_regressions.py",
+      "sha256": "599322b726972a609c08937f73ead878c4c887974990d644635ccc8db8bb76f4",
+      "sha256_lf": "599322b726972a609c08937f73ead878c4c887974990d644635ccc8db8bb76f4",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/tests/test_submission.py",
+      "sha256": "b19b5713e1f41f28dba6f70326ba3b1195e0f6a1ab3392b843f61017e187ff8f",
+      "sha256_lf": "4d3943597076cc9e5fef973aea442fe3134193d773616732b36629c9acdf89ed",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/tests/test_submission_migration.py",
+      "sha256": "4b4348169e3c92926ecd1b06734ae888339b78f4f0108711c29104228a6135be",
+      "sha256_lf": "99c5a8a27cf57e223a158fe21cdb455914f76d80e2a95dbe9c069380d3e263fd",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/tests/test_trace_actions.py",
+      "sha256": "ca8b2a291a3989a3440367f69d5166237b6339fedd3a27108e4eebcd01741a79",
+      "sha256_lf": "1ea190a117ef18045ba423b8b618b53657521648ffddf8f87ca301985f2aa6c0",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/tests/test_trace_explanation.py",
+      "sha256": "96889ce0ad6f3a652290df966a47545a6d18c0b8133564f0bd2b8b0f4b5f9388",
+      "sha256_lf": "0591cd2e83aaf915c6890dd3ac3cc2b36e781721bc8d07b7aa45a318a56c4485",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/tests/verify_practice_content.py",
+      "sha256": "fab6ff7fd9527d30a300b8bd675dd0530b68e7687c42e7dcee0d3211b95b8f9a",
+      "sha256_lf": "af3458495ed839b2662f2486a7f37ea8568185b82931997fef7bcc56565c576f",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/validate_catalog.py",
+      "sha256": "17f7c876685bb1613a336499ddac596f10c203e68160f2c6e3aee4af2c21fc92",
+      "sha256_lf": "fb882ab1aaa58da7f48c09c7589522590abcbce551d1a84cff4bdfef91ab42fa",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "backend/write_endless_problem.py",
+      "sha256": "d1f22ca98432b6ce480ff018699b1cdbb10b78402ddd15fc06e05c38614701d0",
+      "sha256_lf": "d1f22ca98432b6ce480ff018699b1cdbb10b78402ddd15fc06e05c38614701d0",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "compose.yaml",
+      "sha256": "1779841d46b412e584332b7f1adf886a52f6a3dc71a31d85ff4ee56e4574b66b",
+      "sha256_lf": "b47c801eae9ded17104264d5c15aeb400d2e425228affa81254b00cae214b34e",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/.dockerignore",
+      "sha256": "e54686bcc27e7ad37769d4713f778e53bd1151fefb1b602886fcabf6e56553c6",
+      "sha256_lf": "51b683467baace87247effed923b8aaecc559168ba0efbb43fd4714a8dc19362",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/Dockerfile",
+      "sha256": "4ceec1bef61c7f21d8f16edce07db23a758cb7c1f693c1bfe12301abd12982c1",
+      "sha256_lf": "9fab5cc284d8fe17dbcd692544b4ca3e13e8c66cc42be12487af164cec111234",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/index.html",
+      "sha256": "5babf0783df9b4c7656d758547217789dba367ab8b4203ef417bfc40562acabc",
+      "sha256_lf": "37f66a6c611e4a151c174a6ddf883a9ce20adbcb63c8230ad60e0e3cd324aa9f",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/nginx.conf",
+      "sha256": "6ca9c4a85d27c33484f1583ec0295993a580706eb166363d55c358a75219fb79",
+      "sha256_lf": "21c1d2fa2c3b27de706917b0fba53a481c13ad66f174d940a475750fcac322dd",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/package-lock.json",
+      "sha256": "b2c3a4d896280ab33687fdde6ab03b0d29b7c4c01ac1e40663e4894cc171f33d",
+      "sha256_lf": "f64a080fd5f2301cf3a6115f8d7bc6ad3d6caf9056987f72e6d8115bd048d0f8",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/package.json",
+      "sha256": "86de9e6d404a9b1d6b75041bdc72e301e5d7c0f643615ebfa524e465ee48f4d2",
+      "sha256_lf": "bb6b70a3780acbc2011b70465c82fa478a26aa02030309cdaa4f57c888cbeb0b",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/public/beginner-assets/peek.png",
+      "sha256": "c7427b5d7fe2a83a9ba2e7570a23a266e50b683aa23e703fc883cada13032ada",
+      "sha256_lf": "c7427b5d7fe2a83a9ba2e7570a23a266e50b683aa23e703fc883cada13032ada",
+      "text_lf_normalized": false
+    },
+    {
+      "path": "frontend/public/beginner-assets/point.png",
+      "sha256": "6792a13431cf67df6db7c0cb2d43d8e9983cbbdb4dd26ddcbbaed7a76e60b9f7",
+      "sha256_lf": "6792a13431cf67df6db7c0cb2d43d8e9983cbbdb4dd26ddcbbaed7a76e60b9f7",
+      "text_lf_normalized": false
+    },
+    {
+      "path": "frontend/public/beginner-assets/welcome.png",
+      "sha256": "cc29562b17f9900e618f58d044a00cf486c38bc165fa589b9ad62790887a3d93",
+      "sha256_lf": "cc29562b17f9900e618f58d044a00cf486c38bc165fa589b9ad62790887a3d93",
+      "text_lf_normalized": false
+    },
+    {
+      "path": "frontend/public/lesson-illustrations/第一关.png",
+      "sha256": "6afef5a1bc33d4e2a8752129c966467362b5d8f35b30452d6f865529dc065e2c",
+      "sha256_lf": "6afef5a1bc33d4e2a8752129c966467362b5d8f35b30452d6f865529dc065e2c",
+      "text_lf_normalized": false
+    },
+    {
+      "path": "frontend/public/lesson-illustrations/第七关.png",
+      "sha256": "6572bf6e3a0e6bed2b3081695691a0836829693a08dd2d03c891ab3903e4cae5",
+      "sha256_lf": "6572bf6e3a0e6bed2b3081695691a0836829693a08dd2d03c891ab3903e4cae5",
+      "text_lf_normalized": false
+    },
+    {
+      "path": "frontend/public/lesson-illustrations/第三关.png",
+      "sha256": "14c4f3591cf4f52325d6d06f9c16991717cb3a88f6cb052ea5db093b2d68fa01",
+      "sha256_lf": "14c4f3591cf4f52325d6d06f9c16991717cb3a88f6cb052ea5db093b2d68fa01",
+      "text_lf_normalized": false
+    },
+    {
+      "path": "frontend/public/lesson-illustrations/第九关.png",
+      "sha256": "23a4cfe4de38ed1b215ff53aed0c06c447c9e20b57010437a7dd3f74df41019d",
+      "sha256_lf": "23a4cfe4de38ed1b215ff53aed0c06c447c9e20b57010437a7dd3f74df41019d",
+      "text_lf_normalized": false
+    },
+    {
+      "path": "frontend/public/lesson-illustrations/第二关.png",
+      "sha256": "6b46540f4d659bd326770d553f541610562f956bb0254f56e9828e5ff2d6148b",
+      "sha256_lf": "6b46540f4d659bd326770d553f541610562f956bb0254f56e9828e5ff2d6148b",
+      "text_lf_normalized": false
+    },
+    {
+      "path": "frontend/public/lesson-illustrations/第五关.png",
+      "sha256": "f7af54aa7793845652bf6b88b82a23b02d2f8bacc59bb0f67e78e69ac2f0ffa3",
+      "sha256_lf": "f7af54aa7793845652bf6b88b82a23b02d2f8bacc59bb0f67e78e69ac2f0ffa3",
+      "text_lf_normalized": false
+    },
+    {
+      "path": "frontend/public/lesson-illustrations/第八关.png",
+      "sha256": "db2ba589e5f1d3b1e890c05dcb5d8873b5d3a08dc5590921dfbb11e60857f1d5",
+      "sha256_lf": "db2ba589e5f1d3b1e890c05dcb5d8873b5d3a08dc5590921dfbb11e60857f1d5",
+      "text_lf_normalized": false
+    },
+    {
+      "path": "frontend/public/lesson-illustrations/第六关.jpg",
+      "sha256": "a8164c19f84dc744fd38d05e374ed98e2748adf4ca76a0bf9c9186acd9bff779",
+      "sha256_lf": "a8164c19f84dc744fd38d05e374ed98e2748adf4ca76a0bf9c9186acd9bff779",
+      "text_lf_normalized": false
+    },
+    {
+      "path": "frontend/public/lesson-illustrations/第十一关.png",
+      "sha256": "b558b332bcdd94ed0d8bcbcdbb03a710575a003c46045f1a068a785a20caaa81",
+      "sha256_lf": "b558b332bcdd94ed0d8bcbcdbb03a710575a003c46045f1a068a785a20caaa81",
+      "text_lf_normalized": false
+    },
+    {
+      "path": "frontend/public/lesson-illustrations/第十二关.png",
+      "sha256": "6ac8e252ddd9df2279fb53820c26332a55699f748dcf49d16a1bc5cf7f2c4e66",
+      "sha256_lf": "6ac8e252ddd9df2279fb53820c26332a55699f748dcf49d16a1bc5cf7f2c4e66",
+      "text_lf_normalized": false
+    },
+    {
+      "path": "frontend/public/lesson-illustrations/第十关.png",
+      "sha256": "1d8b1ba2e9e508410cf57045079df760339fc6a8f310d96b98b0a9d2ec79c343",
+      "sha256_lf": "1d8b1ba2e9e508410cf57045079df760339fc6a8f310d96b98b0a9d2ec79c343",
+      "text_lf_normalized": false
+    },
+    {
+      "path": "frontend/public/lesson-illustrations/第四关.png",
+      "sha256": "324b1341781f95963e3af32654cde07cfccabdd9b06b82d175f547b3d36bed7c",
+      "sha256_lf": "324b1341781f95963e3af32654cde07cfccabdd9b06b82d175f547b3d36bed7c",
+      "text_lf_normalized": false
+    },
+    {
+      "path": "frontend/public/level-icons/bingo.png",
+      "sha256": "02d0c6a6ef2f25b2290589b86417eb27c7f9b11a6cde5dd70be71b72006c186f",
+      "sha256_lf": "02d0c6a6ef2f25b2290589b86417eb27c7f9b11a6cde5dd70be71b72006c186f",
+      "text_lf_normalized": false
+    },
+    {
+      "path": "frontend/public/level-icons/第一关.png",
+      "sha256": "c0e834798eb1324997f6abf045d1610fe1e6846b40c99c6a58edd33d24e6d7f2",
+      "sha256_lf": "c0e834798eb1324997f6abf045d1610fe1e6846b40c99c6a58edd33d24e6d7f2",
+      "text_lf_normalized": false
+    },
+    {
+      "path": "frontend/public/level-icons/第七关.png",
+      "sha256": "50ca454ccb1a3f699707d42a760238aa7b162191acc80b81d776517e48cfa1a9",
+      "sha256_lf": "50ca454ccb1a3f699707d42a760238aa7b162191acc80b81d776517e48cfa1a9",
+      "text_lf_normalized": false
+    },
+    {
+      "path": "frontend/public/level-icons/第三关.png",
+      "sha256": "4d9fd0001be56cf53f70280eb8bb11e9e1d94b7654fbf9dcbfead029222fb34c",
+      "sha256_lf": "4d9fd0001be56cf53f70280eb8bb11e9e1d94b7654fbf9dcbfead029222fb34c",
+      "text_lf_normalized": false
+    },
+    {
+      "path": "frontend/public/level-icons/第九关.png",
+      "sha256": "3795c07b30c89aafb294c90f7bfc0f0caf7f87ababdb848bd9ef53464dad78ac",
+      "sha256_lf": "3795c07b30c89aafb294c90f7bfc0f0caf7f87ababdb848bd9ef53464dad78ac",
+      "text_lf_normalized": false
+    },
+    {
+      "path": "frontend/public/level-icons/第二关.png",
+      "sha256": "26832d37c85c8d473e3428ae0ad48f9b8016c52144b73f68338c25f0c6b0b2c8",
+      "sha256_lf": "26832d37c85c8d473e3428ae0ad48f9b8016c52144b73f68338c25f0c6b0b2c8",
+      "text_lf_normalized": false
+    },
+    {
+      "path": "frontend/public/level-icons/第五关.png",
+      "sha256": "113e79c52dbb8ddf89722759bedb3daa4c17ab27d89b6d669bde8d88e3d161f9",
+      "sha256_lf": "113e79c52dbb8ddf89722759bedb3daa4c17ab27d89b6d669bde8d88e3d161f9",
+      "text_lf_normalized": false
+    },
+    {
+      "path": "frontend/public/level-icons/第八关.png",
+      "sha256": "5feba89d738417fbd10d277292383e1247db65c65d805b5c43969d49266d2cd4",
+      "sha256_lf": "5feba89d738417fbd10d277292383e1247db65c65d805b5c43969d49266d2cd4",
+      "text_lf_normalized": false
+    },
+    {
+      "path": "frontend/public/level-icons/第六关.png",
+      "sha256": "782a608e3ad91ed10e58ee96d237726d3e243acdca603597a06a4948b6ead2f6",
+      "sha256_lf": "782a608e3ad91ed10e58ee96d237726d3e243acdca603597a06a4948b6ead2f6",
+      "text_lf_normalized": false
+    },
+    {
+      "path": "frontend/public/level-icons/第十一关.png",
+      "sha256": "a841c3e425c89bf7f8651653ac7f67f6854d6c75312af94b461bc27c19d20f05",
+      "sha256_lf": "a841c3e425c89bf7f8651653ac7f67f6854d6c75312af94b461bc27c19d20f05",
+      "text_lf_normalized": false
+    },
+    {
+      "path": "frontend/public/level-icons/第十二关.png",
+      "sha256": "e78aa669c875f6f1c92934d77a9d35f15bb413791b66aab63be9cacc7835f4de",
+      "sha256_lf": "e78aa669c875f6f1c92934d77a9d35f15bb413791b66aab63be9cacc7835f4de",
+      "text_lf_normalized": false
+    },
+    {
+      "path": "frontend/public/level-icons/第十关.png",
+      "sha256": "87bdb76986ecdf324b407fced66b82b84eca2452c3b0d64ffd6982f8c0fc7304",
+      "sha256_lf": "87bdb76986ecdf324b407fced66b82b84eca2452c3b0d64ffd6982f8c0fc7304",
+      "text_lf_normalized": false
+    },
+    {
+      "path": "frontend/public/level-icons/第四关.png",
+      "sha256": "da5a999799ef253e8366e44f42dfd05f68adbd5042ec6336573b0918b857b2c4",
+      "sha256_lf": "da5a999799ef253e8366e44f42dfd05f68adbd5042ec6336573b0918b857b2c4",
+      "text_lf_normalized": false
+    },
+    {
+      "path": "frontend/public/story-assets/ottly-portrait-transparent.png",
+      "sha256": "1792864053b2b7f7621b9a993fcf6ba47f06795cfa1ef2d292926abfd722b78c",
+      "sha256_lf": "1792864053b2b7f7621b9a993fcf6ba47f06795cfa1ef2d292926abfd722b78c",
+      "text_lf_normalized": false
+    },
+    {
+      "path": "frontend/src/App.jsx",
+      "sha256": "fdc8c39475fface4a0762f4a7b8c69a590a38281227635dc769ced41aec8f69a",
+      "sha256_lf": "537d5a745984195f7b81a4a1c798fd81a9591c23519dad6facf3b611d35abdf5",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/src/components/ChatContent.jsx",
+      "sha256": "40ec78530ef3c9c7c3204b16e4685f203f2291d1e15c1ea132a4bd344f133f4a",
+      "sha256_lf": "ab1c7d200dd7fee9ed15715bc5250553c992d7094f4cc85ef740564fe1956737",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/src/components/codeApi.mjs",
+      "sha256": "6d7bcc0c152ee6443449fa0fbd30622ad72ec9407ff51888a4688aa294234094",
+      "sha256_lf": "06dc4f894f4eadb838de94d91550979e32947b0e1c062aa5b3bee6223f709b58",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/src/components/codeDraft.mjs",
+      "sha256": "f16ea930a081b90de54f518b4fb82f425f92a08521ba2d22dea4e0d7cbb9752e",
+      "sha256_lf": "0b436df8faa9b7770d2372c4e82614220a3957b2ee0419fe504a397a567ad204",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/src/components/CodeEditor.jsx",
+      "sha256": "b05148e9286702fb2107be883b95153dcbe80231054e6c3d3f20f5230083d217",
+      "sha256_lf": "e54c3f4103c6b4c70a5586e1688df5dfd697e86047b1d2b14d2a63d4a2554aa3",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/src/components/EndlessChallengeModal.jsx",
+      "sha256": "65d40a1426737b1820d64c26255c6095da11671f572f48f3b35e2360c6513d45",
+      "sha256_lf": "65d40a1426737b1820d64c26255c6095da11671f572f48f3b35e2360c6513d45",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/src/components/ExecutionReplay.jsx",
+      "sha256": "6816909c86b3b86dcd6512fe47ca24e758a4dc54571f4d022b22966ec21fd555",
+      "sha256_lf": "f73012b6d0b41dd2ff3d7ef173c6a006ba7b6eacb2ad0c3b4acb53768143edb8",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/src/components/executionReplayConfig.mjs",
+      "sha256": "60f3a7c82464111aee4d00ec8a5f61c38e7ba389d4f0e167da250e1b3da61bba",
+      "sha256_lf": "c222cdd7d0c5b100e550cb4f4f21ecaf87d4ab14cb1956092d1cf68909d75ba9",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/src/components/Layout.jsx",
+      "sha256": "b9453b6541e7a80c2f84f672c29c7f6b70604a14be0c992bcdd0274dbeee4f89",
+      "sha256_lf": "7799f8906b8bfbf792831b638444de1f525fcd7bde9b9f78447808c442e51d1c",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/src/components/MisconceptionOverview.jsx",
+      "sha256": "5981e2e246b6b8d69730bcafe35289a4674111dd3caa1214d4921ec196753343",
+      "sha256_lf": "3a320cf61d593955bc656388f3bf10df97fa2c2f3be3a4ef3dbfd8920ff621e2",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/src/components/mistakeGrouping.mjs",
+      "sha256": "073b81fefe7cc215cf0fbf526d22756d475974ebedbdcff860b1c1884d327e60",
+      "sha256_lf": "329674baabdf2a3368ea1f2658830cd38b2ab601a8673c9462fe54d5d4c0dcc3",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/src/components/PracticeRecommendationModal.jsx",
+      "sha256": "45d61fd1a51d799d242f812bea4b9e256c19cb2326ecf382bc142aa6b2550b69",
+      "sha256_lf": "45d61fd1a51d799d242f812bea4b9e256c19cb2326ecf382bc142aa6b2550b69",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/src/components/ProblemMetadata.jsx",
+      "sha256": "3da19ed645ebd0ebdd8ba510a7a5b0c562f34be31a2703215248c0806d6bc795",
+      "sha256_lf": "e758fe203ddea1d9974ae71fcdc88adc9afd46535f07d02df877949eb9d1b14d",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/src/components/PythonEditor.jsx",
+      "sha256": "4f1d35ff92ed75698cf521ff4d643d35affb60416196fa07895186362eb18a37",
+      "sha256_lf": "a69d32489fd61ced54c943b7af8910bc7131aab6756f0074d3944b2155844c65",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/src/components/pythonEditor.mjs",
+      "sha256": "8dd90d7b3302cf72c3c588296a71f57da115e47c2ef45259e4230b19eace2cf6",
+      "sha256_lf": "079a2dbcb18a0cb1cc53328d59794f8d6d554ca4e4c118def5a020164e2e99e2",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/src/components/PythonEditorView.jsx",
+      "sha256": "674be1b450919887ee6e9bc6e8d86e756e5150635db0af89259c2636da8000ff",
+      "sha256_lf": "7c905066ed8bb03de95367593ac4e4ae2beb51a3332641bc57edfcc306e90239",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/src/components/StatusStamp.jsx",
+      "sha256": "f557e3f344d0dd0cfa0463eeb27786d26d81e01463fd891550be192c9a96c392",
+      "sha256_lf": "7b1f857a42a51f5b00146365789fb8307cb64ac6ba5ed3f246428775c76c9759",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/src/components/story/beginner-tour.css",
+      "sha256": "dccdfd0249873255c2e49b983089dadebe3132ed47e6072d96df548a4a990d3c",
+      "sha256_lf": "820b73e8d3c76397adeace43fb46c3bae85b9d7df26418f3155c5b5ca372b682",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/src/components/story/BeginnerTour.jsx",
+      "sha256": "33ae6161aa1718f5054325ab3c1956c535b5cb2a73f0cd8a797bd90916d996ce",
+      "sha256_lf": "6a69a83e2f77f3ba2a9306f19331a573b97b2ceaff3ffc2f3b16fa10d632e99f",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/src/components/story/LessonIntro.jsx",
+      "sha256": "7467f5c54aeaaefeefd37ad9eb843fadedbf5830b813bae855954d54cdff4279",
+      "sha256_lf": "bdf6f520994944973344e391b6366bc6ba81ebae20f14aa0c12817e03fbe7e34",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/src/components/story/StoryDialogue.jsx",
+      "sha256": "56bfc466c55e767fb22caccf20598180eec4771642611d61a43c6ff913843aa7",
+      "sha256_lf": "c3f23cd14ed70f8b4c65f684eb9905ceb14640535050b1260a507ed45f2ea078",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/src/components/story/storyEngine.mjs",
+      "sha256": "f5eee4e940e42a3c028b38a301edae506615b794a851c99c1444515a6653e976",
+      "sha256_lf": "a23bc1ac70a53ea2e6f2e3cc6cb22c319c56b0e8eaddb7803fd5ee093bd49011",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/src/components/SubmissionFeedback.jsx",
+      "sha256": "e507a43390a9604258e1c8ab9f6da7f24454931754d6d86b23d527c5f1fc752a",
+      "sha256_lf": "023d17e01c5a204f6fd1e25b4cc25dcce99a7d81002e9310c0622f8e9003cb8a",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/src/components/TraceAction.jsx",
+      "sha256": "aaeae0a057da271fb704da26f01a200ad63534594357108b9c870adcf55fefe1",
+      "sha256_lf": "7e23004d53e0363b17bf08028ed0ce5fdcb56ff2a50011ae97459650cb060b38",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/src/components/TraceStepInsight.jsx",
+      "sha256": "3b01c99bc79e6ecc29fecb648cd026c898490af21ed1071029c08e7009f10124",
+      "sha256_lf": "ed049c0f7afcac361439251c0ec00990f68f300c712e26ed21b336d27d289f3d",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/src/components/TraceVisuals.jsx",
+      "sha256": "420e92ade17f67d8b25e1e9a2f4acae641a0696568f80821c5d012a46b460bab",
+      "sha256_lf": "5c08ff344cd82849bed824a8fb146dbeee5fbb519ea4e08c4a1209adcd5735a6",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/src/main.jsx",
+      "sha256": "929f6588549a485b2e9517ef7fe1331798253f26665ddbd4422e5b6dd54c831a",
+      "sha256_lf": "929f6588549a485b2e9517ef7fe1331798253f26665ddbd4422e5b6dd54c831a",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/src/pages/AIchat.jsx",
+      "sha256": "b3727192e5e63d75abb94fa5b126615a960f4385b654433505cb87fa9db1204b",
+      "sha256_lf": "b2e367fd0d7e639efb124ec1d89ccd01ada167b6ab717f2b4010eba2a346bb76",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/src/pages/Auth.jsx",
+      "sha256": "2d896c9e3a63624df35b327c658ab5583a81c237494597320208227a050e348f",
+      "sha256_lf": "1801448343da2df96c8ae334883823b13b436a76f211bea33f39be6d1ffdd8d2",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/src/pages/images/chatbeijing.png",
+      "sha256": "b764379bb6ba64957144990e2919c5e67af46f77af6efca98c6347b58dc4f0b5",
+      "sha256_lf": "b764379bb6ba64957144990e2919c5e67af46f77af6efca98c6347b58dc4f0b5",
+      "text_lf_normalized": false
+    },
+    {
+      "path": "frontend/src/pages/images/chathaita.png",
+      "sha256": "06d51d074380df2ac687b261b44412e5fb1e2a1cc9b2da0d3798ba27fbb0f531",
+      "sha256_lf": "06d51d074380df2ac687b261b44412e5fb1e2a1cc9b2da0d3798ba27fbb0f531",
+      "text_lf_normalized": false
+    },
+    {
+      "path": "frontend/src/pages/images/loginhaita.png",
+      "sha256": "e603c60b19e308b312964b8c7a7b69de03830365195be6582ce7ceaf7f6433bd",
+      "sha256_lf": "e603c60b19e308b312964b8c7a7b69de03830365195be6582ce7ceaf7f6433bd",
+      "text_lf_normalized": false
+    },
+    {
+      "path": "frontend/src/pages/images/ottly-exercise.png",
+      "sha256": "c4aed24a0d72ebbcfe7ad9a0d7b8f8b5c3322d43535def6e2e06d76627fa7c66",
+      "sha256_lf": "c4aed24a0d72ebbcfe7ad9a0d7b8f8b5c3322d43535def6e2e06d76627fa7c66",
+      "text_lf_normalized": false
+    },
+    {
+      "path": "frontend/src/pages/images/ottly-message.png",
+      "sha256": "af823824309ebd61d8d8bd524d1aa2ba3830ba385c27d8d2c92f80d6de6912b5",
+      "sha256_lf": "af823824309ebd61d8d8bd524d1aa2ba3830ba385c27d8d2c92f80d6de6912b5",
+      "text_lf_normalized": false
+    },
+    {
+      "path": "frontend/src/pages/images/sea_otter.png",
+      "sha256": "3352cc35c2361c68aaab6626c8d561be3ce8ce8b01f13b0487c1629b96c7265f",
+      "sha256_lf": "3352cc35c2361c68aaab6626c8d561be3ce8ce8b01f13b0487c1629b96c7265f",
+      "text_lf_normalized": false
+    },
+    {
+      "path": "frontend/src/pages/images/xingxing.png",
+      "sha256": "8c2c4fb2e9578d1dacc471ef296041392ef72623ed82ddba01092cdc0a041986",
+      "sha256_lf": "8c2c4fb2e9578d1dacc471ef296041392ef72623ed82ddba01092cdc0a041986",
+      "text_lf_normalized": false
+    },
+    {
+      "path": "frontend/src/pages/images/yonghu.png",
+      "sha256": "601aaa671d0aae61add5bdf4ad2c7ff3c5d994bb65556f323a711855a3cb9608",
+      "sha256_lf": "601aaa671d0aae61add5bdf4ad2c7ff3c5d994bb65556f323a711855a3cb9608",
+      "text_lf_normalized": false
+    },
+    {
+      "path": "frontend/src/pages/images/yunduo.png",
+      "sha256": "d38326a67babc68315f1c65a542997232648194e3f54bb7c49cbb2308b178b4b",
+      "sha256_lf": "d38326a67babc68315f1c65a542997232648194e3f54bb7c49cbb2308b178b4b",
+      "text_lf_normalized": false
+    },
+    {
+      "path": "frontend/src/pages/LearningHistory.jsx",
+      "sha256": "fb687dd774dce859c0c8220a2b2511bcb617c6d553f604f7eec960db682e78ed",
+      "sha256_lf": "70ee87bf094034880debdd70112097de7cedf24c1aed0274d7754cfb7be4ceb7",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/src/pages/LessonPage.jsx",
+      "sha256": "9de802aae3ab90ccbd16fbaff4c5432576a0b1b9007eab614ad97cfd33866edd",
+      "sha256_lf": "f310daa0f08278016b307f040f97919ff63cc522662d13952c7c9dc53aa3013f",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/src/pages/Level1.jsx",
+      "sha256": "5a5caeada595336dd659ee25c7167a6884f5b36a0813d22b1cd29ba5a5c2b834",
+      "sha256_lf": "9d02f97c8dec0a3b83483d6cffd4d0b3dd26c6f184d40eb6dca3fb70b1ab8adb",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/src/pages/Level2.jsx",
+      "sha256": "772df2f5708059da5f8b19541a7b4dae4d6ac3ad678055fab8a2254c9469e571",
+      "sha256_lf": "4d02fad5f09ef572f275bf500fba10281dbe9ace94fb25bba868b92b844787f6",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/src/pages/LevelSelection.jsx",
+      "sha256": "8c49e8dcb1e95b00da711e63b955ac9cb820a3d12a254dd2a5e659040450b16b",
+      "sha256_lf": "fa3d03d2122373c74e3d16cc6eb0be645de742241dba12ae943c8897a9e17377",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/src/pages/MistakeDetail.jsx",
+      "sha256": "a11a3c055c9fc87f3282c95201e697b55be9839e4f2776d94dc5803a25aaa192",
+      "sha256_lf": "bba3c567a5d367a0d70f2656d45c1a5c01fb5450914b87959088736f9dbcb905",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/src/pages/PracticePage.jsx",
+      "sha256": "e5b8c66fd9405370b25fd7bae7b9def190d8a1d5231196e06450d729834b7a5d",
+      "sha256_lf": "e8555602c595718dded3e2eb009ddd017720f91c60ffd37b2c2fbfcaf6438e71",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/src/pages/Settings.jsx",
+      "sha256": "5d211bb15b49e9419639bf20b398c3b64ff9872d07b195b617bd389d4ab48bce",
+      "sha256_lf": "5d211bb15b49e9419639bf20b398c3b64ff9872d07b195b617bd389d4ab48bce",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/src/styles/execution-replay.css",
+      "sha256": "b3022b09d12471c2ce3c530dc37fbde1f14d3f40c40ef62511e22b85dda30e6e",
+      "sha256_lf": "1e98a3c4a7726b74d47834d4e2f7ae54be9c0ad40cabfa44a5bc641f0a578b2a",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/src/styles/index.css",
+      "sha256": "9ff2c5f9f3d2798480444a72f03fa0a490a1e113e5eacf85c901aabc7dc9a33d",
+      "sha256_lf": "9ff2c5f9f3d2798480444a72f03fa0a490a1e113e5eacf85c901aabc7dc9a33d",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/src/styles/story-intro.css",
+      "sha256": "62d8d44f5e17d314f5c4bd3f72d1757e2f0229bc8e18f87b3ca5e8467ac2dfae",
+      "sha256_lf": "ffbf44bae57c9303d7d89ac1b7bf26a2244e746ee7eb8cb1c646f37a0cb79aa6",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/tests/chat-session.test.cjs",
+      "sha256": "e05cff543bcb1813b29aa14e44f7fc6fca8a3a4b433a1b27be2b29eac861d5d0",
+      "sha256_lf": "e05cff543bcb1813b29aa14e44f7fc6fca8a3a4b433a1b27be2b29eac861d5d0",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/tests/code-draft.test.cjs",
+      "sha256": "b14ebffa17dabb88f83af797ba3994417b639a72030a599e3624a0779480de25",
+      "sha256_lf": "b14ebffa17dabb88f83af797ba3994417b639a72030a599e3624a0779480de25",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/tests/endless.test.cjs",
+      "sha256": "1f0d90642f388ecdcc9a7153eb5140d77b93a2964896bd9613ba9776997f0367",
+      "sha256_lf": "33fe9fe44a870d5acc852d8cd7ef593ebc19f9e0a3bfbe04e0be6ab34255cc27",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/tests/execution-replay.test.cjs",
+      "sha256": "2c68324b4e805f9e7043efec361e1b0c4d2b41bf9a6591e93075f3ee0aa057ce",
+      "sha256_lf": "6339927dc90a08ac8cb1f46587f1ab3102de6bf0a51b64a78770981c05fb4d59",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/tests/guide-quiz.test.cjs",
+      "sha256": "f9b651e0b3529bb152351ece9c94a94144fbb90a18248f6c17196b7590bfc83f",
+      "sha256_lf": "67d0fd03babc44e7ce46b4196a997a2dea185a1810d4e0c0f6293a1a0deb4634",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/tests/mistake-grouping.test.cjs",
+      "sha256": "cc881f554882038f2023177bc9e94d969b2b2808c245decb3fc7b10a6a69dc59",
+      "sha256_lf": "7e5e040b7ee2c9e1fe7e8ff26b0212c9db4b95ab8290f54a0333dfb780b36c77",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/tests/python-editor-dom.test.cjs",
+      "sha256": "60a8fd28e1889972e651415f72023469863c8fd58b766bc05c0fd890714e4823",
+      "sha256_lf": "a609ed2dc9d86e1ac32282a7cbfdc6e53bb92ff2168b1c33f8f5e6bfc8759efa",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/tests/python-editor.test.cjs",
+      "sha256": "ec2135f3ff49ba8e27a12efbcb6f9ccac360bf930fb5604aa539053348e78d53",
+      "sha256_lf": "5c2cd0b819c59e2903843502303cea24f04280abe990d75901703411cab1d222",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/tests/story-dialogue.test.cjs",
+      "sha256": "b7d4f46caecc09f631910281b99a636146206cc8ad84b4010c8c4bf0bf8ef04c",
+      "sha256_lf": "763bf45598b6a0ea3e1b952e391e03f743c1c6bc4a0506b487f391b717f2809b",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/tests/story-engine.test.cjs",
+      "sha256": "c308fd566f2797d8108040c6f7967b85b76b862504bd2b247212a7c44086e2b4",
+      "sha256_lf": "845f8c81487c6f2bfd6bbf07150d0c38bfc06c6bf8add47fede768f976d94cbe",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/tests/submission-flow.test.cjs",
+      "sha256": "f06b43e2158ffab2b9584d5910d4c5e11aab37d0811c181e76561b62438716ec",
+      "sha256_lf": "91b282a3dd9e2cf6f5aaeb927b262dc52129bfa2942921eebbc61c5b2253c284",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/tests/trace-action.test.cjs",
+      "sha256": "549d3f7fd88f656d224d1b0bc6db47b5c78926bbe8c54e91eb804afbbbbb4ef0",
+      "sha256_lf": "27ff20014dfc48b6bca1e5391a244aef8dfc312675d924f62c96824acc898b0d",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/tests/trace-insight.test.cjs",
+      "sha256": "eceb38dbe7ad78b2fa6936c6f9b41f15696d5617f2d96094b1215f98700617e7",
+      "sha256_lf": "eb5d18a7160fc4582b0b2298a56bf55a4560ba0b8d81b8cb54356fed29a1dfcc",
+      "text_lf_normalized": true
+    },
+    {
+      "path": "frontend/vite.config.js",
+      "sha256": "776079de1aefa3408ae4a6a596bfe74c938127e86abfdd290b7001cb38083955",
+      "sha256_lf": "1e26a86ea79ae7da76a8ac08256db6e56bc0583f64cce18a1aa02e7bb5174568",
+      "text_lf_normalized": true
+    }
+  ],
+  "evidence": [
+    {
+      "path": "docs/competition/dev12-2026-10-28-d73d63b9/diagnostic-notes.txt",
+      "sha256": "4bd962cf30689b927b48cd372fb83ea7a777af9b4dfe02f880ed47b45b6cafb5"
+    },
+    {
+      "path": "docs/competition/dev12-2026-10-28-d73d63b9/responses.json",
+      "sha256": "fad4fa4eafaae949fb0407222df14916d21e4f27be5d7ca644edccb92a1130bb"
+    },
+    {
+      "path": "docs/competition/dev12-2026-10-28-d73d63b9/逐条结果与人工检查.md",
+      "sha256": "c050046848e827b66471af7558cfb98eb8d7b7bee592f1e11a1f594ca6739a12"
+    },
+    {
+      "path": "docs/competition/dev12-d06-d07-retest-2026-10-28/acceptance.jsonl",
+      "sha256": "9986f41b1dd1ffaff0fd28df6ea7d80ba7988044aa401b8bc410cb15f484bbaf"
+    },
+    {
+      "path": "docs/competition/dev12-d06-d07-retest-2026-10-28/offline-replay.json",
+      "sha256": "48e961384bae4b77f77992da30a79e07f90444959a62872b9367eceaaf995500"
+    },
+    {
+      "path": "docs/competition/dev12-d06-d07-retest-2026-10-28/responses.json",
+      "sha256": "da3897ac9c6e62babaf5a4ac87842b68b2ddafa3da7a0edbac0fa4e2347b5bb0"
+    },
+    {
+      "path": "docs/competition/dev12-d06-d07-retest-2026-10-28/复测与定位报告.md",
+      "sha256": "9d528b098de4d7a872ce365f02c8b7b0319478091507649c23a77d4e8d34418a"
+    },
+    {
+      "path": "docs/competition/feedback-guard-fix-2026-10-28/acceptance.jsonl",
+      "sha256": "162eade7dc12d47e5be4fd176d49ed78271824a4747d13bf16be2f5715428c71"
+    },
+    {
+      "path": "docs/competition/feedback-guard-fix-2026-10-28/backend-regression.txt",
+      "sha256": "acbbbfecf340b20bf83f5703d67f5954c26f4d59e45dfe2300ba5576b8e2476e"
+    },
+    {
+      "path": "docs/competition/feedback-guard-fix-2026-10-28/responses.json",
+      "sha256": "080c0cd13e1b31b0dc5a44b72cc57014551ed23b9190b0c0f51e1cfdae6a0a71"
+    },
+    {
+      "path": "docs/competition/feedback-guard-fix-2026-10-28/优化与验收记录.md",
+      "sha256": "051760abded77f4f07ac6fe901c0b98b8079fdb4a307d59cf0854c5b89dfd5e8"
+    },
+    {
+      "path": "docs/competition/freeze-2026-10-28/frontend-build.txt",
+      "sha256": "0171275de0d8fc82412ae950617e452cf2c121ea40a190993cfbdad676405004"
+    },
+    {
+      "path": "docs/competition/freeze-2026-10-28/frontend-tests.txt",
+      "sha256": "857fd4bc906f93b8ebcf7a1f3a49910c8785457cd4762dd69d84a4f456564cf9"
+    }
+  ]
+}

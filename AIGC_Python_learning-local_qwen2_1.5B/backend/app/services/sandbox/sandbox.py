@@ -60,12 +60,12 @@ class Sandbox:
         # 安全的内置函数白名单
         allowed_builtins = [
             'abs', 'all', 'any', 'ascii', 'bin', 'bool', 'bytearray', 'bytes',
-            'callable', 'chr', 'classmethod', 'complex', 'dict', 'dir', 'divmod',
-            'enumerate', 'filter', 'float', 'format', 'frozenset', 'getattr',
-            'hasattr', 'hash', 'help', 'hex', 'id', 'int', 'isinstance', 'issubclass',
-            'iter', 'len', 'list', 'locals', 'map', 'max', 'min', 'next', 'object',
-            'oct', 'ord', 'pow', 'print', 'property', 'range', 'repr', 'reversed',
-            'round', 'set', 'slice', 'sorted', 'staticmethod', 'str', 'sum', 'super',
+            'callable', 'chr', 'complex', 'dict', 'divmod',
+            'enumerate', 'filter', 'float', 'frozenset',
+            'hash', 'hex', 'int', 'isinstance', 'issubclass',
+            'iter', 'len', 'list', 'map', 'max', 'min', 'next',
+            'oct', 'ord', 'pow', 'print', 'range', 'repr', 'reversed',
+            'round', 'set', 'slice', 'sorted', 'str', 'sum',
             'tuple', 'type', 'zip', '__import__',
         ]
         
@@ -99,7 +99,7 @@ class Sandbox:
         """安全的import函数"""
         from .security_check import DANGEROUS_MODULES, ALLOWED_MODULES
         
-        module_name = name.split('.')[0]
+        module_name = name
         
         if module_name in DANGEROUS_MODULES:
             raise ImportError(f'禁止导入模块: {name}')

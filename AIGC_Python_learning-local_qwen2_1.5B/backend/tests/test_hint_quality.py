@@ -55,7 +55,7 @@ def test_evidence_explanation_can_compare_expected_and_actual_output():
 
 def test_claimed_line_must_exist_in_student_code():
     content = copy.deepcopy(GOOD)
-    content["hints"]["level2"] = "结合累加器检查第99行。"
+    content["hints"]["level2"] = "结合累加器检查源码第99行。"
     assert "unsupported_claim" in quality_issues(content, CODE, ["5050"])
 
 

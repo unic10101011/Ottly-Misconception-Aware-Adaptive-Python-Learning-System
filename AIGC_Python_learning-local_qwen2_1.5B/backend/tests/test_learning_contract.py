@@ -126,10 +126,13 @@ def test_analysis_exception_does_not_lose_judgment(client, monkeypatch):
     prepared = client.post(f"/api/v1/code/submissions/{data['submission_id']}/analysis", headers=headers)
     assert prepared.status_code == 200
     data['analysis'] = prepared.json()['data']['analysis']
-    assert data['analysis']['status'] == 'ready'
-    assert data['analysis']['source'] == 'fixed'
-    assert data['analysis']['content']['knowledge_ids'] == ['K01']
-    assert client.get('/api/v1/code/submissions', headers=headers).json()['data']['total'] == 1
+    assert data['analysis']['status'] == 'unavailable'
+    assert data['analysis']['source'] is None
+    assert data['analysis']['content'] is None
+    history = client.get('/api/v1/code/submissions', headers=headers).json()['data']
+    assert history['total'] == 1
+    assert history['items'][0]['judge'] == data['judge']
+    assert history['items'][0]['analysis']['status'] == 'unavailable'
 
 
 def test_knowledge_dictionary_is_authenticated(client):

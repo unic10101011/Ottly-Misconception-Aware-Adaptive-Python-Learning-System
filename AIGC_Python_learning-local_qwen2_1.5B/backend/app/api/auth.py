@@ -70,7 +70,7 @@ class ProfileUpdate(BaseModel):
 
 class PasswordChange(BaseModel):
     current_password: str
-    new_password: str = Field(min_length=8, max_length=128)
+    new_password: str
 
 
 class AccountDelete(BaseModel):
@@ -214,6 +214,9 @@ def change_password(request: PasswordChange, current_user: User = Depends(get_cu
         raise HTTPException(status_code=403, detail="当前密码错误")
     if request.current_password == request.new_password:
         raise HTTPException(status_code=422, detail="新密码不能与当前密码相同")
+    password_error = registration_password_error(request.new_password, user.username, user.phone)
+    if password_error:
+        raise HTTPException(status_code=422, detail=password_error)
     user.password = get_password_hash(request.new_password)
     db.commit()
     return AuthResponse(data={})

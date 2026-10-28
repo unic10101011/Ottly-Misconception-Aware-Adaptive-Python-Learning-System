@@ -1,0 +1,606 @@
+{
+  "started_at": "2026-10-28T15:01:26.310431+00:00",
+  "finished_at": "2026-10-28T15:01:41.972221+00:00",
+  "status": "completed",
+  "local_date": "2026-10-28",
+  "git_head": "921fd5d86eae02144b633a56739e04882fc1f2fa",
+  "working_tree_has_uncommitted_security_fixes": true,
+  "source_sha256": "6f5c639acf3831a9132568a9e3cfc6c1314ae9b09a4c8c4c5eb0565559a9c79d",
+  "runtime_image": "sha256:03e55c9bdbd13a578a796a1e91ff6ce697f8a0bb62d43ded78c9e4c0d8cc98fc",
+  "model_request_name": "deepseek-flash",
+  "real_api": true,
+  "model_configuration": {
+    "thinking": "enabled",
+    "reasoning_effort": "high",
+    "max_tokens": 8192
+  },
+  "attempt_policy": "One initial attempt per case. No automatic retries.",
+  "capture_scope": "Complete application HTTP responses, not discarded provider candidates or reasoning.",
+  "selected_cases": [
+    "D06",
+    "D07"
+  ],
+  "usage": null,
+  "usage_note": "The current application API does not expose provider usage or cost. model_load_ms=0 is not a measured model duration.",
+  "accounts": [
+    {
+      "label": "A",
+      "username": "dev12_c062e4fa_a",
+      "user_id": 30
+    }
+  ],
+  "setup": [
+    {
+      "account": "A",
+      "problem_id": "level1",
+      "submission_id": 292,
+      "seconds": 0.078,
+      "passed": true,
+      "analysis_status": "skipped"
+    },
+    {
+      "account": "A",
+      "problem_id": "greeting-v1",
+      "submission_id": 293,
+      "seconds": 0.148,
+      "passed": true,
+      "analysis_status": "skipped"
+    },
+    {
+      "account": "A",
+      "problem_id": "shell-shop-v1",
+      "submission_id": 294,
+      "seconds": 0.201,
+      "passed": true,
+      "analysis_status": "skipped"
+    },
+    {
+      "account": "A",
+      "problem_id": "shell-groups-v1",
+      "submission_id": 295,
+      "seconds": 0.197,
+      "passed": true,
+      "analysis_status": "skipped"
+    },
+    {
+      "account": "A",
+      "problem_id": "badge-v1",
+      "submission_id": 296,
+      "seconds": 0.262,
+      "passed": true,
+      "analysis_status": "skipped"
+    },
+    {
+      "account": "A",
+      "problem_id": "safe-sailing-v1",
+      "submission_id": 297,
+      "seconds": 0.285,
+      "passed": true,
+      "analysis_status": "skipped"
+    },
+    {
+      "account": "A",
+      "problem_id": "coastal-markers-v1",
+      "submission_id": 298,
+      "seconds": 0.186,
+      "passed": true,
+      "analysis_status": "skipped"
+    },
+    {
+      "account": "A",
+      "problem_id": "shell-total-v1",
+      "submission_id": 299,
+      "seconds": 0.214,
+      "passed": true,
+      "analysis_status": "skipped"
+    },
+    {
+      "account": "A",
+      "problem_id": "shell-savings-v1",
+      "submission_id": 300,
+      "seconds": 0.21,
+      "passed": true,
+      "analysis_status": "skipped"
+    },
+    {
+      "account": "A",
+      "problem_id": "radio-text-v1",
+      "submission_id": 301,
+      "seconds": 0.237,
+      "passed": true,
+      "analysis_status": "skipped"
+    },
+    {
+      "account": "A",
+      "problem_id": "temperature-max-v1",
+      "submission_id": 302,
+      "seconds": 0.209,
+      "passed": true,
+      "analysis_status": "skipped"
+    },
+    {
+      "account": "A",
+      "problem_id": "count-at-least-v1",
+      "submission_id": 303,
+      "seconds": 0.262,
+      "passed": true,
+      "analysis_status": "skipped"
+    }
+  ],
+  "cases": [
+    {
+      "id": "D06",
+      "problem_id": "coastal-markers-v1",
+      "mode": "submit",
+      "code": "n = int(input())\nfor i in range(1, n + 2):\n    print(i)",
+      "name": "循环多执行一次",
+      "account": "A",
+      "expected": {
+        "judge_status": "wrong_answer",
+        "passed_cases": 0,
+        "total_cases": 5,
+        "feedback_kind": "diagnosis",
+        "preferred_tag": "range_boundary"
+      },
+      "human_standard": "n=3实际多输出4；公开n=0实际输出1而非空。循环多包含一个数，不是少输出。",
+      "started_at": "2026-10-28T15:01:29.074604+00:00",
+      "completed_at": "2026-10-28T15:01:37.822825+00:00",
+      "http_response": {
+        "code": 200,
+        "data": {
+          "submission_id": 304,
+          "problem_id": "coastal-markers-v1",
+          "version": 1,
+          "created_at": "2026-10-28T15:01:29.000Z",
+          "error_type": "WRONG_ANSWER",
+          "judge": {
+            "status": "wrong_answer",
+            "passed": false,
+            "passed_cases": 0,
+            "total_cases": 5,
+            "cases": [
+              {
+                "case_id": "sample-1",
+                "passed": false,
+                "expected_output": "1\n2\n3\n",
+                "actual_output": "1\n2\n3\n4\n",
+                "output_available": true,
+                "errors": [],
+                "execution_time": 0.001,
+                "visibility": "public"
+              },
+              {
+                "case_id": "sample-2",
+                "passed": false,
+                "expected_output": "",
+                "actual_output": "1\n",
+                "output_available": true,
+                "errors": [],
+                "execution_time": 0.001,
+                "visibility": "public"
+              },
+              {
+                "case_id": "hidden-1",
+                "passed": false,
+                "expected_output": "",
+                "actual_output": "",
+                "output_available": false,
+                "errors": [],
+                "execution_time": 0.001,
+                "visibility": "hidden"
+              },
+              {
+                "case_id": "hidden-2",
+                "passed": false,
+                "expected_output": "",
+                "actual_output": "",
+                "output_available": false,
+                "errors": [],
+                "execution_time": 0.001,
+                "visibility": "hidden"
+              },
+              {
+                "case_id": "hidden-3",
+                "passed": false,
+                "expected_output": "",
+                "actual_output": "",
+                "output_available": false,
+                "errors": [],
+                "execution_time": 0.001,
+                "visibility": "hidden"
+              }
+            ],
+            "failed_tests": [
+              "sample-1",
+              "sample-2",
+              "hidden-1",
+              "hidden-2",
+              "hidden-3"
+            ]
+          },
+          "analysis": {
+            "status": "preparing",
+            "message": "正在准备反馈",
+            "model": null,
+            "content": null,
+            "feedback_kind": "diagnosis",
+            "guidance": null,
+            "source": null,
+            "model_load_ms": 0.0,
+            "personalization": {
+              "used": false,
+              "related_history_count": 0
+            },
+            "timings": {
+              "judge_ms": 163.6,
+              "model_load_ms": 0.0,
+              "hint_generation_ms": 0.0
+            }
+          },
+          "timings": {
+            "judge_ms": 163.6,
+            "model_load_ms": 0.0,
+            "hint_generation_ms": 0.0
+          },
+          "practice_recommendation_eligible": false
+        }
+      },
+      "analysis_http_response": {
+        "code": 200,
+        "data": {
+          "submission_id": 304,
+          "analysis": {
+            "status": "ready",
+            "message": "错因分析由 AI 根据本次执行生成；三级提示采用已审核的基础提示。",
+            "model": "deepseek-flash",
+            "content": {
+              "misconception_tag": "range_boundary",
+              "suspected_cause": "for 循环的 range 上界写成了 n + 2，导致多包含一个数 n + 1；应使用 range(1, n + 1)，这样 n=3 时只到 3，n=0 时为空。",
+              "evidence": [
+                {
+                  "case_id": "sample-1",
+                  "field": "actual_output",
+                  "quote": "1\n2\n3\n4",
+                  "explanation": "n=3 时 range(1, 5) 产生 1、2、3、4，前三个已正确，多出的第 4 行来自上界过大。"
+                },
+                {
+                  "case_id": "sample-2",
+                  "field": "actual_output",
+                  "quote": "1",
+                  "explanation": "n=0 时 range(1, 2) 仍产生 1，因此输出了不应出现的 1。"
+                }
+              ],
+              "knowledge_points": [
+                "for 循环与 range"
+              ],
+              "hints": {
+                "level1": "怎样把题目要求拆成可以逐步核对的步骤？",
+                "level2": "结合输入、计算和输出的关系，查看产生公开结果的代码操作。",
+                "level3": "对照题目要求，找出公开结果里的第一处不同，再回到产生它的代码位置检查。"
+              },
+              "knowledge_ids": [
+                "K07"
+              ]
+            },
+            "feedback_kind": "diagnosis",
+            "guidance": null,
+            "source": "ai",
+            "model_load_ms": 0.0,
+            "personalization": {
+              "used": false,
+              "related_history_count": 0
+            },
+            "timings": {
+              "judge_ms": 163.6,
+              "model_load_ms": 0.0,
+              "hint_generation_ms": 8477.19
+            }
+          },
+          "timings": {
+            "judge_ms": 163.6,
+            "model_load_ms": 0.0,
+            "hint_generation_ms": 8477.19
+          }
+        }
+      },
+      "recommendation_http_response": null,
+      "checks": {
+        "judge_matches": true,
+        "real_ai_feedback_ready": true,
+        "feedback_route_matches": true,
+        "feedback_shape_matches": true
+      },
+      "timings_seconds": {
+        "submit": 0.21,
+        "feedback_endpoint": 8.537,
+        "case_total": 8.748
+      },
+      "transport_error": null,
+      "human_review": {
+        "correctness": "",
+        "evidence": "",
+        "tag_or_recommendation": "",
+        "readability": "",
+        "answer_protection": "",
+        "conclusion": "",
+        "notes": ""
+      },
+      "final_analysis": {
+        "status": "ready",
+        "message": "错因分析由 AI 根据本次执行生成；三级提示采用已审核的基础提示。",
+        "model": "deepseek-flash",
+        "content": {
+          "misconception_tag": "range_boundary",
+          "suspected_cause": "for 循环的 range 上界写成了 n + 2，导致多包含一个数 n + 1；应使用 range(1, n + 1)，这样 n=3 时只到 3，n=0 时为空。",
+          "evidence": [
+            {
+              "case_id": "sample-1",
+              "field": "actual_output",
+              "quote": "1\n2\n3\n4",
+              "explanation": "n=3 时 range(1, 5) 产生 1、2、3、4，前三个已正确，多出的第 4 行来自上界过大。"
+            },
+            {
+              "case_id": "sample-2",
+              "field": "actual_output",
+              "quote": "1",
+              "explanation": "n=0 时 range(1, 2) 仍产生 1，因此输出了不应出现的 1。"
+            }
+          ],
+          "knowledge_points": [
+            "for 循环与 range"
+          ],
+          "hints": {
+            "level1": "怎样把题目要求拆成可以逐步核对的步骤？",
+            "level2": "结合输入、计算和输出的关系，查看产生公开结果的代码操作。",
+            "level3": "对照题目要求，找出公开结果里的第一处不同，再回到产生它的代码位置检查。"
+          },
+          "knowledge_ids": [
+            "K07"
+          ]
+        },
+        "feedback_kind": "diagnosis",
+        "guidance": null,
+        "source": "ai",
+        "model_load_ms": 0.0,
+        "personalization": {
+          "used": false,
+          "related_history_count": 0
+        },
+        "timings": {
+          "judge_ms": 163.6,
+          "model_load_ms": 0.0,
+          "hint_generation_ms": 8477.19
+        }
+      },
+      "technical_passed": true
+    },
+    {
+      "id": "D07",
+      "problem_id": "shell-total-v1",
+      "mode": "submit",
+      "code": "n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    total = i\nprint(total)",
+      "name": "覆盖与累加",
+      "account": "A",
+      "expected": {
+        "judge_status": "wrong_answer",
+        "passed_cases": 2,
+        "total_cases": 5,
+        "feedback_kind": "guidance",
+        "preferred_tag": ""
+      },
+      "human_standard": "n=4应10实际4；循环覆盖总数。由于部分通过只要求引导，不要求诊断标签或直接替换代码。",
+      "started_at": "2026-10-28T15:01:37.823493+00:00",
+      "completed_at": "2026-10-28T15:01:41.971239+00:00",
+      "http_response": {
+        "code": 200,
+        "data": {
+          "submission_id": 305,
+          "problem_id": "shell-total-v1",
+          "version": 1,
+          "created_at": "2026-10-28T15:01:38.000Z",
+          "error_type": "WRONG_ANSWER",
+          "judge": {
+            "status": "wrong_answer",
+            "passed": false,
+            "passed_cases": 2,
+            "total_cases": 5,
+            "cases": [
+              {
+                "case_id": "sample-1",
+                "passed": false,
+                "expected_output": "10\n",
+                "actual_output": "4\n",
+                "output_available": true,
+                "errors": [],
+                "execution_time": 0.001,
+                "visibility": "public"
+              },
+              {
+                "case_id": "hidden-1",
+                "passed": true,
+                "expected_output": "",
+                "actual_output": "",
+                "output_available": false,
+                "errors": [],
+                "execution_time": 0.001,
+                "visibility": "hidden"
+              },
+              {
+                "case_id": "hidden-2",
+                "passed": true,
+                "expected_output": "",
+                "actual_output": "",
+                "output_available": false,
+                "errors": [],
+                "execution_time": 0.001,
+                "visibility": "hidden"
+              },
+              {
+                "case_id": "hidden-3",
+                "passed": false,
+                "expected_output": "",
+                "actual_output": "",
+                "output_available": false,
+                "errors": [],
+                "execution_time": 0.001,
+                "visibility": "hidden"
+              },
+              {
+                "case_id": "hidden-4",
+                "passed": false,
+                "expected_output": "",
+                "actual_output": "",
+                "output_available": false,
+                "errors": [],
+                "execution_time": 0.001,
+                "visibility": "hidden"
+              }
+            ],
+            "failed_tests": [
+              "sample-1",
+              "hidden-3",
+              "hidden-4"
+            ]
+          },
+          "analysis": {
+            "status": "preparing",
+            "message": "正在准备反馈",
+            "model": null,
+            "content": null,
+            "feedback_kind": "guidance",
+            "guidance": null,
+            "source": null,
+            "model_load_ms": 0.0,
+            "personalization": {
+              "used": false,
+              "related_history_count": 0
+            },
+            "timings": {
+              "judge_ms": 154.92,
+              "model_load_ms": 0.0,
+              "hint_generation_ms": 0.0
+            }
+          },
+          "timings": {
+            "judge_ms": 154.92,
+            "model_load_ms": 0.0,
+            "hint_generation_ms": 0.0
+          },
+          "practice_recommendation_eligible": false
+        }
+      },
+      "analysis_http_response": {
+        "code": 200,
+        "data": {
+          "submission_id": 305,
+          "analysis": {
+            "status": "ready",
+            "message": "AI 提示已生成，可以先思考再修改代码。",
+            "model": "deepseek-flash",
+            "content": null,
+            "feedback_kind": "guidance",
+            "guidance": {
+              "hint": "循环执行时，重点观察 `total = i` 在每次迭代后留下的值，以及这个值是否保留了前面各轮的结果；再对照题目要求的 1 到 n 求和含义检查最终输出。",
+              "knowledge_points": [
+                "for 循环与 range",
+                "累加器与变量更新",
+                "整数输入与算术运算"
+              ],
+              "question": {
+                "prompt": "在循环中维护累加器时，每轮迭代应当怎样处理上一轮保存的值？",
+                "options": [
+                  "用当前元素直接覆盖上一轮保存的值",
+                  "把当前元素与上一轮保存的值合并后再保存",
+                  "只在循环结束后更新一次累加器"
+                ],
+                "correct_index": 1,
+                "explanation": "累加器用于跨多轮迭代保存中间结果；每轮应基于上一轮保存的值继续累积，而不是丢弃它。"
+              }
+            },
+            "source": "ai",
+            "model_load_ms": 0.0,
+            "personalization": {
+              "used": false,
+              "related_history_count": 0
+            },
+            "timings": {
+              "judge_ms": 154.92,
+              "model_load_ms": 0.0,
+              "hint_generation_ms": 3876.81
+            }
+          },
+          "timings": {
+            "judge_ms": 154.92,
+            "model_load_ms": 0.0,
+            "hint_generation_ms": 3876.81
+          }
+        }
+      },
+      "recommendation_http_response": null,
+      "checks": {
+        "judge_matches": true,
+        "real_ai_feedback_ready": true,
+        "feedback_route_matches": true,
+        "feedback_shape_matches": true
+      },
+      "timings_seconds": {
+        "submit": 0.215,
+        "feedback_endpoint": 3.935,
+        "case_total": 4.151
+      },
+      "transport_error": null,
+      "human_review": {
+        "correctness": "",
+        "evidence": "",
+        "tag_or_recommendation": "",
+        "readability": "",
+        "answer_protection": "",
+        "conclusion": "",
+        "notes": ""
+      },
+      "final_analysis": {
+        "status": "ready",
+        "message": "AI 提示已生成，可以先思考再修改代码。",
+        "model": "deepseek-flash",
+        "content": null,
+        "feedback_kind": "guidance",
+        "guidance": {
+          "hint": "循环执行时，重点观察 `total = i` 在每次迭代后留下的值，以及这个值是否保留了前面各轮的结果；再对照题目要求的 1 到 n 求和含义检查最终输出。",
+          "knowledge_points": [
+            "for 循环与 range",
+            "累加器与变量更新",
+            "整数输入与算术运算"
+          ],
+          "question": {
+            "prompt": "在循环中维护累加器时，每轮迭代应当怎样处理上一轮保存的值？",
+            "options": [
+              "用当前元素直接覆盖上一轮保存的值",
+              "把当前元素与上一轮保存的值合并后再保存",
+              "只在循环结束后更新一次累加器"
+            ],
+            "correct_index": 1,
+            "explanation": "累加器用于跨多轮迭代保存中间结果；每轮应基于上一轮保存的值继续累积，而不是丢弃它。"
+          }
+        },
+        "source": "ai",
+        "model_load_ms": 0.0,
+        "personalization": {
+          "used": false,
+          "related_history_count": 0
+        },
+        "timings": {
+          "judge_ms": 154.92,
+          "model_load_ms": 0.0,
+          "hint_generation_ms": 3876.81
+        }
+      },
+      "technical_passed": true
+    }
+  ],
+  "human_review_status": "pending",
+  "summary": {
+    "cases": 2,
+    "technical_passed": 2,
+    "human_semantic_review": "pending"
+  }
+}

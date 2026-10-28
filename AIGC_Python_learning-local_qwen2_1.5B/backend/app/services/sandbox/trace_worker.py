@@ -226,10 +226,8 @@ def main():
     supports_text = request.get('supports_text', False)
     supports_structures = request.get('supports_structures', False)
     # Defence in depth on Linux; the parent also has a wall-clock deadline.
-    if sys.platform == 'linux':
-        import resource
-        resource.setrlimit(resource.RLIMIT_CPU, (2, 2))
-        resource.setrlimit(resource.RLIMIT_AS, (256 * 1024 * 1024, 256 * 1024 * 1024))
+    from .limits import apply_worker_limits
+    apply_worker_limits(2)
     try:
         tree = ast.parse(code, filename=FILENAME)
         compiled = compile(tree, FILENAME, 'exec')

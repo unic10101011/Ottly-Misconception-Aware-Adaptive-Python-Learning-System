@@ -18,6 +18,7 @@ from app.services.error_analysis import AnalysisResult, analyze_failure
 from app.services.personalized_history import select_related_history
 from app.services.practice_recommendation import RecommendationResult, recommend_practice
 from app.services.misconceptions import MISCONCEPTION_TAGS
+from app.services.ai_operations import ai_operation
 from app.services.endless import find_problem
 from app.services.endless_catalog import endless_lessons
 from app.services.problem_catalog import SCHEMA_VERSION, LEVELS, KNOWLEDGE, Problem, TestCase
@@ -49,6 +50,8 @@ async def execute_code(request: CodeRunRequest, current_user: User = Depends(get
                        db: Session = Depends(get_db), stream_analysis: bool = False):
     lesson = (require_lesson(request.problem_id, passed_problem_ids(db, current_user.id), db=db, user_id=current_user.id)
               if request.problem_id else None)
+    if db is not None:
+        db.rollback()
     result = await run_in_threadpool(run_code_process, request.code, timeout=request.timeout, stdin=request.stdin)
     if any(error['type'] == 'RunnerError' for error in result['errors']):
         raise HTTPException(status_code=503, detail='执行器暂不可用，请稍后重试')
@@ -241,6 +244,7 @@ async def submit_code(request: SubmissionRequest, current_user: User = Depends(g
             raise HTTPException(status_code=404, detail="复习来源错题不存在")
     require_lesson(request.problem_id, passed_problem_ids(db, current_user.id), review=review_source_id is not None,
                    db=db, user_id=current_user.id)
+    db.rollback()
     judge_started = perf_counter()
     judge = await run_in_threadpool(judge_submission, problem, request.code)
     judge_ms = round((perf_counter() - judge_started) * 1000, 2)
@@ -307,6 +311,12 @@ async def submit_code(request: SubmissionRequest, current_user: User = Depends(g
 async def prepare_practice_recommendation(submission_id: int, current_user: User = Depends(get_current_user),
                                           db: Session = Depends(get_db)):
     user_id = current_user.id
+    db.rollback()
+    with ai_operation(user_id, 'recommendation', submission_id):
+        return await _prepare_practice_recommendation(submission_id, user_id, db)
+
+
+async def _prepare_practice_recommendation(submission_id, user_id, db):
     record = db.query(LearningSubmission).filter_by(id=submission_id, user_id=user_id).first()
     if record is None:
         raise HTTPException(status_code=404, detail='提交记录不存在')
@@ -369,9 +379,16 @@ async def prepare_practice_recommendation(submission_id: int, current_user: User
 @router.post('/code/submissions/{submission_id}/analysis')
 async def prepare_analysis(submission_id: int, current_user: User = Depends(get_current_user),
                            db: Session = Depends(get_db)):
+    user_id = current_user.id
+    db.rollback()
+    with ai_operation(user_id, 'analysis', submission_id):
+        return await _prepare_analysis(submission_id, user_id, db)
+
+
+async def _prepare_analysis(submission_id, user_id, db):
     record = db.query(LearningSubmission).filter(
         LearningSubmission.id == submission_id,
-        LearningSubmission.user_id == current_user.id,
+        LearningSubmission.user_id == user_id,
     ).first()
     if record is None:
         raise HTTPException(status_code=404, detail='提交记录不存在')
@@ -381,21 +398,23 @@ async def prepare_analysis(submission_id: int, current_user: User = Depends(get_
             'submission_id': record.id, 'analysis': analysis.model_dump(mode='json') if analysis else None,
             'timings': record.analysis_json.get('timings', {}),
         }}
-    problem = find_problem(db, current_user.id, record.problem_id)
+    problem = find_problem(db, user_id, record.problem_id)
     if problem is None:
         raise HTTPException(status_code=404, detail='题目不存在')
     model_judge = JudgeResult.model_validate(record.judge_json)
+    code = record.code
     started = perf_counter()
     try:
-        related_history = select_related_history(db, current_user.id, record.id, record.knowledge_ids or [])
-        raw_analysis = await analyze_failure(problem.execution_problem(), record.code, model_judge,
+        related_history = select_related_history(db, user_id, record.id, record.knowledge_ids or [])
+        db.rollback()
+        raw_analysis = await analyze_failure(problem.execution_problem(), code, model_judge,
                                              related_history=related_history)
     except Exception:
+        db.rollback()
         logger.exception('Teaching analysis failed; judged submission %s remains saved', submission_id)
         raw_analysis = AnalysisResult(status='unavailable', message='教学分析暂不可用，判题和提交记录已保存。')
     hint_ms = round((perf_counter() - started) * 1000, 2)
     analysis = contract_analysis(raw_analysis, analysis_knowledge_scope(problem))
-    user_id = current_user.id
     owner = db.query(User).filter(User.id == user_id, User.status == "enabled").with_for_update().first()
     if owner is None:
         db.rollback()

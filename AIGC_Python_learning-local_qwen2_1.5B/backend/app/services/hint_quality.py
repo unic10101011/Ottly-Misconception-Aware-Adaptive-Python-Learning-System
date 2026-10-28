@@ -3,6 +3,8 @@ from difflib import SequenceMatcher
 from itertools import combinations
 import keyword
 import re
+from io import StringIO
+import tokenize
 
 
 ISSUE_GUIDANCE = {
@@ -22,7 +24,64 @@ def _normalized(text: str) -> str:
     return re.sub(r"[\W_]", "", text).lower()
 
 
-def quality_issues(content: dict, code: str, expected_outputs: list[str]) -> list[str]:
+def line_reference_errors(text: str, source_lines: int, actual_lines: int | None = None,
+                          expected_lines: int | None = None) -> list[dict]:
+    """Check explicit locations only; ambiguous prose is left to semantic review."""
+    errors = []
+    for match in re.finditer(r'第\s*(\d+)\s*行', text):
+        before, after = text[:match.start()], text[match.end():]
+        if (re.search(r'(?:源代码|源码|代码)(?:中)?(?:的)?\s*$', before)
+                or re.match(r'\s*(?:的)?(?:源代码|源码|代码|语句)', after)):
+            kind, limit = 'source', source_lines
+        elif (re.search(r'(?:实际输出|预期输出|期望输出|输出(?:结果)?)(?:中)?(?:的)?\s*$', before)
+              or re.match(r'\s*(?:的)?(?:实际|预期|期望|错误|正确|多余|额外)?(?:的)?输出', after)):
+            if re.search(r'实际输出(?:中)?(?:的)?\s*$', before) or re.match(r'\s*(?:的)?实际输出', after):
+                kind, limit = 'actual_output', actual_lines
+            elif re.search(r'(?:预期|期望)输出(?:中)?(?:的)?\s*$', before) or re.match(r'\s*(?:的)?(?:预期|期望)输出', after):
+                kind, limit = 'expected_output', expected_lines
+            else:
+                counts = [count for count in (actual_lines, expected_lines) if count is not None]
+                kind, limit = 'output', max(counts) if counts else None
+        else:
+            continue
+        number = int(match.group(1))
+        absent = re.match(r'\s*(?:(?:的)?(?:实际|预期|期望)?输出)?\s*(?:并)?(?:不存在|缺失|未出现)', after)
+        exists = limit is not None and 1 <= number <= limit
+        if limit is not None and (bool(exists) if absent else not exists):
+            errors.append({'kind': kind, 'line': number, 'available_lines': limit, 'text': text})
+    return errors
+
+
+def _code_tokens(code: str) -> tuple | None:
+    try:
+        return tuple((token.type, token.string) for token in tokenize.generate_tokens(StringIO(code).readline)
+                     if token.type not in {tokenize.NEWLINE, tokenize.NL, tokenize.INDENT, tokenize.DEDENT,
+                                           tokenize.ENDMARKER, tokenize.COMMENT})
+    except (tokenize.TokenError, IndentationError, SyntaxError):
+        return None
+
+
+def replacement_statement(text: str, student_code: str = '') -> str | None:
+    """Exempt exact quoted student lines, never directives or newly supplied fixes."""
+    source = {_code_tokens(line.strip()) for line in student_code.splitlines() if line.strip()}
+    source.discard(None)
+
+    def quote(match):
+        fragment = next(group for group in match.groups() if group is not None)
+        prefix = text[:match.start()]
+        directive = re.search(r'(?:改为|改成|替换为|替换成|换成|写成|添加|补上|使用|执行|运行|复制|粘贴|请用|改用|应当|应该|必须)(?:下面的?|以下的?|这一?句)?\s*[:：]?\s*$', prefix)
+        conceptual = fragment.strip() == 'print()' and re.match(r'\s*(?:函数|的(?:作用|返回值|含义)|会返回|用于)', text[match.end():])
+        if not directive and (_code_tokens(fragment.strip()) in source or conceptual):
+            return ' ' * len(match.group())
+        return match.group()
+
+    prose = re.sub(r'(?<!`)`([^`\n]+)`(?!`)|“([^”\n]+)”|「([^」\n]+)」', quote, text)
+    match = re.search(r'\b(?:for|while|def)\s+[A-Za-z_][^。\n]*:|\bprint\s*\(|\breturn(?:\s*\(|\s+[A-Za-z_0-9])|\b[A-Za-z_]\w*\s*(?:[+*/%-]=|=(?!=))', prose)
+    return match.group() if match else None
+
+
+def quality_issues(content: dict, code: str, expected_outputs: list[str], *,
+                   public_cases: list[dict] | None = None, details: list[dict] | None = None) -> list[str]:
     """Conservative visible-text checks; semantic relevance is reviewed separately."""
     issues = []
     if any(point.strip() in {"知识点", "相关知识点", "直接相关知识点", "其他知识点"}
@@ -54,10 +113,19 @@ def quality_issues(content: dict, code: str, expected_outputs: list[str]) -> lis
         if direct_answer or replacement:
             issues.append("answer_leak")
             break
-    teaching = [content["suspected_cause"], *content["knowledge_points"], *hints,
-                *(item["explanation"] for item in content["evidence"])]
-    for text in teaching:
-        if any(not 1 <= int(line) <= len(code.splitlines()) for line in re.findall(r"第\s*(\d+)\s*行", text)):
+    cases = [case for case in (public_cases or []) if case.get('visibility') == 'public']
+    teaching = [('suspected_cause', content['suspected_cause'], None)]
+    teaching += [(f'knowledge_points.{i}', text, None) for i, text in enumerate(content['knowledge_points'])]
+    teaching += [(f'hints.{key}', text, None) for key, text in content['hints'].items()]
+    teaching += [(f'evidence.{i}.explanation', item['explanation'], item.get('case_id'))
+                 for i, item in enumerate(content['evidence'])]
+    for field, text, case_id in teaching:
+        relevant = [case for case in cases if case_id is None or case['case_id'] == case_id]
+        actual = [len(case['actual_output'].splitlines()) for case in relevant if case.get('output_available', True)]
+        expected = [len(case['expected_output'].splitlines()) for case in relevant]
+        errors = line_reference_errors(text, len(code.splitlines()), max(actual, default=None), max(expected, default=None))
+        if errors:
             issues.append("unsupported_claim")
-            break
+            if details is not None:
+                details.extend({'field': field, 'case_id': case_id, **error} for error in errors)
     return list(dict.fromkeys(issues))

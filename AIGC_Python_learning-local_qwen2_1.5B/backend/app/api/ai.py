@@ -155,6 +155,7 @@ async def prepare_chat(chat_data: AIChatRequest, db: Session, user_id: int):
         raise HTTPException(status_code=409, detail={'code': 'CHAT_CONTEXT_FULL', 'message': '本次对话已接近上下文上限，请新开一个对话继续。'})
     active_chat_sessions[user_id] = session_id
     pending_chats[(user_id, session_id)] = {'question': chat_data.question, 'answer': ''}
+    db.rollback()
     return session_id, [{'role': 'system', 'content': CHAT_SYSTEM_PROMPT}, *history,
                         {'role': 'user', 'content': chat_data.question}]
 

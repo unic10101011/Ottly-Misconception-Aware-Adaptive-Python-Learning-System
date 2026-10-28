@@ -34,15 +34,15 @@ def test_last_five_learning_flow(client):
         analyzed = client.post(f"/api/v1/code/submissions/{failed['submission_id']}/analysis", headers=headers)
         assert analyzed.status_code == 200, analyzed.text
         failed['analysis'] = analyzed.json()['data']['analysis']
-        assert failed['analysis']['status'] == 'ready' and failed['analysis']['source'] == 'fixed'
-        assert failed['analysis']['content']['knowledge_ids'] == lesson.knowledge_ids
+        assert failed['analysis']['status'] == 'unavailable'
+        assert failed['analysis']['source'] is None and failed['analysis']['content'] is None
         if slot.id in (11, 12):
             assert failed['judge']['status'] == 'wrong_answer' and failed['error_type'] == 'WRONG_ANSWER'
             assert failed['judge']['cases'][0]['errors'][0]['type'] == 'REQUIREMENT_NOT_MET'
         for level in (1, 2, 3):
             saved = client.patch(f"/api/v1/code/submissions/{failed['submission_id']}/hints",
                                  headers=headers, json={'level': level})
-            assert saved.json()['data']['hints_viewed_max'] == level
+            assert saved.status_code == 409, 'No learning hint may be claimed when the model is unavailable'
         review_headers = {**headers, 'X-Review-Source-Id': str(failed['submission_id'])}
         accepted = submit(client, review_headers, lesson.problem_id, lesson.reference_solution).json()['data']
         assert accepted['judge']['passed'] and accepted['analysis']['status'] == 'skipped'
@@ -54,7 +54,7 @@ def test_last_five_learning_flow(client):
         history = client.get('/api/v1/code/submissions?problem_id=' + lesson.problem_id, headers=headers).json()['data']
         assert history['total'] == 2
         old = next(row for row in history['items'] if row['id'] == failed['submission_id'])
-        assert old['hints_viewed_max'] == 3 and old['resolved_later']
+        assert old['hints_viewed_max'] == 0 and old['resolved_later']
         assert old['knowledge_ids'] == lesson.knowledge_ids and old['difficulty'] == lesson.difficulty
         assert old['version'] == 1 and old['schema_version'] == '1.0.0'
         assert history['items'][0]['review_source_id'] == failed['submission_id']

@@ -69,3 +69,10 @@ htmlcov/
 
 # Local research snapshots; never publish raw experiment material automatically
 /research-archive/
+
+# Superseded spreadsheet and its rendering scratch files; Markdown is the review record.
+/docs/competition/dev12-2026-10-28-d73d63b9/*.xlsx
+/docs/competition/dev12-2026-10-28-d73d63b9/*.inspect.ndjson
+/docs/competition/dev12-2026-10-28-d73d63b9/*-preview.png
+/docs/competition/dev12-2026-10-28-d73d63b9/detail-index.json
+/docs/competition/dev12-2026-10-28-d73d63b9/review-inspection.json

@@ -23,6 +23,7 @@ services:
       JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET}
       DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY:-}
       DEEPSEEK_BASE_URL: ${DEEPSEEK_BASE_URL:-https://api.deepseek.com}
+      AI_ACCEPTANCE_LOG: ${AI_ACCEPTANCE_LOG:-}
     depends_on:
       db:
         condition: service_healthy

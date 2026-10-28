@@ -21,25 +21,26 @@ DANGEROUS_MODULES = {
 
 # 游戏合法模块白名单
 ALLOWED_MODULES = {
-    'math', 'random', 'time', 'datetime', 'collections', 'itertools',
-    'functools', 'operator', 're', 'string', 'struct', 'array', 'heapq',
-    'bisect', 'queue', 'deque', 'Counter', 'defaultdict', 'OrderedDict',
-    'namedtuple', 'enum', 'dataclasses', 'typing', 'copy', 'pprint',
-    'turtle', 'pygame', 'pygame.locals'  # 游戏开发库
+    'math', 'time',
 }
 
-# 危险属性黑名单
-DANGEROUS_ATTRIBUTES = {
-    '__import__', '__eval__', '__exec__', '__globals__', '__locals__',
-    '__builtins__', '__code__', '__dict__', '__class__', '__base__',
-    '__bases__', '__subclasses__', '__mro__', '__getattribute__',
-    '__getattr__', '__setattr__', '__delattr__', '__new__', '__init__',
-    '__reduce__', '__reduce_ex__', '__str__', '__repr__', '__bytes__',
-    '__format__', '__dir__', '__getstate__', '__setstate__',
-    '__getinitargs__', '__getnewargs__', '__module__', '__annotations__',
-    '__doc__', '__name__', '__qualname__'
+# Only public operations needed by the introductory exercises are exposed.
+# In particular, frame/generator attributes and str.format can traverse Python
+# objects without spelling a forbidden attribute directly in the AST.
+ALLOWED_ATTRIBUTES = {
+    'append', 'extend', 'insert', 'pop', 'remove', 'clear', 'copy', 'count',
+    'index', 'reverse', 'sort', 'keys', 'values', 'items', 'get', 'update',
+    'setdefault', 'add', 'discard', 'union', 'intersection', 'difference',
+    'split', 'rsplit', 'splitlines', 'join', 'strip', 'lstrip', 'rstrip',
+    'replace', 'startswith', 'endswith', 'lower', 'upper', 'title',
+    'capitalize', 'casefold', 'isdigit', 'isdecimal', 'isnumeric', 'isalpha',
+    'isalnum', 'isspace', 'islower', 'isupper', 'isascii', 'find', 'rfind',
+    'removeprefix', 'removesuffix', 'zfill',
+    'sqrt', 'floor', 'ceil', 'fabs', 'factorial', 'gcd', 'lcm', 'isqrt',
+    'sin', 'cos', 'tan', 'radians', 'degrees', 'log', 'log2', 'log10',
+    'exp', 'pow', 'isfinite', 'isinf', 'isnan', 'pi', 'e', 'tau', 'inf', 'nan',
+    'sleep', 'time', 'monotonic',
 }
-
 
 class SecurityChecker(ast.NodeVisitor):
     """AST安全检查器"""
@@ -81,44 +82,62 @@ class SecurityChecker(ast.NodeVisitor):
                     'suggestion': '此模块可能会访问系统资源，建议使用游戏开发常用模块'
                 })
                 self.has_errors = True
-            elif module_name not in ALLOWED_MODULES:
-                self.errors.append({
-                    'type': '模块建议',
-                    'line': node.lineno,
-                    'column': node.col_offset,
-                    'message': f'不建议使用模块: {name.name}',
-                    'suggestion': '建议使用math、random、collections等游戏开发常用模块'
-                })
-        self.generic_visit(node)
-    
-    def visit_ImportFrom(self, node):
-        """检查from...import语句"""
-        if node.module:
-            module_name = node.module.split('.')[0]
-            if module_name in DANGEROUS_MODULES:
+            elif name.name not in ALLOWED_MODULES:
                 self.errors.append({
                     'type': '安全警告',
                     'line': node.lineno,
                     'column': node.col_offset,
-                    'message': f'禁止导入危险模块: {node.module}',
-                    'suggestion': '此模块可能会访问系统资源，请移除'
+                    'message': f'不支持导入模块: {name.name}',
+                    'suggestion': '当前教学执行器仅支持 math 和 time 模块'
                 })
                 self.has_errors = True
+            if name.asname and name.asname.startswith('__'):
+                self.reject(node, '不支持特殊模块别名')
         self.generic_visit(node)
     
+    def visit_ImportFrom(self, node):
+        """检查from...import语句"""
+        if node.level or node.module not in ALLOWED_MODULES:
+            self.reject(node, '只支持导入 math 和 time 教学模块')
+        for alias in node.names:
+            if (alias.name not in ALLOWED_ATTRIBUTES or
+                    alias.asname and alias.asname.startswith('__')):
+                self.reject(node, '不支持导入此模块成员')
+        self.generic_visit(node)
+
+    def reject(self, node, message):
+        self.has_errors = True
+        self.errors.append({'type': '安全警告', 'line': node.lineno,
+                            'column': node.col_offset, 'message': message,
+                            'suggestion': '请使用当前课程中的普通变量、函数和集合操作'})
+
+    def visit_Name(self, node):
+        if node.id.startswith('__') or node.id in {
+                'getattr', 'setattr', 'delattr', 'hasattr', 'globals', 'locals',
+                'vars', 'eval', 'exec', 'compile', 'open', 'help', 'dir'}:
+            self.reject(node, '禁止访问特殊运行时名称或反射函数')
+
+    def visit_arg(self, node):
+        if node.arg.startswith('__'):
+            self.reject(node, '不支持特殊参数名称')
+
+    def visit_FunctionDef(self, node):
+        if node.name.startswith('__') or node.decorator_list:
+            self.reject(node, '不支持特殊函数名称或装饰器')
+        self.generic_visit(node)
+
+    def visit_ClassDef(self, node):
+        self.reject(node, '当前课程不支持自定义类型')
+
+    def visit_MatchClass(self, node):
+        self.reject(node, '当前课程不支持类型模式匹配')
+
     def visit_Attribute(self, node):
-        """检查属性访问"""
-        if isinstance(node.attr, str) and node.attr in DANGEROUS_ATTRIBUTES:
-            self.errors.append({
-                'type': '安全警告',
-                'line': node.lineno,
-                'column': node.col_offset,
-                'message': f'禁止访问危险属性: {node.attr}',
-                'suggestion': '此属性可能绕过安全限制，请使用普通的属性访问方式'
-            })
-            self.has_errors = True
+        """Allow teaching operations, not access to arbitrary runtime objects."""
+        if node.attr not in ALLOWED_ATTRIBUTES:
+            self.reject(node, f'不支持访问属性: {node.attr}')
         self.generic_visit(node)
-    
+
     def visit_Call(self, node):
         """检查函数调用"""
         # 检查直接调用危险函数

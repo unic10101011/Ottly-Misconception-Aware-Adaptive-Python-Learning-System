@@ -60,6 +60,7 @@ async def ask_guide_question(problem_id: str, body: GuideQuestion, current_user:
     question = body.question.strip()
     if not question:
         raise HTTPException(status_code=422, detail='请输入想问的问题。')
+    db.rollback()
     result = await answer_question(story, question, [message.model_dump() for message in body.history])
     return {'code': 200, 'data': result}
 

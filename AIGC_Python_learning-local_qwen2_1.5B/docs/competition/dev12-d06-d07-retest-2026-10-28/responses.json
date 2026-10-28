@@ -1,0 +1,516 @@
+{
+  "started_at": "2026-10-28T14:30:30.108702+00:00",
+  "finished_at": "2026-10-28T14:30:40.185883+00:00",
+  "status": "completed",
+  "local_date": "2026-10-28",
+  "git_head": "921fd5d86eae02144b633a56739e04882fc1f2fa",
+  "working_tree_has_uncommitted_security_fixes": true,
+  "source_sha256": "e460158613ed65dcb8445c27eee141db6778e660c4b986adc1954d5389b1a611",
+  "runtime_image": "sha256:94d19046e86d040286c04ce47065183e9feceb3b0ff5cde481621a1db787f5e3",
+  "model_request_name": "deepseek-flash",
+  "real_api": true,
+  "model_configuration": {
+    "thinking": "enabled",
+    "reasoning_effort": "high",
+    "max_tokens": 8192
+  },
+  "attempt_policy": "One initial attempt per case. No automatic retries.",
+  "capture_scope": "Complete application HTTP responses, not discarded provider candidates or reasoning.",
+  "selected_cases": [
+    "D06",
+    "D07"
+  ],
+  "usage": null,
+  "usage_note": "The current application API does not expose provider usage or cost. model_load_ms=0 is not a measured model duration.",
+  "accounts": [
+    {
+      "label": "A",
+      "username": "dev12_df688fff_a",
+      "user_id": 29
+    }
+  ],
+  "setup": [
+    {
+      "account": "A",
+      "problem_id": "level1",
+      "submission_id": 278,
+      "seconds": 0.067,
+      "passed": true,
+      "analysis_status": "skipped"
+    },
+    {
+      "account": "A",
+      "problem_id": "greeting-v1",
+      "submission_id": 279,
+      "seconds": 0.118,
+      "passed": true,
+      "analysis_status": "skipped"
+    },
+    {
+      "account": "A",
+      "problem_id": "shell-shop-v1",
+      "submission_id": 280,
+      "seconds": 0.129,
+      "passed": true,
+      "analysis_status": "skipped"
+    },
+    {
+      "account": "A",
+      "problem_id": "shell-groups-v1",
+      "submission_id": 281,
+      "seconds": 0.138,
+      "passed": true,
+      "analysis_status": "skipped"
+    },
+    {
+      "account": "A",
+      "problem_id": "badge-v1",
+      "submission_id": 282,
+      "seconds": 0.169,
+      "passed": true,
+      "analysis_status": "skipped"
+    },
+    {
+      "account": "A",
+      "problem_id": "safe-sailing-v1",
+      "submission_id": 283,
+      "seconds": 0.176,
+      "passed": true,
+      "analysis_status": "skipped"
+    },
+    {
+      "account": "A",
+      "problem_id": "coastal-markers-v1",
+      "submission_id": 284,
+      "seconds": 0.133,
+      "passed": true,
+      "analysis_status": "skipped"
+    },
+    {
+      "account": "A",
+      "problem_id": "shell-total-v1",
+      "submission_id": 285,
+      "seconds": 0.133,
+      "passed": true,
+      "analysis_status": "skipped"
+    },
+    {
+      "account": "A",
+      "problem_id": "shell-savings-v1",
+      "submission_id": 286,
+      "seconds": 0.127,
+      "passed": true,
+      "analysis_status": "skipped"
+    },
+    {
+      "account": "A",
+      "problem_id": "radio-text-v1",
+      "submission_id": 287,
+      "seconds": 0.146,
+      "passed": true,
+      "analysis_status": "skipped"
+    },
+    {
+      "account": "A",
+      "problem_id": "temperature-max-v1",
+      "submission_id": 288,
+      "seconds": 0.15,
+      "passed": true,
+      "analysis_status": "skipped"
+    },
+    {
+      "account": "A",
+      "problem_id": "count-at-least-v1",
+      "submission_id": 289,
+      "seconds": 0.178,
+      "passed": true,
+      "analysis_status": "skipped"
+    }
+  ],
+  "cases": [
+    {
+      "id": "D06",
+      "problem_id": "coastal-markers-v1",
+      "mode": "submit",
+      "code": "n = int(input())\nfor i in range(1, n + 2):\n    print(i)",
+      "name": "循环多执行一次",
+      "account": "A",
+      "expected": {
+        "judge_status": "wrong_answer",
+        "passed_cases": 0,
+        "total_cases": 5,
+        "feedback_kind": "diagnosis",
+        "preferred_tag": "range_boundary"
+      },
+      "human_standard": "n=3实际多输出4；公开n=0实际输出1而非空。循环多包含一个数，不是少输出。",
+      "started_at": "2026-10-28T14:30:32.014642+00:00",
+      "completed_at": "2026-10-28T14:30:35.586816+00:00",
+      "http_response": {
+        "code": 200,
+        "data": {
+          "submission_id": 290,
+          "problem_id": "coastal-markers-v1",
+          "version": 1,
+          "created_at": "2026-10-28T14:30:32.000Z",
+          "error_type": "WRONG_ANSWER",
+          "judge": {
+            "status": "wrong_answer",
+            "passed": false,
+            "passed_cases": 0,
+            "total_cases": 5,
+            "cases": [
+              {
+                "case_id": "sample-1",
+                "passed": false,
+                "expected_output": "1\n2\n3\n",
+                "actual_output": "1\n2\n3\n4\n",
+                "output_available": true,
+                "errors": [],
+                "execution_time": 0.0,
+                "visibility": "public"
+              },
+              {
+                "case_id": "sample-2",
+                "passed": false,
+                "expected_output": "",
+                "actual_output": "1\n",
+                "output_available": true,
+                "errors": [],
+                "execution_time": 0.001,
+                "visibility": "public"
+              },
+              {
+                "case_id": "hidden-1",
+                "passed": false,
+                "expected_output": "",
+                "actual_output": "",
+                "output_available": false,
+                "errors": [],
+                "execution_time": 0.001,
+                "visibility": "hidden"
+              },
+              {
+                "case_id": "hidden-2",
+                "passed": false,
+                "expected_output": "",
+                "actual_output": "",
+                "output_available": false,
+                "errors": [],
+                "execution_time": 0.001,
+                "visibility": "hidden"
+              },
+              {
+                "case_id": "hidden-3",
+                "passed": false,
+                "expected_output": "",
+                "actual_output": "",
+                "output_available": false,
+                "errors": [],
+                "execution_time": 0.001,
+                "visibility": "hidden"
+              }
+            ],
+            "failed_tests": [
+              "sample-1",
+              "sample-2",
+              "hidden-1",
+              "hidden-2",
+              "hidden-3"
+            ]
+          },
+          "analysis": {
+            "status": "preparing",
+            "message": "正在准备反馈",
+            "model": null,
+            "content": null,
+            "feedback_kind": "diagnosis",
+            "guidance": null,
+            "source": null,
+            "model_load_ms": 0.0,
+            "personalization": {
+              "used": false,
+              "related_history_count": 0
+            },
+            "timings": {
+              "judge_ms": 107.85,
+              "model_load_ms": 0.0,
+              "hint_generation_ms": 0.0
+            }
+          },
+          "timings": {
+            "judge_ms": 107.85,
+            "model_load_ms": 0.0,
+            "hint_generation_ms": 0.0
+          },
+          "practice_recommendation_eligible": false
+        }
+      },
+      "analysis_http_response": {
+        "code": 200,
+        "data": {
+          "submission_id": 290,
+          "analysis": {
+            "status": "invalid_response",
+            "message": "错因分析未通过内容检查，判题结果已保留。请先对照实际输出或报错。",
+            "model": "deepseek-flash",
+            "content": null,
+            "feedback_kind": "diagnosis",
+            "guidance": null,
+            "source": null,
+            "model_load_ms": 0.0,
+            "personalization": {
+              "used": false,
+              "related_history_count": 0
+            },
+            "timings": {
+              "judge_ms": 107.85,
+              "model_load_ms": 0.0,
+              "hint_generation_ms": 3421.86
+            }
+          },
+          "timings": {
+            "judge_ms": 107.85,
+            "model_load_ms": 0.0,
+            "hint_generation_ms": 3421.86
+          }
+        }
+      },
+      "recommendation_http_response": null,
+      "checks": {
+        "judge_matches": true,
+        "real_ai_feedback_ready": false,
+        "feedback_route_matches": true,
+        "feedback_shape_matches": false
+      },
+      "timings_seconds": {
+        "submit": 0.129,
+        "feedback_endpoint": 3.442,
+        "case_total": 3.572
+      },
+      "transport_error": null,
+      "human_review": {
+        "correctness": "",
+        "evidence": "",
+        "tag_or_recommendation": "",
+        "readability": "",
+        "answer_protection": "",
+        "conclusion": "",
+        "notes": ""
+      },
+      "final_analysis": {
+        "status": "invalid_response",
+        "message": "错因分析未通过内容检查，判题结果已保留。请先对照实际输出或报错。",
+        "model": "deepseek-flash",
+        "content": null,
+        "feedback_kind": "diagnosis",
+        "guidance": null,
+        "source": null,
+        "model_load_ms": 0.0,
+        "personalization": {
+          "used": false,
+          "related_history_count": 0
+        },
+        "timings": {
+          "judge_ms": 107.85,
+          "model_load_ms": 0.0,
+          "hint_generation_ms": 3421.86
+        }
+      },
+      "technical_passed": false
+    },
+    {
+      "id": "D07",
+      "problem_id": "shell-total-v1",
+      "mode": "submit",
+      "code": "n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    total = i\nprint(total)",
+      "name": "覆盖与累加",
+      "account": "A",
+      "expected": {
+        "judge_status": "wrong_answer",
+        "passed_cases": 2,
+        "total_cases": 5,
+        "feedback_kind": "guidance",
+        "preferred_tag": ""
+      },
+      "human_standard": "n=4应10实际4；循环覆盖总数。由于部分通过只要求引导，不要求诊断标签或直接替换代码。",
+      "started_at": "2026-10-28T14:30:35.587159+00:00",
+      "completed_at": "2026-10-28T14:30:40.185123+00:00",
+      "http_response": {
+        "code": 200,
+        "data": {
+          "submission_id": 291,
+          "problem_id": "shell-total-v1",
+          "version": 1,
+          "created_at": "2026-10-28T14:30:36.000Z",
+          "error_type": "WRONG_ANSWER",
+          "judge": {
+            "status": "wrong_answer",
+            "passed": false,
+            "passed_cases": 2,
+            "total_cases": 5,
+            "cases": [
+              {
+                "case_id": "sample-1",
+                "passed": false,
+                "expected_output": "10\n",
+                "actual_output": "4\n",
+                "output_available": true,
+                "errors": [],
+                "execution_time": 0.001,
+                "visibility": "public"
+              },
+              {
+                "case_id": "hidden-1",
+                "passed": true,
+                "expected_output": "",
+                "actual_output": "",
+                "output_available": false,
+                "errors": [],
+                "execution_time": 0.001,
+                "visibility": "hidden"
+              },
+              {
+                "case_id": "hidden-2",
+                "passed": true,
+                "expected_output": "",
+                "actual_output": "",
+                "output_available": false,
+                "errors": [],
+                "execution_time": 0.001,
+                "visibility": "hidden"
+              },
+              {
+                "case_id": "hidden-3",
+                "passed": false,
+                "expected_output": "",
+                "actual_output": "",
+                "output_available": false,
+                "errors": [],
+                "execution_time": 0.001,
+                "visibility": "hidden"
+              },
+              {
+                "case_id": "hidden-4",
+                "passed": false,
+                "expected_output": "",
+                "actual_output": "",
+                "output_available": false,
+                "errors": [],
+                "execution_time": 0.001,
+                "visibility": "hidden"
+              }
+            ],
+            "failed_tests": [
+              "sample-1",
+              "hidden-3",
+              "hidden-4"
+            ]
+          },
+          "analysis": {
+            "status": "preparing",
+            "message": "正在准备反馈",
+            "model": null,
+            "content": null,
+            "feedback_kind": "guidance",
+            "guidance": null,
+            "source": null,
+            "model_load_ms": 0.0,
+            "personalization": {
+              "used": false,
+              "related_history_count": 0
+            },
+            "timings": {
+              "judge_ms": 128.74,
+              "model_load_ms": 0.0,
+              "hint_generation_ms": 0.0
+            }
+          },
+          "timings": {
+            "judge_ms": 128.74,
+            "model_load_ms": 0.0,
+            "hint_generation_ms": 0.0
+          },
+          "practice_recommendation_eligible": false
+        }
+      },
+      "analysis_http_response": {
+        "code": 200,
+        "data": {
+          "submission_id": 291,
+          "analysis": {
+            "status": "invalid_response",
+            "message": "AI 提示未通过内容检查，判题结果已保留。",
+            "model": "deepseek-flash",
+            "content": null,
+            "feedback_kind": "guidance",
+            "guidance": null,
+            "source": null,
+            "model_load_ms": 0.0,
+            "personalization": {
+              "used": false,
+              "related_history_count": 0
+            },
+            "timings": {
+              "judge_ms": 128.74,
+              "model_load_ms": 0.0,
+              "hint_generation_ms": 4403.89
+            }
+          },
+          "timings": {
+            "judge_ms": 128.74,
+            "model_load_ms": 0.0,
+            "hint_generation_ms": 4403.89
+          }
+        }
+      },
+      "recommendation_http_response": null,
+      "checks": {
+        "judge_matches": true,
+        "real_ai_feedback_ready": false,
+        "feedback_route_matches": true,
+        "feedback_shape_matches": false
+      },
+      "timings_seconds": {
+        "submit": 0.159,
+        "feedback_endpoint": 4.438,
+        "case_total": 4.598
+      },
+      "transport_error": null,
+      "human_review": {
+        "correctness": "",
+        "evidence": "",
+        "tag_or_recommendation": "",
+        "readability": "",
+        "answer_protection": "",
+        "conclusion": "",
+        "notes": ""
+      },
+      "final_analysis": {
+        "status": "invalid_response",
+        "message": "AI 提示未通过内容检查，判题结果已保留。",
+        "model": "deepseek-flash",
+        "content": null,
+        "feedback_kind": "guidance",
+        "guidance": null,
+        "source": null,
+        "model_load_ms": 0.0,
+        "personalization": {
+          "used": false,
+          "related_history_count": 0
+        },
+        "timings": {
+          "judge_ms": 128.74,
+          "model_load_ms": 0.0,
+          "hint_generation_ms": 4403.89
+        }
+      },
+      "technical_passed": false
+    }
+  ],
+  "human_review_status": "pending",
+  "summary": {
+    "cases": 2,
+    "technical_passed": 0,
+    "human_semantic_review": "pending"
+  }
+}

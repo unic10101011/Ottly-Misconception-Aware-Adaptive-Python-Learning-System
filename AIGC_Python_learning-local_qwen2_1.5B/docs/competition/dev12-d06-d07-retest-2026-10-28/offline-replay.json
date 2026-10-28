@@ -1,0 +1,21 @@
+{
+  "real_model_calls": 0,
+  "application_rules_modified": false,
+  "note": "Reworded candidates are offline controls, never live retest successes.",
+  "findings": [
+    {
+      "id": "D06",
+      "source_line_count": 3,
+      "before": [
+        "unsupported_claim"
+      ],
+      "after_output_line_rewording": [],
+      "model_review_was_reached": false
+    },
+    {
+      "id": "D07",
+      "before": "invalid_response",
+      "after_removing_assignment_example_from_quiz_explanation": "ready"
+    }
+  ]
+}

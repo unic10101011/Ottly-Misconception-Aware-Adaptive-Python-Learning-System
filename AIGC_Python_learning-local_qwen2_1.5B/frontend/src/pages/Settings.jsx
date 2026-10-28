@@ -169,8 +169,8 @@ function Settings() {
         <h2>修改密码</h2>
         <form onSubmit={changePassword}>
           <label>当前密码<input required type="password" autoComplete="current-password" value={oldPassword} onChange={event => setOldPassword(event.target.value)} /></label>
-          <label>新密码<input required type="password" minLength="8" autoComplete="new-password" value={newPassword} onChange={event => setNewPassword(event.target.value)} /></label>
-          <label>确认新密码<input required type="password" minLength="8" autoComplete="new-password" value={confirmPassword} onChange={event => setConfirmPassword(event.target.value)} /></label>
+          <label>新密码（12–128个字符）<input required type="password" minLength="12" maxLength="128" autoComplete="new-password" value={newPassword} onChange={event => setNewPassword(event.target.value)} /></label>
+          <label>确认新密码<input required type="password" minLength="12" maxLength="128" autoComplete="new-password" value={confirmPassword} onChange={event => setConfirmPassword(event.target.value)} /></label>
           <button className="btn btn-primary" disabled={busy}>修改密码并重新登录</button>
         </form>
       </section>

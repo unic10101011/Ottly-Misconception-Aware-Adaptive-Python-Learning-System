@@ -5,6 +5,7 @@ import subprocess
 import sys
 
 from .runner import BACKEND_ROOT
+from .limits import ExecutionBusy, execution_slot
 
 
 def collect_trace(raw, interrupted=False):
@@ -26,6 +27,16 @@ def collect_trace(raw, interrupted=False):
 
 
 def run_trace_process(code, stdin, timeout=3, *, supports_text=False, supports_structures=False):
+    try:
+        with execution_slot():
+            return _run_trace_process(code, stdin, timeout, supports_text=supports_text,
+                                      supports_structures=supports_structures)
+    except ExecutionBusy:
+        return {'line_semantics': 'before_execution', 'steps': [], 'exception': None,
+                'trace_status': 'unavailable', 'truncated': False, 'truncation_reason': None}
+
+
+def _run_trace_process(code, stdin, timeout, *, supports_text, supports_structures):
     env = {key: value for key, value in os.environ.items()
            if key.upper() in {'SYSTEMROOT', 'WINDIR', 'SYSTEMDRIVE', 'TEMP', 'TMP', 'PATH', 'LD_LIBRARY_PATH'}}
     env.update(PYTHONIOENCODING='utf-8', PYTHONUTF8='1', PYTHONDONTWRITEBYTECODE='1')

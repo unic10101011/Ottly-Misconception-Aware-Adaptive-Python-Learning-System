@@ -9,6 +9,7 @@ from pathlib import Path
 import subprocess
 import sys
 import time
+from .limits import ExecutionBusy, execution_slot
 
 
 BACKEND_ROOT = Path(__file__).resolve().parents[3]
@@ -23,18 +24,8 @@ def run_code_process(code: str, timeout: int = 3, stdin: str = '') -> dict:
     }
     env.update(PYTHONIOENCODING='utf-8', PYTHONUTF8='1', PYTHONDONTWRITEBYTECODE='1')
     try:
-        completed = subprocess.run(
-            [sys.executable, '-m', 'app.services.sandbox.worker'],
-            input=json.dumps({'code': code, 'timeout': timeout, 'stdin': stdin}, ensure_ascii=False),
-            cwd=BACKEND_ROOT,
-            env=env,
-            capture_output=True,
-            text=True,
-            encoding='utf-8',
-            errors='replace',
-            timeout=timeout,
-            check=False,
-        )
+        with execution_slot():
+            completed = _execute_worker(code, timeout, stdin, env)
         if completed.returncode != 0:
             raise ValueError('Worker did not return a result')
         result = json.loads(completed.stdout)
@@ -46,9 +37,9 @@ def run_code_process(code: str, timeout: int = 3, stdin: str = '') -> dict:
         error_type = '超时警告'
         message = f'代码执行超过 {timeout} 秒，执行进程已终止'
         suggestion = '检查循环终止条件或减少计算量'
-    except (OSError, ValueError):
+    except (OSError, ValueError, ExecutionBusy):
         error_type = 'RunnerError'
-        message = '代码执行器暂时不可用，请稍后重试'
+        message = '代码执行器暂时不可用或繁忙，请稍后重试'
         suggestion = '请检查后端运行环境'
     return {
         'success': False,
@@ -57,3 +48,18 @@ def run_code_process(code: str, timeout: int = 3, stdin: str = '') -> dict:
         'errors': [{'type': error_type, 'line': None, 'column': None, 'message': message, 'suggestion': suggestion}],
         'execution_time': round(time.monotonic() - started, 3),
     }
+
+
+def _execute_worker(code, timeout, stdin, env):
+    return subprocess.run(
+        [sys.executable, '-m', 'app.services.sandbox.worker'],
+        input=json.dumps({'code': code, 'timeout': timeout, 'stdin': stdin}, ensure_ascii=False),
+        cwd=BACKEND_ROOT,
+        env=env,
+        capture_output=True,
+        text=True,
+        encoding='utf-8',
+        errors='replace',
+        timeout=timeout,
+        check=False,
+    )
