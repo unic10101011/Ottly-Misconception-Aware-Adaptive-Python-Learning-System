@@ -1,0 +1,359 @@
+{
+  "completed_at": "2026-10-29T00:11:45.037890+08:00",
+  "previous_baseline": "acceptance-baseline-2026-10-28",
+  "baseline_tag": "acceptance-baseline-2026-10-29",
+  "old_project": "aigc_python_learning-local_qwen2_15b",
+  "new_project": "ottly",
+  "database_volume": "aigc_python_learning-local_qwen2_15b_db_data",
+  "all_table_contents_identical": true,
+  "tables_before": {
+    "ai_chat_records": {
+      "columns": [
+        "record_id",
+        "user_id",
+        "conversation_id",
+        "session_id",
+        "question",
+        "question_type",
+        "answer",
+        "response_time",
+        "is_stream"
+      ],
+      "rows": 26,
+      "sha256": "a2dd07d424bfee60b167f19a9a4479d6332924a592b4a9021ec04662003c851b"
+    },
+    "class_selections": {
+      "columns": [
+        "id",
+        "user_id",
+        "class_name",
+        "created_at"
+      ],
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "generated_problems": {
+      "columns": [
+        "problem_id",
+        "user_id",
+        "lesson_json",
+        "model",
+        "created_at"
+      ],
+      "rows": 1,
+      "sha256": "786e845a49fc060b70808d7ae35006b96ff904c66d44bafada72ff8778390d0a"
+    },
+    "guide_progress": {
+      "columns": [
+        "id",
+        "user_id",
+        "problem_id",
+        "guide_version",
+        "completed_at"
+      ],
+      "rows": 14,
+      "sha256": "40164711d802e53df3a77d3d4e72fc51b6bfef2379639a3c3629cbb78ad219af"
+    },
+    "language_settings": {
+      "columns": [
+        "id",
+        "user_settings_id",
+        "language",
+        "timezone"
+      ],
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "learning_reviews": {
+      "columns": [
+        "id",
+        "user_id",
+        "submission_id",
+        "source_submission_id"
+      ],
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "learning_submissions": {
+      "columns": [
+        "id",
+        "user_id",
+        "problem_id",
+        "problem_title",
+        "problem_description",
+        "schema_version",
+        "problem_version",
+        "difficulty",
+        "knowledge_ids",
+        "code",
+        "judge_json",
+        "analysis_json",
+        "passed",
+        "error_type",
+        "hints_viewed_max",
+        "created_at"
+      ],
+      "rows": 305,
+      "sha256": "737bd0778c3e0949eb7262416436d1ade0516e964c93158dc742adfb120087de"
+    },
+    "notification_preferences": {
+      "columns": [
+        "id",
+        "user_settings_id",
+        "email_notifications",
+        "push_notifications",
+        "sms_notifications"
+      ],
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "user_profiles": {
+      "columns": [
+        "user_id",
+        "nickname",
+        "signature"
+      ],
+      "rows": 1,
+      "sha256": "d125bfc5bd3e30b3febf640615217ac8e202d79b4bef7da8dc5a595ec7958b7a"
+    },
+    "user_settings": {
+      "columns": [
+        "id",
+        "user_id",
+        "eye_protection",
+        "volume"
+      ],
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "users": {
+      "columns": [
+        "id",
+        "username",
+        "password",
+        "phone",
+        "created_at",
+        "last_login",
+        "status"
+      ],
+      "rows": 30,
+      "sha256": "071d9b81925bd3d8a14c51dbc344c91db7e46ca9d1e187fe4e66ccdcad35abd5"
+    }
+  },
+  "tables_after": {
+    "ai_chat_records": {
+      "columns": [
+        "record_id",
+        "user_id",
+        "conversation_id",
+        "session_id",
+        "question",
+        "question_type",
+        "answer",
+        "response_time",
+        "is_stream"
+      ],
+      "rows": 26,
+      "sha256": "a2dd07d424bfee60b167f19a9a4479d6332924a592b4a9021ec04662003c851b"
+    },
+    "class_selections": {
+      "columns": [
+        "id",
+        "user_id",
+        "class_name",
+        "created_at"
+      ],
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "generated_problems": {
+      "columns": [
+        "problem_id",
+        "user_id",
+        "lesson_json",
+        "model",
+        "created_at"
+      ],
+      "rows": 1,
+      "sha256": "786e845a49fc060b70808d7ae35006b96ff904c66d44bafada72ff8778390d0a"
+    },
+    "guide_progress": {
+      "columns": [
+        "id",
+        "user_id",
+        "problem_id",
+        "guide_version",
+        "completed_at"
+      ],
+      "rows": 14,
+      "sha256": "40164711d802e53df3a77d3d4e72fc51b6bfef2379639a3c3629cbb78ad219af"
+    },
+    "language_settings": {
+      "columns": [
+        "id",
+        "user_settings_id",
+        "language",
+        "timezone"
+      ],
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "learning_reviews": {
+      "columns": [
+        "id",
+        "user_id",
+        "submission_id",
+        "source_submission_id"
+      ],
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "learning_submissions": {
+      "columns": [
+        "id",
+        "user_id",
+        "problem_id",
+        "problem_title",
+        "problem_description",
+        "schema_version",
+        "problem_version",
+        "difficulty",
+        "knowledge_ids",
+        "code",
+        "judge_json",
+        "analysis_json",
+        "passed",
+        "error_type",
+        "hints_viewed_max",
+        "created_at"
+      ],
+      "rows": 305,
+      "sha256": "737bd0778c3e0949eb7262416436d1ade0516e964c93158dc742adfb120087de"
+    },
+    "notification_preferences": {
+      "columns": [
+        "id",
+        "user_settings_id",
+        "email_notifications",
+        "push_notifications",
+        "sms_notifications"
+      ],
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "user_profiles": {
+      "columns": [
+        "user_id",
+        "nickname",
+        "signature"
+      ],
+      "rows": 1,
+      "sha256": "d125bfc5bd3e30b3febf640615217ac8e202d79b4bef7da8dc5a595ec7958b7a"
+    },
+    "user_settings": {
+      "columns": [
+        "id",
+        "user_id",
+        "eye_protection",
+        "volume"
+      ],
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "users": {
+      "columns": [
+        "id",
+        "username",
+        "password",
+        "phone",
+        "created_at",
+        "last_login",
+        "status"
+      ],
+      "rows": 30,
+      "sha256": "071d9b81925bd3d8a14c51dbc344c91db7e46ca9d1e187fe4e66ccdcad35abd5"
+    }
+  },
+  "inheritance_checks": {
+    "all_table_contents_identical": true,
+    "jwt_configuration_unchanged": true,
+    "original_session_valid": true,
+    "progress_and_submission_reads_identical": true,
+    "same_database_identity": true
+  },
+  "original_environment_bytes_preserved": true,
+  "private_backup": {
+    "path": ".cache/layout-migration-2026-10-28/database-before.sql",
+    "bytes": 711837,
+    "committed": false
+  },
+  "backend_source_sha256": "6f5c639acf3831a9132568a9e3cfc6c1314ae9b09a4c8c4c5eb0565559a9c79d",
+  "application_source_and_prompts_unchanged": true,
+  "unchanged_frozen_source_files": 245,
+  "changed_metadata_files": [
+    "compose.yaml",
+    "frontend/package.json",
+    "frontend/package-lock.json"
+  ],
+  "historical_evidence_files_preserved": 13,
+  "configuration_modes": {
+    "existing_install": {
+      "project": "ottly",
+      "backend_image": "ottly-backend:local",
+      "frontend_image": "ottly-frontend:local",
+      "database_volume": "aigc_python_learning-local_qwen2_15b_db_data",
+      "external": true
+    },
+    "fresh_install": {
+      "project": "ottly",
+      "database_volume": "ottly_db_data",
+      "external": false
+    }
+  },
+  "images": [
+    {
+      "ID": "sha256:11172f09655790b4e1fe7e3e09694b987167ae2c81e77f10e0a74030bf93af34",
+      "ContainerName": "ottly-backend-1",
+      "Repository": "ottly-backend",
+      "Tag": "local",
+      "Platform": "linux/amd64",
+      "Size": 70778522,
+      "Created": "2026-10-28T15:30:37.503074554Z",
+      "LastTagTime": "2026-10-28T15:57:37.946105609Z"
+    },
+    {
+      "ID": "sha256:24989179f58856db763f418010c1169fecc944e3ec1ea7e921572d83eb070f70",
+      "ContainerName": "ottly-db-1",
+      "Repository": "mysql",
+      "Tag": "8.4",
+      "Platform": "linux/amd64",
+      "Size": 238283573,
+      "Created": "2026-10-12T20:12:57.125197724Z",
+      "LastTagTime": "2026-10-17T11:26:25.192740116Z"
+    },
+    {
+      "ID": "sha256:8f4992b20545cee779c5ea567302fc56a48e549fccae5d861f402f65d4ba6e9a",
+      "ContainerName": "ottly-frontend-1",
+      "Repository": "ottly-frontend",
+      "Tag": "local",
+      "Platform": "linux/amd64",
+      "Size": 55673125,
+      "Created": "2026-10-28T12:38:11.142376558Z",
+      "LastTagTime": "2026-10-28T15:57:37.961453127Z"
+    }
+  ],
+  "regression": {
+    "backend_passed": 585,
+    "backend_skipped": 1,
+    "backend_subtests_passed": 9,
+    "frontend_passed": 110,
+    "production_build": "passed"
+  },
+  "paid_ai_calls": 0,
+  "startup_migration_guard": {
+    "legacy_configuration_detected": true,
+    "startup_stopped_before_new_configuration": true,
+    "legacy_environment_untouched": true
+  },
+  "startup_script_changed": "Preserve ignored legacy configuration before generating a new .env"
+}

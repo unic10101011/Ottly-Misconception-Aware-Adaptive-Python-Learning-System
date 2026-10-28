@@ -4,6 +4,8 @@
 
 ## 启动
 
+项目已展开到 Git 仓库根目录，`backend/`、`frontend/`、`docs/`、`compose.yaml` 与启动脚本位于同一层，不再需要进入旧的 AIGC/Qwen 子目录。Compose 项目名称固定为 `ottly`，镜像为 `ottly-backend:local` 和 `ottly-frontend:local`。
+
 在 Windows 上先启动 Docker Desktop，然后双击 start-demo.bat。首次启动会下载并构建镜像，脚本会在本目录生成仅供本机使用的 .env，其中包含随机数据库密码和 JWT 密钥。页面地址是 http://127.0.0.1:3000。
 
 拉取更新后再次运行 start-demo.bat，脚本会重建前后端以应用新代码。启动脚本支持查找 Docker 的用户安装目录和系统安装目录，并输出完整构建步骤。构建中的 `#24` 等编号只是步骤编号，应结合后面的步骤名称判断进度；如果长期停在执行命令阶段，可先在 Docker Desktop 中重启引擎后重试。在 PowerShell 中运行 `powershell -NoProfile -ExecutionPolicy Bypass -File .\start-demo.ps1 -NoBrowser` 可启动并检查服务而不自动打开浏览器。
@@ -11,6 +13,10 @@
 若 Docker 提示 `WSL is unresponsive`，退出 Docker Desktop 后执行 `wsl --shutdown`，再启动 Docker Desktop。若关闭 WSL 的命令也一直无响应，请保存工作并使用 Windows 的“重启”，之后等待 Docker 引擎就绪再运行启动脚本。不要使用“恢复出厂设置”处理此问题，以免清除数据库卷。
 
 双击 stop-demo.bat 可停止服务。数据库保存在 Docker 命名卷中，停止服务不会删除账号和聊天记录。不要把 .env 上传到 GitHub。
+
+新安装默认使用 `ottly_db_data`。从旧目录迁移已有数据时，在本机 `.env` 设置 `OTTLY_DB_VOLUME=原有卷名` 和 `OTTLY_DB_EXTERNAL=true`，并沿用原 `.env` 中的数据库密码与 JWT 密钥；先停止旧项目，再启动 `ottly`，避免两个 MySQL 容器同时打开同一个数据卷。外部卷不存在时启动会报错，不会回退创建空库。停止旧项目不要使用 `down -v`。本次迁移与数据继承结果见[目录调整验收记录](docs/competition/layout-migration-2026-10-28/目录调整与数据继承.md)。
+
+已有克隆执行 `git pull` 后，Git 不会搬移被忽略的 `.env`、`research-archive/` 或本机缓存。启动前先将旧目录的 `.env` 移到仓库根目录，不要覆盖已经存在的配置，并按上文设置原数据卷。启动脚本若发现根目录没有 `.env`、旧目录却留有配置，会停止并提示迁移，不会直接生成新密钥。前端依赖可在新位置通过 `npm ci` 重装。
 
 可在本目录运行 docker compose ps 查看服务，运行 docker compose logs backend 查看后端错误。
 
@@ -121,4 +127,4 @@ DEEPSEEK_BASE_URL=https://api.deepseek.com
 
 在 backend 目录使用 Python 3.11 虚拟环境安装 requirements.lock.txt 与 pytest，先运行 `python validate_catalog.py --check-solutions`，再运行 `python -m pytest tests -q`。Docker 使用已验收的 Python 基础镜像摘要与完整依赖锁文件；requirements.txt 保留为直接依赖清单。在 frontend 目录运行 `npm ci`、`node --test tests/*.test.cjs` 和 `npm run build`。演示版启动后，在 backend 目录运行 `python tests/live_submission_smoke.py --output ../docs/live-submission.json` 可通过真实 HTTP 接口验证四种错误代码和正确代码；脚本每次创建一个独立 smoke_ 测试账号，报告不保存密码和令牌。专用 MySQL 契约测试和样例生成步骤见实施契约。
 
-正式 AI 验收基线见[版本冻结记录](docs/competition/freeze-2026-10-28/冻结版本.md)，对应 Git 标签 `acceptance-baseline-2026-10-28`。后续修改代码、提示词、题库或运行参数时，应建立新基线并保留此前验收结果。
+当前目录布局与部署验收基线为 `acceptance-baseline-2026-10-29`，见[目录调整验收记录](docs/competition/layout-migration-2026-10-28/目录调整与数据继承.md)。此前应用行为的正式 AI 验收基线见[版本冻结记录](docs/competition/freeze-2026-10-28/冻结版本.md)，标签 `acceptance-baseline-2026-10-28` 保留，其路径与镜像属于调整前版本。后续修改代码、提示词、题库或运行参数时，应建立新基线并保留此前验收结果。

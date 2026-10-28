@@ -1,0 +1,14 @@
+{
+  "existing_install": {
+    "project": "ottly",
+    "backend_image": "ottly-backend:local",
+    "frontend_image": "ottly-frontend:local",
+    "database_volume": "aigc_python_learning-local_qwen2_15b_db_data",
+    "external": true
+  },
+  "fresh_install": {
+    "project": "ottly",
+    "database_volume": "ottly_db_data",
+    "external": false
+  }
+}

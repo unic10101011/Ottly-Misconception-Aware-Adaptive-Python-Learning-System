@@ -1,0 +1,164 @@
+ Image ottly-backend:local Building 
+ Image ottly-frontend:local Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 1.16kB 0.0s done
+#1 DONE 0.0s
+
+#2 [backend internal] load build definition from Dockerfile
+#2 transferring dockerfile: 325B done
+#2 DONE 0.0s
+
+#3 [frontend internal] load build definition from Dockerfile
+#3 transferring dockerfile: 267B done
+#3 DONE 0.0s
+
+#4 [backend internal] load metadata for docker.io/library/python:3.11-slim@sha256:9c900dea9e8fb7e16277c179b555cc72d29a352dbc33cff48ad5a0412fd5bfc7
+#4 DONE 0.1s
+
+#5 [frontend internal] load metadata for docker.io/library/nginx:alpine
+#5 DONE 0.1s
+
+#6 [backend internal] load .dockerignore
+#6 transferring context: 178B done
+#6 DONE 0.0s
+
+#7 [frontend internal] load metadata for docker.io/library/node:20-alpine
+#7 DONE 0.1s
+
+#8 [frontend internal] load .dockerignore
+#8 transferring context: 66B done
+#8 DONE 0.0s
+
+#9 [frontend internal] load build context
+#9 DONE 0.0s
+
+#10 [backend internal] load build context
+#10 transferring context: 8.90kB 0.0s done
+#10 DONE 0.0s
+
+#11 [backend 1/5] FROM docker.io/library/python:3.11-slim@sha256:9c900dea9e8fb7e16277c179b555cc72d29a352dbc33cff48ad5a0412fd5bfc7
+#11 resolve docker.io/library/python:3.11-slim@sha256:9c900dea9e8fb7e16277c179b555cc72d29a352dbc33cff48ad5a0412fd5bfc7 0.1s done
+#11 DONE 0.1s
+
+#12 [backend 4/5] RUN pip install --no-cache-dir -r requirements.lock.txt
+#12 CACHED
+
+#13 [backend 2/5] WORKDIR /app
+#13 CACHED
+
+#14 [backend 3/5] COPY requirements*.txt .
+#14 CACHED
+
+#15 [backend 5/5] COPY . .
+#15 CACHED
+
+#16 [frontend build 1/6] FROM docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293
+#16 resolve docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293 0.1s done
+#16 DONE 0.1s
+
+#17 [frontend stage-1 1/3] FROM docker.io/library/nginx:alpine@sha256:a3554c0d0b48177b1413c26e01f695334428020d9df01243fbae3e11cfd17417
+#17 resolve docker.io/library/nginx:alpine@sha256:a3554c0d0b48177b1413c26e01f695334428020d9df01243fbae3e11cfd17417 0.1s done
+#17 DONE 0.1s
+
+#9 [frontend internal] load build context
+#9 transferring context: 90.63kB 0.0s done
+#9 DONE 0.0s
+
+#18 [frontend build 2/6] WORKDIR /app
+#18 CACHED
+
+#19 [frontend build 3/6] COPY package*.json ./
+#19 DONE 0.1s
+
+#20 [backend] exporting to image
+#20 exporting layers done
+#20 exporting manifest sha256:346d5a05ddd9fe3a86422c68619444bef334c33fbe07c2d37a2e0bbb54f79ffe 0.0s done
+#20 exporting config sha256:64bbfb32f5f0c8c1aeedcea199f0639ed275f04a15b12ebcc1519fae64308403 0.0s done
+#20 exporting attestation manifest sha256:6e9cab9e4b14d1cb4090ab7b861f8f2c2f2e36f0094c2658be61551631888234
+#20 exporting attestation manifest sha256:6e9cab9e4b14d1cb4090ab7b861f8f2c2f2e36f0094c2658be61551631888234 0.0s done
+#20 exporting manifest list sha256:6375d90c37fff87446a8d4cae78f08d43df7c56584c7191454242613c8274761 0.0s done
+#20 naming to docker.io/library/ottly-backend:local 0.0s done
+#20 unpacking to docker.io/library/ottly-backend:local 0.0s done
+#20 DONE 0.2s
+
+#21 [frontend build 4/6] RUN npm ci
+#21 ...
+
+#22 [backend] resolving provenance for metadata file
+#22 DONE 0.0s
+
+#21 [frontend build 4/6] RUN npm ci
+#21 4.172 npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+#21 21.41 
+#21 21.41 added 117 packages, and audited 118 packages in 21s
+#21 21.41 
+#21 21.41 14 packages are looking for funding
+#21 21.41   run `npm fund` for details
+#21 21.44 
+#21 21.44 11 vulnerabilities (1 low, 5 moderate, 5 high)
+#21 21.44 
+#21 21.44 To address issues that do not require attention, run:
+#21 21.44   npm audit fix
+#21 21.44 
+#21 21.44 To address all issues (including breaking changes), run:
+#21 21.44   npm audit fix --force
+#21 21.44 
+#21 21.44 Run `npm audit` for details.
+#21 21.45 npm notice
+#21 21.45 npm notice New major version of npm available! 10.8.2 -> 12.2.1
+#21 21.45 npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+#21 21.45 npm notice To update run: npm install -g npm@12.2.1
+#21 21.45 npm notice
+#21 DONE 21.7s
+
+#23 [frontend build 5/6] COPY . .
+#23 DONE 0.3s
+
+#24 [frontend build 6/6] RUN npm run build
+#24 0.420 
+#24 0.420 > ottly-frontend@1.0.0 build
+#24 0.420 > vite build
+#24 0.420 
+#24 0.614 [33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+#24 0.646 vite v5.4.21 building for production...
+#24 0.694 transforming...
+#24 2.762 ✓ 94 modules transformed.
+#24 3.069 rendering chunks...
+#24 3.124 computing gzip size...
+#24 3.139 dist/index.html                               0.50 kB │ gzip:   0.38 kB
+#24 3.139 dist/assets/yonghu-0iptb1OH.png               7.47 kB
+#24 3.139 dist/assets/chathaita-Cd3UDMcc.png            8.21 kB
+#24 3.140 dist/assets/yunduo-CV19mzyN.png              72.59 kB
+#24 3.140 dist/assets/xingxing-DmQlu4O3.png           101.87 kB
+#24 3.140 dist/assets/ottly-message-CdMWUgRf.png      105.81 kB
+#24 3.140 dist/assets/loginhaita-C1m6GWF3.png         161.75 kB
+#24 3.140 dist/assets/sea_otter-CfIZFMgD.png          228.29 kB
+#24 3.140 dist/assets/ottly-exercise-UVSToRlx.png   1,053.45 kB
+#24 3.140 dist/assets/chatbeijing-BHG_ig1e.png      2,426.28 kB
+#24 3.140 dist/assets/index-BpXMooIh.css               85.99 kB │ gzip:  18.62 kB
+#24 3.140 dist/assets/index-GvKajEjC.js               282.32 kB │ gzip:  92.46 kB
+#24 3.140 dist/assets/PythonEditorView-DtFWkvCW.js    376.32 kB │ gzip: 127.94 kB
+#24 3.141 ✓ built in 2.47s
+#24 DONE 3.3s
+
+#25 [frontend stage-1 2/3] COPY nginx.conf /etc/nginx/conf.d/default.conf
+#25 CACHED
+
+#26 [frontend stage-1 3/3] COPY --from=build /app/dist /usr/share/nginx/html
+#26 CACHED
+
+#27 [frontend] exporting to image
+#27 exporting layers done
+#27 exporting manifest sha256:41bc80f01a1cb7b29324b26f6d77549f2de15d394ae1b35629e26b577cf1fa1a 0.0s done
+#27 exporting config sha256:4d2579afb8a5a3fd0f3271503575be4c06316b08d54724920bbce78d068abf37 0.0s done
+#27 exporting attestation manifest sha256:18a16a05117509d729ac1408027a96b2d05b2155d3b2bbdde90b7e9c96a6c0b8 0.0s done
+#27 exporting manifest list sha256:08acb0a05d1790a079b4616d7d9d1343c66621e778faad71bcd854c14a2cfd98
+#27 exporting manifest list sha256:08acb0a05d1790a079b4616d7d9d1343c66621e778faad71bcd854c14a2cfd98 0.0s done
+#27 naming to docker.io/library/ottly-frontend:local done
+#27 unpacking to docker.io/library/ottly-frontend:local 0.0s done
+#27 DONE 0.2s
+
+#28 [frontend] resolving provenance for metadata file
+#28 DONE 0.0s
+ Image ottly-backend:local Built 
+ Image ottly-frontend:local Built 

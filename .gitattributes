@@ -1,6 +1,8 @@
 # Keep acceptance evidence byte-identical so published SHA256 values stay valid.
-AIGC_Python_learning-local_qwen2_1.5B/docs/competition/dev12-*/** -text whitespace=cr-at-eol,-blank-at-eof
-AIGC_Python_learning-local_qwen2_1.5B/docs/competition/feedback-guard-fix-*/** -text whitespace=cr-at-eol,-blank-at-eof
-AIGC_Python_learning-local_qwen2_1.5B/docs/competition/freeze-2026-10-28/** -text whitespace=cr-at-eol,-blank-at-eof
+docs/competition/dev12-*/** -text whitespace=cr-at-eol,-blank-at-eof
+docs/competition/feedback-guard-fix-*/** -text whitespace=cr-at-eol,-blank-at-eof
+docs/competition/freeze-2026-10-28/** -text whitespace=cr-at-eol,-blank-at-eof
+docs/competition/layout-migration-2026-10-28/** -text whitespace=cr-at-eol,-blank-at-eof
+docs/competition/layout-migration-2026-10-28/*.txt -whitespace
 # Verbatim Docker output includes trailing spaces; its published checksum is immutable.
-AIGC_Python_learning-local_qwen2_1.5B/docs/competition/feedback-guard-fix-2026-10-28/backend-regression.txt -whitespace
+docs/competition/feedback-guard-fix-2026-10-28/backend-regression.txt -whitespace

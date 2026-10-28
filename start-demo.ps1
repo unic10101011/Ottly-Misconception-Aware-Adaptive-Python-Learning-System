@@ -3,6 +3,12 @@
 $ErrorActionPreference = 'Stop'
 Set-Location -LiteralPath $PSScriptRoot
 
+# Git does not relocate ignored configuration files when an existing clone is updated.
+$legacyEnvFile = Join-Path $PSScriptRoot 'AIGC_Python_learning-local_qwen2_1.5B\.env'
+if (-not (Test-Path -LiteralPath (Join-Path $PSScriptRoot '.env')) -and (Test-Path -LiteralPath $legacyEnvFile)) {
+    throw '检测到旧目录中的 .env。请先按 README 将原配置移到仓库根目录并设置原数据卷映射，再启动；本次不会生成新配置或连接空库。'
+}
+
 function New-HexSecret {
     $bytes = New-Object byte[] 32
     $generator = [System.Security.Cryptography.RandomNumberGenerator]::Create()
