@@ -1,0 +1,9 @@
+{
+  "source": "用户在当前会话中明确答复",
+  "trial_id": "C54-R3",
+  "human_decision": "保留答案保护1分，结论改为不通过",
+  "change": "仅将该行人工结论由通过改为不通过；分数和备注均不变。",
+  "before_sha256": "73a8ac82bff675b9b470983adf54907ad785bd683a40d71ec67a35d5ef786c01",
+  "after_sha256": "242413a62a3d8443fdc5d8fc43860f62b78015b13bfcb58d97b7631b35f31b08",
+  "original_note_retained": "该行原备注仍写“未发现实质问题”，系更正前原文；最新结论及理由以本记录中的用户明确决定为准。"
+}

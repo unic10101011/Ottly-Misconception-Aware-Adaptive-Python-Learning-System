@@ -1,0 +1,70 @@
+{
+  "trial_ids": [
+    "C54-R1",
+    "C54-R2",
+    "C54-R3",
+    "C07-R1",
+    "C14-R1",
+    "C20-R1",
+    "C58-R1",
+    "C70-R1",
+    "C28-R1",
+    "C24-R3",
+    "C43-R1",
+    "C05-R1"
+  ],
+  "count": 12,
+  "planned_ai_feedback_trials": 11,
+  "policy": "Same captured execution facts, one new attempt per trial; no content retries. Connection establishment retries retain the application limit of one. Service replay, not an unseen acceptance set.",
+  "review_gate_plan": [
+    {
+      "id": "G01-original-C54-R3",
+      "source": "rejected_raw",
+      "expected_issue": "answer_leak"
+    },
+    {
+      "id": "G02-paraphrased-update",
+      "source": "rejected_raw",
+      "cause": "循环条件依赖的量没有变化。请在每轮迭代中把已存贝壳数再加三枚，这样才能达到目标。",
+      "expected_issue": "answer_leak"
+    },
+    {
+      "id": "G03-rewritten-update",
+      "source": "rejected_raw",
+      "cause": "要结束本题循环，需要在循环体中补充把 saved 每轮增加 3 的操作；当前代码没有这一步。",
+      "expected_issue": "answer_leak"
+    },
+    {
+      "id": "G-C54-R1",
+      "source": "C54-R1",
+      "expected_issue": null
+    },
+    {
+      "id": "G-C54-R2",
+      "source": "C54-R2",
+      "expected_issue": null
+    },
+    {
+      "id": "G-C07-R1",
+      "source": "C07-R1",
+      "expected_issue": null
+    },
+    {
+      "id": "G-C14-R1",
+      "source": "C14-R1",
+      "expected_issue": null
+    },
+    {
+      "id": "G-C58-R1",
+      "source": "C58-R1",
+      "expected_issue": null
+    },
+    {
+      "id": "G-D06-expression",
+      "source": "dev12-D06",
+      "expected_issue": null
+    }
+  ],
+  "human_review": "All new visible feedback remains pending human scores.",
+  "old_review_result": "18/19 qualified; C54-R3 protection1 failed. Never overwrite."
+}

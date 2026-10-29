@@ -61,22 +61,62 @@ def _code_tokens(code: str) -> tuple | None:
         return None
 
 
-def replacement_statement(text: str, student_code: str = '') -> str | None:
+def replacement_statement(text: str, student_code: str = '', *, public_inputs: list[str] | None = None,
+                          allow_source_observation: bool = False) -> str | None:
     """Exempt exact quoted student lines, never directives or newly supplied fixes."""
     source = {_code_tokens(line.strip()) for line in student_code.splitlines() if line.strip()}
     source.discard(None)
+
+    def observed_operation(prefix):
+        # Existing erroneous statements may be described as "却写成" or
+        # "本次调用...执行". These describe what ran, not an instruction to fix it.
+        if not allow_source_observation:
+            return False
+        if re.search(r'(?:却|但|实际|原来|当前)(?:写成|使用|执行|运行)\s*$', prefix):
+            return True
+        sentence = re.split(r'[。；;\n]', prefix)[-1]
+        return bool(re.search(r'执行\s*$', sentence) and re.search(r'本次|实际|程序|函数|调用|循环', sentence)
+                    and not re.search(r'请|应|需要|改为|改成|补上|添加|必须', sentence))
 
     def quote(match):
         fragment = next(group for group in match.groups() if group is not None)
         prefix = text[:match.start()]
         directive = re.search(r'(?:改为|改成|替换为|替换成|换成|写成|添加|补上|使用|执行|运行|复制|粘贴|请用|改用|应当|应该|必须)(?:下面的?|以下的?|这一?句)?\s*[:：]?\s*$', prefix)
         conceptual = fragment.strip() == 'print()' and re.match(r'\s*(?:函数|的(?:作用|返回值|含义)|会返回|用于)', text[match.end():])
-        if not directive and (_code_tokens(fragment.strip()) in source or conceptual):
+        if (not directive or observed_operation(prefix)) and (_code_tokens(fragment.strip()) in source or conceptual):
             return ' ' * len(match.group())
         return match.group()
 
     prose = re.sub(r'(?<!`)`([^`\n]+)`(?!`)|“([^”\n]+)”|「([^」\n]+)」', quote, text)
-    match = re.search(r'\b(?:for|while|def)\s+[A-Za-z_][^。\n]*:|\bprint\s*\(|\breturn(?:\s*\(|\s+[A-Za-z_0-9])|\b[A-Za-z_]\w*\s*(?:[+*/%-]=|=(?!=))', prose)
+    if allow_source_observation:
+        for line in sorted(student_code.splitlines(), key=len, reverse=True):
+            line = line.strip()
+            if not line:
+                continue
+            def observation(match):
+                prefix = prose[:match.start()]
+                if re.match(r'\s*[A-Za-z_0-9+*/%([.=\-]', prose[match.end():]):
+                    return match.group()
+                if (not observed_operation(prefix)
+                        and re.search(r'(?:改为|改成|替换为|替换成|换成|写成|添加|补上|使用|执行|运行|复制|粘贴|请用|改用|应当|应该|必须)\s*[:：]?\s*$', prefix)):
+                    return match.group()
+                return ' ' * len(match.group())
+            prose = re.sub(r'(?<![A-Za-z_0-9])' + re.escape(line), observation, prose)
+    # Only a labelled, observed input value is data notation. Arbitrary numeric
+    # assignments and modification directives must still be caught below.
+    values = {line.strip() for stdin in (public_inputs or []) for line in stdin.splitlines()}
+    def input_notation(match):
+        prefix = re.split(r'[。；;\n]', prose[:match.start()])[-1]
+        labelled = re.search(r'公开样例|公开用例|public_cases|样例输入|本次|输入|sample-\w+', prefix)
+        contextual = re.match(r'\s*(?:时|的(?:输入|样例)|(?:、|和)\s*[A-Za-z_]\w*\s*=)', prose[match.end():])
+        if allow_source_observation and re.match(r'\s*且', prose[match.end():]):
+            contextual = True
+        if (match['value'] not in values or not (labelled or contextual)
+                or re.search(r'改为|改成|设为|赋值|写成|替换|添加|补上', prefix)):
+            return match.group()
+        return ' ' * len(match.group())
+    prose = re.sub(r'\b[A-Za-z_]\w*\s*=\s*(?P<value>-?\d+(?:\.\d+)?)(?![\w.+*/%-])', input_notation, prose)
+    match = re.search(r'\b(?:for|while|def|if|elif)\s+[A-Za-z_][^。\n]*:|\belse\s*:|\bprint\s*\(|\breturn(?:\s*\(|\s+[A-Za-z_0-9])|\b[A-Za-z_]\w*\s*(?:[+*/%-]=|=(?!=))', prose)
     return match.group() if match else None
 
 

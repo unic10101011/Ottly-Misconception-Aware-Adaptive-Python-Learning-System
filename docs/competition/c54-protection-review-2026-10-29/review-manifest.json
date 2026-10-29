@@ -1,0 +1,47 @@
+{
+  "status": "scoped_c54_retest_human_passed",
+  "files": [
+    {
+      "path": "finalize_review.py",
+      "sha256": "ae93280c30af675be77ac6511e09bc1bc6c01b639134db13a331d968003939c6"
+    },
+    {
+      "path": "human-review-rows.json",
+      "sha256": "289db90ef1a550a159c5d0342d913bf98b594e53ee631b3506e0f475ca6ecd5f"
+    },
+    {
+      "path": "human-review-summary.json",
+      "sha256": "26e591f7d2d6775cda03ee3416ca57df4d3e06a42a5c2095735aaabaef07d45f"
+    },
+    {
+      "path": "human-review.snapshot.txt",
+      "sha256": "aac565e3ac4da5e73f49ec25623c5cde68f1ea014acb0f4e9ac5b588f3debe5d"
+    },
+    {
+      "path": "人工复测定稿.md",
+      "sha256": "3be9635a3f391106c5c4de72b698f37899628a72c0f00cd3a6468a350dac0077"
+    }
+  ],
+  "sources": [
+    {
+      "path": "c54-protection-fix-2026-10-29/人工复测检查表.md",
+      "sha256": "aac565e3ac4da5e73f49ec25623c5cde68f1ea014acb0f4e9ac5b588f3debe5d"
+    },
+    {
+      "path": "c54-protection-fix-2026-10-29/manifest.json",
+      "sha256": "ca219742956e0177d5f1618a7ca1a6aeb37a355e1c5a4b60dd33777242982537"
+    },
+    {
+      "path": "c54-protection-fix-2026-10-29/final/real-ai-results.json",
+      "sha256": "6d5868fc1e360c496f3e7fba0a32f71adef62662b70f792e1258377f9d3abc32"
+    },
+    {
+      "path": "c54-protection-fix-2026-10-29/final/review-gate-results.json",
+      "sha256": "b024196ec4bd3a576a3c772b7894bf11cc933f7d7e902232ff9a702c780b479f"
+    },
+    {
+      "path": "c54-protection-fix-2026-10-29/application-state-final.json",
+      "sha256": "4e958d2793028abb03a09a93027090b788c3ab57c73af8a3b549c394901f9f90"
+    }
+  ]
+}

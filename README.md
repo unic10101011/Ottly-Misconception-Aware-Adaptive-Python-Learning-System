@@ -127,4 +127,4 @@ DEEPSEEK_BASE_URL=https://api.deepseek.com
 
 在 backend 目录使用 Python 3.11 虚拟环境安装 requirements.lock.txt 与 pytest，先运行 `python validate_catalog.py --check-solutions`，再运行 `python -m pytest tests -q`。Docker 使用已验收的 Python 基础镜像摘要与完整依赖锁文件；requirements.txt 保留为直接依赖清单。在 frontend 目录运行 `npm ci`、`node --test tests/*.test.cjs` 和 `npm run build`。演示版启动后，在 backend 目录运行 `python tests/live_submission_smoke.py --output ../docs/live-submission.json` 可通过真实 HTTP 接口验证四种错误代码和正确代码；脚本每次创建一个独立 smoke_ 测试账号，报告不保存密码和令牌。专用 MySQL 契约测试和样例生成步骤见实施契约。
 
-当前目录布局与部署验收基线为 `acceptance-baseline-2026-10-29`，见[目录调整验收记录](docs/competition/layout-migration-2026-10-28/目录调整与数据继承.md)。此前应用行为的正式 AI 验收基线见[版本冻结记录](docs/competition/freeze-2026-10-28/冻结版本.md)，标签 `acceptance-baseline-2026-10-28` 保留，其路径与镜像属于调整前版本。后续修改代码、提示词、题库或运行参数时，应建立新基线并保留此前验收结果。
+当前修复版冻结标识为 `acceptance-baseline-2026-10-29-r2`，见[修复版冻结记录](docs/competition/freeze-2026-10-29-r2/冻结版本.md)。目录调整基线 `acceptance-baseline-2026-10-29` 和此前 `acceptance-baseline-2026-10-28` 均保留，历史验收仍对应原版本。新基线已完成636项后端回归及C54定向人工复测，推荐、出题、问答与回放专项尚待执行，详见[参赛验收导航](docs/competition/README.md)。后续修改代码、提示词、题库或运行参数时，应建立新基线并保留此前验收结果。

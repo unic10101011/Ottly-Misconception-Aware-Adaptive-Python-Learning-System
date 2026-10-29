@@ -1,0 +1,383 @@
+{
+  "scope": "Literal matching only; notes may include proposed wording and paraphrases, which are not misquotes by themselves.",
+  "items": [
+    {
+      "trial_id": "C07-R1",
+      "reviewer": "A",
+      "quotes": [
+        {
+          "quote": "应拼接字符串 \"!\"，而不是整数 1",
+          "literal_match_ignoring_whitespace": true
+        }
+      ]
+    },
+    {
+      "trial_id": "C07-R1",
+      "reviewer": "B",
+      "quotes": []
+    },
+    {
+      "trial_id": "C08-R1",
+      "reviewer": "A",
+      "quotes": []
+    },
+    {
+      "trial_id": "C08-R1",
+      "reviewer": "B",
+      "quotes": [
+        {
+          "quote": "公开样例中，输入姓名与期望输出的字母大小写不同",
+          "literal_match_ignoring_whitespace": true
+        },
+        {
+          "quote": "实际输出中的姓名与期望输出（或输入）大小写不同",
+          "literal_match_ignoring_whitespace": false
+        },
+        {
+          "quote": "把实际输出和期望输出逐字符比较",
+          "literal_match_ignoring_whitespace": true
+        }
+      ]
+    },
+    {
+      "trial_id": "C10-R1",
+      "reviewer": "A",
+      "quotes": []
+    },
+    {
+      "trial_id": "C10-R1",
+      "reviewer": "B",
+      "quotes": []
+    },
+    {
+      "trial_id": "C13-R1",
+      "reviewer": "A",
+      "quotes": [
+        {
+          "quote": "quantity 缺少 int() 转换",
+          "literal_match_ignoring_whitespace": true
+        }
+      ]
+    },
+    {
+      "trial_id": "C13-R1",
+      "reviewer": "B",
+      "quotes": []
+    },
+    {
+      "trial_id": "C14-R1",
+      "reviewer": "A",
+      "quotes": [
+        {
+          "quote": "price * quantity",
+          "literal_match_ignoring_whitespace": true
+        }
+      ]
+    },
+    {
+      "trial_id": "C14-R1",
+      "reviewer": "B",
+      "quotes": []
+    },
+    {
+      "trial_id": "C20-R1",
+      "reviewer": "A",
+      "quotes": [
+        {
+          "quote": "17//5=3",
+          "literal_match_ignoring_whitespace": true
+        }
+      ]
+    },
+    {
+      "trial_id": "C20-R1",
+      "reviewer": "B",
+      "quotes": []
+    },
+    {
+      "trial_id": "C24-R1",
+      "reviewer": "A",
+      "quotes": [
+        {
+          "quote": "没有先检查 capacity 是否为 0",
+          "literal_match_ignoring_whitespace": true
+        }
+      ]
+    },
+    {
+      "trial_id": "C24-R1",
+      "reviewer": "B",
+      "quotes": []
+    },
+    {
+      "trial_id": "C28-R1",
+      "reviewer": "A",
+      "quotes": [
+        {
+          "quote": "if score >= 90:",
+          "literal_match_ignoring_whitespace": true
+        }
+      ]
+    },
+    {
+      "trial_id": "C28-R1",
+      "reviewer": "B",
+      "quotes": []
+    },
+    {
+      "trial_id": "C44-R1",
+      "reviewer": "A",
+      "quotes": [
+        {
+          "quote": "应初始化为 0，再累加 1 到 n",
+          "literal_match_ignoring_whitespace": true
+        }
+      ]
+    },
+    {
+      "trial_id": "C44-R1",
+      "reviewer": "B",
+      "quotes": []
+    },
+    {
+      "trial_id": "C54-R1",
+      "reviewer": "A",
+      "quotes": [
+        {
+          "quote": "saved += 3（或 saved = saved + 3）",
+          "literal_match_ignoring_whitespace": true
+        }
+      ]
+    },
+    {
+      "trial_id": "C54-R1",
+      "reviewer": "B",
+      "quotes": []
+    },
+    {
+      "trial_id": "C58-R1",
+      "reviewer": "A",
+      "quotes": [
+        {
+          "quote": "count 初始化为 0",
+          "literal_match_ignoring_whitespace": false
+        }
+      ]
+    },
+    {
+      "trial_id": "C58-R1",
+      "reviewer": "B",
+      "quotes": []
+    },
+    {
+      "trial_id": "C64-R1",
+      "reviewer": "A",
+      "quotes": [
+        {
+          "quote": "values[0] 初始化 largest",
+          "literal_match_ignoring_whitespace": true
+        }
+      ]
+    },
+    {
+      "trial_id": "C64-R1",
+      "reviewer": "B",
+      "quotes": []
+    },
+    {
+      "trial_id": "C70-R1",
+      "reviewer": "A",
+      "quotes": [
+        {
+          "quote": "应返回 count",
+          "literal_match_ignoring_whitespace": true
+        }
+      ]
+    },
+    {
+      "trial_id": "C70-R1",
+      "reviewer": "B",
+      "quotes": []
+    },
+    {
+      "trial_id": "C07-R2",
+      "reviewer": "A",
+      "quotes": [
+        {
+          "quote": "应拼接字符串 \"!\"，而不是整数 1",
+          "literal_match_ignoring_whitespace": false
+        }
+      ]
+    },
+    {
+      "trial_id": "C07-R2",
+      "reviewer": "B",
+      "quotes": []
+    },
+    {
+      "trial_id": "C14-R2",
+      "reviewer": "A",
+      "quotes": [
+        {
+          "quote": "price * quantity",
+          "literal_match_ignoring_whitespace": true
+        }
+      ]
+    },
+    {
+      "trial_id": "C14-R2",
+      "reviewer": "B",
+      "quotes": []
+    },
+    {
+      "trial_id": "C20-R2",
+      "reviewer": "A",
+      "quotes": [
+        {
+          "quote": "17//5=3",
+          "literal_match_ignoring_whitespace": false
+        }
+      ]
+    },
+    {
+      "trial_id": "C20-R2",
+      "reviewer": "B",
+      "quotes": []
+    },
+    {
+      "trial_id": "C24-R2",
+      "reviewer": "A",
+      "quotes": [
+        {
+          "quote": "没有先检查 capacity 是否为 0",
+          "literal_match_ignoring_whitespace": false
+        }
+      ]
+    },
+    {
+      "trial_id": "C24-R2",
+      "reviewer": "B",
+      "quotes": []
+    },
+    {
+      "trial_id": "C54-R2",
+      "reviewer": "A",
+      "quotes": [
+        {
+          "quote": "saved += 3（或 saved = saved + 3）",
+          "literal_match_ignoring_whitespace": false
+        }
+      ]
+    },
+    {
+      "trial_id": "C54-R2",
+      "reviewer": "B",
+      "quotes": []
+    },
+    {
+      "trial_id": "C58-R2",
+      "reviewer": "A",
+      "quotes": [
+        {
+          "quote": "count 初始化为 0",
+          "literal_match_ignoring_whitespace": false
+        }
+      ]
+    },
+    {
+      "trial_id": "C58-R2",
+      "reviewer": "B",
+      "quotes": []
+    },
+    {
+      "trial_id": "C07-R3",
+      "reviewer": "A",
+      "quotes": [
+        {
+          "quote": "应拼接字符串 \"!\"，而不是整数 1",
+          "literal_match_ignoring_whitespace": false
+        }
+      ]
+    },
+    {
+      "trial_id": "C07-R3",
+      "reviewer": "B",
+      "quotes": []
+    },
+    {
+      "trial_id": "C14-R3",
+      "reviewer": "A",
+      "quotes": [
+        {
+          "quote": "price * quantity",
+          "literal_match_ignoring_whitespace": true
+        }
+      ]
+    },
+    {
+      "trial_id": "C14-R3",
+      "reviewer": "B",
+      "quotes": []
+    },
+    {
+      "trial_id": "C20-R3",
+      "reviewer": "A",
+      "quotes": [
+        {
+          "quote": "17//5=3",
+          "literal_match_ignoring_whitespace": false
+        }
+      ]
+    },
+    {
+      "trial_id": "C20-R3",
+      "reviewer": "B",
+      "quotes": []
+    },
+    {
+      "trial_id": "C24-R3",
+      "reviewer": "A",
+      "quotes": [
+        {
+          "quote": "没有先检查 capacity 是否为 0",
+          "literal_match_ignoring_whitespace": false
+        }
+      ]
+    },
+    {
+      "trial_id": "C24-R3",
+      "reviewer": "B",
+      "quotes": []
+    },
+    {
+      "trial_id": "C54-R3",
+      "reviewer": "A",
+      "quotes": [
+        {
+          "quote": "saved += 3（或 saved = saved + 3）",
+          "literal_match_ignoring_whitespace": false
+        }
+      ]
+    },
+    {
+      "trial_id": "C54-R3",
+      "reviewer": "B",
+      "quotes": []
+    },
+    {
+      "trial_id": "C58-R3",
+      "reviewer": "A",
+      "quotes": [
+        {
+          "quote": "count 初始化为 0",
+          "literal_match_ignoring_whitespace": false
+        }
+      ]
+    },
+    {
+      "trial_id": "C58-R3",
+      "reviewer": "B",
+      "quotes": []
+    }
+  ]
+}

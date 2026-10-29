@@ -1,0 +1,39 @@
+{
+  "status": "comparison_complete_final_human_adjudication_pending",
+  "immutable_files": [
+    {
+      "path": "adjudication-proposals.json",
+      "sha256": "3826c21db2050ff05187b3fbea4f4978b4a6152518b33c23c2e349fc5ef07867"
+    },
+    {
+      "path": "quotation-check.json",
+      "sha256": "e331460b21943841e987a2b2c25deea67c0819cab1a1546e43356f665ac1c772"
+    },
+    {
+      "path": "review-A.snapshot.txt",
+      "sha256": "afcf783f764b44fbe56461557b472c3995163396e485807ab7822ca27a302668"
+    },
+    {
+      "path": "review-B.snapshot.txt",
+      "sha256": "51bbb01892cb9c24ecfdb9348571905f7c9c7d20ab0ef513a8179db0da49e30b"
+    },
+    {
+      "path": "review-comparison.json",
+      "sha256": "911ea94e8348890384643d2448bda0283e3225034ceefe1708f59a76e1499464"
+    },
+    {
+      "path": "review-provenance.json",
+      "sha256": "c83d804ef09a9a4bbdf1809ef5ef8c4caba2c19cffe9f3a7d582f5c4122d8387"
+    },
+    {
+      "path": "summarize_reviews.py",
+      "sha256": "220587d86d4c69a890d2d66d4fceb394654a6e08b282be96aca0805c299ab3d8"
+    },
+    {
+      "path": "逐条分歧表.md",
+      "sha256": "a1c5531439519f5d57fd3544329fa015673e54f9b0bdff9d03a908321a191ea2"
+    }
+  ],
+  "mutable_adjudication_file": "分歧核对说明.md",
+  "note": "Original review snapshots and run evidence preserved. Codex recommendations are not a third independent human review."
+}

@@ -1,0 +1,22 @@
+{
+  "reason": "用户要求第一位复核人由unic匿名化为A；仅更正署名，不改评分、备注、裁决或统计。",
+  "historical_snapshots": "旧快照和旧清单保持原字节；验证当前文件时同时核对此更正记录。历史脚本重放应使用已保留的原始快照。",
+  "changes": [
+    {
+      "path": "core72-2026-10-29/人工验收表.md",
+      "before_sha256": "afcf783f764b44fbe56461557b472c3995163396e485807ab7822ca27a302668",
+      "after_sha256": "ce83bb3106528a3a75c5d47ad5044c2c6e46f86c40fe0a720b0e007295dd5241",
+      "original_snapshot": "core72-review-2026-10-29/review-A.snapshot.txt",
+      "old": "_unic_______",
+      "new": "_A_______"
+    },
+    {
+      "path": "core72-review-2026-10-29/分歧核对说明.md",
+      "before_sha256": "c8467caa85bae7eaf06df5a1d3e079065d430afc858b283797e337fbdfd4776e",
+      "after_sha256": "b10edac490c6fc0bcaf76a1b859cb12cf09c488478675238b9b920a7260a1e0b",
+      "original_snapshot": "core72-final-2026-10-29/adjudication.snapshot.txt",
+      "old": "复核人A：unic",
+      "new": "复核人A：A"
+    }
+  ]
+}

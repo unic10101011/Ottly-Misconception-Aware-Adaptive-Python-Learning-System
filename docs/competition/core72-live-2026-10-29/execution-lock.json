@@ -1,0 +1,23 @@
+{
+  "application_commit": "d668fe4c68e65ec2ab1ca0459c21550e03e0ce15",
+  "real_ai_started": false,
+  "backend_image": "sha256:11172f09655790b4e1fe7e3e09694b987167ae2c81e77f10e0a74030bf93af34",
+  "files": [
+    {
+      "path": "docs/competition/core72-2026-10-29/capture_proxy.py",
+      "sha256": "3f6b48eaa4dfd068f60cead49e06a5d889a06510668e646fa524c2ab21c0d3b4"
+    },
+    {
+      "path": "docs/competition/core72-2026-10-29/live_run.py",
+      "sha256": "62e6ce28327cb04a12b558d8e1d5af27eabd956563fb5bbdbb58d3c50a9d4948"
+    },
+    {
+      "path": "docs/competition/core72-2026-10-29/design-lock.json",
+      "sha256": "c67608689d5461b9cd10b22d0179891da2a0f230d6f5493a0c782ffe008f3644"
+    },
+    {
+      "path": ".cache/core72-runtime.yaml",
+      "sha256": "33714f7d9a26c5cb83f1aaf2f31aec8f26aa447b672c785920ce1b0639fda4a6"
+    }
+  ]
+}

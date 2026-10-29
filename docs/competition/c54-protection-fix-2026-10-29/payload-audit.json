@@ -1,0 +1,367 @@
+{
+  "attempts": 60,
+  "verified": 60,
+  "note": "Boundary checks only; not a human semantic grade.",
+  "items": [
+    {
+      "stage": "c54-protection-fix-2026-10-29",
+      "trial_id": "G01-original-C54-R3",
+      "call_id": 1,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "c54-protection-fix-2026-10-29",
+      "trial_id": "G02-paraphrased-update",
+      "call_id": 2,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "c54-protection-fix-2026-10-29",
+      "trial_id": "G03-rewritten-update",
+      "call_id": 3,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "c54-protection-fix-2026-10-29",
+      "trial_id": "G-C54-R1",
+      "call_id": 4,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "c54-protection-fix-2026-10-29",
+      "trial_id": "G-C54-R2",
+      "call_id": 5,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "c54-protection-fix-2026-10-29",
+      "trial_id": "G-C07-R1",
+      "call_id": 6,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "c54-protection-fix-2026-10-29",
+      "trial_id": "G-C14-R1",
+      "call_id": 7,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "c54-protection-fix-2026-10-29",
+      "trial_id": "G-C58-R1",
+      "call_id": 8,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "c54-protection-fix-2026-10-29",
+      "trial_id": "G-D06-expression",
+      "call_id": 10,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "c54-protection-fix-2026-10-29",
+      "trial_id": "G-D06-expression",
+      "call_id": 9,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "c54-protection-fix-2026-10-29",
+      "trial_id": "C54-R1",
+      "call_id": 11,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "c54-protection-fix-2026-10-29",
+      "trial_id": "C54-R2",
+      "call_id": 12,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "c54-protection-fix-2026-10-29",
+      "trial_id": "C54-R2",
+      "call_id": 13,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "c54-protection-fix-2026-10-29",
+      "trial_id": "C54-R3",
+      "call_id": 14,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "c54-protection-fix-2026-10-29",
+      "trial_id": "C54-R3",
+      "call_id": 15,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "c54-protection-fix-2026-10-29",
+      "trial_id": "C07-R1",
+      "call_id": 16,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "c54-protection-fix-2026-10-29",
+      "trial_id": "C07-R1",
+      "call_id": 17,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "c54-protection-fix-2026-10-29",
+      "trial_id": "C14-R1",
+      "call_id": 18,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "c54-protection-fix-2026-10-29",
+      "trial_id": "C14-R1",
+      "call_id": 19,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "c54-protection-fix-2026-10-29",
+      "trial_id": "C20-R1",
+      "call_id": 20,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "c54-protection-fix-2026-10-29",
+      "trial_id": "C20-R1",
+      "call_id": 21,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "c54-protection-fix-2026-10-29",
+      "trial_id": "C58-R1",
+      "call_id": 22,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "c54-protection-fix-2026-10-29",
+      "trial_id": "C58-R1",
+      "call_id": 23,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "c54-protection-fix-2026-10-29",
+      "trial_id": "C70-R1",
+      "call_id": 24,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "c54-protection-fix-2026-10-29",
+      "trial_id": "C70-R1",
+      "call_id": 25,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "c54-protection-fix-2026-10-29",
+      "trial_id": "C28-R1",
+      "call_id": 26,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "c54-protection-fix-2026-10-29",
+      "trial_id": "C28-R1",
+      "call_id": 27,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "c54-protection-fix-2026-10-29",
+      "trial_id": "C24-R3",
+      "call_id": 28,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "c54-protection-fix-2026-10-29",
+      "trial_id": "C24-R3",
+      "call_id": 29,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "c54-protection-fix-2026-10-29",
+      "trial_id": "C43-R1",
+      "call_id": 30,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "G01-original-C54-R3",
+      "call_id": 1,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "G02-paraphrased-update",
+      "call_id": 2,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "G03-rewritten-update",
+      "call_id": 3,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "G-C54-R1",
+      "call_id": 4,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "G-C54-R2",
+      "call_id": 5,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "G-C07-R1",
+      "call_id": 6,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "G-C14-R1",
+      "call_id": 7,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "G-C58-R1",
+      "call_id": 8,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "G-D06-expression",
+      "call_id": 9,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C54-R1",
+      "call_id": 10,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C54-R1",
+      "call_id": 11,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C54-R2",
+      "call_id": 12,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C54-R2",
+      "call_id": 13,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C54-R3",
+      "call_id": 14,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C54-R3",
+      "call_id": 15,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C07-R1",
+      "call_id": 16,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C07-R1",
+      "call_id": 17,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C14-R1",
+      "call_id": 18,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C14-R1",
+      "call_id": 19,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C20-R1",
+      "call_id": 20,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C20-R1",
+      "call_id": 21,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C58-R1",
+      "call_id": 22,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C58-R1",
+      "call_id": 23,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C70-R1",
+      "call_id": 24,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C70-R1",
+      "call_id": 25,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C28-R1",
+      "call_id": 26,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C28-R1",
+      "call_id": 27,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C24-R3",
+      "call_id": 28,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C24-R3",
+      "call_id": 29,
+      "verified_public_facts": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C43-R1",
+      "call_id": 30,
+      "verified_public_facts": true
+    }
+  ]
+}

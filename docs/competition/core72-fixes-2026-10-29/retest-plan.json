@@ -1,0 +1,27 @@
+{
+  "trial_ids": [
+    "C10-R1",
+    "C24-R1",
+    "C24-R2",
+    "C24-R3",
+    "C28-R1",
+    "C54-R1",
+    "C54-R2",
+    "C54-R3",
+    "C64-R1",
+    "C37-R1",
+    "C40-R1",
+    "C43-R1",
+    "C01-R2",
+    "C08-R1",
+    "C07-R1",
+    "C14-R1",
+    "C20-R1",
+    "C58-R1",
+    "C70-R1",
+    "C05-R1"
+  ],
+  "count": 20,
+  "policy": "Service-level real AI replay of captured execution facts, one attempt per trial; connection-only retry at most once; no content retries. Not a new independent acceptance set or a full HTTP workflow test.",
+  "manual_review": "Pending human confirmation; automated checks never replace human semantic adjudication."
+}

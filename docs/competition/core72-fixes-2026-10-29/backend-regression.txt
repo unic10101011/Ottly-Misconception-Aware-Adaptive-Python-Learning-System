@@ -1,0 +1,2541 @@
+.....F.........FFF.F.FF................................................. [ 11%]
+............................................................... [ 21%]
+........................................................................ [ 33%]
+........................................................................ [ 44%]
+........................................................................ [ 55%]
+........................................................................ [ 67%]
+........................................................................ [ 78%]
+........................................................................ [ 90%]
+......................F..........................s..........             [100%]
+=================================== FAILURES ===================================
+__________________ test_login_access_token_lasts_eight_hours ___________________
+
+self = <sqlalchemy.engine.base.Connection object at 0x7c57878c0a50>
+dialect = <sqlalchemy.dialects.sqlite.pysqlite.SQLiteDialect_pysqlite object at 0x7c5787f9ab10>
+context = <sqlalchemy.dialects.sqlite.base.SQLiteExecutionContext object at 0x7c578781fc50>
+statement = <sqlalchemy.dialects.sqlite.base.SQLiteCompiler object at 0x7c578781fcd0>
+parameters = [('eight_hour_student', 1, 0)]
+
+    def _exec_single_context(
+        self,
+        dialect: Dialect,
+        context: ExecutionContext,
+        statement: Union[str, Compiled],
+        parameters: Optional[_AnyMultiExecuteParams],
+    ) -> CursorResult[Unpack[TupleAny]]:
+        """continue the _execute_context() method for a single DBAPI
+        cursor.execute() or cursor.executemany() call.
+    
+        """
+        if dialect.bind_typing is BindTyping.SETINPUTSIZES:
+            generic_setinputsizes = context._prepare_set_input_sizes()
+    
+            if generic_setinputsizes:
+                try:
+                    dialect.do_set_input_sizes(
+                        context.cursor, generic_setinputsizes, context
+                    )
+                except BaseException as e:
+                    self._handle_dbapi_exception(
+                        e, str(statement), parameters, None, context
+                    )
+    
+        cursor, str_statement, parameters = (
+            context.cursor,
+            context.statement,
+            context.parameters,
+        )
+    
+        effective_parameters: Optional[_AnyExecuteParams]
+    
+        if not context.executemany:
+            effective_parameters = parameters[0]
+        else:
+            effective_parameters = parameters
+    
+        evt_handled: bool = False
+        try:
+            if self._has_events or self.engine._has_events:
+                for fn in self.dispatch.before_cursor_execute:
+                    str_statement, effective_parameters = fn(
+                        self,
+                        cursor,
+                        str_statement,
+                        effective_parameters,
+                        context,
+                        context.executemany,
+                    )
+    
+            if self._echo:
+                self._log_info(str_statement)
+    
+                stats = context._get_cache_stats()
+    
+                if not self.engine.hide_parameters:
+                    self._log_info(
+                        "[%s] %r",
+                        stats,
+                        sql_util._repr_params(
+                            effective_parameters,
+                            batches=10,
+                            ismulti=context.executemany,
+                        ),
+                    )
+                else:
+                    self._log_info(
+                        "[%s] [SQL parameters hidden due to "
+                        "hide_parameters=True]",
+                        stats,
+                    )
+            if context.execute_style is ExecuteStyle.EXECUTEMANY:
+                effective_parameters = cast(
+                    "_CoreMultiExecuteParams", effective_parameters
+                )
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_executemany:
+                        if fn(
+                            cursor,
+                            str_statement,
+                            effective_parameters,
+                            context,
+                        ):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+                    self.dialect.do_executemany(
+                        cursor,
+                        str_statement,
+                        effective_parameters,
+                        context,
+                    )
+            elif not effective_parameters and context.no_parameters:
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_execute_no_params:
+                        if fn(cursor, str_statement, context):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+                    self.dialect.do_execute_no_params(
+                        cursor, str_statement, context
+                    )
+            else:
+                effective_parameters = cast(
+                    "_CoreSingleExecuteParams", effective_parameters
+                )
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_execute:
+                        if fn(
+                            cursor,
+                            str_statement,
+                            effective_parameters,
+                            context,
+                        ):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+>                   self.dialect.do_execute(
+                        cursor, str_statement, effective_parameters, context
+                    )
+
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1958: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <sqlalchemy.dialects.sqlite.pysqlite.SQLiteDialect_pysqlite object at 0x7c5787f9ab10>
+cursor = <sqlite3.Cursor object at 0x7c578783d540>
+statement = 'SELECT users.id AS users_id, users.username AS users_username, users.password AS users_password, users.phone AS users...ast_login AS users_last_login, users.status AS users_status \nFROM users \nWHERE users.username = ?\n LIMIT ? OFFSET ?'
+parameters = ('eight_hour_student', 1, 0)
+context = <sqlalchemy.dialects.sqlite.base.SQLiteExecutionContext object at 0x7c578781fc50>
+
+    def do_execute(self, cursor, statement, parameters, context=None):
+>       cursor.execute(statement, parameters)
+E       sqlite3.OperationalError: no such table: users
+
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:1192: OperationalError
+
+The above exception was the direct cause of the following exception:
+
+    def get_db():
+        db = SessionLocal()
+        try:
+>           yield db
+
+app/core/database.py:21: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.11/site-packages/fastapi/concurrency.py:29: in contextmanager_in_threadpool
+    yield await run_in_threadpool(cm.__enter__)
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:152: in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:745: in app
+    raw_response = await run_endpoint_function(
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:372: in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+app/api/auth.py:92: in register
+    if db.query(User).filter(User.username == user.username).first():
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/query.py:2823: in first
+    return self.limit(1)._iter().first()  # type: ignore[return-value]
+           ^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/query.py:2921: in _iter
+    result: Union[ScalarResult[_T], Result[_T]] = self.session.execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:2473: in execute
+    return self._execute_internal(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:2363: in _execute_internal
+    compile_state_cls.orm_execute_statement(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/context.py:320: in orm_execute_statement
+    result = conn.execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1463: in execute
+    return meth(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/sql/elements.py:533: in _execute_on_connection
+    return connection._execute_clauseelement(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1683: in _execute_clauseelement
+    ret = self._execute_context(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1837: in _execute_context
+    return self._exec_single_context(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1977: in _exec_single_context
+    self._handle_dbapi_exception(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2347: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1958: in _exec_single_context
+    self.dialect.do_execute(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <sqlalchemy.dialects.sqlite.pysqlite.SQLiteDialect_pysqlite object at 0x7c5787f9ab10>
+cursor = <sqlite3.Cursor object at 0x7c578783d540>
+statement = 'SELECT users.id AS users_id, users.username AS users_username, users.password AS users_password, users.phone AS users...ast_login AS users_last_login, users.status AS users_status \nFROM users \nWHERE users.username = ?\n LIMIT ? OFFSET ?'
+parameters = ('eight_hour_student', 1, 0)
+context = <sqlalchemy.dialects.sqlite.base.SQLiteExecutionContext object at 0x7c578781fc50>
+
+    def do_execute(self, cursor, statement, parameters, context=None):
+>       cursor.execute(statement, parameters)
+E       sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) no such table: users
+E       [SQL: SELECT users.id AS users_id, users.username AS users_username, users.password AS users_password, users.phone AS users_phone, users.created_at AS users_created_at, users.last_login AS users_last_login, users.status AS users_status 
+E       FROM users 
+E       WHERE users.username = ?
+E        LIMIT ? OFFSET ?]
+E       [parameters: ('eight_hour_student', 1, 0)]
+E       (Background on this error at: https://sqlalche.me/e/21/e3q8)
+
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:1192: OperationalError
+
+During handling of the above exception, another exception occurred:
+
+self = <sqlalchemy.engine.base.Connection object at 0x7c57878c0a50>
+
+    def _rollback_impl(self) -> None:
+        if self._has_events or self.engine._has_events:
+            self.dispatch.rollback(self)
+    
+        if self._still_open_and_dbapi_connection_is_valid:
+            if self._echo:
+                if self._is_autocommit_isolation():
+                    if self.dialect.skip_autocommit_rollback:
+                        self._log_info(
+                            "ROLLBACK will be skipped by "
+                            "skip_autocommit_rollback"
+                        )
+                    else:
+                        self._log_info(
+                            "ROLLBACK using DBAPI connection.rollback(); "
+                            "set skip_autocommit_rollback to prevent fully"
+                        )
+                else:
+                    self._log_info("ROLLBACK")
+            try:
+>               self.engine.dialect.do_rollback(self.connection)
+
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1153: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <sqlalchemy.dialects.sqlite.pysqlite.SQLiteDialect_pysqlite object at 0x7c5787f9ab10>
+dbapi_connection = <sqlalchemy.pool.base._ConnectionFairy object at 0x7c57877adef0>
+
+    def do_rollback(self, dbapi_connection):
+        if self.skip_autocommit_rollback and self.detect_autocommit_setting(
+            dbapi_connection
+        ):
+            return
+>       dbapi_connection.rollback()
+E       sqlite3.ProgrammingError: SQLite objects created in a thread can only be used in that same thread. The object was created in thread id 136715376879296 and this is thread id 136715368486592.
+
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:951: ProgrammingError
+
+The above exception was the direct cause of the following exception:
+
+client = <starlette.testclient.TestClient object at 0x7c5788120c50>
+
+    def test_login_access_token_lasts_eight_hours(client):
+>       _, token = register_and_login(client, "eight_hour_student", "13800000088")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_auth_flow.py:42: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_auth_flow.py:23: in register_and_login
+    registered = client.post(
+/usr/local/lib/python3.11/site-packages/httpx/_client.py:1144: in post
+    return self.request(
+/usr/local/lib/python3.11/site-packages/starlette/testclient.py:518: in request
+    return super().request(
+/usr/local/lib/python3.11/site-packages/httpx/_client.py:825: in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/httpx/_client.py:928: in send
+    raise exc
+/usr/local/lib/python3.11/site-packages/httpx/_client.py:922: in send
+    response.read()
+/usr/local/lib/python3.11/site-packages/httpx/_models.py:881: in read
+    self._content = b"".join(self.iter_bytes())
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/httpx/_models.py:897: in iter_bytes
+    for raw_bytes in self.iter_raw():
+/usr/local/lib/python3.11/site-packages/httpx/_models.py:951: in iter_raw
+    for raw_stream_bytes in self.stream:
+/usr/local/lib/python3.11/site-packages/httpx/_client.py:153: in __iter__
+    for chunk in self._stream:
+/usr/local/lib/python3.11/site-packages/starlette/testclient.py:384: in iter_body
+    exit_stack.close()
+/usr/local/lib/python3.11/contextlib.py:609: in close
+    self.__exit__(None, None, None)
+/usr/local/lib/python3.11/contextlib.py:601: in __exit__
+    raise exc_details[1]
+/usr/local/lib/python3.11/contextlib.py:586: in __exit__
+    if cb(*exc_details):
+       ^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/starlette/testclient.py:399: in close_app
+    raise exception
+/usr/local/lib/python3.11/site-packages/anyio/from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/starlette/testclient.py:366: in run_app
+    await self.app(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/fastapi/applications.py:1194: in __call__
+    await super().__call__(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/starlette/applications.py:96: in __call__
+    await self.middleware_stack(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/starlette/middleware/errors.py:186: in __call__
+    raise exc
+/usr/local/lib/python3.11/site-packages/starlette/middleware/errors.py:164: in __call__
+    await self.app(scope, receive, _send)
+/usr/local/lib/python3.11/site-packages/fastapi/telemetry/_asgi.py:151: in __call__
+    await self.app(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/starlette/middleware/cors.py:91: in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+/usr/local/lib/python3.11/site-packages/starlette/middleware/cors.py:149: in simple_response
+    await self.app(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/starlette/middleware/exceptions.py:63: in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/starlette/_exception_handler.py:53: in wrapped_app
+    raise exc
+/usr/local/lib/python3.11/site-packages/starlette/_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+/usr/local/lib/python3.11/site-packages/fastapi/middleware/asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/starlette/routing.py:683: in __call__
+    await self.middleware_stack(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:2811: in app
+    await route.handle(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:1839: in handle
+    await self.original_router.handle(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:2894: in handle
+    await included_router._handle_selected(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:1865: in _handle_selected
+    await original_route.handle(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:1328: in handle
+    await effective_context.app(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:166: in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/starlette/_exception_handler.py:53: in wrapped_app
+    raise exc
+/usr/local/lib/python3.11/site-packages/starlette/_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:148: in app
+    async with AsyncExitStack() as request_stack:
+/usr/local/lib/python3.11/contextlib.py:745: in __aexit__
+    raise exc_details[1]
+/usr/local/lib/python3.11/contextlib.py:728: in __aexit__
+    cb_suppress = await cb(*exc_details)
+                  ^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/contextlib.py:231: in __aexit__
+    await self.gen.athrow(typ, value, traceback)
+/usr/local/lib/python3.11/site-packages/fastapi/concurrency.py:32: in contextmanager_in_threadpool
+    await anyio.to_thread.run_sync(
+/usr/local/lib/python3.11/site-packages/anyio/_backends/_asyncio.py:2706: in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/anyio/_backends/_asyncio.py:1100: in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/contextlib.py:158: in __exit__
+    self.gen.throw(typ, value, traceback)
+app/core/database.py:23: in get_db
+    db.close()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:2642: in close
+    self._close_impl(invalidate=False)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:2711: in _close_impl
+    transaction.close(invalidate)
+<sqlalchemy generated _go() wrapper for sqlalchemy.orm.session.SessionTransaction.close>:2: in close
+    return target(fn, self, invalidate=invalidate)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/state_changes.py:137: in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1436: in close
+    transaction.close()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2581: in close
+    self._do_close()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2719: in _do_close
+    self._close_impl()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2705: in _close_impl
+    self._connection_rollback_impl()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2697: in _connection_rollback_impl
+    self.connection._rollback_impl()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1155: in _rollback_impl
+    self._handle_dbapi_exception(e, None, None, None, None)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2347: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1153: in _rollback_impl
+    self.engine.dialect.do_rollback(self.connection)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <sqlalchemy.dialects.sqlite.pysqlite.SQLiteDialect_pysqlite object at 0x7c5787f9ab10>
+dbapi_connection = <sqlalchemy.pool.base._ConnectionFairy object at 0x7c57877adef0>
+
+    def do_rollback(self, dbapi_connection):
+        if self.skip_autocommit_rollback and self.detect_autocommit_setting(
+            dbapi_connection
+        ):
+            return
+>       dbapi_connection.rollback()
+E       sqlalchemy.exc.ProgrammingError: (sqlite3.ProgrammingError) SQLite objects created in a thread can only be used in that same thread. The object was created in thread id 136715376879296 and this is thread id 136715368486592.
+E       (Background on this error at: https://sqlalche.me/e/21/f405)
+
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:951: ProgrammingError
+_____ test_password_is_salted_hashed_and_old_short_password_still_logs_in ______
+
+self = <sqlalchemy.engine.base.Connection object at 0x7c5784766190>
+dialect = <sqlalchemy.dialects.sqlite.pysqlite.SQLiteDialect_pysqlite object at 0x7c5787f9ab10>
+context = <sqlalchemy.dialects.sqlite.base.SQLiteExecutionContext object at 0x7c5784765710>
+statement = <sqlalchemy.dialects.sqlite.base.SQLiteCompiler object at 0x7c578781fcd0>
+parameters = [('hashed_student', 1, 0)]
+
+    def _exec_single_context(
+        self,
+        dialect: Dialect,
+        context: ExecutionContext,
+        statement: Union[str, Compiled],
+        parameters: Optional[_AnyMultiExecuteParams],
+    ) -> CursorResult[Unpack[TupleAny]]:
+        """continue the _execute_context() method for a single DBAPI
+        cursor.execute() or cursor.executemany() call.
+    
+        """
+        if dialect.bind_typing is BindTyping.SETINPUTSIZES:
+            generic_setinputsizes = context._prepare_set_input_sizes()
+    
+            if generic_setinputsizes:
+                try:
+                    dialect.do_set_input_sizes(
+                        context.cursor, generic_setinputsizes, context
+                    )
+                except BaseException as e:
+                    self._handle_dbapi_exception(
+                        e, str(statement), parameters, None, context
+                    )
+    
+        cursor, str_statement, parameters = (
+            context.cursor,
+            context.statement,
+            context.parameters,
+        )
+    
+        effective_parameters: Optional[_AnyExecuteParams]
+    
+        if not context.executemany:
+            effective_parameters = parameters[0]
+        else:
+            effective_parameters = parameters
+    
+        evt_handled: bool = False
+        try:
+            if self._has_events or self.engine._has_events:
+                for fn in self.dispatch.before_cursor_execute:
+                    str_statement, effective_parameters = fn(
+                        self,
+                        cursor,
+                        str_statement,
+                        effective_parameters,
+                        context,
+                        context.executemany,
+                    )
+    
+            if self._echo:
+                self._log_info(str_statement)
+    
+                stats = context._get_cache_stats()
+    
+                if not self.engine.hide_parameters:
+                    self._log_info(
+                        "[%s] %r",
+                        stats,
+                        sql_util._repr_params(
+                            effective_parameters,
+                            batches=10,
+                            ismulti=context.executemany,
+                        ),
+                    )
+                else:
+                    self._log_info(
+                        "[%s] [SQL parameters hidden due to "
+                        "hide_parameters=True]",
+                        stats,
+                    )
+            if context.execute_style is ExecuteStyle.EXECUTEMANY:
+                effective_parameters = cast(
+                    "_CoreMultiExecuteParams", effective_parameters
+                )
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_executemany:
+                        if fn(
+                            cursor,
+                            str_statement,
+                            effective_parameters,
+                            context,
+                        ):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+                    self.dialect.do_executemany(
+                        cursor,
+                        str_statement,
+                        effective_parameters,
+                        context,
+                    )
+            elif not effective_parameters and context.no_parameters:
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_execute_no_params:
+                        if fn(cursor, str_statement, context):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+                    self.dialect.do_execute_no_params(
+                        cursor, str_statement, context
+                    )
+            else:
+                effective_parameters = cast(
+                    "_CoreSingleExecuteParams", effective_parameters
+                )
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_execute:
+                        if fn(
+                            cursor,
+                            str_statement,
+                            effective_parameters,
+                            context,
+                        ):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+>                   self.dialect.do_execute(
+                        cursor, str_statement, effective_parameters, context
+                    )
+
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1958: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <sqlalchemy.dialects.sqlite.pysqlite.SQLiteDialect_pysqlite object at 0x7c5787f9ab10>
+cursor = <sqlite3.Cursor object at 0x7c578491cc40>
+statement = 'SELECT users.id AS users_id, users.username AS users_username, users.password AS users_password, users.phone AS users...ast_login AS users_last_login, users.status AS users_status \nFROM users \nWHERE users.username = ?\n LIMIT ? OFFSET ?'
+parameters = ('hashed_student', 1, 0)
+context = <sqlalchemy.dialects.sqlite.base.SQLiteExecutionContext object at 0x7c5784765710>
+
+    def do_execute(self, cursor, statement, parameters, context=None):
+>       cursor.execute(statement, parameters)
+E       sqlite3.OperationalError: no such table: users
+
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:1192: OperationalError
+
+The above exception was the direct cause of the following exception:
+
+    def get_db():
+        db = SessionLocal()
+        try:
+>           yield db
+
+app/core/database.py:21: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.11/site-packages/fastapi/concurrency.py:29: in contextmanager_in_threadpool
+    yield await run_in_threadpool(cm.__enter__)
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:152: in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:745: in app
+    raw_response = await run_endpoint_function(
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:372: in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+app/api/auth.py:92: in register
+    if db.query(User).filter(User.username == user.username).first():
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/query.py:2823: in first
+    return self.limit(1)._iter().first()  # type: ignore[return-value]
+           ^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/query.py:2921: in _iter
+    result: Union[ScalarResult[_T], Result[_T]] = self.session.execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:2473: in execute
+    return self._execute_internal(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:2363: in _execute_internal
+    compile_state_cls.orm_execute_statement(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/context.py:320: in orm_execute_statement
+    result = conn.execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1463: in execute
+    return meth(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/sql/elements.py:533: in _execute_on_connection
+    return connection._execute_clauseelement(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1683: in _execute_clauseelement
+    ret = self._execute_context(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1837: in _execute_context
+    return self._exec_single_context(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1977: in _exec_single_context
+    self._handle_dbapi_exception(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2347: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1958: in _exec_single_context
+    self.dialect.do_execute(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <sqlalchemy.dialects.sqlite.pysqlite.SQLiteDialect_pysqlite object at 0x7c5787f9ab10>
+cursor = <sqlite3.Cursor object at 0x7c578491cc40>
+statement = 'SELECT users.id AS users_id, users.username AS users_username, users.password AS users_password, users.phone AS users...ast_login AS users_last_login, users.status AS users_status \nFROM users \nWHERE users.username = ?\n LIMIT ? OFFSET ?'
+parameters = ('hashed_student', 1, 0)
+context = <sqlalchemy.dialects.sqlite.base.SQLiteExecutionContext object at 0x7c5784765710>
+
+    def do_execute(self, cursor, statement, parameters, context=None):
+>       cursor.execute(statement, parameters)
+E       sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) no such table: users
+E       [SQL: SELECT users.id AS users_id, users.username AS users_username, users.password AS users_password, users.phone AS users_phone, users.created_at AS users_created_at, users.last_login AS users_last_login, users.status AS users_status 
+E       FROM users 
+E       WHERE users.username = ?
+E        LIMIT ? OFFSET ?]
+E       [parameters: ('hashed_student', 1, 0)]
+E       (Background on this error at: https://sqlalche.me/e/21/e3q8)
+
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:1192: OperationalError
+
+During handling of the above exception, another exception occurred:
+
+self = <sqlalchemy.engine.base.Connection object at 0x7c5784766190>
+
+    def _rollback_impl(self) -> None:
+        if self._has_events or self.engine._has_events:
+            self.dispatch.rollback(self)
+    
+        if self._still_open_and_dbapi_connection_is_valid:
+            if self._echo:
+                if self._is_autocommit_isolation():
+                    if self.dialect.skip_autocommit_rollback:
+                        self._log_info(
+                            "ROLLBACK will be skipped by "
+                            "skip_autocommit_rollback"
+                        )
+                    else:
+                        self._log_info(
+                            "ROLLBACK using DBAPI connection.rollback(); "
+                            "set skip_autocommit_rollback to prevent fully"
+                        )
+                else:
+                    self._log_info("ROLLBACK")
+            try:
+>               self.engine.dialect.do_rollback(self.connection)
+
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1153: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <sqlalchemy.dialects.sqlite.pysqlite.SQLiteDialect_pysqlite object at 0x7c5787f9ab10>
+dbapi_connection = <sqlalchemy.pool.base._ConnectionFairy object at 0x7c57877adef0>
+
+    def do_rollback(self, dbapi_connection):
+        if self.skip_autocommit_rollback and self.detect_autocommit_setting(
+            dbapi_connection
+        ):
+            return
+>       dbapi_connection.rollback()
+E       sqlite3.ProgrammingError: SQLite objects created in a thread can only be used in that same thread. The object was created in thread id 136715376879296 and this is thread id 136715368486592.
+
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:951: ProgrammingError
+
+The above exception was the direct cause of the following exception:
+
+client = <starlette.testclient.TestClient object at 0x7c5788120c50>
+
+    def test_password_is_salted_hashed_and_old_short_password_still_logs_in(client):
+        from app.core.auth import get_password_hash, verify_password
+        from app.core.database import SessionLocal
+        from app.models.user import User
+>       register_and_login(client, 'hashed_student', '13988880001')
+
+tests/test_auth_flow.py:69: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_auth_flow.py:23: in register_and_login
+    registered = client.post(
+/usr/local/lib/python3.11/site-packages/httpx/_client.py:1144: in post
+    return self.request(
+/usr/local/lib/python3.11/site-packages/starlette/testclient.py:518: in request
+    return super().request(
+/usr/local/lib/python3.11/site-packages/httpx/_client.py:825: in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/httpx/_client.py:928: in send
+    raise exc
+/usr/local/lib/python3.11/site-packages/httpx/_client.py:922: in send
+    response.read()
+/usr/local/lib/python3.11/site-packages/httpx/_models.py:881: in read
+    self._content = b"".join(self.iter_bytes())
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/httpx/_models.py:897: in iter_bytes
+    for raw_bytes in self.iter_raw():
+/usr/local/lib/python3.11/site-packages/httpx/_models.py:951: in iter_raw
+    for raw_stream_bytes in self.stream:
+/usr/local/lib/python3.11/site-packages/httpx/_client.py:153: in __iter__
+    for chunk in self._stream:
+/usr/local/lib/python3.11/site-packages/starlette/testclient.py:384: in iter_body
+    exit_stack.close()
+/usr/local/lib/python3.11/contextlib.py:609: in close
+    self.__exit__(None, None, None)
+/usr/local/lib/python3.11/contextlib.py:601: in __exit__
+    raise exc_details[1]
+/usr/local/lib/python3.11/contextlib.py:586: in __exit__
+    if cb(*exc_details):
+       ^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/starlette/testclient.py:399: in close_app
+    raise exception
+/usr/local/lib/python3.11/site-packages/anyio/from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/starlette/testclient.py:366: in run_app
+    await self.app(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/fastapi/applications.py:1194: in __call__
+    await super().__call__(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/starlette/applications.py:96: in __call__
+    await self.middleware_stack(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/starlette/middleware/errors.py:186: in __call__
+    raise exc
+/usr/local/lib/python3.11/site-packages/starlette/middleware/errors.py:164: in __call__
+    await self.app(scope, receive, _send)
+/usr/local/lib/python3.11/site-packages/fastapi/telemetry/_asgi.py:151: in __call__
+    await self.app(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/starlette/middleware/cors.py:91: in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+/usr/local/lib/python3.11/site-packages/starlette/middleware/cors.py:149: in simple_response
+    await self.app(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/starlette/middleware/exceptions.py:63: in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/starlette/_exception_handler.py:53: in wrapped_app
+    raise exc
+/usr/local/lib/python3.11/site-packages/starlette/_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+/usr/local/lib/python3.11/site-packages/fastapi/middleware/asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/starlette/routing.py:683: in __call__
+    await self.middleware_stack(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:2811: in app
+    await route.handle(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:1839: in handle
+    await self.original_router.handle(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:2894: in handle
+    await included_router._handle_selected(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:1865: in _handle_selected
+    await original_route.handle(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:1328: in handle
+    await effective_context.app(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:166: in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/starlette/_exception_handler.py:53: in wrapped_app
+    raise exc
+/usr/local/lib/python3.11/site-packages/starlette/_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:148: in app
+    async with AsyncExitStack() as request_stack:
+/usr/local/lib/python3.11/contextlib.py:745: in __aexit__
+    raise exc_details[1]
+/usr/local/lib/python3.11/contextlib.py:728: in __aexit__
+    cb_suppress = await cb(*exc_details)
+                  ^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/contextlib.py:231: in __aexit__
+    await self.gen.athrow(typ, value, traceback)
+/usr/local/lib/python3.11/site-packages/fastapi/concurrency.py:32: in contextmanager_in_threadpool
+    await anyio.to_thread.run_sync(
+/usr/local/lib/python3.11/site-packages/anyio/_backends/_asyncio.py:2706: in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/anyio/_backends/_asyncio.py:1100: in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/contextlib.py:158: in __exit__
+    self.gen.throw(typ, value, traceback)
+app/core/database.py:23: in get_db
+    db.close()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:2642: in close
+    self._close_impl(invalidate=False)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:2711: in _close_impl
+    transaction.close(invalidate)
+<sqlalchemy generated _go() wrapper for sqlalchemy.orm.session.SessionTransaction.close>:2: in close
+    return target(fn, self, invalidate=invalidate)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/state_changes.py:137: in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1436: in close
+    transaction.close()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2581: in close
+    self._do_close()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2719: in _do_close
+    self._close_impl()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2705: in _close_impl
+    self._connection_rollback_impl()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2697: in _connection_rollback_impl
+    self.connection._rollback_impl()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1155: in _rollback_impl
+    self._handle_dbapi_exception(e, None, None, None, None)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2347: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1153: in _rollback_impl
+    self.engine.dialect.do_rollback(self.connection)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <sqlalchemy.dialects.sqlite.pysqlite.SQLiteDialect_pysqlite object at 0x7c5787f9ab10>
+dbapi_connection = <sqlalchemy.pool.base._ConnectionFairy object at 0x7c57877adef0>
+
+    def do_rollback(self, dbapi_connection):
+        if self.skip_autocommit_rollback and self.detect_autocommit_setting(
+            dbapi_connection
+        ):
+            return
+>       dbapi_connection.rollback()
+E       sqlalchemy.exc.ProgrammingError: (sqlite3.ProgrammingError) SQLite objects created in a thread can only be used in that same thread. The object was created in thread id 136715376879296 and this is thread id 136715368486592.
+E       (Background on this error at: https://sqlalche.me/e/21/f405)
+
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:951: ProgrammingError
+_________ test_login_identifies_each_user_and_protects_private_routes __________
+
+self = <sqlalchemy.engine.base.Connection object at 0x7c5785623cd0>
+dialect = <sqlalchemy.dialects.sqlite.pysqlite.SQLiteDialect_pysqlite object at 0x7c5787f9ab10>
+context = <sqlalchemy.dialects.sqlite.base.SQLiteExecutionContext object at 0x7c5785623d90>
+statement = <sqlalchemy.dialects.sqlite.base.SQLiteCompiler object at 0x7c578781fcd0>
+parameters = [('student_one', 1, 0)]
+
+    def _exec_single_context(
+        self,
+        dialect: Dialect,
+        context: ExecutionContext,
+        statement: Union[str, Compiled],
+        parameters: Optional[_AnyMultiExecuteParams],
+    ) -> CursorResult[Unpack[TupleAny]]:
+        """continue the _execute_context() method for a single DBAPI
+        cursor.execute() or cursor.executemany() call.
+    
+        """
+        if dialect.bind_typing is BindTyping.SETINPUTSIZES:
+            generic_setinputsizes = context._prepare_set_input_sizes()
+    
+            if generic_setinputsizes:
+                try:
+                    dialect.do_set_input_sizes(
+                        context.cursor, generic_setinputsizes, context
+                    )
+                except BaseException as e:
+                    self._handle_dbapi_exception(
+                        e, str(statement), parameters, None, context
+                    )
+    
+        cursor, str_statement, parameters = (
+            context.cursor,
+            context.statement,
+            context.parameters,
+        )
+    
+        effective_parameters: Optional[_AnyExecuteParams]
+    
+        if not context.executemany:
+            effective_parameters = parameters[0]
+        else:
+            effective_parameters = parameters
+    
+        evt_handled: bool = False
+        try:
+            if self._has_events or self.engine._has_events:
+                for fn in self.dispatch.before_cursor_execute:
+                    str_statement, effective_parameters = fn(
+                        self,
+                        cursor,
+                        str_statement,
+                        effective_parameters,
+                        context,
+                        context.executemany,
+                    )
+    
+            if self._echo:
+                self._log_info(str_statement)
+    
+                stats = context._get_cache_stats()
+    
+                if not self.engine.hide_parameters:
+                    self._log_info(
+                        "[%s] %r",
+                        stats,
+                        sql_util._repr_params(
+                            effective_parameters,
+                            batches=10,
+                            ismulti=context.executemany,
+                        ),
+                    )
+                else:
+                    self._log_info(
+                        "[%s] [SQL parameters hidden due to "
+                        "hide_parameters=True]",
+                        stats,
+                    )
+            if context.execute_style is ExecuteStyle.EXECUTEMANY:
+                effective_parameters = cast(
+                    "_CoreMultiExecuteParams", effective_parameters
+                )
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_executemany:
+                        if fn(
+                            cursor,
+                            str_statement,
+                            effective_parameters,
+                            context,
+                        ):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+                    self.dialect.do_executemany(
+                        cursor,
+                        str_statement,
+                        effective_parameters,
+                        context,
+                    )
+            elif not effective_parameters and context.no_parameters:
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_execute_no_params:
+                        if fn(cursor, str_statement, context):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+                    self.dialect.do_execute_no_params(
+                        cursor, str_statement, context
+                    )
+            else:
+                effective_parameters = cast(
+                    "_CoreSingleExecuteParams", effective_parameters
+                )
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_execute:
+                        if fn(
+                            cursor,
+                            str_statement,
+                            effective_parameters,
+                            context,
+                        ):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+>                   self.dialect.do_execute(
+                        cursor, str_statement, effective_parameters, context
+                    )
+
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1958: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <sqlalchemy.dialects.sqlite.pysqlite.SQLiteDialect_pysqlite object at 0x7c5787f9ab10>
+cursor = <sqlite3.Cursor object at 0x7c5784545640>
+statement = 'SELECT users.id AS users_id, users.username AS users_username, users.password AS users_password, users.phone AS users...ast_login AS users_last_login, users.status AS users_status \nFROM users \nWHERE users.username = ?\n LIMIT ? OFFSET ?'
+parameters = ('student_one', 1, 0)
+context = <sqlalchemy.dialects.sqlite.base.SQLiteExecutionContext object at 0x7c5785623d90>
+
+    def do_execute(self, cursor, statement, parameters, context=None):
+>       cursor.execute(statement, parameters)
+E       sqlite3.OperationalError: no such table: users
+
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:1192: OperationalError
+
+The above exception was the direct cause of the following exception:
+
+    def get_db():
+        db = SessionLocal()
+        try:
+>           yield db
+
+app/core/database.py:21: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.11/site-packages/fastapi/concurrency.py:29: in contextmanager_in_threadpool
+    yield await run_in_threadpool(cm.__enter__)
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:152: in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:745: in app
+    raw_response = await run_endpoint_function(
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:372: in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+app/api/auth.py:92: in register
+    if db.query(User).filter(User.username == user.username).first():
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/query.py:2823: in first
+    return self.limit(1)._iter().first()  # type: ignore[return-value]
+           ^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/query.py:2921: in _iter
+    result: Union[ScalarResult[_T], Result[_T]] = self.session.execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:2473: in execute
+    return self._execute_internal(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:2363: in _execute_internal
+    compile_state_cls.orm_execute_statement(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/context.py:320: in orm_execute_statement
+    result = conn.execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1463: in execute
+    return meth(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/sql/elements.py:533: in _execute_on_connection
+    return connection._execute_clauseelement(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1683: in _execute_clauseelement
+    ret = self._execute_context(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1837: in _execute_context
+    return self._exec_single_context(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1977: in _exec_single_context
+    self._handle_dbapi_exception(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2347: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1958: in _exec_single_context
+    self.dialect.do_execute(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <sqlalchemy.dialects.sqlite.pysqlite.SQLiteDialect_pysqlite object at 0x7c5787f9ab10>
+cursor = <sqlite3.Cursor object at 0x7c5784545640>
+statement = 'SELECT users.id AS users_id, users.username AS users_username, users.password AS users_password, users.phone AS users...ast_login AS users_last_login, users.status AS users_status \nFROM users \nWHERE users.username = ?\n LIMIT ? OFFSET ?'
+parameters = ('student_one', 1, 0)
+context = <sqlalchemy.dialects.sqlite.base.SQLiteExecutionContext object at 0x7c5785623d90>
+
+    def do_execute(self, cursor, statement, parameters, context=None):
+>       cursor.execute(statement, parameters)
+E       sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) no such table: users
+E       [SQL: SELECT users.id AS users_id, users.username AS users_username, users.password AS users_password, users.phone AS users_phone, users.created_at AS users_created_at, users.last_login AS users_last_login, users.status AS users_status 
+E       FROM users 
+E       WHERE users.username = ?
+E        LIMIT ? OFFSET ?]
+E       [parameters: ('student_one', 1, 0)]
+E       (Background on this error at: https://sqlalche.me/e/21/e3q8)
+
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:1192: OperationalError
+
+During handling of the above exception, another exception occurred:
+
+self = <sqlalchemy.engine.base.Connection object at 0x7c5785623cd0>
+
+    def _rollback_impl(self) -> None:
+        if self._has_events or self.engine._has_events:
+            self.dispatch.rollback(self)
+    
+        if self._still_open_and_dbapi_connection_is_valid:
+            if self._echo:
+                if self._is_autocommit_isolation():
+                    if self.dialect.skip_autocommit_rollback:
+                        self._log_info(
+                            "ROLLBACK will be skipped by "
+                            "skip_autocommit_rollback"
+                        )
+                    else:
+                        self._log_info(
+                            "ROLLBACK using DBAPI connection.rollback(); "
+                            "set skip_autocommit_rollback to prevent fully"
+                        )
+                else:
+                    self._log_info("ROLLBACK")
+            try:
+>               self.engine.dialect.do_rollback(self.connection)
+
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1153: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <sqlalchemy.dialects.sqlite.pysqlite.SQLiteDialect_pysqlite object at 0x7c5787f9ab10>
+dbapi_connection = <sqlalchemy.pool.base._ConnectionFairy object at 0x7c57877adef0>
+
+    def do_rollback(self, dbapi_connection):
+        if self.skip_autocommit_rollback and self.detect_autocommit_setting(
+            dbapi_connection
+        ):
+            return
+>       dbapi_connection.rollback()
+E       sqlite3.ProgrammingError: SQLite objects created in a thread can only be used in that same thread. The object was created in thread id 136715376879296 and this is thread id 136715368486592.
+
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:951: ProgrammingError
+
+The above exception was the direct cause of the following exception:
+
+client = <starlette.testclient.TestClient object at 0x7c5788120c50>
+
+    def test_login_identifies_each_user_and_protects_private_routes(client):
+>       first_id, first_token = register_and_login(client, "student_one", "13800000001")
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_auth_flow.py:84: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_auth_flow.py:23: in register_and_login
+    registered = client.post(
+/usr/local/lib/python3.11/site-packages/httpx/_client.py:1144: in post
+    return self.request(
+/usr/local/lib/python3.11/site-packages/starlette/testclient.py:518: in request
+    return super().request(
+/usr/local/lib/python3.11/site-packages/httpx/_client.py:825: in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/httpx/_client.py:928: in send
+    raise exc
+/usr/local/lib/python3.11/site-packages/httpx/_client.py:922: in send
+    response.read()
+/usr/local/lib/python3.11/site-packages/httpx/_models.py:881: in read
+    self._content = b"".join(self.iter_bytes())
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/httpx/_models.py:897: in iter_bytes
+    for raw_bytes in self.iter_raw():
+/usr/local/lib/python3.11/site-packages/httpx/_models.py:951: in iter_raw
+    for raw_stream_bytes in self.stream:
+/usr/local/lib/python3.11/site-packages/httpx/_client.py:153: in __iter__
+    for chunk in self._stream:
+/usr/local/lib/python3.11/site-packages/starlette/testclient.py:384: in iter_body
+    exit_stack.close()
+/usr/local/lib/python3.11/contextlib.py:609: in close
+    self.__exit__(None, None, None)
+/usr/local/lib/python3.11/contextlib.py:601: in __exit__
+    raise exc_details[1]
+/usr/local/lib/python3.11/contextlib.py:586: in __exit__
+    if cb(*exc_details):
+       ^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/starlette/testclient.py:399: in close_app
+    raise exception
+/usr/local/lib/python3.11/site-packages/anyio/from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/starlette/testclient.py:366: in run_app
+    await self.app(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/fastapi/applications.py:1194: in __call__
+    await super().__call__(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/starlette/applications.py:96: in __call__
+    await self.middleware_stack(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/starlette/middleware/errors.py:186: in __call__
+    raise exc
+/usr/local/lib/python3.11/site-packages/starlette/middleware/errors.py:164: in __call__
+    await self.app(scope, receive, _send)
+/usr/local/lib/python3.11/site-packages/fastapi/telemetry/_asgi.py:151: in __call__
+    await self.app(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/starlette/middleware/cors.py:91: in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+/usr/local/lib/python3.11/site-packages/starlette/middleware/cors.py:149: in simple_response
+    await self.app(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/starlette/middleware/exceptions.py:63: in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/starlette/_exception_handler.py:53: in wrapped_app
+    raise exc
+/usr/local/lib/python3.11/site-packages/starlette/_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+/usr/local/lib/python3.11/site-packages/fastapi/middleware/asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/starlette/routing.py:683: in __call__
+    await self.middleware_stack(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:2811: in app
+    await route.handle(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:1839: in handle
+    await self.original_router.handle(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:2894: in handle
+    await included_router._handle_selected(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:1865: in _handle_selected
+    await original_route.handle(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:1328: in handle
+    await effective_context.app(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:166: in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/starlette/_exception_handler.py:53: in wrapped_app
+    raise exc
+/usr/local/lib/python3.11/site-packages/starlette/_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:148: in app
+    async with AsyncExitStack() as request_stack:
+/usr/local/lib/python3.11/contextlib.py:745: in __aexit__
+    raise exc_details[1]
+/usr/local/lib/python3.11/contextlib.py:728: in __aexit__
+    cb_suppress = await cb(*exc_details)
+                  ^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/contextlib.py:231: in __aexit__
+    await self.gen.athrow(typ, value, traceback)
+/usr/local/lib/python3.11/site-packages/fastapi/concurrency.py:32: in contextmanager_in_threadpool
+    await anyio.to_thread.run_sync(
+/usr/local/lib/python3.11/site-packages/anyio/_backends/_asyncio.py:2706: in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/anyio/_backends/_asyncio.py:1100: in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/contextlib.py:158: in __exit__
+    self.gen.throw(typ, value, traceback)
+app/core/database.py:23: in get_db
+    db.close()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:2642: in close
+    self._close_impl(invalidate=False)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:2711: in _close_impl
+    transaction.close(invalidate)
+<sqlalchemy generated _go() wrapper for sqlalchemy.orm.session.SessionTransaction.close>:2: in close
+    return target(fn, self, invalidate=invalidate)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/state_changes.py:137: in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1436: in close
+    transaction.close()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2581: in close
+    self._do_close()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2719: in _do_close
+    self._close_impl()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2705: in _close_impl
+    self._connection_rollback_impl()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2697: in _connection_rollback_impl
+    self.connection._rollback_impl()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1155: in _rollback_impl
+    self._handle_dbapi_exception(e, None, None, None, None)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2347: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1153: in _rollback_impl
+    self.engine.dialect.do_rollback(self.connection)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <sqlalchemy.dialects.sqlite.pysqlite.SQLiteDialect_pysqlite object at 0x7c5787f9ab10>
+dbapi_connection = <sqlalchemy.pool.base._ConnectionFairy object at 0x7c57877adef0>
+
+    def do_rollback(self, dbapi_connection):
+        if self.skip_autocommit_rollback and self.detect_autocommit_setting(
+            dbapi_connection
+        ):
+            return
+>       dbapi_connection.rollback()
+E       sqlalchemy.exc.ProgrammingError: (sqlite3.ProgrammingError) SQLite objects created in a thread can only be used in that same thread. The object was created in thread id 136715376879296 and this is thread id 136715368486592.
+E       (Background on this error at: https://sqlalche.me/e/21/f405)
+
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:951: ProgrammingError
+____________ test_chat_history_and_class_records_are_user_isolated _____________
+
+client = <starlette.testclient.TestClient object at 0x7c5788120c50>
+
+    def test_chat_history_and_class_records_are_user_isolated(client):
+        from app.core.database import SessionLocal
+        from app.models.user import AIChatRecord, User
+    
+        db = SessionLocal()
+        try:
+>           first = db.query(User).filter(User.username == "student_one").one()
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_auth_flow.py:99: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/query.py:2872: in one
+    return self._iter().one()  # type: ignore[return-value]
+           ^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/result.py:1421: in one
+    return self._only_one_row(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+>   ???
+E   sqlalchemy.exc.NoResultFound: No row was found when one was required
+
+lib/sqlalchemy/engine/_result_cy.py:539: NoResultFound
+_____________ test_account_update_password_and_permanent_deletion ______________
+
+self = <sqlalchemy.engine.base.Connection object at 0x7c57860a0a50>
+dialect = <sqlalchemy.dialects.sqlite.pysqlite.SQLiteDialect_pysqlite object at 0x7c5787f9ab10>
+context = <sqlalchemy.dialects.sqlite.base.SQLiteExecutionContext object at 0x7c57860a00d0>
+statement = <sqlalchemy.dialects.sqlite.base.SQLiteCompiler object at 0x7c578781fcd0>
+parameters = [('account_owner', 1, 0)]
+
+    def _exec_single_context(
+        self,
+        dialect: Dialect,
+        context: ExecutionContext,
+        statement: Union[str, Compiled],
+        parameters: Optional[_AnyMultiExecuteParams],
+    ) -> CursorResult[Unpack[TupleAny]]:
+        """continue the _execute_context() method for a single DBAPI
+        cursor.execute() or cursor.executemany() call.
+    
+        """
+        if dialect.bind_typing is BindTyping.SETINPUTSIZES:
+            generic_setinputsizes = context._prepare_set_input_sizes()
+    
+            if generic_setinputsizes:
+                try:
+                    dialect.do_set_input_sizes(
+                        context.cursor, generic_setinputsizes, context
+                    )
+                except BaseException as e:
+                    self._handle_dbapi_exception(
+                        e, str(statement), parameters, None, context
+                    )
+    
+        cursor, str_statement, parameters = (
+            context.cursor,
+            context.statement,
+            context.parameters,
+        )
+    
+        effective_parameters: Optional[_AnyExecuteParams]
+    
+        if not context.executemany:
+            effective_parameters = parameters[0]
+        else:
+            effective_parameters = parameters
+    
+        evt_handled: bool = False
+        try:
+            if self._has_events or self.engine._has_events:
+                for fn in self.dispatch.before_cursor_execute:
+                    str_statement, effective_parameters = fn(
+                        self,
+                        cursor,
+                        str_statement,
+                        effective_parameters,
+                        context,
+                        context.executemany,
+                    )
+    
+            if self._echo:
+                self._log_info(str_statement)
+    
+                stats = context._get_cache_stats()
+    
+                if not self.engine.hide_parameters:
+                    self._log_info(
+                        "[%s] %r",
+                        stats,
+                        sql_util._repr_params(
+                            effective_parameters,
+                            batches=10,
+                            ismulti=context.executemany,
+                        ),
+                    )
+                else:
+                    self._log_info(
+                        "[%s] [SQL parameters hidden due to "
+                        "hide_parameters=True]",
+                        stats,
+                    )
+            if context.execute_style is ExecuteStyle.EXECUTEMANY:
+                effective_parameters = cast(
+                    "_CoreMultiExecuteParams", effective_parameters
+                )
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_executemany:
+                        if fn(
+                            cursor,
+                            str_statement,
+                            effective_parameters,
+                            context,
+                        ):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+                    self.dialect.do_executemany(
+                        cursor,
+                        str_statement,
+                        effective_parameters,
+                        context,
+                    )
+            elif not effective_parameters and context.no_parameters:
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_execute_no_params:
+                        if fn(cursor, str_statement, context):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+                    self.dialect.do_execute_no_params(
+                        cursor, str_statement, context
+                    )
+            else:
+                effective_parameters = cast(
+                    "_CoreSingleExecuteParams", effective_parameters
+                )
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_execute:
+                        if fn(
+                            cursor,
+                            str_statement,
+                            effective_parameters,
+                            context,
+                        ):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+>                   self.dialect.do_execute(
+                        cursor, str_statement, effective_parameters, context
+                    )
+
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1958: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <sqlalchemy.dialects.sqlite.pysqlite.SQLiteDialect_pysqlite object at 0x7c5787f9ab10>
+cursor = <sqlite3.Cursor object at 0x7c5785d1b440>
+statement = 'SELECT users.id AS users_id, users.username AS users_username, users.password AS users_password, users.phone AS users...ast_login AS users_last_login, users.status AS users_status \nFROM users \nWHERE users.username = ?\n LIMIT ? OFFSET ?'
+parameters = ('account_owner', 1, 0)
+context = <sqlalchemy.dialects.sqlite.base.SQLiteExecutionContext object at 0x7c57860a00d0>
+
+    def do_execute(self, cursor, statement, parameters, context=None):
+>       cursor.execute(statement, parameters)
+E       sqlite3.OperationalError: no such table: users
+
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:1192: OperationalError
+
+The above exception was the direct cause of the following exception:
+
+    def get_db():
+        db = SessionLocal()
+        try:
+>           yield db
+
+app/core/database.py:21: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.11/site-packages/fastapi/concurrency.py:29: in contextmanager_in_threadpool
+    yield await run_in_threadpool(cm.__enter__)
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:152: in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:745: in app
+    raw_response = await run_endpoint_function(
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:372: in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+app/api/auth.py:92: in register
+    if db.query(User).filter(User.username == user.username).first():
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/query.py:2823: in first
+    return self.limit(1)._iter().first()  # type: ignore[return-value]
+           ^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/query.py:2921: in _iter
+    result: Union[ScalarResult[_T], Result[_T]] = self.session.execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:2473: in execute
+    return self._execute_internal(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:2363: in _execute_internal
+    compile_state_cls.orm_execute_statement(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/context.py:320: in orm_execute_statement
+    result = conn.execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1463: in execute
+    return meth(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/sql/elements.py:533: in _execute_on_connection
+    return connection._execute_clauseelement(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1683: in _execute_clauseelement
+    ret = self._execute_context(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1837: in _execute_context
+    return self._exec_single_context(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1977: in _exec_single_context
+    self._handle_dbapi_exception(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2347: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1958: in _exec_single_context
+    self.dialect.do_execute(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <sqlalchemy.dialects.sqlite.pysqlite.SQLiteDialect_pysqlite object at 0x7c5787f9ab10>
+cursor = <sqlite3.Cursor object at 0x7c5785d1b440>
+statement = 'SELECT users.id AS users_id, users.username AS users_username, users.password AS users_password, users.phone AS users...ast_login AS users_last_login, users.status AS users_status \nFROM users \nWHERE users.username = ?\n LIMIT ? OFFSET ?'
+parameters = ('account_owner', 1, 0)
+context = <sqlalchemy.dialects.sqlite.base.SQLiteExecutionContext object at 0x7c57860a00d0>
+
+    def do_execute(self, cursor, statement, parameters, context=None):
+>       cursor.execute(statement, parameters)
+E       sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) no such table: users
+E       [SQL: SELECT users.id AS users_id, users.username AS users_username, users.password AS users_password, users.phone AS users_phone, users.created_at AS users_created_at, users.last_login AS users_last_login, users.status AS users_status 
+E       FROM users 
+E       WHERE users.username = ?
+E        LIMIT ? OFFSET ?]
+E       [parameters: ('account_owner', 1, 0)]
+E       (Background on this error at: https://sqlalche.me/e/21/e3q8)
+
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:1192: OperationalError
+
+During handling of the above exception, another exception occurred:
+
+self = <sqlalchemy.engine.base.Connection object at 0x7c57860a0a50>
+
+    def _rollback_impl(self) -> None:
+        if self._has_events or self.engine._has_events:
+            self.dispatch.rollback(self)
+    
+        if self._still_open_and_dbapi_connection_is_valid:
+            if self._echo:
+                if self._is_autocommit_isolation():
+                    if self.dialect.skip_autocommit_rollback:
+                        self._log_info(
+                            "ROLLBACK will be skipped by "
+                            "skip_autocommit_rollback"
+                        )
+                    else:
+                        self._log_info(
+                            "ROLLBACK using DBAPI connection.rollback(); "
+                            "set skip_autocommit_rollback to prevent fully"
+                        )
+                else:
+                    self._log_info("ROLLBACK")
+            try:
+>               self.engine.dialect.do_rollback(self.connection)
+
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1153: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <sqlalchemy.dialects.sqlite.pysqlite.SQLiteDialect_pysqlite object at 0x7c5787f9ab10>
+dbapi_connection = <sqlalchemy.pool.base._ConnectionFairy object at 0x7c5784770600>
+
+    def do_rollback(self, dbapi_connection):
+        if self.skip_autocommit_rollback and self.detect_autocommit_setting(
+            dbapi_connection
+        ):
+            return
+>       dbapi_connection.rollback()
+E       sqlite3.ProgrammingError: SQLite objects created in a thread can only be used in that same thread. The object was created in thread id 136715376879296 and this is thread id 136715368486592.
+
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:951: ProgrammingError
+
+The above exception was the direct cause of the following exception:
+
+client = <starlette.testclient.TestClient object at 0x7c5788120c50>
+
+    def test_account_update_password_and_permanent_deletion(client):
+        from app.core.database import SessionLocal
+        from app.models.class_selection import ClassSelection
+        from app.models.learning_review import LearningReview
+        from app.models.learning_submission import LearningSubmission
+        from sqlalchemy import text
+        from app.models.user import AIChatRecord, User
+    
+>       user_id, token = register_and_login(client, "account_owner", "13800000008")
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_auth_flow.py:142: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_auth_flow.py:23: in register_and_login
+    registered = client.post(
+/usr/local/lib/python3.11/site-packages/httpx/_client.py:1144: in post
+    return self.request(
+/usr/local/lib/python3.11/site-packages/starlette/testclient.py:518: in request
+    return super().request(
+/usr/local/lib/python3.11/site-packages/httpx/_client.py:825: in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/httpx/_client.py:928: in send
+    raise exc
+/usr/local/lib/python3.11/site-packages/httpx/_client.py:922: in send
+    response.read()
+/usr/local/lib/python3.11/site-packages/httpx/_models.py:881: in read
+    self._content = b"".join(self.iter_bytes())
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/httpx/_models.py:897: in iter_bytes
+    for raw_bytes in self.iter_raw():
+/usr/local/lib/python3.11/site-packages/httpx/_models.py:951: in iter_raw
+    for raw_stream_bytes in self.stream:
+/usr/local/lib/python3.11/site-packages/httpx/_client.py:153: in __iter__
+    for chunk in self._stream:
+/usr/local/lib/python3.11/site-packages/starlette/testclient.py:384: in iter_body
+    exit_stack.close()
+/usr/local/lib/python3.11/contextlib.py:609: in close
+    self.__exit__(None, None, None)
+/usr/local/lib/python3.11/contextlib.py:601: in __exit__
+    raise exc_details[1]
+/usr/local/lib/python3.11/contextlib.py:586: in __exit__
+    if cb(*exc_details):
+       ^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/starlette/testclient.py:399: in close_app
+    raise exception
+/usr/local/lib/python3.11/site-packages/anyio/from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/starlette/testclient.py:366: in run_app
+    await self.app(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/fastapi/applications.py:1194: in __call__
+    await super().__call__(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/starlette/applications.py:96: in __call__
+    await self.middleware_stack(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/starlette/middleware/errors.py:186: in __call__
+    raise exc
+/usr/local/lib/python3.11/site-packages/starlette/middleware/errors.py:164: in __call__
+    await self.app(scope, receive, _send)
+/usr/local/lib/python3.11/site-packages/fastapi/telemetry/_asgi.py:151: in __call__
+    await self.app(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/starlette/middleware/cors.py:91: in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+/usr/local/lib/python3.11/site-packages/starlette/middleware/cors.py:149: in simple_response
+    await self.app(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/starlette/middleware/exceptions.py:63: in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/starlette/_exception_handler.py:53: in wrapped_app
+    raise exc
+/usr/local/lib/python3.11/site-packages/starlette/_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+/usr/local/lib/python3.11/site-packages/fastapi/middleware/asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/starlette/routing.py:683: in __call__
+    await self.middleware_stack(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:2811: in app
+    await route.handle(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:1839: in handle
+    await self.original_router.handle(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:2894: in handle
+    await included_router._handle_selected(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:1865: in _handle_selected
+    await original_route.handle(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:1328: in handle
+    await effective_context.app(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:166: in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/starlette/_exception_handler.py:53: in wrapped_app
+    raise exc
+/usr/local/lib/python3.11/site-packages/starlette/_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:148: in app
+    async with AsyncExitStack() as request_stack:
+/usr/local/lib/python3.11/contextlib.py:745: in __aexit__
+    raise exc_details[1]
+/usr/local/lib/python3.11/contextlib.py:728: in __aexit__
+    cb_suppress = await cb(*exc_details)
+                  ^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/contextlib.py:231: in __aexit__
+    await self.gen.athrow(typ, value, traceback)
+/usr/local/lib/python3.11/site-packages/fastapi/concurrency.py:32: in contextmanager_in_threadpool
+    await anyio.to_thread.run_sync(
+/usr/local/lib/python3.11/site-packages/anyio/_backends/_asyncio.py:2706: in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/anyio/_backends/_asyncio.py:1100: in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/contextlib.py:158: in __exit__
+    self.gen.throw(typ, value, traceback)
+app/core/database.py:23: in get_db
+    db.close()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:2642: in close
+    self._close_impl(invalidate=False)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:2711: in _close_impl
+    transaction.close(invalidate)
+<sqlalchemy generated _go() wrapper for sqlalchemy.orm.session.SessionTransaction.close>:2: in close
+    return target(fn, self, invalidate=invalidate)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/state_changes.py:137: in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1436: in close
+    transaction.close()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2581: in close
+    self._do_close()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2719: in _do_close
+    self._close_impl()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2705: in _close_impl
+    self._connection_rollback_impl()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2697: in _connection_rollback_impl
+    self.connection._rollback_impl()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1155: in _rollback_impl
+    self._handle_dbapi_exception(e, None, None, None, None)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2347: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1153: in _rollback_impl
+    self.engine.dialect.do_rollback(self.connection)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <sqlalchemy.dialects.sqlite.pysqlite.SQLiteDialect_pysqlite object at 0x7c5787f9ab10>
+dbapi_connection = <sqlalchemy.pool.base._ConnectionFairy object at 0x7c5784770600>
+
+    def do_rollback(self, dbapi_connection):
+        if self.skip_autocommit_rollback and self.detect_autocommit_setting(
+            dbapi_connection
+        ):
+            return
+>       dbapi_connection.rollback()
+E       sqlalchemy.exc.ProgrammingError: (sqlite3.ProgrammingError) SQLite objects created in a thread can only be used in that same thread. The object was created in thread id 136715376879296 and this is thread id 136715368486592.
+E       (Background on this error at: https://sqlalche.me/e/21/f405)
+
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:951: ProgrammingError
+_____________ test_delayed_judge_cannot_write_after_account_delete _____________
+
+self = <sqlalchemy.engine.base.Connection object at 0x7c5785cd8050>
+dialect = <sqlalchemy.dialects.sqlite.pysqlite.SQLiteDialect_pysqlite object at 0x7c5787f9ab10>
+context = <sqlalchemy.dialects.sqlite.base.SQLiteExecutionContext object at 0x7c5785cdbbd0>
+statement = <sqlalchemy.dialects.sqlite.base.SQLiteCompiler object at 0x7c578781fcd0>
+parameters = [('delayed_student', 1, 0)]
+
+    def _exec_single_context(
+        self,
+        dialect: Dialect,
+        context: ExecutionContext,
+        statement: Union[str, Compiled],
+        parameters: Optional[_AnyMultiExecuteParams],
+    ) -> CursorResult[Unpack[TupleAny]]:
+        """continue the _execute_context() method for a single DBAPI
+        cursor.execute() or cursor.executemany() call.
+    
+        """
+        if dialect.bind_typing is BindTyping.SETINPUTSIZES:
+            generic_setinputsizes = context._prepare_set_input_sizes()
+    
+            if generic_setinputsizes:
+                try:
+                    dialect.do_set_input_sizes(
+                        context.cursor, generic_setinputsizes, context
+                    )
+                except BaseException as e:
+                    self._handle_dbapi_exception(
+                        e, str(statement), parameters, None, context
+                    )
+    
+        cursor, str_statement, parameters = (
+            context.cursor,
+            context.statement,
+            context.parameters,
+        )
+    
+        effective_parameters: Optional[_AnyExecuteParams]
+    
+        if not context.executemany:
+            effective_parameters = parameters[0]
+        else:
+            effective_parameters = parameters
+    
+        evt_handled: bool = False
+        try:
+            if self._has_events or self.engine._has_events:
+                for fn in self.dispatch.before_cursor_execute:
+                    str_statement, effective_parameters = fn(
+                        self,
+                        cursor,
+                        str_statement,
+                        effective_parameters,
+                        context,
+                        context.executemany,
+                    )
+    
+            if self._echo:
+                self._log_info(str_statement)
+    
+                stats = context._get_cache_stats()
+    
+                if not self.engine.hide_parameters:
+                    self._log_info(
+                        "[%s] %r",
+                        stats,
+                        sql_util._repr_params(
+                            effective_parameters,
+                            batches=10,
+                            ismulti=context.executemany,
+                        ),
+                    )
+                else:
+                    self._log_info(
+                        "[%s] [SQL parameters hidden due to "
+                        "hide_parameters=True]",
+                        stats,
+                    )
+            if context.execute_style is ExecuteStyle.EXECUTEMANY:
+                effective_parameters = cast(
+                    "_CoreMultiExecuteParams", effective_parameters
+                )
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_executemany:
+                        if fn(
+                            cursor,
+                            str_statement,
+                            effective_parameters,
+                            context,
+                        ):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+                    self.dialect.do_executemany(
+                        cursor,
+                        str_statement,
+                        effective_parameters,
+                        context,
+                    )
+            elif not effective_parameters and context.no_parameters:
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_execute_no_params:
+                        if fn(cursor, str_statement, context):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+                    self.dialect.do_execute_no_params(
+                        cursor, str_statement, context
+                    )
+            else:
+                effective_parameters = cast(
+                    "_CoreSingleExecuteParams", effective_parameters
+                )
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_execute:
+                        if fn(
+                            cursor,
+                            str_statement,
+                            effective_parameters,
+                            context,
+                        ):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+>                   self.dialect.do_execute(
+                        cursor, str_statement, effective_parameters, context
+                    )
+
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1958: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <sqlalchemy.dialects.sqlite.pysqlite.SQLiteDialect_pysqlite object at 0x7c5787f9ab10>
+cursor = <sqlite3.Cursor object at 0x7c5784167f40>
+statement = 'SELECT users.id AS users_id, users.username AS users_username, users.password AS users_password, users.phone AS users...ast_login AS users_last_login, users.status AS users_status \nFROM users \nWHERE users.username = ?\n LIMIT ? OFFSET ?'
+parameters = ('delayed_student', 1, 0)
+context = <sqlalchemy.dialects.sqlite.base.SQLiteExecutionContext object at 0x7c5785cdbbd0>
+
+    def do_execute(self, cursor, statement, parameters, context=None):
+>       cursor.execute(statement, parameters)
+E       sqlite3.OperationalError: no such table: users
+
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:1192: OperationalError
+
+The above exception was the direct cause of the following exception:
+
+    def get_db():
+        db = SessionLocal()
+        try:
+>           yield db
+
+app/core/database.py:21: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.11/site-packages/fastapi/concurrency.py:29: in contextmanager_in_threadpool
+    yield await run_in_threadpool(cm.__enter__)
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:152: in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:745: in app
+    raw_response = await run_endpoint_function(
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:372: in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+app/api/auth.py:92: in register
+    if db.query(User).filter(User.username == user.username).first():
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/query.py:2823: in first
+    return self.limit(1)._iter().first()  # type: ignore[return-value]
+           ^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/query.py:2921: in _iter
+    result: Union[ScalarResult[_T], Result[_T]] = self.session.execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:2473: in execute
+    return self._execute_internal(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:2363: in _execute_internal
+    compile_state_cls.orm_execute_statement(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/context.py:320: in orm_execute_statement
+    result = conn.execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1463: in execute
+    return meth(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/sql/elements.py:533: in _execute_on_connection
+    return connection._execute_clauseelement(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1683: in _execute_clauseelement
+    ret = self._execute_context(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1837: in _execute_context
+    return self._exec_single_context(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1977: in _exec_single_context
+    self._handle_dbapi_exception(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2347: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1958: in _exec_single_context
+    self.dialect.do_execute(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <sqlalchemy.dialects.sqlite.pysqlite.SQLiteDialect_pysqlite object at 0x7c5787f9ab10>
+cursor = <sqlite3.Cursor object at 0x7c5784167f40>
+statement = 'SELECT users.id AS users_id, users.username AS users_username, users.password AS users_password, users.phone AS users...ast_login AS users_last_login, users.status AS users_status \nFROM users \nWHERE users.username = ?\n LIMIT ? OFFSET ?'
+parameters = ('delayed_student', 1, 0)
+context = <sqlalchemy.dialects.sqlite.base.SQLiteExecutionContext object at 0x7c5785cdbbd0>
+
+    def do_execute(self, cursor, statement, parameters, context=None):
+>       cursor.execute(statement, parameters)
+E       sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) no such table: users
+E       [SQL: SELECT users.id AS users_id, users.username AS users_username, users.password AS users_password, users.phone AS users_phone, users.created_at AS users_created_at, users.last_login AS users_last_login, users.status AS users_status 
+E       FROM users 
+E       WHERE users.username = ?
+E        LIMIT ? OFFSET ?]
+E       [parameters: ('delayed_student', 1, 0)]
+E       (Background on this error at: https://sqlalche.me/e/21/e3q8)
+
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:1192: OperationalError
+
+During handling of the above exception, another exception occurred:
+
+self = <sqlalchemy.engine.base.Connection object at 0x7c5785cd8050>
+
+    def _rollback_impl(self) -> None:
+        if self._has_events or self.engine._has_events:
+            self.dispatch.rollback(self)
+    
+        if self._still_open_and_dbapi_connection_is_valid:
+            if self._echo:
+                if self._is_autocommit_isolation():
+                    if self.dialect.skip_autocommit_rollback:
+                        self._log_info(
+                            "ROLLBACK will be skipped by "
+                            "skip_autocommit_rollback"
+                        )
+                    else:
+                        self._log_info(
+                            "ROLLBACK using DBAPI connection.rollback(); "
+                            "set skip_autocommit_rollback to prevent fully"
+                        )
+                else:
+                    self._log_info("ROLLBACK")
+            try:
+>               self.engine.dialect.do_rollback(self.connection)
+
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1153: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <sqlalchemy.dialects.sqlite.pysqlite.SQLiteDialect_pysqlite object at 0x7c5787f9ab10>
+dbapi_connection = <sqlalchemy.pool.base._ConnectionFairy object at 0x7c5784770600>
+
+    def do_rollback(self, dbapi_connection):
+        if self.skip_autocommit_rollback and self.detect_autocommit_setting(
+            dbapi_connection
+        ):
+            return
+>       dbapi_connection.rollback()
+E       sqlite3.ProgrammingError: SQLite objects created in a thread can only be used in that same thread. The object was created in thread id 136715376879296 and this is thread id 136715368486592.
+
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:951: ProgrammingError
+
+The above exception was the direct cause of the following exception:
+
+client = <starlette.testclient.TestClient object at 0x7c5788120c50>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7c5785cdb210>
+
+    def test_delayed_judge_cannot_write_after_account_delete(client, monkeypatch):
+        from app.api import coding
+        from app.core.database import SessionLocal
+        from app.models.learning_submission import LearningSubmission
+        from app.models.user import User
+    
+>       user_id, token = register_and_login(client, "delayed_student", "13800000010")
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_auth_flow.py:251: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_auth_flow.py:23: in register_and_login
+    registered = client.post(
+/usr/local/lib/python3.11/site-packages/httpx/_client.py:1144: in post
+    return self.request(
+/usr/local/lib/python3.11/site-packages/starlette/testclient.py:518: in request
+    return super().request(
+/usr/local/lib/python3.11/site-packages/httpx/_client.py:825: in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/httpx/_client.py:928: in send
+    raise exc
+/usr/local/lib/python3.11/site-packages/httpx/_client.py:922: in send
+    response.read()
+/usr/local/lib/python3.11/site-packages/httpx/_models.py:881: in read
+    self._content = b"".join(self.iter_bytes())
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/httpx/_models.py:897: in iter_bytes
+    for raw_bytes in self.iter_raw():
+/usr/local/lib/python3.11/site-packages/httpx/_models.py:951: in iter_raw
+    for raw_stream_bytes in self.stream:
+/usr/local/lib/python3.11/site-packages/httpx/_client.py:153: in __iter__
+    for chunk in self._stream:
+/usr/local/lib/python3.11/site-packages/starlette/testclient.py:384: in iter_body
+    exit_stack.close()
+/usr/local/lib/python3.11/contextlib.py:609: in close
+    self.__exit__(None, None, None)
+/usr/local/lib/python3.11/contextlib.py:601: in __exit__
+    raise exc_details[1]
+/usr/local/lib/python3.11/contextlib.py:586: in __exit__
+    if cb(*exc_details):
+       ^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/starlette/testclient.py:399: in close_app
+    raise exception
+/usr/local/lib/python3.11/site-packages/anyio/from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/starlette/testclient.py:366: in run_app
+    await self.app(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/fastapi/applications.py:1194: in __call__
+    await super().__call__(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/starlette/applications.py:96: in __call__
+    await self.middleware_stack(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/starlette/middleware/errors.py:186: in __call__
+    raise exc
+/usr/local/lib/python3.11/site-packages/starlette/middleware/errors.py:164: in __call__
+    await self.app(scope, receive, _send)
+/usr/local/lib/python3.11/site-packages/fastapi/telemetry/_asgi.py:151: in __call__
+    await self.app(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/starlette/middleware/cors.py:91: in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+/usr/local/lib/python3.11/site-packages/starlette/middleware/cors.py:149: in simple_response
+    await self.app(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/starlette/middleware/exceptions.py:63: in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/starlette/_exception_handler.py:53: in wrapped_app
+    raise exc
+/usr/local/lib/python3.11/site-packages/starlette/_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+/usr/local/lib/python3.11/site-packages/fastapi/middleware/asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/starlette/routing.py:683: in __call__
+    await self.middleware_stack(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:2811: in app
+    await route.handle(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:1839: in handle
+    await self.original_router.handle(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:2894: in handle
+    await included_router._handle_selected(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:1865: in _handle_selected
+    await original_route.handle(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:1328: in handle
+    await effective_context.app(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:166: in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/starlette/_exception_handler.py:53: in wrapped_app
+    raise exc
+/usr/local/lib/python3.11/site-packages/starlette/_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:148: in app
+    async with AsyncExitStack() as request_stack:
+/usr/local/lib/python3.11/contextlib.py:745: in __aexit__
+    raise exc_details[1]
+/usr/local/lib/python3.11/contextlib.py:728: in __aexit__
+    cb_suppress = await cb(*exc_details)
+                  ^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/contextlib.py:231: in __aexit__
+    await self.gen.athrow(typ, value, traceback)
+/usr/local/lib/python3.11/site-packages/fastapi/concurrency.py:32: in contextmanager_in_threadpool
+    await anyio.to_thread.run_sync(
+/usr/local/lib/python3.11/site-packages/anyio/_backends/_asyncio.py:2706: in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/anyio/_backends/_asyncio.py:1100: in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/contextlib.py:158: in __exit__
+    self.gen.throw(typ, value, traceback)
+app/core/database.py:23: in get_db
+    db.close()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:2642: in close
+    self._close_impl(invalidate=False)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:2711: in _close_impl
+    transaction.close(invalidate)
+<sqlalchemy generated _go() wrapper for sqlalchemy.orm.session.SessionTransaction.close>:2: in close
+    return target(fn, self, invalidate=invalidate)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/state_changes.py:137: in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1436: in close
+    transaction.close()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2581: in close
+    self._do_close()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2719: in _do_close
+    self._close_impl()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2705: in _close_impl
+    self._connection_rollback_impl()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2697: in _connection_rollback_impl
+    self.connection._rollback_impl()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1155: in _rollback_impl
+    self._handle_dbapi_exception(e, None, None, None, None)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2347: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1153: in _rollback_impl
+    self.engine.dialect.do_rollback(self.connection)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <sqlalchemy.dialects.sqlite.pysqlite.SQLiteDialect_pysqlite object at 0x7c5787f9ab10>
+dbapi_connection = <sqlalchemy.pool.base._ConnectionFairy object at 0x7c5784770600>
+
+    def do_rollback(self, dbapi_connection):
+        if self.skip_autocommit_rollback and self.detect_autocommit_setting(
+            dbapi_connection
+        ):
+            return
+>       dbapi_connection.rollback()
+E       sqlalchemy.exc.ProgrammingError: (sqlite3.ProgrammingError) SQLite objects created in a thread can only be used in that same thread. The object was created in thread id 136715376879296 and this is thread id 136715368486592.
+E       (Background on this error at: https://sqlalche.me/e/21/f405)
+
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:951: ProgrammingError
+____________ test_deepseek_chat_non_stream_and_stream_save_history _____________
+
+self = <sqlalchemy.engine.base.Connection object at 0x7c577fd46950>
+dialect = <sqlalchemy.dialects.sqlite.pysqlite.SQLiteDialect_pysqlite object at 0x7c5787f9ab10>
+context = <sqlalchemy.dialects.sqlite.base.SQLiteExecutionContext object at 0x7c577fd46910>
+statement = <sqlalchemy.dialects.sqlite.base.SQLiteCompiler object at 0x7c578781fcd0>
+parameters = [('deepseek_student', 1, 0)]
+
+    def _exec_single_context(
+        self,
+        dialect: Dialect,
+        context: ExecutionContext,
+        statement: Union[str, Compiled],
+        parameters: Optional[_AnyMultiExecuteParams],
+    ) -> CursorResult[Unpack[TupleAny]]:
+        """continue the _execute_context() method for a single DBAPI
+        cursor.execute() or cursor.executemany() call.
+    
+        """
+        if dialect.bind_typing is BindTyping.SETINPUTSIZES:
+            generic_setinputsizes = context._prepare_set_input_sizes()
+    
+            if generic_setinputsizes:
+                try:
+                    dialect.do_set_input_sizes(
+                        context.cursor, generic_setinputsizes, context
+                    )
+                except BaseException as e:
+                    self._handle_dbapi_exception(
+                        e, str(statement), parameters, None, context
+                    )
+    
+        cursor, str_statement, parameters = (
+            context.cursor,
+            context.statement,
+            context.parameters,
+        )
+    
+        effective_parameters: Optional[_AnyExecuteParams]
+    
+        if not context.executemany:
+            effective_parameters = parameters[0]
+        else:
+            effective_parameters = parameters
+    
+        evt_handled: bool = False
+        try:
+            if self._has_events or self.engine._has_events:
+                for fn in self.dispatch.before_cursor_execute:
+                    str_statement, effective_parameters = fn(
+                        self,
+                        cursor,
+                        str_statement,
+                        effective_parameters,
+                        context,
+                        context.executemany,
+                    )
+    
+            if self._echo:
+                self._log_info(str_statement)
+    
+                stats = context._get_cache_stats()
+    
+                if not self.engine.hide_parameters:
+                    self._log_info(
+                        "[%s] %r",
+                        stats,
+                        sql_util._repr_params(
+                            effective_parameters,
+                            batches=10,
+                            ismulti=context.executemany,
+                        ),
+                    )
+                else:
+                    self._log_info(
+                        "[%s] [SQL parameters hidden due to "
+                        "hide_parameters=True]",
+                        stats,
+                    )
+            if context.execute_style is ExecuteStyle.EXECUTEMANY:
+                effective_parameters = cast(
+                    "_CoreMultiExecuteParams", effective_parameters
+                )
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_executemany:
+                        if fn(
+                            cursor,
+                            str_statement,
+                            effective_parameters,
+                            context,
+                        ):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+                    self.dialect.do_executemany(
+                        cursor,
+                        str_statement,
+                        effective_parameters,
+                        context,
+                    )
+            elif not effective_parameters and context.no_parameters:
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_execute_no_params:
+                        if fn(cursor, str_statement, context):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+                    self.dialect.do_execute_no_params(
+                        cursor, str_statement, context
+                    )
+            else:
+                effective_parameters = cast(
+                    "_CoreSingleExecuteParams", effective_parameters
+                )
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_execute:
+                        if fn(
+                            cursor,
+                            str_statement,
+                            effective_parameters,
+                            context,
+                        ):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+>                   self.dialect.do_execute(
+                        cursor, str_statement, effective_parameters, context
+                    )
+
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1958: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <sqlalchemy.dialects.sqlite.pysqlite.SQLiteDialect_pysqlite object at 0x7c5787f9ab10>
+cursor = <sqlite3.Cursor object at 0x7c5785fd1640>
+statement = 'SELECT users.id AS users_id, users.username AS users_username, users.password AS users_password, users.phone AS users...ast_login AS users_last_login, users.status AS users_status \nFROM users \nWHERE users.username = ?\n LIMIT ? OFFSET ?'
+parameters = ('deepseek_student', 1, 0)
+context = <sqlalchemy.dialects.sqlite.base.SQLiteExecutionContext object at 0x7c577fd46910>
+
+    def do_execute(self, cursor, statement, parameters, context=None):
+>       cursor.execute(statement, parameters)
+E       sqlite3.OperationalError: no such table: users
+
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:1192: OperationalError
+
+The above exception was the direct cause of the following exception:
+
+    def get_db():
+        db = SessionLocal()
+        try:
+>           yield db
+
+app/core/database.py:21: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.11/site-packages/fastapi/concurrency.py:29: in contextmanager_in_threadpool
+    yield await run_in_threadpool(cm.__enter__)
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:152: in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:745: in app
+    raw_response = await run_endpoint_function(
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:372: in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+app/api/auth.py:92: in register
+    if db.query(User).filter(User.username == user.username).first():
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/query.py:2823: in first
+    return self.limit(1)._iter().first()  # type: ignore[return-value]
+           ^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/query.py:2921: in _iter
+    result: Union[ScalarResult[_T], Result[_T]] = self.session.execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:2473: in execute
+    return self._execute_internal(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:2363: in _execute_internal
+    compile_state_cls.orm_execute_statement(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/context.py:320: in orm_execute_statement
+    result = conn.execute(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1463: in execute
+    return meth(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/sql/elements.py:533: in _execute_on_connection
+    return connection._execute_clauseelement(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1683: in _execute_clauseelement
+    ret = self._execute_context(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1837: in _execute_context
+    return self._exec_single_context(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1977: in _exec_single_context
+    self._handle_dbapi_exception(
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2347: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1958: in _exec_single_context
+    self.dialect.do_execute(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <sqlalchemy.dialects.sqlite.pysqlite.SQLiteDialect_pysqlite object at 0x7c5787f9ab10>
+cursor = <sqlite3.Cursor object at 0x7c5785fd1640>
+statement = 'SELECT users.id AS users_id, users.username AS users_username, users.password AS users_password, users.phone AS users...ast_login AS users_last_login, users.status AS users_status \nFROM users \nWHERE users.username = ?\n LIMIT ? OFFSET ?'
+parameters = ('deepseek_student', 1, 0)
+context = <sqlalchemy.dialects.sqlite.base.SQLiteExecutionContext object at 0x7c577fd46910>
+
+    def do_execute(self, cursor, statement, parameters, context=None):
+>       cursor.execute(statement, parameters)
+E       sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) no such table: users
+E       [SQL: SELECT users.id AS users_id, users.username AS users_username, users.password AS users_password, users.phone AS users_phone, users.created_at AS users_created_at, users.last_login AS users_last_login, users.status AS users_status 
+E       FROM users 
+E       WHERE users.username = ?
+E        LIMIT ? OFFSET ?]
+E       [parameters: ('deepseek_student', 1, 0)]
+E       (Background on this error at: https://sqlalche.me/e/21/e3q8)
+
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:1192: OperationalError
+
+During handling of the above exception, another exception occurred:
+
+self = <sqlalchemy.engine.base.Connection object at 0x7c577fd46950>
+
+    def _rollback_impl(self) -> None:
+        if self._has_events or self.engine._has_events:
+            self.dispatch.rollback(self)
+    
+        if self._still_open_and_dbapi_connection_is_valid:
+            if self._echo:
+                if self._is_autocommit_isolation():
+                    if self.dialect.skip_autocommit_rollback:
+                        self._log_info(
+                            "ROLLBACK will be skipped by "
+                            "skip_autocommit_rollback"
+                        )
+                    else:
+                        self._log_info(
+                            "ROLLBACK using DBAPI connection.rollback(); "
+                            "set skip_autocommit_rollback to prevent fully"
+                        )
+                else:
+                    self._log_info("ROLLBACK")
+            try:
+>               self.engine.dialect.do_rollback(self.connection)
+
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1153: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <sqlalchemy.dialects.sqlite.pysqlite.SQLiteDialect_pysqlite object at 0x7c5787f9ab10>
+dbapi_connection = <sqlalchemy.pool.base._ConnectionFairy object at 0x7c5784770600>
+
+    def do_rollback(self, dbapi_connection):
+        if self.skip_autocommit_rollback and self.detect_autocommit_setting(
+            dbapi_connection
+        ):
+            return
+>       dbapi_connection.rollback()
+E       sqlite3.ProgrammingError: SQLite objects created in a thread can only be used in that same thread. The object was created in thread id 136715376879296 and this is thread id 136715368486592.
+
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:951: ProgrammingError
+
+The above exception was the direct cause of the following exception:
+
+client = <starlette.testclient.TestClient object at 0x7c5788120c50>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7c577fd44290>
+
+    def test_deepseek_chat_non_stream_and_stream_save_history(client, monkeypatch):
+        import json
+        import httpx
+        from app.api import ai
+    
+>       _, token = register_and_login(client, "deepseek_student", "13800000005")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_auth_flow.py:272: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_auth_flow.py:23: in register_and_login
+    registered = client.post(
+/usr/local/lib/python3.11/site-packages/httpx/_client.py:1144: in post
+    return self.request(
+/usr/local/lib/python3.11/site-packages/starlette/testclient.py:518: in request
+    return super().request(
+/usr/local/lib/python3.11/site-packages/httpx/_client.py:825: in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/httpx/_client.py:928: in send
+    raise exc
+/usr/local/lib/python3.11/site-packages/httpx/_client.py:922: in send
+    response.read()
+/usr/local/lib/python3.11/site-packages/httpx/_models.py:881: in read
+    self._content = b"".join(self.iter_bytes())
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/httpx/_models.py:897: in iter_bytes
+    for raw_bytes in self.iter_raw():
+/usr/local/lib/python3.11/site-packages/httpx/_models.py:951: in iter_raw
+    for raw_stream_bytes in self.stream:
+/usr/local/lib/python3.11/site-packages/httpx/_client.py:153: in __iter__
+    for chunk in self._stream:
+/usr/local/lib/python3.11/site-packages/starlette/testclient.py:384: in iter_body
+    exit_stack.close()
+/usr/local/lib/python3.11/contextlib.py:609: in close
+    self.__exit__(None, None, None)
+/usr/local/lib/python3.11/contextlib.py:601: in __exit__
+    raise exc_details[1]
+/usr/local/lib/python3.11/contextlib.py:586: in __exit__
+    if cb(*exc_details):
+       ^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/starlette/testclient.py:399: in close_app
+    raise exception
+/usr/local/lib/python3.11/site-packages/anyio/from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/starlette/testclient.py:366: in run_app
+    await self.app(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/fastapi/applications.py:1194: in __call__
+    await super().__call__(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/starlette/applications.py:96: in __call__
+    await self.middleware_stack(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/starlette/middleware/errors.py:186: in __call__
+    raise exc
+/usr/local/lib/python3.11/site-packages/starlette/middleware/errors.py:164: in __call__
+    await self.app(scope, receive, _send)
+/usr/local/lib/python3.11/site-packages/fastapi/telemetry/_asgi.py:151: in __call__
+    await self.app(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/starlette/middleware/cors.py:91: in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+/usr/local/lib/python3.11/site-packages/starlette/middleware/cors.py:149: in simple_response
+    await self.app(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/starlette/middleware/exceptions.py:63: in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/starlette/_exception_handler.py:53: in wrapped_app
+    raise exc
+/usr/local/lib/python3.11/site-packages/starlette/_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+/usr/local/lib/python3.11/site-packages/fastapi/middleware/asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/starlette/routing.py:683: in __call__
+    await self.middleware_stack(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:2811: in app
+    await route.handle(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:1839: in handle
+    await self.original_router.handle(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:2894: in handle
+    await included_router._handle_selected(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:1865: in _handle_selected
+    await original_route.handle(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:1328: in handle
+    await effective_context.app(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:166: in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+/usr/local/lib/python3.11/site-packages/starlette/_exception_handler.py:53: in wrapped_app
+    raise exc
+/usr/local/lib/python3.11/site-packages/starlette/_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+/usr/local/lib/python3.11/site-packages/fastapi/routing.py:148: in app
+    async with AsyncExitStack() as request_stack:
+/usr/local/lib/python3.11/contextlib.py:745: in __aexit__
+    raise exc_details[1]
+/usr/local/lib/python3.11/contextlib.py:728: in __aexit__
+    cb_suppress = await cb(*exc_details)
+                  ^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/contextlib.py:231: in __aexit__
+    await self.gen.athrow(typ, value, traceback)
+/usr/local/lib/python3.11/site-packages/fastapi/concurrency.py:32: in contextmanager_in_threadpool
+    await anyio.to_thread.run_sync(
+/usr/local/lib/python3.11/site-packages/anyio/_backends/_asyncio.py:2706: in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/anyio/_backends/_asyncio.py:1100: in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/contextlib.py:158: in __exit__
+    self.gen.throw(typ, value, traceback)
+app/core/database.py:23: in get_db
+    db.close()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:2642: in close
+    self._close_impl(invalidate=False)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:2711: in _close_impl
+    transaction.close(invalidate)
+<sqlalchemy generated _go() wrapper for sqlalchemy.orm.session.SessionTransaction.close>:2: in close
+    return target(fn, self, invalidate=invalidate)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/state_changes.py:137: in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py:1436: in close
+    transaction.close()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2581: in close
+    self._do_close()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2719: in _do_close
+    self._close_impl()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2705: in _close_impl
+    self._connection_rollback_impl()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2697: in _connection_rollback_impl
+    self.connection._rollback_impl()
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1155: in _rollback_impl
+    self._handle_dbapi_exception(e, None, None, None, None)
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2347: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1153: in _rollback_impl
+    self.engine.dialect.do_rollback(self.connection)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <sqlalchemy.dialects.sqlite.pysqlite.SQLiteDialect_pysqlite object at 0x7c5787f9ab10>
+dbapi_connection = <sqlalchemy.pool.base._ConnectionFairy object at 0x7c5784770600>
+
+    def do_rollback(self, dbapi_connection):
+        if self.skip_autocommit_rollback and self.detect_autocommit_setting(
+            dbapi_connection
+        ):
+            return
+>       dbapi_connection.rollback()
+E       sqlalchemy.exc.ProgrammingError: (sqlite3.ProgrammingError) SQLite objects created in a thread can only be used in that same thread. The object was created in thread id 136715376879296 and this is thread id 136715368486592.
+E       (Background on this error at: https://sqlalche.me/e/21/f405)
+
+/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py:951: ProgrammingError
+_________ test_analysis_failure_preserves_judging[offline-unavailable] _________
+
+client = <starlette.testclient.TestClient object at 0x7c577e654e90>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7c5784e72950>
+failure = 'offline', expected = 'unavailable'
+
+    @pytest.mark.parametrize("failure,expected", [
+        ("timeout", "timeout"), ("offline", "unavailable"), ("missing_model", "unavailable"),
+        ("plain_503", "unavailable"),
+        ("invalid_json", "invalid_response"), ("wrong_schema", "invalid_response"),
+        ("invented_evidence", "invalid_response"), ("solution", "invalid_response"),
+        ("truncated", "invalid_response"), ("false_pass", "invalid_response"),
+        ("list_response", "invalid_response"),
+    ])
+    def test_analysis_failure_preserves_judging(client, monkeypatch, failure, expected):
+        calls = []
+    
+        def handler(request):
+            calls.append(request)
+            if failure == "timeout":
+                raise httpx.ReadTimeout("slow model")
+            if failure == "offline":
+                raise httpx.ConnectError("offline")
+            if failure == "missing_model":
+                return httpx.Response(404, json={"error": "model not found"})
+            if failure == "plain_503":
+                return httpx.Response(503, text="model temporarily unavailable")
+            if failure == "list_response":
+                return httpx.Response(200, json=[])
+            content = sample_analysis()
+            if failure == "invented_evidence":
+                content["evidence"][0]["quote"] = "99999"
+            if failure == "solution":
+                content["suspected_cause"] = "```python\n" + CORRECT + "\n```"
+            if failure == "wrong_schema":
+                content.pop("suspected_cause")
+            if failure == "false_pass":
+                content["suspected_cause"] = "判题已经通过所有测试。"
+            return httpx.Response(200, json={'choices': [{'finish_reason': 'length' if failure == 'truncated' else 'stop', 'message': {"content": "not json" if failure == "invalid_json" else json.dumps(content)}}]})
+    
+        mock_model(monkeypatch, handler)
+        data = submit_and_analyze(client, login(client), json={"problem_id": "level2", "code": OVERWRITE})
+        assert data["judge"]["status"] == "wrong_answer"
+        assert data["judge"]["cases"][0]["actual_output"] == "100\n"
+        assert data["analysis"]["status"] == expected
+        assert data["analysis"]["content"] is None
+>       assert len(calls) == 1
+E       AssertionError: assert 2 == 1
+E        +  where 2 = len([<Request('POST', 'https://api.deepseek.com/chat/completions')>, <Request('POST', 'https://api.deepseek.com/chat/completions')>])
+
+tests/test_submission.py:790: AssertionError
+=============================== warnings summary ===============================
+../usr/local/lib/python3.11/site-packages/fastapi/testclient.py:1
+  /usr/local/lib/python3.11/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_auth_flow.py::test_login_access_token_lasts_eight_hours - s...
+FAILED tests/test_auth_flow.py::test_password_is_salted_hashed_and_old_short_password_still_logs_in
+FAILED tests/test_auth_flow.py::test_login_identifies_each_user_and_protects_private_routes
+FAILED tests/test_auth_flow.py::test_chat_history_and_class_records_are_user_isolated
+FAILED tests/test_auth_flow.py::test_account_update_password_and_permanent_deletion
+FAILED tests/test_auth_flow.py::test_delayed_judge_cannot_write_after_account_delete
+FAILED tests/test_auth_flow.py::test_deepseek_chat_non_stream_and_stream_save_history
+FAILED tests/test_submission.py::test_analysis_failure_preserves_judging[offline-unavailable]
+8 failed, 618 passed, 1 skipped, 1 warning, 9 subtests passed in 383.33s (0:06:23)

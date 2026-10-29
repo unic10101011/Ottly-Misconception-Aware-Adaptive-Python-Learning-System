@@ -1,0 +1,51 @@
+{
+  "status": "human_review_completed_with_one_failure",
+  "files": [
+    {
+      "path": "finalize_review.py",
+      "sha256": "cf61ee2470db72830891d8ff155d4cdd10b36a5a3ee57fa198a8d22f2ee07220"
+    },
+    {
+      "path": "human-correction.json",
+      "sha256": "2b6c442788d99f83dc6eddb98a5d23cabd7888154332b3e9e3c17797fa58abf6"
+    },
+    {
+      "path": "human-review-rows.json",
+      "sha256": "3d9d7d813cab1d7ab150d6ea52a9339cc1ed16de8b6b00da60f307d0e74672ae"
+    },
+    {
+      "path": "human-review-summary.json",
+      "sha256": "e0c79ca27a66c4dacfe62d8c1953b3e23b7db7ac1094720f4ef92fabf6031349"
+    },
+    {
+      "path": "human-review.before-correction.snapshot.txt",
+      "sha256": "73a8ac82bff675b9b470983adf54907ad785bd683a40d71ec67a35d5ef786c01"
+    },
+    {
+      "path": "human-review.final.snapshot.txt",
+      "sha256": "242413a62a3d8443fdc5d8fc43860f62b78015b13bfcb58d97b7631b35f31b08"
+    },
+    {
+      "path": "人工审核定稿.md",
+      "sha256": "5e2eaf911d5b476b39af73e334aead35f00d1010c89face16b5ca78c412e9d96"
+    }
+  ],
+  "sources": [
+    {
+      "path": "core72-fixes-2026-10-29/人工复测检查表.md",
+      "sha256": "242413a62a3d8443fdc5d8fc43860f62b78015b13bfcb58d97b7631b35f31b08"
+    },
+    {
+      "path": "core72-fixes-2026-10-29/fixes-manifest.json",
+      "sha256": "70890ae01695b594911e76d966cafaa5fcb5be596a3494569ea15c219d6f2177"
+    },
+    {
+      "path": "core72-fixes-2026-10-29/final/real-ai-results.json",
+      "sha256": "93723a6834fc83ce976f53f2eb4f48eaf90549489f0c97b49b83c35ed881d52f"
+    },
+    {
+      "path": "core72-fixes-2026-10-29/source-and-evidence-check-final.json",
+      "sha256": "c338e343543f71fd0c923355cf60668c31d8ff7b2115cd1e6af7c260407a6ca2"
+    }
+  ]
+}

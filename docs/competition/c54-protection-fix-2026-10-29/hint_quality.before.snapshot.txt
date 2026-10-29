@@ -1,0 +1,171 @@
+"""Small teaching-output guards. No execution, AST inspection or code diagnosis."""
+from difflib import SequenceMatcher
+from itertools import combinations
+import keyword
+import re
+from io import StringIO
+import tokenize
+
+
+ISSUE_GUIDANCE = {
+    "level1_leak": "第一级只提出概念方向问题，去掉行号、变量名、具体错误和修复方法。",
+    "repetition": "三层分别写概念问题、知识点与观察位置、具体核验动作，不重复同一建议。",
+    "answer_leak": "去掉代码、替换语句和直接输出或赋值最终答案的建议。",
+    "unrelated_claim": "只讨论当前代码和真实失败证据共同支持的问题，去掉额外猜测。",
+    "unsupported_claim": "不能声称已经观察到未提供的运行轨迹或不存在的代码位置。",
+    "weak_level2": "第二级联系相关知识概念，引导检查学生实际代码中的位置或操作。",
+    "weak_level3": "第三级给出与疑似原因对应的具体核验动作或修改思路，不能只说确保正确。",
+    "format_or_evidence": "返回完整 JSON，引用只用允许的真实证据；第一级以问号结尾。",
+}
+
+
+def _normalized(text: str) -> str:
+    text = re.sub(r"思考一下|请|一下|看看|检查|观察|是否|确保|注意|了|的", "", text)
+    return re.sub(r"[\W_]", "", text).lower()
+
+
+def line_reference_errors(text: str, source_lines: int, actual_lines: int | None = None,
+                          expected_lines: int | None = None) -> list[dict]:
+    """Check explicit locations only; ambiguous prose is left to semantic review."""
+    errors = []
+    for match in re.finditer(r'第\s*(\d+)\s*行', text):
+        before, after = text[:match.start()], text[match.end():]
+        if (re.search(r'(?:源代码|源码|代码)(?:中)?(?:的)?\s*$', before)
+                or re.match(r'\s*(?:的)?(?:源代码|源码|代码|语句)', after)):
+            kind, limit = 'source', source_lines
+        elif (re.search(r'(?:实际输出|预期输出|期望输出|输出(?:结果)?)(?:中)?(?:的)?\s*$', before)
+              or re.match(r'\s*(?:的)?(?:实际|预期|期望|错误|正确|多余|额外)?(?:的)?输出', after)):
+            if re.search(r'实际输出(?:中)?(?:的)?\s*$', before) or re.match(r'\s*(?:的)?实际输出', after):
+                kind, limit = 'actual_output', actual_lines
+            elif re.search(r'(?:预期|期望)输出(?:中)?(?:的)?\s*$', before) or re.match(r'\s*(?:的)?(?:预期|期望)输出', after):
+                kind, limit = 'expected_output', expected_lines
+            else:
+                counts = [count for count in (actual_lines, expected_lines) if count is not None]
+                kind, limit = 'output', max(counts) if counts else None
+        else:
+            continue
+        number = int(match.group(1))
+        absent = re.match(r'\s*(?:(?:的)?(?:实际|预期|期望)?输出)?\s*(?:并)?(?:不存在|缺失|未出现)', after)
+        exists = limit is not None and 1 <= number <= limit
+        if limit is not None and (bool(exists) if absent else not exists):
+            errors.append({'kind': kind, 'line': number, 'available_lines': limit, 'text': text})
+    return errors
+
+
+def _code_tokens(code: str) -> tuple | None:
+    try:
+        return tuple((token.type, token.string) for token in tokenize.generate_tokens(StringIO(code).readline)
+                     if token.type not in {tokenize.NEWLINE, tokenize.NL, tokenize.INDENT, tokenize.DEDENT,
+                                           tokenize.ENDMARKER, tokenize.COMMENT})
+    except (tokenize.TokenError, IndentationError, SyntaxError):
+        return None
+
+
+def replacement_statement(text: str, student_code: str = '', *, public_inputs: list[str] | None = None,
+                          allow_source_observation: bool = False) -> str | None:
+    """Exempt exact quoted student lines, never directives or newly supplied fixes."""
+    source = {_code_tokens(line.strip()) for line in student_code.splitlines() if line.strip()}
+    source.discard(None)
+
+    def observed_operation(prefix):
+        # Existing erroneous statements may be described as "却写成" or
+        # "本次调用...执行". These describe what ran, not an instruction to fix it.
+        if not allow_source_observation:
+            return False
+        if re.search(r'(?:却|但|实际|原来|当前)(?:写成|使用|执行|运行)\s*$', prefix):
+            return True
+        sentence = re.split(r'[。；;\n]', prefix)[-1]
+        return bool(re.search(r'执行\s*$', sentence) and re.search(r'本次|实际|程序|函数|调用', sentence)
+                    and not re.search(r'请|应|需要|改为|改成|补上|添加|必须', sentence))
+
+    def quote(match):
+        fragment = next(group for group in match.groups() if group is not None)
+        prefix = text[:match.start()]
+        directive = re.search(r'(?:改为|改成|替换为|替换成|换成|写成|添加|补上|使用|执行|运行|复制|粘贴|请用|改用|应当|应该|必须)(?:下面的?|以下的?|这一?句)?\s*[:：]?\s*$', prefix)
+        conceptual = fragment.strip() == 'print()' and re.match(r'\s*(?:函数|的(?:作用|返回值|含义)|会返回|用于)', text[match.end():])
+        if (not directive or observed_operation(prefix)) and (_code_tokens(fragment.strip()) in source or conceptual):
+            return ' ' * len(match.group())
+        return match.group()
+
+    prose = re.sub(r'(?<!`)`([^`\n]+)`(?!`)|“([^”\n]+)”|「([^」\n]+)」', quote, text)
+    if allow_source_observation:
+        for line in sorted(student_code.splitlines(), key=len, reverse=True):
+            line = line.strip()
+            if not line:
+                continue
+            def observation(match):
+                prefix = prose[:match.start()]
+                if re.match(r'\s*[A-Za-z_0-9+*/%([.=\-]', prose[match.end():]):
+                    return match.group()
+                if (not observed_operation(prefix)
+                        and re.search(r'(?:改为|改成|替换为|替换成|换成|写成|添加|补上|使用|执行|运行|复制|粘贴|请用|改用|应当|应该|必须)\s*[:：]?\s*$', prefix)):
+                    return match.group()
+                return ' ' * len(match.group())
+            prose = re.sub(r'(?<![A-Za-z_0-9])' + re.escape(line), observation, prose)
+    # Only a labelled, observed input value is data notation. Arbitrary numeric
+    # assignments and modification directives must still be caught below.
+    values = {line.strip() for stdin in (public_inputs or []) for line in stdin.splitlines()}
+    def input_notation(match):
+        prefix = re.split(r'[。；;\n]', prose[:match.start()])[-1]
+        labelled = re.search(r'公开样例|公开用例|public_cases|样例输入|本次|输入|sample-\w+', prefix)
+        contextual = re.match(r'\s*(?:时|的(?:输入|样例)|(?:、|和)\s*[A-Za-z_]\w*\s*=)', prose[match.end():])
+        if allow_source_observation and re.match(r'\s*且', prose[match.end():]):
+            contextual = True
+        if (match['value'] not in values or not (labelled or contextual)
+                or re.search(r'改为|改成|设为|赋值|写成|替换|添加|补上', prefix)):
+            return match.group()
+        return ' ' * len(match.group())
+    prose = re.sub(r'\b[A-Za-z_]\w*\s*=\s*(?P<value>-?\d+(?:\.\d+)?)(?![\w.+*/%-])', input_notation, prose)
+    match = re.search(r'\b(?:for|while|def|if|elif)\s+[A-Za-z_][^。\n]*:|\belse\s*:|\bprint\s*\(|\breturn(?:\s*\(|\s+[A-Za-z_0-9])|\b[A-Za-z_]\w*\s*(?:[+*/%-]=|=(?!=))', prose)
+    return match.group() if match else None
+
+
+def quality_issues(content: dict, code: str, expected_outputs: list[str], *,
+                   public_cases: list[dict] | None = None, details: list[dict] | None = None) -> list[str]:
+    """Conservative visible-text checks; semantic relevance is reviewed separately."""
+    issues = []
+    if any(point.strip() in {"知识点", "相关知识点", "直接相关知识点", "其他知识点"}
+           for point in content["knowledge_points"]):
+        issues.append("unrelated_claim")
+    hints = list(content["hints"].values())
+    first = content["hints"]["level1"]
+    identifiers = set(re.findall(r"\b[A-Za-z_]\w*\b", code)) - set(keyword.kwlist)
+    identifiers -= {"print", "range", "len", "input", "int", "str", "float", "sum"}
+    early_detail = r"\d|第[一二三四五六七八九十]+行|[首末]行|最后一行|缺少|少了|遗漏|未定义|覆盖|冒号|加号|等号|改为|改成|添加|补上|加上|删除|替换"
+    if re.search(early_detail, first) or any(re.search(rf"\b{re.escape(name)}\b", first) for name in identifiers):
+        issues.append("level1_leak")
+    second = content["hints"]["level2"]
+    if (not re.search(r"检查|观察|对照|核对|查看|比较|找到|留意|关注", second)
+            or re.search(r"(?:是否|确保).{0,12}(?:正确|符合题意)", second)):
+        issues.append("weak_level2")
+    if not re.search(r"列出|记录|推演|核算|对照|比较|逐[字行轮步]|尝试|调整|修改|验证|跟踪|计算", content["hints"]["level3"]):
+        issues.append("weak_level3")
+    for left, right in combinations(hints, 2):
+        a, b = _normalized(left), _normalized(right)
+        if a == b or SequenceMatcher(None, a, b).ratio() >= 0.72:
+            issues.append("repetition")
+            break
+    for hint in hints:
+        direct_answer = re.search(r"(?:直接|只需要?|只要)(?:将|把)?(?:结果|答案)?(?:打印|输出|赋值|返回)", hint)
+        replacement = any(value.strip() and re.search(
+            rf"(?:打印|输出|赋值|设为|改为).{{0,12}}{re.escape(value.strip())}", hint)
+            for value in expected_outputs)
+        if direct_answer or replacement:
+            issues.append("answer_leak")
+            break
+    cases = [case for case in (public_cases or []) if case.get('visibility') == 'public']
+    teaching = [('suspected_cause', content['suspected_cause'], None)]
+    teaching += [(f'knowledge_points.{i}', text, None) for i, text in enumerate(content['knowledge_points'])]
+    teaching += [(f'hints.{key}', text, None) for key, text in content['hints'].items()]
+    teaching += [(f'evidence.{i}.explanation', item['explanation'], item.get('case_id'))
+                 for i, item in enumerate(content['evidence'])]
+    for field, text, case_id in teaching:
+        relevant = [case for case in cases if case_id is None or case['case_id'] == case_id]
+        actual = [len(case['actual_output'].splitlines()) for case in relevant if case.get('output_available', True)]
+        expected = [len(case['expected_output'].splitlines()) for case in relevant]
+        errors = line_reference_errors(text, len(code.splitlines()), max(actual, default=None), max(expected, default=None))
+        if errors:
+            issues.append("unsupported_claim")
+            if details is not None:
+                details.extend({'field': field, 'case_id': case_id, **error} for error in errors)
+    return list(dict.fromkeys(issues))

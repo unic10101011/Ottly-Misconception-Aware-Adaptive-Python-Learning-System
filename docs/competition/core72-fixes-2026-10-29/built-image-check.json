@@ -1,0 +1,1 @@
+{"built_image_matches_final_source": true, "files": [{"path": "backend/app/services/error_analysis.py", "matches": true}, {"path": "backend/app/services/hint_quality.py", "matches": true}, {"path": "backend/app/services/misconceptions.py", "matches": true}]}

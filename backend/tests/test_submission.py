@@ -787,7 +787,7 @@ def test_analysis_failure_preserves_judging(client, monkeypatch, failure, expect
     assert data["judge"]["cases"][0]["actual_output"] == "100\n"
     assert data["analysis"]["status"] == expected
     assert data["analysis"]["content"] is None
-    assert len(calls) == 1
+    assert len(calls) == (2 if failure == 'offline' else 1)
 
 
 def test_submission_auth_problem_and_payload_validation(client):

@@ -1,0 +1,7 @@
+{
+  "source": "core72-fixes-2026-10-29 first real replay; local false positives retained",
+  "candidates": {
+    "C37-R1": "{\"hint\":\"对照 public_cases 中 n=3 的实际输出与期望输出，逐行查看 0 和 3 分别出现在哪里；再单独推演 `range(n)` 在 n=3 和 n=0 时依次产生哪些整数，并检查 `print(marker)` 每轮输出的对象是否符合题目要求。\",\"knowledge_points\":[\"for 循环与 range\",\"字符串与输出\"],\"question\":{\"prompt\":\"关于 `range(n)` 产生的整数序列，下面哪种说法是正确的？\",\"options\":[\"从 0 开始，到 n 的前一个整数结束\",\"从 1 开始，到 n 结束\",\"总是包含 n 本身\",\"当 n 为 0 时仍会产生一个零\"],\"correct_index\":0,\"explanation\":\"`range(n)` 产生的序列从 0 开始，不包含终点 n；当 n 为 0 时，它不会产生任何整数。\"}}",
+    "C70-R1": "{\"code_observation\":\"本次输入阈值为 60，成绩依次为 59、60、80、100。循环中前三个成绩满足大于等于阈值，count 累加后为 3；但函数最后返回的是未定义的 tally，而不是已累计的 count，因此执行到 return 时抛出 NameError，未产生输出。\",\"suspected_cause\":\"函数内只定义并更新了 count，却写成 return tally；tally 没有赋值或定义，导致执行到返回语句时报 NameError。\",\"evidence\":[{\"case_id\":\"sample-1\",\"field\":\"error_message\",\"quote\":\"变量 'tally' 没有定义，请先赋值或检查拼写\",\"explanation\":\"本次调用统计到 3 个达标成绩后，执行 return tally；由于 tally 不存在，程序抛出该 NameError，actual_output 为空。\"}],\"knowledge_points\":[\"函数与返回值\",\"累加器与变量更新\"],\"misconception_tag\":\"variable_error\"}"
+  }
+}

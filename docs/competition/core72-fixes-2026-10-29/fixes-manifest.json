@@ -1,0 +1,179 @@
+{
+  "status": "software_fixed_real_replay_complete_human_review_pending",
+  "human_review": "pending",
+  "mutable_human_form": "人工复测检查表.md",
+  "files": [
+    {
+      "path": "acceptance.jsonl",
+      "sha256": "2fc2d8e2513fb9eea586ddfe0f363c31376982c8dca561828d2bb8d7b0872e4d"
+    },
+    {
+      "path": "application.patch",
+      "sha256": "f883de4d4fdccd195863bbb3daca90e0d7ecb14c05a52a5ce51562117deb8ec2"
+    },
+    {
+      "path": "audit_payloads.py",
+      "sha256": "31844f8f4b58e165ec1fadcd7791183de17e63ae19624bb94308fce1fadc5a3d"
+    },
+    {
+      "path": "backend-build-final.txt",
+      "sha256": "75ac1978cc4b140480805d3b6e93576e9db4c63261addde6fce988e9854739cf"
+    },
+    {
+      "path": "backend-build.txt",
+      "sha256": "446924dcec07af7743ca222a403861be7542fcedb8c7eaa57de855ef0465214e"
+    },
+    {
+      "path": "backend-regression-complete.txt",
+      "sha256": "b5b83241cead712302b842d015fe1da14bc005a270d288a1a1d7ac1c0f2d3cff"
+    },
+    {
+      "path": "backend-regression-configured.txt",
+      "sha256": "80f97cac9768c07146ea5b2e0ec9c957eac4a0ae629cbfc01cde6afc36119a53"
+    },
+    {
+      "path": "backend-regression-final-v2.txt",
+      "sha256": "ce185204a11a66c51b9526c2db6dfdb24ae9bda7ac0f1c24c35bc7e239884637"
+    },
+    {
+      "path": "backend-regression-final.txt",
+      "sha256": "ac349a8aa1c365c79d58e2fb16c5d16841a8a544c447cc7c185a59a701461647"
+    },
+    {
+      "path": "backend-regression.txt",
+      "sha256": "1860aaba8ec217cf33769d8bb917d8738ac18667f64c6ad72a3341c3a4b112ac"
+    },
+    {
+      "path": "built-image-check.json",
+      "sha256": "08c97b75450778973a8342f6bdc4bc851dc022bc668d883457a9278cb841c137"
+    },
+    {
+      "path": "database-after.json",
+      "sha256": "51f9b8b7d4d31ef6dcfd894cc0471ed26aaee847142c8833cf1777359d073467"
+    },
+    {
+      "path": "database-before.json",
+      "sha256": "51f9b8b7d4d31ef6dcfd894cc0471ed26aaee847142c8833cf1777359d073467"
+    },
+    {
+      "path": "final/acceptance.jsonl",
+      "sha256": "8314134a59686fb2ddae443771914050027c36ed375e3db42fc4653d8dd9e1b3"
+    },
+    {
+      "path": "final/provider-calls.jsonl",
+      "sha256": "965ef389c0d8ebcb784e4a2c1904e89d3554c228775dad50da4ac420de40a2fc"
+    },
+    {
+      "path": "final/provider-usage.json",
+      "sha256": "349447e8e8a6a371602ef55ae783e6af8d9e76ab41b5e24b07855d9f274bbecc"
+    },
+    {
+      "path": "final/real-ai-results.json",
+      "sha256": "93723a6834fc83ce976f53f2eb4f48eaf90549489f0c97b49b83c35ed881d52f"
+    },
+    {
+      "path": "finish_report.py",
+      "sha256": "0e1956939ded818e0f4aec73128c78b3f6670e2f3d6055f5219669738f4db1a4"
+    },
+    {
+      "path": "health-check.json",
+      "sha256": "577e41f9e3e394ee18f3b41bbade15fa56dd9d5792a70d251a5d8cb1b1bdad6c"
+    },
+    {
+      "path": "live-console-final.txt",
+      "sha256": "f12220bd0b6d5b593d04def2ddcb90ecfcd30c8837d2933a5d43abfcf10f666e"
+    },
+    {
+      "path": "live-console.txt",
+      "sha256": "8d34ae170000145b753a7aaadba62ec5c00005f0c64d91dfd917bf8c0b3b8e64"
+    },
+    {
+      "path": "live_retest.py",
+      "sha256": "7ef4178d991ca945a436cc8d43c203d124aadac03699058c5ca6b36dd3d60b76"
+    },
+    {
+      "path": "payload-audit.json",
+      "sha256": "6b674d27cc229b8f75e3a3c55d50d2a2e8d030dbc46d9bafeea024b1680f22f6"
+    },
+    {
+      "path": "prepare_evidence.py",
+      "sha256": "8fc8a0573b7b2207f8ef953abf3032ffe2bb1f43032468962d1084c79a83e5b3"
+    },
+    {
+      "path": "provider-calls.jsonl",
+      "sha256": "c9ff641dfdb082b6cb0ce9188a57a8d7848f6ec9e77a500599ae389d2171fae1"
+    },
+    {
+      "path": "provider-usage.json",
+      "sha256": "3f21d7c42742bd331d77f286fbba2d345c16df73fcaddf87a4a6736caf7b0639"
+    },
+    {
+      "path": "real-ai-results.json",
+      "sha256": "369c4034adabe96e3fe035736e90d263410804670b5353c4230527e9e8573abd"
+    },
+    {
+      "path": "render_retest.py",
+      "sha256": "736c47d4c624bbc60db76fb10bbde29d06cd0410e18789697d2c5cf4b1375919"
+    },
+    {
+      "path": "repair-summary.json",
+      "sha256": "02289c1f1526b14fb36dd7ff3328a9da8790c962ab1bca2e1548e8d929564188"
+    },
+    {
+      "path": "retest-plan.json",
+      "sha256": "2d9003d6152989fbca68e6c0bacf802888b246fbf8a5d19b442cc68fad4a55b3"
+    },
+    {
+      "path": "reviewer-name-correction.json",
+      "sha256": "e56fd0718086d9d9650dae53209143866a91a24e5c6387b3d76f4575aabb6e75"
+    },
+    {
+      "path": "running-image.json",
+      "sha256": "5067bd18888c0d92223b7308cc642c80b51ba098920fbee550733b21231a6aca"
+    },
+    {
+      "path": "runtime-after.json",
+      "sha256": "2f4f8cb13931109e2f822a41d161d944c170a9b6b07f95606d84ac57bdb9e81d"
+    },
+    {
+      "path": "source-and-evidence-check-final.json",
+      "sha256": "c338e343543f71fd0c923355cf60668c31d8ff7b2115cd1e6af7c260407a6ca2"
+    },
+    {
+      "path": "source-and-evidence-check.json",
+      "sha256": "dd921503dfbd9cdaf8545cf7e8933860493a64c5cbfc308c5b836c7e9930a130"
+    },
+    {
+      "path": "startup.txt",
+      "sha256": "96d4a9cdea0decf8d46ca4b6b608a2ba80bcc4e897d35443b5e034a662377cbc"
+    },
+    {
+      "path": "targeted-regression-final-confirmed.txt",
+      "sha256": "1c10996c40d62e6031ba92fe149e5e97f925d1c18e789cc90e48a0026e15ef92"
+    },
+    {
+      "path": "targeted-regression-final.txt",
+      "sha256": "316763ac6ff9cfcb4f6cfdfb6d5fe6b95c4cb353ace390fe8a31000893769614"
+    },
+    {
+      "path": "targeted-regression.txt",
+      "sha256": "0f0bbf1e8443cfd66201d22d8e83677f551043800c50eac598261f3c8d38fa3f"
+    },
+    {
+      "path": "verify_evidence.py",
+      "sha256": "8116ccc74f33c00d73dc590580b727df4c82bbd303aff9445a3a2b9138071b14"
+    },
+    {
+      "path": "修复与复测报告.md",
+      "sha256": "057b2b6d9fc048e0e970ae994c2cb7f729c5081775f9e826563cb8616ce63e4b"
+    },
+    {
+      "path": "真实AI复测逐条结果.md",
+      "sha256": "b11db9e504e1eb353ee57d680a609f63f6437e35aacd50000aa6e58a9e677e6b"
+    },
+    {
+      "path": "缺陷清单与定位.md",
+      "sha256": "bbfa6612632f7b70d3356db60d7bc35adcee8d68bf9dc6ea7c4cba5890a0fea5"
+    }
+  ]
+}

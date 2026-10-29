@@ -1,0 +1,1 @@
+{"source_sha256": "6f5c639acf3831a9132568a9e3cfc6c1314ae9b09a4c8c4c5eb0565559a9c79d", "source_matches_baseline": true, "key_configured": true, "model": "deepseek-flash", "base_url": "https://api.deepseek.com", "acceptance_log": "", "normal_configuration_restored": true, "health": {"/": 200, "/api/v1/health": 200, "/api/v1/auth/me": 401}}

@@ -1,0 +1,2242 @@
+{
+  "calls": 149,
+  "passed": 149,
+  "items": [
+    {
+      "call_id": "232690e173c04a0e96e3e4d4bd9c71b5",
+      "trial_id": "C01-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "eb9b0458afad40d8af7665c10f5e1e4c",
+      "trial_id": "C01-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "98ae2ca02f8a47d09792b2ccee36dfde",
+      "trial_id": "C02-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "fdc5acef66f14f959bc5169702289907",
+      "trial_id": "C02-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "ab693ccf782d4039bc06379c29e6660e",
+      "trial_id": "C03-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "d4f98103cbb344e2b8df03d7256f9aa3",
+      "trial_id": "C03-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "7f76aac03856499da8439f1130fa78b1",
+      "trial_id": "C04-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "fbf194f2c143413c8bcfd04a8cbdc8d2",
+      "trial_id": "C04-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "29342946d8514c8ba23af423544e5bf1",
+      "trial_id": "C07-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "46d25ece11004d0daf1493e715d80ecf",
+      "trial_id": "C07-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "ef142b0886444ea8887ed42ba63e9ceb",
+      "trial_id": "C08-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "d4ef365d647a46af948c797b4fada800",
+      "trial_id": "C09-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "58bf7e5e55fb416a82fe85aab37909a4",
+      "trial_id": "C09-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "5252bbf788734d2d99be1f2a49dbd583",
+      "trial_id": "C10-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "b0e44322dd7047f2b1c2579574432108",
+      "trial_id": "C10-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "cdcebfcf653f4be69c926fd82dd77340",
+      "trial_id": "C12-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "8e23d450d9754fba9c5aea2b6c8745c9",
+      "trial_id": "C12-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "c8fcd3bc38ff4ddf934b671173f5de9a",
+      "trial_id": "C13-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "b27b5b5b1fad44f19aaa75e7efd56762",
+      "trial_id": "C13-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "00a96c7396b9455d937fcfed477c720b",
+      "trial_id": "C14-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "a5b1945060434560b3a292ca7a39a39e",
+      "trial_id": "C14-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "32ce41276b0a4ff0b74239ed4817fbb2",
+      "trial_id": "C15-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "6ae4d08042c0495489d81681b782e60b",
+      "trial_id": "C16-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "451aed451e3f484c8fae92a4261c99e4",
+      "trial_id": "C16-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "a7273d784c244b1a8dfc788c4494e0c7",
+      "trial_id": "C19-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "357bdac66e88435e815a6b8448f47b42",
+      "trial_id": "C20-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "d7cffa06606e45c294de11b429628e22",
+      "trial_id": "C20-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "42a8a45516724385a341225108214032",
+      "trial_id": "C21-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "72968b1d96ad4f2cb47fcea999762969",
+      "trial_id": "C22-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "242293e040e6414a81c3af6bab26aa96",
+      "trial_id": "C24-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "7daf6be7902b4d5c8f4d4c7573519126",
+      "trial_id": "C24-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "91352fa74be748f58acd8b240d06a45a",
+      "trial_id": "C25-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "fa13c15bcd4641c19560254d3f937911",
+      "trial_id": "C26-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "163b681967714db084b6a24dcd7b1508",
+      "trial_id": "C27-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "9a2c6339746c451c956c5c9650c115c3",
+      "trial_id": "C28-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "0183236f02364a5f93f1eac7493c9791",
+      "trial_id": "C28-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "5a7273a7db8047d8b1e7c80e3165e925",
+      "trial_id": "C31-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "9fb7ad8c6d0d4588a654237faac8c9b5",
+      "trial_id": "C32-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "ed7cf47b090b4af697ad15b3ffa6f790",
+      "trial_id": "C33-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "8f023d04cc65451aa2d04d13b881eb5b",
+      "trial_id": "C34-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "d1b5bf687ef642b78bcc7cf3f7492c41",
+      "trial_id": "C34-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "473f79b8dd1b4110b15d1bf2ce51b179",
+      "trial_id": "C36-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "30d7b59ca7d849d0b36d429d24f503b3",
+      "trial_id": "C36-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "ab594b1d119240189878a1f7a933c601",
+      "trial_id": "C37-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "8a59a4a47848487a86908ca8c57097d0",
+      "trial_id": "C38-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "62fafbcd92eb47a593011914d052a68b",
+      "trial_id": "C39-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "131dc1e3b7eb4bce930d620b5ca29e93",
+      "trial_id": "C40-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "cfdcbc91f0d2482f8687bb989ecba936",
+      "trial_id": "C42-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "81067f4a4c904585bd013f74f07f37ea",
+      "trial_id": "C42-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "432cebac54194c76a7b10a7bad1e3bad",
+      "trial_id": "C43-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "1fd476510d4e42e192bfb0a8b240e6fe",
+      "trial_id": "C44-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "2208d5f268394be2956f8d7260cd7f62",
+      "trial_id": "C44-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "e62dae1938b54f7c9a7cbf7b6ff8c5d0",
+      "trial_id": "C45-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "f3ecc046f6944d168a3d023f76343264",
+      "trial_id": "C46-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "13314e1cf70c46cca703b41171deeb54",
+      "trial_id": "C49-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "ce68172e41ca4f8393d584bce99b3511",
+      "trial_id": "C50-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "d91e647c9ff645a9b1faf48daa219599",
+      "trial_id": "C51-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "b4be3e7207ff4bd39fa11ea7aafbf562",
+      "trial_id": "C52-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "c3cdee9b7be543deaea859cfd568194e",
+      "trial_id": "C54-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "33b26ca1af8a41c19868631dabf8dcc2",
+      "trial_id": "C54-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "6f30d59f5b024b25a90ddb1dfa54f7ad",
+      "trial_id": "C55-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "c4844c8094154f11973eb1469f23485f",
+      "trial_id": "C56-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "84661070c6d54d25b2540cfaeaca4c4b",
+      "trial_id": "C57-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "97901bcbe90140e8b74a37d6c845bb91",
+      "trial_id": "C58-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "4afb8e8c42c845658fb6a26cc187879a",
+      "trial_id": "C58-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "45cbd5c9f4e749339b937442a336fbc1",
+      "trial_id": "C60-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "5e4d239e62d947bab87b2585d0c794b2",
+      "trial_id": "C61-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "d32996e69ab9485bac32e07de05e93b9",
+      "trial_id": "C62-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "63645f35a1bb4e1ca8dcbc50ccd4268f",
+      "trial_id": "C63-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "88472ad74d2b4ca492028099b003ee17",
+      "trial_id": "C64-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "7eb2a8a907cb40de8a48ef31cc7c25c8",
+      "trial_id": "C64-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "83f01440685241cb884261d7da680ef5",
+      "trial_id": "C66-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "e7033670131246fca0b57ca7f7cd4ea4",
+      "trial_id": "C66-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "d72db63e99a0467b8e230b346d84e2d8",
+      "trial_id": "C67-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "81a9084445e34b6d9d6da9e01addbe5a",
+      "trial_id": "C68-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "5ec34e2148e54434b11a07afef558ffa",
+      "trial_id": "C69-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "4d1f9d8e4bf64409a68c8cfc8244f34c",
+      "trial_id": "C70-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "1a9a033481cd4a37bebec0557b43a6ed",
+      "trial_id": "C70-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "272fe7fdc78c4c5c98d31f57c9851053",
+      "trial_id": "C72-R1",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "5fd54391634d4f549238d84dba7aab40",
+      "trial_id": "C01-R2",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "a50ed79946be47aabd8e4df8c45b276f",
+      "trial_id": "C01-R2",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "6b0578eae2b1441485490185f2ff9d27",
+      "trial_id": "C04-R2",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "ea30a15b32d247ce8a65ebe7f26a2d81",
+      "trial_id": "C04-R2",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "f8492293234a493e9d5e2024842cb8f2",
+      "trial_id": "C07-R2",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "d9c4804b80974542ab6810f1e583ec1f",
+      "trial_id": "C07-R2",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "349631ae74564678b281833eafd93b39",
+      "trial_id": "C12-R2",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "0f6ca57cb99f4a7cb5de331e5f744b0c",
+      "trial_id": "C12-R2",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "aac416a2146549ff985d31c720cc05f3",
+      "trial_id": "C14-R2",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "12e9816069a04f9aba39fcc4caaff269",
+      "trial_id": "C14-R2",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "18611601f96746b38cc77a34b4a8eadc",
+      "trial_id": "C15-R2",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "41ee7611380b48b5a7b5f4e6aa268a2c",
+      "trial_id": "C20-R2",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "695a9c0882bb4438bbbd775bdc3b0601",
+      "trial_id": "C20-R2",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "778647a1dc8a4821be9f3f58a7995f48",
+      "trial_id": "C24-R2",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "c196daa7398e467e8f4e8ff80c3739a5",
+      "trial_id": "C24-R2",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "109e31250d244996960081637ee9f537",
+      "trial_id": "C25-R2",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "a905cdd8c52a4ee0a6aca0796a255b92",
+      "trial_id": "C27-R2",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "2b01ab552af44a57ba385bf4e40a0629",
+      "trial_id": "C31-R2",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "eee10ce7e05c483584b87e50bb4815dd",
+      "trial_id": "C33-R2",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "35fdcff743fc460e91744055e850d4df",
+      "trial_id": "C38-R2",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "2cf3fc6209d344bdbdec9228bf63e8d7",
+      "trial_id": "C42-R2",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "a4a245a0f0d7403b9db7e89ed963e197",
+      "trial_id": "C42-R2",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "8d4e3581a98e469e8d608ff5848c9f76",
+      "trial_id": "C43-R2",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "39816ec431b94efa96c4bef4fd8fe2b4",
+      "trial_id": "C45-R2",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "6a557b8a25e1437bab5182ac70425730",
+      "trial_id": "C49-R2",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "cbb47257937c4a2995a9ae4e822bbbda",
+      "trial_id": "C54-R2",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "717048d6cd7e4f0395345d02b3eac056",
+      "trial_id": "C54-R2",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "647b12836bbb42ecb9c5aced07fd07db",
+      "trial_id": "C58-R2",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "2eb80534341643a1b3a611ced1f12eba",
+      "trial_id": "C58-R2",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "df9621906d1a45c09050acc7886704bc",
+      "trial_id": "C60-R2",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "fd6f0885ed9048a7bb5fb05e7074ca6a",
+      "trial_id": "C61-R2",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "1324d9dc71dd48b8baa370b3c5036d56",
+      "trial_id": "C66-R2",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "625a0df909984d29b269d9e96989198f",
+      "trial_id": "C66-R2",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "987325c66d9f47edb37afe98dcf3e4da",
+      "trial_id": "C69-R2",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "3c16123ef9ea44bd8b4b5b458b638b1a",
+      "trial_id": "C72-R2",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "d4873b0817d0477892881e5d06382b26",
+      "trial_id": "C01-R3",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "9556a8b504614a5c9f3f6cf175b674f0",
+      "trial_id": "C01-R3",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "b470d2c582f0488d84b8821a711fecdd",
+      "trial_id": "C04-R3",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "72b6bfa7530f41d3baf1e74beaa27b44",
+      "trial_id": "C04-R3",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "894bc77bab99444fa0386aabc391d185",
+      "trial_id": "C07-R3",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "f48054f55aa24d1fabfa86b28209e84d",
+      "trial_id": "C07-R3",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "533845473d78444b8becef0684446e81",
+      "trial_id": "C12-R3",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "e58000936aa04e579e004704325f1cac",
+      "trial_id": "C12-R3",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "925efd03734d48a6aa3e065d4d64beab",
+      "trial_id": "C14-R3",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "b267796b65cc419d90482f84fd450f0a",
+      "trial_id": "C14-R3",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "e76f308840d240ce8d0762b0df78a700",
+      "trial_id": "C15-R3",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "459030ebd2244ab2a5b3c315194fecb4",
+      "trial_id": "C20-R3",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "0e347c824e9149cbb3b16f6037a191b4",
+      "trial_id": "C20-R3",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "407df4cb666d4b45957bd47085953abd",
+      "trial_id": "C24-R3",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "b0e93adadc01471ba0d2d56932dee288",
+      "trial_id": "C24-R3",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "db6094806c324d3ea47c93ed8d077891",
+      "trial_id": "C25-R3",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "f5bdd6ac318942de865936d47146a4fa",
+      "trial_id": "C27-R3",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "0ee1b8a5fff74f5b8097ca8538df1b85",
+      "trial_id": "C31-R3",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "4ab903f9e00b4ed1a5f0a4da39827f3e",
+      "trial_id": "C33-R3",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "22c2a8e5f8954e40a550d296a98cfaa2",
+      "trial_id": "C38-R3",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "4c2d3723b2c54e259ada16b33ba2e2ab",
+      "trial_id": "C42-R3",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "4dfe143b0f284ea5adaae59063b5d73e",
+      "trial_id": "C42-R3",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "7dd45be6849446e39bab2a71e2fb9405",
+      "trial_id": "C43-R3",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "34eb5eeeb6c4467d861a877e2f977176",
+      "trial_id": "C45-R3",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "6ecb9bcafed34d729c2cdf7b12d778c9",
+      "trial_id": "C49-R3",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "c9ea8258863240bbb10ea3de39fbcaab",
+      "trial_id": "C54-R3",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "d2f65a112d4b4e4b80617a60d49464b7",
+      "trial_id": "C54-R3",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "324584e7bdab4fb2b6ce6403d202ad6a",
+      "trial_id": "C58-R3",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "a1a4b7dfec974dc7be8c4530870f93be",
+      "trial_id": "C58-R3",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "111ea01ecb524421b813e81f3f1fe83f",
+      "trial_id": "C60-R3",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "8305be0319924f17a9544fd98870c904",
+      "trial_id": "C61-R3",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "f830b119673e4b6baf8fecbbdd1c3776",
+      "trial_id": "C66-R3",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "296e21bdd4e04f6f9d14fd70d9272d98",
+      "trial_id": "C66-R3",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "3c5c76a5d3ea4b0faa809877b20159d0",
+      "trial_id": "C69-R3",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    },
+    {
+      "call_id": "c7e2899c28fe49e291ded502a9cf0f32",
+      "trial_id": "C72-R3",
+      "checks": {
+        "student_code_is_trial": true,
+        "model_parameters_match": true,
+        "human_oracle_not_sent": true,
+        "problem_has_no_private_tests": true,
+        "history_empty": true,
+        "failed_cases_public_only": true,
+        "allowed_evidence_public_ids": true,
+        "guidance_cases_public_only": true
+      },
+      "passed": true
+    }
+  ],
+  "scope": "Structural/public-case boundary checks; not a human semantic assessment."
+}

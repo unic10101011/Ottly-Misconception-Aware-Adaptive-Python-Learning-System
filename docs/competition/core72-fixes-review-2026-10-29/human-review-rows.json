@@ -1,0 +1,265 @@
+{
+  "reviewer": "A",
+  "rows": [
+    {
+      "trial_id": "C10-R1",
+      "feedback_status": "diagnosis / ready",
+      "scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "conclusion": "通过",
+      "notes": "未发现问题。第2行将变量名 guest 写在字符串字面量中，公开输出为 `Hello, guest!` 而期望为 `Hello, Ottly!`；错因和证据一致，未提供可直接替换的修正语句。"
+    },
+    {
+      "trial_id": "C24-R1",
+      "feedback_status": "diagnosis / ready",
+      "scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "1",
+        "answer_protection": "2"
+      },
+      "conclusion": "通过",
+      "notes": "未发现实质问题。反馈明确指出本次 `capacity=0` 属于越界输入，并说明不能据此断言合法输入下算法错误或要求额外防御；证据与 `ZeroDivisionError` 对应。三级提示较通用，易懂性评为1。"
+    },
+    {
+      "trial_id": "C24-R2",
+      "feedback_status": "diagnosis / ready",
+      "scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "1",
+        "answer_protection": "2"
+      },
+      "conclusion": "通过",
+      "notes": "未发现实质问题。反馈指出题目约束 k 为 1–100，本次输入 0 越界，并用实际除零报错作依据；没有泄露修正语句。三级提示较通用，易懂性评为1。"
+    },
+    {
+      "trial_id": "C24-R3",
+      "feedback_status": "diagnosis / ready",
+      "scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "1",
+        "answer_protection": "2"
+      },
+      "conclusion": "通过",
+      "notes": "未发现实质问题。学生代码第 3 行 print(shells // capacity) 确实把 capacity 用作 // 的除数，本次自定义输入第二行为 0，整数除零触发 ZeroDivisionError——与公开执行结果完全吻合（错误类型 ZeroDivisionError、行号 3、报错文本一致）。"
+    },
+    {
+      "trial_id": "C28-R1",
+      "feedback_status": "diagnosis / ready",
+      "scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "conclusion": "通过",
+      "notes": "未发现问题。第2行缺少冒号与公开错误 `expected ':'` 对应；提示没有直接给出修正后的代码。"
+    },
+    {
+      "trial_id": "C54-R1",
+      "feedback_status": "diagnosis / ready",
+      "scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "1",
+        "answer_protection": "2"
+      },
+      "conclusion": "通过",
+      "notes": "未发现实质问题。代码只更新 `days`，未更新 `saved`，因此 `saved < target` 持续成立并超时，证据吻合。提示较通用，易懂性评为1。"
+    },
+    {
+      "trial_id": "C54-R2",
+      "feedback_status": "diagnosis / ready",
+      "scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "1",
+        "answer_protection": "2"
+      },
+      "conclusion": "通过",
+      "notes": "未发现实质问题。指出 `saved` 未按每天3枚更新，解释了循环条件始终为真及超时原因；没有给出完整替换代码。提示较通用，易懂性评为1。"
+    },
+    {
+      "trial_id": "C54-R3",
+      "feedback_status": "diagnosis / ready",
+      "scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "1"
+      },
+      "conclusion": "不通过",
+      "notes": "未发现实质问题。"
+    },
+    {
+      "trial_id": "C64-R1",
+      "feedback_status": "diagnosis / ready",
+      "scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "1",
+        "answer_protection": "2"
+      },
+      "conclusion": "通过",
+      "notes": "未发现实质问题。"
+    },
+    {
+      "trial_id": "C37-R1",
+      "feedback_status": "guidance / ready",
+      "scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "不适用",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "conclusion": "通过",
+      "notes": "未发现问题。提示准确对比 n=3 时实际输出 `0,1,2` 与期望 `1,2,3`，并提醒检查 n=0；属于 guidance，标签不适用。"
+    },
+    {
+      "trial_id": "C40-R1",
+      "feedback_status": "diagnosis / ready",
+      "scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "conclusion": "通过",
+      "notes": "未发现问题。反馈准确指出 `range` 起点为 -1，解释了 n=3 和 n=0 两组公开输出差异；标签 `range_boundary` 合理，未直接给出替换表达式。"
+    },
+    {
+      "trial_id": "C43-R1",
+      "feedback_status": "guidance / ready",
+      "scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "不适用",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "conclusion": "通过",
+      "notes": "未发现问题。提示明确引导检查循环体内每轮执行的 `total = 0` 是否清除了此前累计结果，概念题与解释一致；属于 guidance，标签不适用。"
+    },
+    {
+      "trial_id": "C01-R2",
+      "feedback_status": "diagnosis / ready",
+      "scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "conclusion": "通过",
+      "notes": "未发现问题。字符串未闭合的诊断与 `unterminated string literal` 报错一致，证据引用了实际错误信息；没有提供完整修正语句。"
+    },
+    {
+      "trial_id": "C08-R1",
+      "feedback_status": "guidance / ready",
+      "scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "不适用",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "conclusion": "通过",
+      "notes": "未发现问题。提示准确引用实际输出 `Hello, ottly!` 与期望 `Hello, Ottly!` 的大小写差异，并引导检查字符串处理；概念题与解释正确，未直接给出替换语句。"
+    },
+    {
+      "trial_id": "C07-R1",
+      "feedback_status": "diagnosis / ready",
+      "scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "conclusion": "通过",
+      "notes": "未发现问题。反馈准确指出字符串与整数 `1` 相加导致 TypeError，并解释程序中止、没有输出；标签 `other` 为允许的保守标签。"
+    },
+    {
+      "trial_id": "C14-R1",
+      "feedback_status": "diagnosis / ready",
+      "scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "conclusion": "通过",
+      "notes": "未发现问题。反馈指出总价应按单价与数量相乘，而代码使用加法；公开输出 `7、13` 与期望 `12、8` 相互印证，未给出直接替换语句。"
+    },
+    {
+      "trial_id": "C20-R1",
+      "feedback_status": "diagnosis / ready",
+      "scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "conclusion": "通过",
+      "notes": "未发现问题。反馈准确区分普通除法得到 `3.4` 与题目要求的完整袋数整数部分；同时指出第二行取余结果 `2` 正确，证据充分。"
+    },
+    {
+      "trial_id": "C58-R1",
+      "feedback_status": "diagnosis / ready",
+      "scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "conclusion": "通过",
+      "notes": "未发现问题。计数初始值为1导致 `banana` 中 `a` 的计数从应有的3变成4，和公开输出吻合；标签 `accumulation_error` 合理。"
+    },
+    {
+      "trial_id": "C70-R1",
+      "feedback_status": "diagnosis / ready",
+      "scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "conclusion": "通过",
+      "notes": "未发现问题。反馈指出 `return tally` 引用了未定义变量，而代码实际累计的是 `count`；与 NameError 证据吻合，提示没有给出直接替换语句。"
+    },
+    {
+      "trial_id": "C05-R1",
+      "feedback_status": "diagnosis / skipped",
+      "scores": {
+        "correctness": "不适用",
+        "evidence": "不适用",
+        "tag": "不适用",
+        "readability": "不适用",
+        "answer_protection": "不适用"
+      },
+      "conclusion": "正确跳过",
+      "notes": "测试状态为 `accepted` 且 `passed=true`，AI 状态为 `skipped`，消息为“测试已通过，无需 AI 分析。”符合正确跳过规则，不计入 AI 语义分母。"
+    }
+  ]
+}

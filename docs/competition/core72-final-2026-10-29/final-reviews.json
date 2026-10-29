@@ -1,0 +1,5529 @@
+{
+  "status": "human_adjudication_finalized_with_recorded_failures",
+  "rows": [
+    {
+      "trial_id": "C01-R1",
+      "case_id": "C01",
+      "round": 1,
+      "level_no": 1,
+      "feedback_kind": "diagnosis",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L01.md#c01-r1"
+    },
+    {
+      "trial_id": "C02-R1",
+      "case_id": "C02",
+      "round": 1,
+      "level_no": 1,
+      "feedback_kind": "diagnosis",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L01.md#c02-r1"
+    },
+    {
+      "trial_id": "C03-R1",
+      "case_id": "C03",
+      "round": 1,
+      "level_no": 1,
+      "feedback_kind": "diagnosis",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L01.md#c03-r1"
+    },
+    {
+      "trial_id": "C04-R1",
+      "case_id": "C04",
+      "round": 1,
+      "level_no": 1,
+      "feedback_kind": "diagnosis",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L01.md#c04-r1"
+    },
+    {
+      "trial_id": "C05-R1",
+      "case_id": "C05",
+      "round": 1,
+      "level_no": 1,
+      "feedback_kind": "skipped",
+      "effective_feedback": false,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "",
+          "evidence": "",
+          "tag": "",
+          "readability": "",
+          "answer_protection": ""
+        },
+        "conclusion": "正确跳过",
+        "notes": ""
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "",
+          "evidence": "",
+          "tag": "",
+          "readability": "",
+          "answer_protection": ""
+        },
+        "conclusion": "正确跳过",
+        "notes": ""
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "",
+      "final_conclusion": "正确跳过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "",
+        "evidence": "",
+        "tag": "",
+        "readability": "",
+        "answer_protection": ""
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L01.md#c05-r1"
+    },
+    {
+      "trial_id": "C06-R1",
+      "case_id": "C06",
+      "round": 1,
+      "level_no": 1,
+      "feedback_kind": "skipped",
+      "effective_feedback": false,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "",
+          "evidence": "",
+          "tag": "",
+          "readability": "",
+          "answer_protection": ""
+        },
+        "conclusion": "正确跳过",
+        "notes": ""
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "",
+          "evidence": "",
+          "tag": "",
+          "readability": "",
+          "answer_protection": ""
+        },
+        "conclusion": "正确跳过",
+        "notes": ""
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "",
+      "final_conclusion": "正确跳过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "",
+        "evidence": "",
+        "tag": "",
+        "readability": "",
+        "answer_protection": ""
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L01.md#c06-r1"
+    },
+    {
+      "trial_id": "C07-R1",
+      "case_id": "C07",
+      "round": 1,
+      "level_no": 2,
+      "feedback_kind": "diagnosis",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "1"
+        },
+        "conclusion": "需讨论",
+        "notes": "答案保护1：AI原文“应拼接字符串 \"!\"，而不是整数 1”直接给出了应替换的字符内容；虽未给完整代码行，但修正方向过于直接。"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": "G1",
+      "decision_origin": "人工组别裁决：G1",
+      "human_decision_text": "通过",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L02.md#c07-r1"
+    },
+    {
+      "trial_id": "C08-R1",
+      "case_id": "C08",
+      "round": 1,
+      "level_no": 2,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "1",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "易懂1：首句“公开样例中，输入姓名与期望输出的字母大小写不同”易误导——公开输入为Ottly、期望输出Hello, Ottly!中的姓名也是Ottly，大小写相同；不同的是实际输出Hello, ottly!。应表述为“实际输出中的姓名与期望输出（或输入）大小写不同”。后一句“把实际输出和期望输出逐字符比较”的提示正确，仍能据此定位问题。"
+      },
+      "decision_group": "G6",
+      "decision_origin": "人工组别裁决：G6",
+      "human_decision_text": "通过，错因不易懂但分析正确",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "1",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [
+        "G6裁决通过、易懂1；原hint比较对象表述的核对争议仍保留，不声称原文已修复。"
+      ],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L02.md#c08-r1"
+    },
+    {
+      "trial_id": "C09-R1",
+      "case_id": "C09",
+      "round": 1,
+      "level_no": 2,
+      "feedback_kind": "diagnosis",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L02.md#c09-r1"
+    },
+    {
+      "trial_id": "C10-R1",
+      "case_id": "C10",
+      "round": 1,
+      "level_no": 2,
+      "feedback_kind": "diagnosis",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "0",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "不通过",
+        "notes": "标签0：AI给出的疑似标签是 `variable_error`，但该条允许标签只有 `other`。源码中的 guest 已定义，实际问题是把姓名写成固定字符串，不是未定义变量。参考正确标签：`other`。"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "0",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "需讨论",
+        "notes": "疑似标签为variable_error，不在本条允许标签（仅other）内。错因描述本身正确（guest被当作普通文字写进字符串）；但guest已定义且读入正常，不属于变量未定义类错误。参考正确标签：other。"
+      },
+      "decision_group": "G4",
+      "decision_origin": "人工组别裁决：G4",
+      "human_decision_text": "标签部分不通过",
+      "final_conclusion": "不通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "0",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": "frozen_tag_mismatch",
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L02.md#c10-r1"
+    },
+    {
+      "trial_id": "C11-R1",
+      "case_id": "C11",
+      "round": 1,
+      "level_no": 2,
+      "feedback_kind": "skipped",
+      "effective_feedback": false,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "",
+          "evidence": "",
+          "tag": "",
+          "readability": "",
+          "answer_protection": ""
+        },
+        "conclusion": "正确跳过",
+        "notes": ""
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "",
+          "evidence": "",
+          "tag": "",
+          "readability": "",
+          "answer_protection": ""
+        },
+        "conclusion": "正确跳过",
+        "notes": ""
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "",
+      "final_conclusion": "正确跳过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "",
+        "evidence": "",
+        "tag": "",
+        "readability": "",
+        "answer_protection": ""
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L02.md#c11-r1"
+    },
+    {
+      "trial_id": "C12-R1",
+      "case_id": "C12",
+      "round": 1,
+      "level_no": 2,
+      "feedback_kind": "diagnosis",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L02.md#c12-r1"
+    },
+    {
+      "trial_id": "C13-R1",
+      "case_id": "C13",
+      "round": 1,
+      "level_no": 3,
+      "feedback_kind": "diagnosis",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "1"
+        },
+        "conclusion": "需讨论",
+        "notes": "答案保护1：AI原文“quantity 缺少 int() 转换”直接指出了具体修正操作，属于部分泄露修正方法。"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": "G1",
+      "decision_origin": "人工组别裁决：G1",
+      "human_decision_text": "通过",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L03.md#c13-r1"
+    },
+    {
+      "trial_id": "C14-R1",
+      "case_id": "C14",
+      "round": 1,
+      "level_no": 3,
+      "feedback_kind": "diagnosis",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "1"
+        },
+        "conclusion": "需讨论",
+        "notes": "答案保护1：AI原文直接给出“price * quantity”作为正确表达式，基本泄露了需要替换的运算表达式。"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": "G1",
+      "decision_origin": "人工组别裁决：G1",
+      "human_decision_text": "通过",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L03.md#c14-r1"
+    },
+    {
+      "trial_id": "C15-R1",
+      "case_id": "C15",
+      "round": 1,
+      "level_no": 3,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L03.md#c15-r1"
+    },
+    {
+      "trial_id": "C16-R1",
+      "case_id": "C16",
+      "round": 1,
+      "level_no": 3,
+      "feedback_kind": "diagnosis",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L03.md#c16-r1"
+    },
+    {
+      "trial_id": "C17-R1",
+      "case_id": "C17",
+      "round": 1,
+      "level_no": 3,
+      "feedback_kind": "skipped",
+      "effective_feedback": false,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "",
+          "evidence": "",
+          "tag": "",
+          "readability": "",
+          "answer_protection": ""
+        },
+        "conclusion": "正确跳过",
+        "notes": ""
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "",
+          "evidence": "",
+          "tag": "",
+          "readability": "",
+          "answer_protection": ""
+        },
+        "conclusion": "正确跳过",
+        "notes": ""
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "",
+      "final_conclusion": "正确跳过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "",
+        "evidence": "",
+        "tag": "",
+        "readability": "",
+        "answer_protection": ""
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L03.md#c17-r1"
+    },
+    {
+      "trial_id": "C18-R1",
+      "case_id": "C18",
+      "round": 1,
+      "level_no": 3,
+      "feedback_kind": "none",
+      "effective_feedback": false,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "",
+          "evidence": "",
+          "tag": "",
+          "readability": "",
+          "answer_protection": ""
+        },
+        "conclusion": "正确跳过",
+        "notes": ""
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "",
+          "evidence": "",
+          "tag": "",
+          "readability": "",
+          "answer_protection": ""
+        },
+        "conclusion": "正确跳过",
+        "notes": ""
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "",
+      "final_conclusion": "正确跳过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "",
+        "evidence": "",
+        "tag": "",
+        "readability": "",
+        "answer_protection": ""
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L03.md#c18-r1"
+    },
+    {
+      "trial_id": "C19-R1",
+      "case_id": "C19",
+      "round": 1,
+      "level_no": 4,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L04.md#c19-r1"
+    },
+    {
+      "trial_id": "C20-R1",
+      "case_id": "C20",
+      "round": 1,
+      "level_no": 4,
+      "feedback_kind": "diagnosis",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "1"
+        },
+        "conclusion": "需讨论",
+        "notes": "答案保护1：AI原文直接给出“17//5=3”，并明确指出应使用整除表达式，修正方向过于直接。"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": "G1",
+      "decision_origin": "人工组别裁决：G1",
+      "human_decision_text": "通过",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L04.md#c20-r1"
+    },
+    {
+      "trial_id": "C21-R1",
+      "case_id": "C21",
+      "round": 1,
+      "level_no": 4,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L04.md#c21-r1"
+    },
+    {
+      "trial_id": "C22-R1",
+      "case_id": "C22",
+      "round": 1,
+      "level_no": 4,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L04.md#c22-r1"
+    },
+    {
+      "trial_id": "C23-R1",
+      "case_id": "C23",
+      "round": 1,
+      "level_no": 4,
+      "feedback_kind": "skipped",
+      "effective_feedback": false,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "",
+          "evidence": "",
+          "tag": "",
+          "readability": "",
+          "answer_protection": ""
+        },
+        "conclusion": "正确跳过",
+        "notes": ""
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "",
+          "evidence": "",
+          "tag": "",
+          "readability": "",
+          "answer_protection": ""
+        },
+        "conclusion": "正确跳过",
+        "notes": ""
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "",
+      "final_conclusion": "正确跳过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "",
+        "evidence": "",
+        "tag": "",
+        "readability": "",
+        "answer_protection": ""
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L04.md#c23-r1"
+    },
+    {
+      "trial_id": "C24-R1",
+      "case_id": "C24",
+      "round": 1,
+      "level_no": 4,
+      "feedback_kind": "diagnosis",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "1",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "需讨论",
+        "notes": "正确性1：AI原文称“没有先检查 capacity 是否为 0”，但人工依据明确说明正式题合法输入要求 capacity 至少为 1。本次 run 输入 0 属于越界输入，ZeroDivisionError 证据属实，但将缺少零值检查诊断为代码错误并不充分符合合法输入域。"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": "G3",
+      "decision_origin": "人工组别裁决：G3",
+      "human_decision_text": "不通过",
+      "final_conclusion": "不通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "1",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": "run_input_domain_explanation",
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L04.md#c24-r1"
+    },
+    {
+      "trial_id": "C25-R1",
+      "case_id": "C25",
+      "round": 1,
+      "level_no": 5,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L05.md#c25-r1"
+    },
+    {
+      "trial_id": "C26-R1",
+      "case_id": "C26",
+      "round": 1,
+      "level_no": 5,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L05.md#c26-r1"
+    },
+    {
+      "trial_id": "C27-R1",
+      "case_id": "C27",
+      "round": 1,
+      "level_no": 5,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L05.md#c27-r1"
+    },
+    {
+      "trial_id": "C28-R1",
+      "case_id": "C28",
+      "round": 1,
+      "level_no": 5,
+      "feedback_kind": "diagnosis",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "0"
+        },
+        "conclusion": "不通过",
+        "notes": "答案保护0：AI原文直接给出完整替换行“if score >= 90:”，违反不得提供原题直接修正语句的要求。"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": "G2",
+      "decision_origin": "人工组别裁决：G2",
+      "human_decision_text": "不通过",
+      "final_conclusion": "不通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "0"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": "direct_replacement_code",
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L05.md#c28-r1"
+    },
+    {
+      "trial_id": "C29-R1",
+      "case_id": "C29",
+      "round": 1,
+      "level_no": 5,
+      "feedback_kind": "skipped",
+      "effective_feedback": false,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "",
+          "evidence": "",
+          "tag": "",
+          "readability": "",
+          "answer_protection": ""
+        },
+        "conclusion": "正确跳过",
+        "notes": ""
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "",
+          "evidence": "",
+          "tag": "",
+          "readability": "",
+          "answer_protection": ""
+        },
+        "conclusion": "正确跳过",
+        "notes": ""
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "",
+      "final_conclusion": "正确跳过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "",
+        "evidence": "",
+        "tag": "",
+        "readability": "",
+        "answer_protection": ""
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L05.md#c29-r1"
+    },
+    {
+      "trial_id": "C30-R1",
+      "case_id": "C30",
+      "round": 1,
+      "level_no": 5,
+      "feedback_kind": "skipped",
+      "effective_feedback": false,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "",
+          "evidence": "",
+          "tag": "",
+          "readability": "",
+          "answer_protection": ""
+        },
+        "conclusion": "正确跳过",
+        "notes": ""
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "",
+          "evidence": "",
+          "tag": "",
+          "readability": "",
+          "answer_protection": ""
+        },
+        "conclusion": "正确跳过",
+        "notes": ""
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "",
+      "final_conclusion": "正确跳过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "",
+        "evidence": "",
+        "tag": "",
+        "readability": "",
+        "answer_protection": ""
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L05.md#c30-r1"
+    },
+    {
+      "trial_id": "C31-R1",
+      "case_id": "C31",
+      "round": 1,
+      "level_no": 6,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L06.md#c31-r1"
+    },
+    {
+      "trial_id": "C32-R1",
+      "case_id": "C32",
+      "round": 1,
+      "level_no": 6,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L06.md#c32-r1"
+    },
+    {
+      "trial_id": "C33-R1",
+      "case_id": "C33",
+      "round": 1,
+      "level_no": 6,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L06.md#c33-r1"
+    },
+    {
+      "trial_id": "C34-R1",
+      "case_id": "C34",
+      "round": 1,
+      "level_no": 6,
+      "feedback_kind": "diagnosis",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L06.md#c34-r1"
+    },
+    {
+      "trial_id": "C35-R1",
+      "case_id": "C35",
+      "round": 1,
+      "level_no": 6,
+      "feedback_kind": "skipped",
+      "effective_feedback": false,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "",
+          "evidence": "",
+          "tag": "",
+          "readability": "",
+          "answer_protection": ""
+        },
+        "conclusion": "正确跳过",
+        "notes": ""
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "",
+          "evidence": "",
+          "tag": "",
+          "readability": "",
+          "answer_protection": ""
+        },
+        "conclusion": "正确跳过",
+        "notes": ""
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "",
+      "final_conclusion": "正确跳过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "",
+        "evidence": "",
+        "tag": "",
+        "readability": "",
+        "answer_protection": ""
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L06.md#c35-r1"
+    },
+    {
+      "trial_id": "C36-R1",
+      "case_id": "C36",
+      "round": 1,
+      "level_no": 6,
+      "feedback_kind": "diagnosis",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L06.md#c36-r1"
+    },
+    {
+      "trial_id": "C37-R1",
+      "case_id": "C37",
+      "round": 1,
+      "level_no": 7,
+      "feedback_kind": "guidance",
+      "effective_feedback": false,
+      "technical_passed": false,
+      "original_A": {
+        "scores": {
+          "correctness": "不适用",
+          "evidence": "不适用",
+          "tag": "不适用",
+          "readability": "不适用",
+          "answer_protection": "不适用"
+        },
+        "conclusion": "调用失败未评分",
+        "notes": ""
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "",
+          "evidence": "",
+          "tag": "",
+          "readability": "",
+          "answer_protection": ""
+        },
+        "conclusion": "调用失败未评分",
+        "notes": ""
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "",
+      "final_conclusion": "调用失败未评分",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "",
+        "evidence": "",
+        "tag": "",
+        "readability": "",
+        "answer_protection": ""
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L07.md#c37-r1"
+    },
+    {
+      "trial_id": "C38-R1",
+      "case_id": "C38",
+      "round": 1,
+      "level_no": 7,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L07.md#c38-r1"
+    },
+    {
+      "trial_id": "C39-R1",
+      "case_id": "C39",
+      "round": 1,
+      "level_no": 7,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L07.md#c39-r1"
+    },
+    {
+      "trial_id": "C40-R1",
+      "case_id": "C40",
+      "round": 1,
+      "level_no": 7,
+      "feedback_kind": "diagnosis",
+      "effective_feedback": false,
+      "technical_passed": false,
+      "original_A": {
+        "scores": {
+          "correctness": "不适用",
+          "evidence": "不适用",
+          "tag": "不适用",
+          "readability": "不适用",
+          "answer_protection": "不适用"
+        },
+        "conclusion": "调用失败未评分",
+        "notes": ""
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "",
+          "evidence": "",
+          "tag": "",
+          "readability": "",
+          "answer_protection": ""
+        },
+        "conclusion": "调用失败未评分",
+        "notes": ""
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "",
+      "final_conclusion": "调用失败未评分",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "",
+        "evidence": "",
+        "tag": "",
+        "readability": "",
+        "answer_protection": ""
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L07.md#c40-r1"
+    },
+    {
+      "trial_id": "C41-R1",
+      "case_id": "C41",
+      "round": 1,
+      "level_no": 7,
+      "feedback_kind": "skipped",
+      "effective_feedback": false,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "",
+          "evidence": "",
+          "tag": "",
+          "readability": "",
+          "answer_protection": ""
+        },
+        "conclusion": "正确跳过",
+        "notes": ""
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "",
+          "evidence": "",
+          "tag": "",
+          "readability": "",
+          "answer_protection": ""
+        },
+        "conclusion": "正确跳过",
+        "notes": ""
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "",
+      "final_conclusion": "正确跳过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "",
+        "evidence": "",
+        "tag": "",
+        "readability": "",
+        "answer_protection": ""
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L07.md#c41-r1"
+    },
+    {
+      "trial_id": "C42-R1",
+      "case_id": "C42",
+      "round": 1,
+      "level_no": 7,
+      "feedback_kind": "diagnosis",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L07.md#c42-r1"
+    },
+    {
+      "trial_id": "C43-R1",
+      "case_id": "C43",
+      "round": 1,
+      "level_no": 8,
+      "feedback_kind": "guidance",
+      "effective_feedback": false,
+      "technical_passed": false,
+      "original_A": {
+        "scores": {
+          "correctness": "不适用",
+          "evidence": "不适用",
+          "tag": "不适用",
+          "readability": "不适用",
+          "answer_protection": "不适用"
+        },
+        "conclusion": "调用失败未评分",
+        "notes": ""
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "",
+          "evidence": "",
+          "tag": "",
+          "readability": "",
+          "answer_protection": ""
+        },
+        "conclusion": "调用失败未评分",
+        "notes": ""
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "",
+      "final_conclusion": "调用失败未评分",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "",
+        "evidence": "",
+        "tag": "",
+        "readability": "",
+        "answer_protection": ""
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L08.md#c43-r1"
+    },
+    {
+      "trial_id": "C44-R1",
+      "case_id": "C44",
+      "round": 1,
+      "level_no": 8,
+      "feedback_kind": "diagnosis",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "1"
+        },
+        "conclusion": "需讨论",
+        "notes": "答案保护1：AI原文“应初始化为 0，再累加 1 到 n”直接给出关键修正方案，答案保护不充分。"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": "G1",
+      "decision_origin": "人工组别裁决：G1",
+      "human_decision_text": "通过",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L08.md#c44-r1"
+    },
+    {
+      "trial_id": "C45-R1",
+      "case_id": "C45",
+      "round": 1,
+      "level_no": 8,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L08.md#c45-r1"
+    },
+    {
+      "trial_id": "C46-R1",
+      "case_id": "C46",
+      "round": 1,
+      "level_no": 8,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L08.md#c46-r1"
+    },
+    {
+      "trial_id": "C47-R1",
+      "case_id": "C47",
+      "round": 1,
+      "level_no": 8,
+      "feedback_kind": "skipped",
+      "effective_feedback": false,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "",
+          "evidence": "",
+          "tag": "",
+          "readability": "",
+          "answer_protection": ""
+        },
+        "conclusion": "正确跳过",
+        "notes": ""
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "",
+          "evidence": "",
+          "tag": "",
+          "readability": "",
+          "answer_protection": ""
+        },
+        "conclusion": "正确跳过",
+        "notes": ""
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "",
+      "final_conclusion": "正确跳过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "",
+        "evidence": "",
+        "tag": "",
+        "readability": "",
+        "answer_protection": ""
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L08.md#c47-r1"
+    },
+    {
+      "trial_id": "C48-R1",
+      "case_id": "C48",
+      "round": 1,
+      "level_no": 8,
+      "feedback_kind": "skipped",
+      "effective_feedback": false,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "",
+          "evidence": "",
+          "tag": "",
+          "readability": "",
+          "answer_protection": ""
+        },
+        "conclusion": "正确跳过",
+        "notes": ""
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "",
+          "evidence": "",
+          "tag": "",
+          "readability": "",
+          "answer_protection": ""
+        },
+        "conclusion": "正确跳过",
+        "notes": ""
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "",
+      "final_conclusion": "正确跳过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "",
+        "evidence": "",
+        "tag": "",
+        "readability": "",
+        "answer_protection": ""
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L08.md#c48-r1"
+    },
+    {
+      "trial_id": "C49-R1",
+      "case_id": "C49",
+      "round": 1,
+      "level_no": 9,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L09.md#c49-r1"
+    },
+    {
+      "trial_id": "C50-R1",
+      "case_id": "C50",
+      "round": 1,
+      "level_no": 9,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L09.md#c50-r1"
+    },
+    {
+      "trial_id": "C51-R1",
+      "case_id": "C51",
+      "round": 1,
+      "level_no": 9,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L09.md#c51-r1"
+    },
+    {
+      "trial_id": "C52-R1",
+      "case_id": "C52",
+      "round": 1,
+      "level_no": 9,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L09.md#c52-r1"
+    },
+    {
+      "trial_id": "C53-R1",
+      "case_id": "C53",
+      "round": 1,
+      "level_no": 9,
+      "feedback_kind": "skipped",
+      "effective_feedback": false,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "",
+          "evidence": "",
+          "tag": "",
+          "readability": "",
+          "answer_protection": ""
+        },
+        "conclusion": "正确跳过",
+        "notes": ""
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "",
+          "evidence": "",
+          "tag": "",
+          "readability": "",
+          "answer_protection": ""
+        },
+        "conclusion": "正确跳过",
+        "notes": ""
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "",
+      "final_conclusion": "正确跳过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "",
+        "evidence": "",
+        "tag": "",
+        "readability": "",
+        "answer_protection": ""
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L09.md#c53-r1"
+    },
+    {
+      "trial_id": "C54-R1",
+      "case_id": "C54",
+      "round": 1,
+      "level_no": 9,
+      "feedback_kind": "diagnosis",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "0"
+        },
+        "conclusion": "不通过",
+        "notes": "答案保护0：AI原文直接给出“saved += 3（或 saved = saved + 3）”，提供了可直接替换的修正语句。"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": "G2",
+      "decision_origin": "人工组别裁决：G2",
+      "human_decision_text": "不通过",
+      "final_conclusion": "不通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "0"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": "direct_replacement_code",
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L09.md#c54-r1"
+    },
+    {
+      "trial_id": "C55-R1",
+      "case_id": "C55",
+      "round": 1,
+      "level_no": 10,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L10.md#c55-r1"
+    },
+    {
+      "trial_id": "C56-R1",
+      "case_id": "C56",
+      "round": 1,
+      "level_no": 10,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L10.md#c56-r1"
+    },
+    {
+      "trial_id": "C57-R1",
+      "case_id": "C57",
+      "round": 1,
+      "level_no": 10,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L10.md#c57-r1"
+    },
+    {
+      "trial_id": "C58-R1",
+      "case_id": "C58",
+      "round": 1,
+      "level_no": 10,
+      "feedback_kind": "diagnosis",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "1"
+        },
+        "conclusion": "需讨论",
+        "notes": "答案保护1：AI原文直接指出“count 初始化为 0”，给出了应修改的具体初值。"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": "G1",
+      "decision_origin": "人工组别裁决：G1",
+      "human_decision_text": "通过",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L10.md#c58-r1"
+    },
+    {
+      "trial_id": "C59-R1",
+      "case_id": "C59",
+      "round": 1,
+      "level_no": 10,
+      "feedback_kind": "skipped",
+      "effective_feedback": false,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "",
+          "evidence": "",
+          "tag": "",
+          "readability": "",
+          "answer_protection": ""
+        },
+        "conclusion": "正确跳过",
+        "notes": ""
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "",
+          "evidence": "",
+          "tag": "",
+          "readability": "",
+          "answer_protection": ""
+        },
+        "conclusion": "正确跳过",
+        "notes": ""
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "",
+      "final_conclusion": "正确跳过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "",
+        "evidence": "",
+        "tag": "",
+        "readability": "",
+        "answer_protection": ""
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L10.md#c59-r1"
+    },
+    {
+      "trial_id": "C60-R1",
+      "case_id": "C60",
+      "round": 1,
+      "level_no": 10,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L10.md#c60-r1"
+    },
+    {
+      "trial_id": "C61-R1",
+      "case_id": "C61",
+      "round": 1,
+      "level_no": 11,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L11.md#c61-r1"
+    },
+    {
+      "trial_id": "C62-R1",
+      "case_id": "C62",
+      "round": 1,
+      "level_no": 11,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L11.md#c62-r1"
+    },
+    {
+      "trial_id": "C63-R1",
+      "case_id": "C63",
+      "round": 1,
+      "level_no": 11,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L11.md#c63-r1"
+    },
+    {
+      "trial_id": "C64-R1",
+      "case_id": "C64",
+      "round": 1,
+      "level_no": 11,
+      "feedback_kind": "diagnosis",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "0",
+          "readability": "2",
+          "answer_protection": "0"
+        },
+        "conclusion": "不通过",
+        "notes": "标签0：AI给出的疑似标签是 `range_boundary`，但该条允许标签只有 `other`。问题是列表下标越界 values[n]；按本条冻结标签约束，参考正确标签：`other`。；答案保护0：AI原文直接给出“values[0] 初始化 largest”的替换方案，且同时存在标签不符合允许范围的问题。"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "0",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "需讨论",
+        "notes": "疑似标签为range_boundary，不在本条允许标签（仅other）内。错因描述本身正确（values[n]下标越界，应用首元素初始化）。参考正确标签：other。"
+      },
+      "decision_group": "G4",
+      "decision_origin": "人工组别裁决：G4",
+      "human_decision_text": "标签部分不通过",
+      "final_conclusion": "不通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "0",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": "frozen_tag_mismatch",
+      "retained_notes": [
+        "G4明确裁定标签不通过；B的答案保护2仅作参考，未把组别裁决冒记为全维度重打分。"
+      ],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L11.md#c64-r1"
+    },
+    {
+      "trial_id": "C65-R1",
+      "case_id": "C65",
+      "round": 1,
+      "level_no": 11,
+      "feedback_kind": "skipped",
+      "effective_feedback": false,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "",
+          "evidence": "",
+          "tag": "",
+          "readability": "",
+          "answer_protection": ""
+        },
+        "conclusion": "正确跳过",
+        "notes": ""
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "",
+          "evidence": "",
+          "tag": "",
+          "readability": "",
+          "answer_protection": ""
+        },
+        "conclusion": "正确跳过",
+        "notes": ""
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "",
+      "final_conclusion": "正确跳过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "",
+        "evidence": "",
+        "tag": "",
+        "readability": "",
+        "answer_protection": ""
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L11.md#c65-r1"
+    },
+    {
+      "trial_id": "C66-R1",
+      "case_id": "C66",
+      "round": 1,
+      "level_no": 11,
+      "feedback_kind": "diagnosis",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L11.md#c66-r1"
+    },
+    {
+      "trial_id": "C67-R1",
+      "case_id": "C67",
+      "round": 1,
+      "level_no": 12,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L12.md#c67-r1"
+    },
+    {
+      "trial_id": "C68-R1",
+      "case_id": "C68",
+      "round": 1,
+      "level_no": 12,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L12.md#c68-r1"
+    },
+    {
+      "trial_id": "C69-R1",
+      "case_id": "C69",
+      "round": 1,
+      "level_no": 12,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L12.md#c69-r1"
+    },
+    {
+      "trial_id": "C70-R1",
+      "case_id": "C70",
+      "round": 1,
+      "level_no": 12,
+      "feedback_kind": "diagnosis",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "0"
+        },
+        "conclusion": "不通过",
+        "notes": "答案保护0：AI原文直接写明“应返回 count”，泄露了应替换的变量名。"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": "G5",
+      "decision_origin": "人工组别裁决：G5",
+      "human_decision_text": "通过，不算泄露答案",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L12.md#c70-r1"
+    },
+    {
+      "trial_id": "C71-R1",
+      "case_id": "C71",
+      "round": 1,
+      "level_no": 12,
+      "feedback_kind": "skipped",
+      "effective_feedback": false,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "",
+          "evidence": "",
+          "tag": "",
+          "readability": "",
+          "answer_protection": ""
+        },
+        "conclusion": "正确跳过",
+        "notes": ""
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "",
+          "evidence": "",
+          "tag": "",
+          "readability": "",
+          "answer_protection": ""
+        },
+        "conclusion": "正确跳过",
+        "notes": ""
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "",
+      "final_conclusion": "正确跳过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "",
+        "evidence": "",
+        "tag": "",
+        "readability": "",
+        "answer_protection": ""
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L12.md#c71-r1"
+    },
+    {
+      "trial_id": "C72-R1",
+      "case_id": "C72",
+      "round": 1,
+      "level_no": 12,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L12.md#c72-r1"
+    },
+    {
+      "trial_id": "C01-R2",
+      "case_id": "C01",
+      "round": 2,
+      "level_no": 1,
+      "feedback_kind": "diagnosis",
+      "effective_feedback": false,
+      "technical_passed": false,
+      "original_A": {
+        "scores": {
+          "correctness": "不适用",
+          "evidence": "不适用",
+          "tag": "不适用",
+          "readability": "不适用",
+          "answer_protection": "不适用"
+        },
+        "conclusion": "调用失败未评分",
+        "notes": ""
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "",
+          "evidence": "",
+          "tag": "",
+          "readability": "",
+          "answer_protection": ""
+        },
+        "conclusion": "调用失败未评分",
+        "notes": ""
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "",
+      "final_conclusion": "调用失败未评分",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "",
+        "evidence": "",
+        "tag": "",
+        "readability": "",
+        "answer_protection": ""
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L01.md#c01-r2"
+    },
+    {
+      "trial_id": "C04-R2",
+      "case_id": "C04",
+      "round": 2,
+      "level_no": 1,
+      "feedback_kind": "diagnosis",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L01.md#c04-r2"
+    },
+    {
+      "trial_id": "C07-R2",
+      "case_id": "C07",
+      "round": 2,
+      "level_no": 2,
+      "feedback_kind": "diagnosis",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "1"
+        },
+        "conclusion": "需讨论",
+        "notes": "答案保护1：AI原文“应拼接字符串 \"!\"，而不是整数 1”直接给出了应替换的字符内容；虽未给完整代码行，但修正方向过于直接。"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": "G1",
+      "decision_origin": "人工组别裁决：G1",
+      "human_decision_text": "通过",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L02.md#c07-r2"
+    },
+    {
+      "trial_id": "C12-R2",
+      "case_id": "C12",
+      "round": 2,
+      "level_no": 2,
+      "feedback_kind": "diagnosis",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L02.md#c12-r2"
+    },
+    {
+      "trial_id": "C14-R2",
+      "case_id": "C14",
+      "round": 2,
+      "level_no": 3,
+      "feedback_kind": "diagnosis",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "1"
+        },
+        "conclusion": "需讨论",
+        "notes": "答案保护1：AI原文直接给出“price * quantity”作为正确表达式，基本泄露了需要替换的运算表达式。"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": "G1",
+      "decision_origin": "人工组别裁决：G1",
+      "human_decision_text": "通过",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L03.md#c14-r2"
+    },
+    {
+      "trial_id": "C15-R2",
+      "case_id": "C15",
+      "round": 2,
+      "level_no": 3,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L03.md#c15-r2"
+    },
+    {
+      "trial_id": "C20-R2",
+      "case_id": "C20",
+      "round": 2,
+      "level_no": 4,
+      "feedback_kind": "diagnosis",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "1"
+        },
+        "conclusion": "需讨论",
+        "notes": "答案保护1：AI原文直接给出“17//5=3”，并明确指出应使用整除表达式，修正方向过于直接。"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": "G1",
+      "decision_origin": "人工组别裁决：G1",
+      "human_decision_text": "通过",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L04.md#c20-r2"
+    },
+    {
+      "trial_id": "C24-R2",
+      "case_id": "C24",
+      "round": 2,
+      "level_no": 4,
+      "feedback_kind": "diagnosis",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "1",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "需讨论",
+        "notes": "正确性1：AI原文称“没有先检查 capacity 是否为 0”，但人工依据明确说明正式题合法输入要求 capacity 至少为 1。本次 run 输入 0 属于越界输入，ZeroDivisionError 证据属实，但将缺少零值检查诊断为代码错误并不充分符合合法输入域。"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": "G3",
+      "decision_origin": "人工组别裁决：G3",
+      "human_decision_text": "不通过",
+      "final_conclusion": "不通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "1",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": "run_input_domain_explanation",
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L04.md#c24-r2"
+    },
+    {
+      "trial_id": "C25-R2",
+      "case_id": "C25",
+      "round": 2,
+      "level_no": 5,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L05.md#c25-r2"
+    },
+    {
+      "trial_id": "C27-R2",
+      "case_id": "C27",
+      "round": 2,
+      "level_no": 5,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L05.md#c27-r2"
+    },
+    {
+      "trial_id": "C31-R2",
+      "case_id": "C31",
+      "round": 2,
+      "level_no": 6,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L06.md#c31-r2"
+    },
+    {
+      "trial_id": "C33-R2",
+      "case_id": "C33",
+      "round": 2,
+      "level_no": 6,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L06.md#c33-r2"
+    },
+    {
+      "trial_id": "C38-R2",
+      "case_id": "C38",
+      "round": 2,
+      "level_no": 7,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L07.md#c38-r2"
+    },
+    {
+      "trial_id": "C42-R2",
+      "case_id": "C42",
+      "round": 2,
+      "level_no": 7,
+      "feedback_kind": "diagnosis",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L07.md#c42-r2"
+    },
+    {
+      "trial_id": "C43-R2",
+      "case_id": "C43",
+      "round": 2,
+      "level_no": 8,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L08.md#c43-r2"
+    },
+    {
+      "trial_id": "C45-R2",
+      "case_id": "C45",
+      "round": 2,
+      "level_no": 8,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L08.md#c45-r2"
+    },
+    {
+      "trial_id": "C49-R2",
+      "case_id": "C49",
+      "round": 2,
+      "level_no": 9,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L09.md#c49-r2"
+    },
+    {
+      "trial_id": "C54-R2",
+      "case_id": "C54",
+      "round": 2,
+      "level_no": 9,
+      "feedback_kind": "diagnosis",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "0"
+        },
+        "conclusion": "不通过",
+        "notes": "答案保护0：AI原文直接给出“saved += 3（或 saved = saved + 3）”，提供了可直接替换的修正语句。"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": "G2",
+      "decision_origin": "人工组别裁决：G2",
+      "human_decision_text": "不通过",
+      "final_conclusion": "不通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "0"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": "direct_replacement_code",
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L09.md#c54-r2"
+    },
+    {
+      "trial_id": "C58-R2",
+      "case_id": "C58",
+      "round": 2,
+      "level_no": 10,
+      "feedback_kind": "diagnosis",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "1"
+        },
+        "conclusion": "需讨论",
+        "notes": "答案保护1：AI原文直接指出“count 初始化为 0”，给出了应修改的具体初值。"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": "G1",
+      "decision_origin": "人工组别裁决：G1",
+      "human_decision_text": "通过",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L10.md#c58-r2"
+    },
+    {
+      "trial_id": "C60-R2",
+      "case_id": "C60",
+      "round": 2,
+      "level_no": 10,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L10.md#c60-r2"
+    },
+    {
+      "trial_id": "C61-R2",
+      "case_id": "C61",
+      "round": 2,
+      "level_no": 11,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L11.md#c61-r2"
+    },
+    {
+      "trial_id": "C66-R2",
+      "case_id": "C66",
+      "round": 2,
+      "level_no": 11,
+      "feedback_kind": "diagnosis",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L11.md#c66-r2"
+    },
+    {
+      "trial_id": "C69-R2",
+      "case_id": "C69",
+      "round": 2,
+      "level_no": 12,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L12.md#c69-r2"
+    },
+    {
+      "trial_id": "C72-R2",
+      "case_id": "C72",
+      "round": 2,
+      "level_no": 12,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L12.md#c72-r2"
+    },
+    {
+      "trial_id": "C01-R3",
+      "case_id": "C01",
+      "round": 3,
+      "level_no": 1,
+      "feedback_kind": "diagnosis",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L01.md#c01-r3"
+    },
+    {
+      "trial_id": "C04-R3",
+      "case_id": "C04",
+      "round": 3,
+      "level_no": 1,
+      "feedback_kind": "diagnosis",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L01.md#c04-r3"
+    },
+    {
+      "trial_id": "C07-R3",
+      "case_id": "C07",
+      "round": 3,
+      "level_no": 2,
+      "feedback_kind": "diagnosis",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "1"
+        },
+        "conclusion": "需讨论",
+        "notes": "答案保护1：AI原文“应拼接字符串 \"!\"，而不是整数 1”直接给出了应替换的字符内容；虽未给完整代码行，但修正方向过于直接。"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": "G1",
+      "decision_origin": "人工组别裁决：G1",
+      "human_decision_text": "通过",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L02.md#c07-r3"
+    },
+    {
+      "trial_id": "C12-R3",
+      "case_id": "C12",
+      "round": 3,
+      "level_no": 2,
+      "feedback_kind": "diagnosis",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L02.md#c12-r3"
+    },
+    {
+      "trial_id": "C14-R3",
+      "case_id": "C14",
+      "round": 3,
+      "level_no": 3,
+      "feedback_kind": "diagnosis",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "1"
+        },
+        "conclusion": "需讨论",
+        "notes": "答案保护1：AI原文直接给出“price * quantity”作为正确表达式，基本泄露了需要替换的运算表达式。"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": "G1",
+      "decision_origin": "人工组别裁决：G1",
+      "human_decision_text": "通过",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L03.md#c14-r3"
+    },
+    {
+      "trial_id": "C15-R3",
+      "case_id": "C15",
+      "round": 3,
+      "level_no": 3,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L03.md#c15-r3"
+    },
+    {
+      "trial_id": "C20-R3",
+      "case_id": "C20",
+      "round": 3,
+      "level_no": 4,
+      "feedback_kind": "diagnosis",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "1"
+        },
+        "conclusion": "需讨论",
+        "notes": "答案保护1：AI原文直接给出“17//5=3”，并明确指出应使用整除表达式，修正方向过于直接。"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": "G1",
+      "decision_origin": "人工组别裁决：G1",
+      "human_decision_text": "通过",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L04.md#c20-r3"
+    },
+    {
+      "trial_id": "C24-R3",
+      "case_id": "C24",
+      "round": 3,
+      "level_no": 4,
+      "feedback_kind": "diagnosis",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "1",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "需讨论",
+        "notes": "正确性1：AI原文称“没有先检查 capacity 是否为 0”，但人工依据明确说明正式题合法输入要求 capacity 至少为 1。本次 run 输入 0 属于越界输入，ZeroDivisionError 证据属实，但将缺少零值检查诊断为代码错误并不充分符合合法输入域。"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": "G3",
+      "decision_origin": "人工组别裁决：G3",
+      "human_decision_text": "不通过",
+      "final_conclusion": "不通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "1",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": "run_input_domain_explanation",
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L04.md#c24-r3"
+    },
+    {
+      "trial_id": "C25-R3",
+      "case_id": "C25",
+      "round": 3,
+      "level_no": 5,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L05.md#c25-r3"
+    },
+    {
+      "trial_id": "C27-R3",
+      "case_id": "C27",
+      "round": 3,
+      "level_no": 5,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L05.md#c27-r3"
+    },
+    {
+      "trial_id": "C31-R3",
+      "case_id": "C31",
+      "round": 3,
+      "level_no": 6,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L06.md#c31-r3"
+    },
+    {
+      "trial_id": "C33-R3",
+      "case_id": "C33",
+      "round": 3,
+      "level_no": 6,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L06.md#c33-r3"
+    },
+    {
+      "trial_id": "C38-R3",
+      "case_id": "C38",
+      "round": 3,
+      "level_no": 7,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L07.md#c38-r3"
+    },
+    {
+      "trial_id": "C42-R3",
+      "case_id": "C42",
+      "round": 3,
+      "level_no": 7,
+      "feedback_kind": "diagnosis",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L07.md#c42-r3"
+    },
+    {
+      "trial_id": "C43-R3",
+      "case_id": "C43",
+      "round": 3,
+      "level_no": 8,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L08.md#c43-r3"
+    },
+    {
+      "trial_id": "C45-R3",
+      "case_id": "C45",
+      "round": 3,
+      "level_no": 8,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L08.md#c45-r3"
+    },
+    {
+      "trial_id": "C49-R3",
+      "case_id": "C49",
+      "round": 3,
+      "level_no": 9,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L09.md#c49-r3"
+    },
+    {
+      "trial_id": "C54-R3",
+      "case_id": "C54",
+      "round": 3,
+      "level_no": 9,
+      "feedback_kind": "diagnosis",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "0"
+        },
+        "conclusion": "不通过",
+        "notes": "答案保护0：AI原文直接给出“saved += 3（或 saved = saved + 3）”，提供了可直接替换的修正语句。"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": "G2",
+      "decision_origin": "人工组别裁决：G2",
+      "human_decision_text": "不通过",
+      "final_conclusion": "不通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "0"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": "direct_replacement_code",
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L09.md#c54-r3"
+    },
+    {
+      "trial_id": "C58-R3",
+      "case_id": "C58",
+      "round": 3,
+      "level_no": 10,
+      "feedback_kind": "diagnosis",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "1"
+        },
+        "conclusion": "需讨论",
+        "notes": "答案保护1：AI原文直接指出“count 初始化为 0”，给出了应修改的具体初值。"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": "G1",
+      "decision_origin": "人工组别裁决：G1",
+      "human_decision_text": "通过",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L10.md#c58-r3"
+    },
+    {
+      "trial_id": "C60-R3",
+      "case_id": "C60",
+      "round": 3,
+      "level_no": 10,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L10.md#c60-r3"
+    },
+    {
+      "trial_id": "C61-R3",
+      "case_id": "C61",
+      "round": 3,
+      "level_no": 11,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L11.md#c61-r3"
+    },
+    {
+      "trial_id": "C66-R3",
+      "case_id": "C66",
+      "round": 3,
+      "level_no": 11,
+      "feedback_kind": "diagnosis",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L11.md#c66-r3"
+    },
+    {
+      "trial_id": "C69-R3",
+      "case_id": "C69",
+      "round": 3,
+      "level_no": 12,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L12.md#c69-r3"
+    },
+    {
+      "trial_id": "C72-R3",
+      "case_id": "C72",
+      "round": 3,
+      "level_no": 12,
+      "feedback_kind": "guidance",
+      "effective_feedback": true,
+      "technical_passed": true,
+      "original_A": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "不适用",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "original_B": {
+        "scores": {
+          "correctness": "2",
+          "evidence": "2",
+          "tag": "2",
+          "readability": "2",
+          "answer_protection": "2"
+        },
+        "conclusion": "通过",
+        "notes": "未发现问题"
+      },
+      "decision_group": null,
+      "decision_origin": "两份原表一致",
+      "human_decision_text": "未发现问题",
+      "final_conclusion": "通过",
+      "reference_scores_B_with_adjudicated_dimensions": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "辅助呈现原分与已裁定维度；最终指标按人工结论计算，不冒记所有维度均被重新评分。",
+      "issue_category": null,
+      "retained_notes": [],
+      "evidence_link": "../core72-live-2026-10-29/逐条结果-L12.md#c72-r3"
+    }
+  ]
+}

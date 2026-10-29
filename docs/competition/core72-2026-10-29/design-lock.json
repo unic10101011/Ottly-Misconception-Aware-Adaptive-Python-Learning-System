@@ -1,0 +1,71 @@
+{
+  "dataset_id": "ottly-core72-2026-10-29-v1",
+  "created_at": "2026-10-29T01:01:18.739922+00:00",
+  "application_baseline": {
+    "tag": "acceptance-baseline-2026-10-29",
+    "commit": "d668fe4c68e65ec2ab1ca0459c21550e03e0ce15"
+  },
+  "status": "design_locked_before_first_real_ai_call",
+  "real_ai_executed": false,
+  "case_count": 72,
+  "initial_feedback_counts": {
+    "diagnosis": 24,
+    "skipped": 15,
+    "guidance": 32,
+    "none": 1
+  },
+  "repeat_case_ids": [
+    "C01",
+    "C04",
+    "C07",
+    "C12",
+    "C14",
+    "C15",
+    "C20",
+    "C24",
+    "C25",
+    "C27",
+    "C31",
+    "C33",
+    "C38",
+    "C42",
+    "C43",
+    "C45",
+    "C49",
+    "C54",
+    "C58",
+    "C60",
+    "C61",
+    "C66",
+    "C69",
+    "C72"
+  ],
+  "planned_total_trials": 120,
+  "planned_ai_feedback_trials": 104,
+  "excluded_mutable_files": [
+    "人工验收表.md"
+  ],
+  "hash_policy": "SHA256 of exact UTF-8 bytes; .gitattributes preserves this directory without text conversion.",
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "68d852cdcc43f757feef8433434f80df20e504b655af5e9d194076e7705f81b5"
+    },
+    {
+      "path": "cases.json",
+      "sha256": "6144c9223e82c214dea8ef5f960d2080418389817fac9b7c1d08c768359395d0"
+    },
+    {
+      "path": "72条样例设计.md",
+      "sha256": "4534d2455835de524e78a6faa07cd32da945ca9b4ee8fcf464889e59754fdd3f"
+    },
+    {
+      "path": "verify_design.py",
+      "sha256": "835e013e61baafcb240f0617309a8c1dc446cfc63f0eae01a9874ffeff0caa45"
+    },
+    {
+      "path": "offline-validation.json",
+      "sha256": "a26801741bb2cacd72abd667f4d5e4d75a52c8eeae0cf8fb6ee8229660d99071"
+    }
+  ]
+}

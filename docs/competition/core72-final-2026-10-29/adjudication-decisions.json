@@ -1,0 +1,53 @@
+{
+  "source_sha256": "c8467caa85bae7eaf06df5a1d3e079065d430afc858b283797e337fbdfd4776e",
+  "groups": {
+    "G1": {
+      "group": "G1",
+      "trial_count": 14,
+      "recorded_proposal": "诊断解释，答案保护2，通过",
+      "human_decision": "通过",
+      "signed_by_and_date": "C-2026-10-29",
+      "qualified": true
+    },
+    "G2": {
+      "group": "G2",
+      "trial_count": 4,
+      "recorded_proposal": "可复制修正代码，答案保护0，不通过",
+      "human_decision": "不通过",
+      "signed_by_and_date": "C-2026-10-29",
+      "qualified": false
+    },
+    "G3": {
+      "group": "G3",
+      "trial_count": 3,
+      "recorded_proposal": "未区分运行越界输入与题目合法域，正确性1，暂不合格",
+      "human_decision": "不通过",
+      "signed_by_and_date": "C-2026-10-29",
+      "qualified": false
+    },
+    "G4": {
+      "group": "G4",
+      "trial_count": 2,
+      "recorded_proposal": "按冻结标签集合，标签0，不通过；C64保护项单独说明",
+      "human_decision": "标签部分不通过",
+      "signed_by_and_date": "C-2026-10-29",
+      "qualified": false
+    },
+    "G5": {
+      "group": "G5",
+      "trial_count": 1,
+      "recorded_proposal": "倾向允许名字对应解释、保护2，人工确认边界",
+      "human_decision": "通过，不算泄露答案",
+      "signed_by_and_date": "C-2026-10-29",
+      "qualified": true
+    },
+    "G6": {
+      "group": "G6",
+      "trial_count": 1,
+      "recorded_proposal": "C08正确性/证据/易懂各1，暂不合格",
+      "human_decision": "通过，错因不易懂但分析正确",
+      "signed_by_and_date": "C-2026-10-29",
+      "qualified": true
+    }
+  }
+}

@@ -1,0 +1,281 @@
+{
+  "reviewer": "A",
+  "rows": [
+    {
+      "trial_id": "C54-R1",
+      "feedback_kind": "diagnosis",
+      "status": "ready",
+      "original_scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "normalized_scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "正确跳过项原表留空的评分仅在统计中记不适用，未改原表。",
+      "conclusion": "通过",
+      "notes": "未发现问题",
+      "qualified": true
+    },
+    {
+      "trial_id": "C54-R2",
+      "feedback_kind": "diagnosis",
+      "status": "ready",
+      "original_scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "normalized_scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "正确跳过项原表留空的评分仅在统计中记不适用，未改原表。",
+      "conclusion": "通过",
+      "notes": "未发现问题",
+      "qualified": true
+    },
+    {
+      "trial_id": "C54-R3",
+      "feedback_kind": "diagnosis",
+      "status": "ready",
+      "original_scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "normalized_scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "正确跳过项原表留空的评分仅在统计中记不适用，未改原表。",
+      "conclusion": "通过",
+      "notes": "未发现问题",
+      "qualified": true
+    },
+    {
+      "trial_id": "C07-R1",
+      "feedback_kind": "diagnosis",
+      "status": "ready",
+      "original_scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "normalized_scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "正确跳过项原表留空的评分仅在统计中记不适用，未改原表。",
+      "conclusion": "通过",
+      "notes": "未发现问题",
+      "qualified": true
+    },
+    {
+      "trial_id": "C14-R1",
+      "feedback_kind": "diagnosis",
+      "status": "ready",
+      "original_scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "normalized_scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "正确跳过项原表留空的评分仅在统计中记不适用，未改原表。",
+      "conclusion": "通过",
+      "notes": "未发现问题",
+      "qualified": true
+    },
+    {
+      "trial_id": "C20-R1",
+      "feedback_kind": "diagnosis",
+      "status": "ready",
+      "original_scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "normalized_scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "正确跳过项原表留空的评分仅在统计中记不适用，未改原表。",
+      "conclusion": "通过",
+      "notes": "未发现问题",
+      "qualified": true
+    },
+    {
+      "trial_id": "C58-R1",
+      "feedback_kind": "diagnosis",
+      "status": "ready",
+      "original_scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "normalized_scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "正确跳过项原表留空的评分仅在统计中记不适用，未改原表。",
+      "conclusion": "通过",
+      "notes": "未发现问题",
+      "qualified": true
+    },
+    {
+      "trial_id": "C70-R1",
+      "feedback_kind": "diagnosis",
+      "status": "ready",
+      "original_scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "normalized_scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "正确跳过项原表留空的评分仅在统计中记不适用，未改原表。",
+      "conclusion": "通过",
+      "notes": "未发现问题",
+      "qualified": true
+    },
+    {
+      "trial_id": "C28-R1",
+      "feedback_kind": "diagnosis",
+      "status": "ready",
+      "original_scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "normalized_scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "正确跳过项原表留空的评分仅在统计中记不适用，未改原表。",
+      "conclusion": "通过",
+      "notes": "未发现问题",
+      "qualified": true
+    },
+    {
+      "trial_id": "C24-R3",
+      "feedback_kind": "diagnosis",
+      "status": "ready",
+      "original_scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "normalized_scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "正确跳过项原表留空的评分仅在统计中记不适用，未改原表。",
+      "conclusion": "通过",
+      "notes": "未发现问题。输入域观察项达标：明确“该异常来自本次越界输入，不能据此断言合法输入下的算法错误，也不能要求额外防御代码”，正确区分了越界运行输入与合法域算法错误，较此前版本更完整",
+      "qualified": true
+    },
+    {
+      "trial_id": "C43-R1",
+      "feedback_kind": "guidance",
+      "status": "ready",
+      "original_scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "不适用",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "normalized_scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "不适用",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "score_note": "正确跳过项原表留空的评分仅在统计中记不适用，未改原表。",
+      "conclusion": "通过",
+      "notes": "未发现问题",
+      "qualified": true
+    },
+    {
+      "trial_id": "C05-R1",
+      "feedback_kind": "diagnosis",
+      "status": "skipped",
+      "original_scores": {
+        "correctness": "",
+        "evidence": "",
+        "tag": "",
+        "readability": "",
+        "answer_protection": ""
+      },
+      "normalized_scores": {
+        "correctness": "不适用",
+        "evidence": "不适用",
+        "tag": "不适用",
+        "readability": "不适用",
+        "answer_protection": "不适用"
+      },
+      "score_note": "正确跳过项原表留空的评分仅在统计中记不适用，未改原表。",
+      "conclusion": "正确跳过",
+      "notes": "",
+      "qualified": null
+    }
+  ]
+}

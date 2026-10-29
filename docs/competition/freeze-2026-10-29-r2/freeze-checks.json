@@ -1,0 +1,63 @@
+{
+  "created_at": "2026-10-29T06:19:41.097097+00:00",
+  "previous_head": "d668fe4c68e65ec2ab1ca0459c21550e03e0ce15",
+  "branch": "main",
+  "tag": "acceptance-baseline-2026-10-29-r2",
+  "application_source_files_verified": 96,
+  "evidence_checks": [
+    {
+      "directory": "core72-2026-10-29",
+      "locked_files_verified": 5
+    },
+    {
+      "directory": "core72-live-2026-10-29",
+      "locked_files_verified": 25
+    },
+    {
+      "directory": "core72-review-2026-10-29",
+      "locked_files_verified": 8
+    },
+    {
+      "directory": "core72-final-2026-10-29",
+      "locked_files_verified": 7
+    },
+    {
+      "directory": "core72-fixes-2026-10-29",
+      "locked_files_verified": 43
+    },
+    {
+      "directory": "core72-fixes-review-2026-10-29",
+      "locked_files_verified": 7
+    },
+    {
+      "directory": "c54-protection-fix-2026-10-29",
+      "locked_files_verified": 47
+    },
+    {
+      "directory": "c54-protection-review-2026-10-29",
+      "locked_files_verified": 5
+    }
+  ],
+  "unchanged_frontend_files_verified": 98,
+  "credential_value_scan_passed": true,
+  "credential_types_checked": [
+    "DB_PASSWORD",
+    "DB_ROOT_PASSWORD",
+    "DEEPSEEK_API_KEY",
+    "JWT_SECRET"
+  ],
+  "candidate_files_scanned": 184,
+  "software_regression": {
+    "passed": 636,
+    "skipped": 1,
+    "subtests_passed": 9,
+    "warnings": 1,
+    "targeted_passed_included": 149
+  },
+  "human_retest": {
+    "AI_qualified": 11,
+    "AI_expected": 11,
+    "correct_skip": 1
+  },
+  "all_project_acceptance_complete": false
+}

@@ -1,0 +1,490 @@
+{
+  "requests": 69,
+  "public_fact_checks_passed": 69,
+  "scope": "Structural/public-fact boundary verification, not a semantic grade.",
+  "items": [
+    {
+      "stage": "core72-fixes-2026-10-29",
+      "trial_id": "C10-R1",
+      "call_id": 1,
+      "payload_sha256": "2682d6d35eb8bc84236860e5513359a50ec08db337c50d336f628a7f0f5c4265",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "core72-fixes-2026-10-29",
+      "trial_id": "C10-R1",
+      "call_id": 2,
+      "payload_sha256": "8cb8acd72b5417d12315d4578e72683b5a33a590ed5e1d44d5081375e042d849",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "core72-fixes-2026-10-29",
+      "trial_id": "C24-R1",
+      "call_id": 3,
+      "payload_sha256": "2fffb0b18fa55dc6f037dabc654c8ea1965c6d368d9fd06a029c4838cce5d2ca",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "core72-fixes-2026-10-29",
+      "trial_id": "C24-R1",
+      "call_id": 4,
+      "payload_sha256": "e02b290b1b5fe7895652ebf7ce96795fe9ecc55ee0c0a2e6d83fbfbfcb25fcf8",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "core72-fixes-2026-10-29",
+      "trial_id": "C24-R2",
+      "call_id": 5,
+      "payload_sha256": "2fffb0b18fa55dc6f037dabc654c8ea1965c6d368d9fd06a029c4838cce5d2ca",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "core72-fixes-2026-10-29",
+      "trial_id": "C24-R2",
+      "call_id": 6,
+      "payload_sha256": "df10ae3dc1c2cc821b46abcb2113b4cf371f48ed22e557aa902b7ad18e1181cb",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "core72-fixes-2026-10-29",
+      "trial_id": "C24-R3",
+      "call_id": 7,
+      "payload_sha256": "2fffb0b18fa55dc6f037dabc654c8ea1965c6d368d9fd06a029c4838cce5d2ca",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "core72-fixes-2026-10-29",
+      "trial_id": "C24-R3",
+      "call_id": 8,
+      "payload_sha256": "7e8e7cffc2ab6903366e06e4e73c1fd69f2ab24933d3b37f677304dc24d6c9af",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "core72-fixes-2026-10-29",
+      "trial_id": "C28-R1",
+      "call_id": 9,
+      "payload_sha256": "b3af1c4931adba1a8b79bbd6ab9bdf5462024c34a44477c95fa94cec4ffacf87",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "core72-fixes-2026-10-29",
+      "trial_id": "C28-R1",
+      "call_id": 10,
+      "payload_sha256": "19fdba806db13b3895610b42b5d5e4e4b0029c4c271b948bea5540ccd7a8b3d3",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "core72-fixes-2026-10-29",
+      "trial_id": "C54-R1",
+      "call_id": 11,
+      "payload_sha256": "4a375f3de8a379297434c6fff61863ae62a442e1f9b838b441a4dac4b6af033e",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "core72-fixes-2026-10-29",
+      "trial_id": "C54-R1",
+      "call_id": 12,
+      "payload_sha256": "97c2318c94307da27253230461c075554916c8f22a579f36237e98bc8e0248e2",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "core72-fixes-2026-10-29",
+      "trial_id": "C54-R2",
+      "call_id": 13,
+      "payload_sha256": "4a375f3de8a379297434c6fff61863ae62a442e1f9b838b441a4dac4b6af033e",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "core72-fixes-2026-10-29",
+      "trial_id": "C54-R2",
+      "call_id": 14,
+      "payload_sha256": "c64d57b2f602ecc1a13fa547449fb5bdbf6f4db27adb9649d0f898bff5e0faa1",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "core72-fixes-2026-10-29",
+      "trial_id": "C54-R3",
+      "call_id": 15,
+      "payload_sha256": "4a375f3de8a379297434c6fff61863ae62a442e1f9b838b441a4dac4b6af033e",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "core72-fixes-2026-10-29",
+      "trial_id": "C54-R3",
+      "call_id": 16,
+      "payload_sha256": "9db4bfa211cf668180778fe879e5217d783719bacf5f6a8514e4546744f300c9",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "core72-fixes-2026-10-29",
+      "trial_id": "C64-R1",
+      "call_id": 17,
+      "payload_sha256": "468b8aa331c8e21ec928d8fc513aab224042cfca022da991b0c2e69ef8dfaf93",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "core72-fixes-2026-10-29",
+      "trial_id": "C64-R1",
+      "call_id": 18,
+      "payload_sha256": "61731c4299e2a94c02375f8eceb957697d3577c53e8a589f1e0809bdedecdd12",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "core72-fixes-2026-10-29",
+      "trial_id": "C37-R1",
+      "call_id": 19,
+      "payload_sha256": "1acc89b60b29486a74c3c2ead4a036862f3116ed727c8973979bc8542cedd6fa",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "core72-fixes-2026-10-29",
+      "trial_id": "C40-R1",
+      "call_id": 20,
+      "payload_sha256": "e2d874d331606effb5b7d98691e50f4315f09a358f891f03208909f9c35f4ee4",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "core72-fixes-2026-10-29",
+      "trial_id": "C40-R1",
+      "call_id": 21,
+      "payload_sha256": "9c803e1887153a254fa8020c2e6e2af5dc82671dfaab59206fdd728586062c3e",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "core72-fixes-2026-10-29",
+      "trial_id": "C43-R1",
+      "call_id": 22,
+      "payload_sha256": "64b4865cd6b1bce2e3b934a6e6c8cba862ccb46c06dfa9addf4123bf54c9dcb0",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "core72-fixes-2026-10-29",
+      "trial_id": "C01-R2",
+      "call_id": 23,
+      "payload_sha256": "a94ccc9fa86af592fc75ca71859a7d6bea5ac7f780ce0a68bd8752a292c1c5e7",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "core72-fixes-2026-10-29",
+      "trial_id": "C01-R2",
+      "call_id": 24,
+      "payload_sha256": "658f9c36620d56b39a6132d5e2dbf5d336db894d1f58232885f0ba360150b8d5",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "core72-fixes-2026-10-29",
+      "trial_id": "C08-R1",
+      "call_id": 25,
+      "payload_sha256": "6906a24be62d2725d42a3d686f6f69a271f59376296ac6761e42823b2ef168c7",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "core72-fixes-2026-10-29",
+      "trial_id": "C07-R1",
+      "call_id": 26,
+      "payload_sha256": "9874cf219865d2f0a3f177cb64fb6c1dc312bf460a517699a64dedc2f339ae12",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "core72-fixes-2026-10-29",
+      "trial_id": "C07-R1",
+      "call_id": 27,
+      "payload_sha256": "22f0b524407a027970e04e43c6d13fb110f07d0ce3edeea685dc0e8dfa49fe9a",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "core72-fixes-2026-10-29",
+      "trial_id": "C14-R1",
+      "call_id": 28,
+      "payload_sha256": "c52cb4060000d6eb35ab6054a857f53193ef48ad664dacda379a3c39f4d74341",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "core72-fixes-2026-10-29",
+      "trial_id": "C14-R1",
+      "call_id": 29,
+      "payload_sha256": "16c3c8a04521e2cb0c6769eda6410909d01e3db28b9c2569e7cb6929e23406fe",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "core72-fixes-2026-10-29",
+      "trial_id": "C20-R1",
+      "call_id": 30,
+      "payload_sha256": "04a12ae93e0090b9b9639c2b88a651fc2708db394074c449c4792796472ff4d8",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "core72-fixes-2026-10-29",
+      "trial_id": "C20-R1",
+      "call_id": 31,
+      "payload_sha256": "c4f42f2f04abc56451214f54bd26cc6bdfc968c3a54be49d5053cc95ad4de6b9",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "core72-fixes-2026-10-29",
+      "trial_id": "C58-R1",
+      "call_id": 32,
+      "payload_sha256": "e0172e7402076e62f07a89c042f3724ce56a555b429bf5a05c5f8b6a29102fb5",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "core72-fixes-2026-10-29",
+      "trial_id": "C58-R1",
+      "call_id": 33,
+      "payload_sha256": "9fdde67d6f83c2977c8e3ae934aac38750b72b67b907c1f918f1db2db04df4b2",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "core72-fixes-2026-10-29",
+      "trial_id": "C70-R1",
+      "call_id": 34,
+      "payload_sha256": "a88498b74c93dc110f647c5c8e1768e1631c992df51e119115b78f362b5c7d84",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C10-R1",
+      "call_id": 1,
+      "payload_sha256": "2682d6d35eb8bc84236860e5513359a50ec08db337c50d336f628a7f0f5c4265",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C10-R1",
+      "call_id": 2,
+      "payload_sha256": "20dbf362ecba6845159bb6b14ac0f04a1fe3baf25516e719d99d841859bfc986",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C24-R1",
+      "call_id": 3,
+      "payload_sha256": "2fffb0b18fa55dc6f037dabc654c8ea1965c6d368d9fd06a029c4838cce5d2ca",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C24-R1",
+      "call_id": 4,
+      "payload_sha256": "2e90811573a92c775d17f763d8779db354c55473a033e3585dd18bf850c661f1",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C24-R2",
+      "call_id": 5,
+      "payload_sha256": "2fffb0b18fa55dc6f037dabc654c8ea1965c6d368d9fd06a029c4838cce5d2ca",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C24-R2",
+      "call_id": 6,
+      "payload_sha256": "7f737b2fc5514068bb308a2dc219c4f16253ac8419520c0efa08b960a08b4939",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C24-R3",
+      "call_id": 7,
+      "payload_sha256": "2fffb0b18fa55dc6f037dabc654c8ea1965c6d368d9fd06a029c4838cce5d2ca",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C24-R3",
+      "call_id": 8,
+      "payload_sha256": "32519c60ffffd3df629a91f12c2a01935cc18bedeaea2f8c36c8d3437584a685",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C28-R1",
+      "call_id": 9,
+      "payload_sha256": "b3af1c4931adba1a8b79bbd6ab9bdf5462024c34a44477c95fa94cec4ffacf87",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C28-R1",
+      "call_id": 10,
+      "payload_sha256": "05b2009e02379d069b090993a9b822931072b2900a1dcc308da3c960d43c4366",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C54-R1",
+      "call_id": 11,
+      "payload_sha256": "4a375f3de8a379297434c6fff61863ae62a442e1f9b838b441a4dac4b6af033e",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C54-R1",
+      "call_id": 12,
+      "payload_sha256": "76025fa3572b82c3506bc1729c7ef48e2f45fb2ceb12b04c1a43c10fe7bc8226",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C54-R2",
+      "call_id": 13,
+      "payload_sha256": "4a375f3de8a379297434c6fff61863ae62a442e1f9b838b441a4dac4b6af033e",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C54-R2",
+      "call_id": 14,
+      "payload_sha256": "49ed553ba7e9ba99ec888de78969cb4b62c9949cde3a25a5a41319f692e210e0",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C54-R3",
+      "call_id": 15,
+      "payload_sha256": "4a375f3de8a379297434c6fff61863ae62a442e1f9b838b441a4dac4b6af033e",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C54-R3",
+      "call_id": 16,
+      "payload_sha256": "d09106b4f2736f47155b59db68cdd53b2c99ab10a91bc55a82945600638da59f",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C64-R1",
+      "call_id": 17,
+      "payload_sha256": "468b8aa331c8e21ec928d8fc513aab224042cfca022da991b0c2e69ef8dfaf93",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C64-R1",
+      "call_id": 18,
+      "payload_sha256": "63d561578301ddc161ac17badef66e053dff4f005914c98857cb46e7bc5d4b0b",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C37-R1",
+      "call_id": 19,
+      "payload_sha256": "1acc89b60b29486a74c3c2ead4a036862f3116ed727c8973979bc8542cedd6fa",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C40-R1",
+      "call_id": 20,
+      "payload_sha256": "e2d874d331606effb5b7d98691e50f4315f09a358f891f03208909f9c35f4ee4",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C40-R1",
+      "call_id": 21,
+      "payload_sha256": "f570d7cd58293be5f951e0f204e640e8477dad836dd4a7947cfa9066d9c06c30",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C43-R1",
+      "call_id": 22,
+      "payload_sha256": "64b4865cd6b1bce2e3b934a6e6c8cba862ccb46c06dfa9addf4123bf54c9dcb0",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C01-R2",
+      "call_id": 23,
+      "payload_sha256": "a94ccc9fa86af592fc75ca71859a7d6bea5ac7f780ce0a68bd8752a292c1c5e7",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C01-R2",
+      "call_id": 24,
+      "payload_sha256": "016560be26b883cbac7abcc20320d5c5ff2a5df18c8c051569b29dcfe2ac12e3",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C08-R1",
+      "call_id": 25,
+      "payload_sha256": "6906a24be62d2725d42a3d686f6f69a271f59376296ac6761e42823b2ef168c7",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C07-R1",
+      "call_id": 26,
+      "payload_sha256": "9874cf219865d2f0a3f177cb64fb6c1dc312bf460a517699a64dedc2f339ae12",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C07-R1",
+      "call_id": 27,
+      "payload_sha256": "e24ca39fc931fe4e3ea2e17294a7fcb65a3baa194c6a2b6d297daa68808affbf",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C14-R1",
+      "call_id": 28,
+      "payload_sha256": "c52cb4060000d6eb35ab6054a857f53193ef48ad664dacda379a3c39f4d74341",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C14-R1",
+      "call_id": 29,
+      "payload_sha256": "4bb91535d349c5cfaf8bf1287cb9c51c46e01a533d4b6a94a5a20a2be2aed553",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C20-R1",
+      "call_id": 30,
+      "payload_sha256": "04a12ae93e0090b9b9639c2b88a651fc2708db394074c449c4792796472ff4d8",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C20-R1",
+      "call_id": 31,
+      "payload_sha256": "c39ab21a0f1c65175f588edfbae5dfda3c3992ebadfddfa5910317a5c27eeaee",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C58-R1",
+      "call_id": 32,
+      "payload_sha256": "e0172e7402076e62f07a89c042f3724ce56a555b429bf5a05c5f8b6a29102fb5",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C58-R1",
+      "call_id": 33,
+      "payload_sha256": "442cdf5d2cd6f6d6b0aeb51f635b3ca4d5c013959bb17a1d4bb86907fde39b0d",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C70-R1",
+      "call_id": 34,
+      "payload_sha256": "a88498b74c93dc110f647c5c8e1768e1631c992df51e119115b78f362b5c7d84",
+      "public_facts_verified": true
+    },
+    {
+      "stage": "final",
+      "trial_id": "C70-R1",
+      "call_id": 35,
+      "payload_sha256": "620b76bbd690517e59a700be92d85c7e6392dd3a84dbda2a8580fc0b2894516f",
+      "public_facts_verified": true
+    }
+  ]
+}

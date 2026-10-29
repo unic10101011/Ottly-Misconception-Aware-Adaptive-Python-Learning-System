@@ -1,0 +1,495 @@
+{
+  "status": "not_final_human_scores",
+  "groups": {
+    "G1": {
+      "ids": [
+        "C07-R1",
+        "C07-R2",
+        "C07-R3",
+        "C13-R1",
+        "C14-R1",
+        "C14-R2",
+        "C14-R3",
+        "C20-R1",
+        "C20-R2",
+        "C20-R3",
+        "C44-R1",
+        "C58-R1",
+        "C58-R2",
+        "C58-R3"
+      ],
+      "scores": {
+        "answer_protection": "2"
+      },
+      "conclusion": "通过",
+      "reason": "具体诊断解释，不是可复制的替换语句；不套用guidance的全面禁修正口径。"
+    },
+    "G2": {
+      "ids": [
+        "C28-R1",
+        "C54-R1",
+        "C54-R2",
+        "C54-R3"
+      ],
+      "scores": {
+        "answer_protection": "0"
+      },
+      "conclusion": "不通过",
+      "reason": "实际给出可直接复制到原题的修正代码，超出普通错因解释。"
+    },
+    "G3": {
+      "ids": [
+        "C24-R1",
+        "C24-R2",
+        "C24-R3"
+      ],
+      "scores": {
+        "correctness": "1"
+      },
+      "conclusion": "不通过",
+      "reason": "除零证据正确，但未明确区分自定义越界输入与合法题域算法，未充分满足冻结oracle。"
+    },
+    "G4": {
+      "ids": [
+        "C10-R1",
+        "C64-R1"
+      ],
+      "scores": {
+        "tag": "0"
+      },
+      "conclusion": "不通过",
+      "reason": "真实标签不在冻结允许集合内；不修改本轮标签或允许集合。C64的自然语言初始化解释倾向保护2。"
+    },
+    "G5": {
+      "ids": [
+        "C70-R1"
+      ],
+      "scores": {
+        "answer_protection": "2"
+      },
+      "conclusion": "通过",
+      "reason": "倾向允许diagnosis解释已有变量的对应关系；此项为人工应确认的边界，建议并非最终裁决。"
+    },
+    "G6": {
+      "ids": [
+        "C08-R1"
+      ],
+      "scores": {
+        "correctness": "1",
+        "evidence": "1",
+        "readability": "1"
+      },
+      "conclusion": "不通过",
+      "reason": "原文错误地说输入姓名与期望输出大小写不同；应降事实正确性，不能只降易懂。"
+    }
+  },
+  "proposals": [
+    {
+      "trial_id": "C07-R1",
+      "group": "G1",
+      "proposed_scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "proposed_conclusion": "通过",
+      "reason": "具体诊断解释，不是可复制的替换语句；不套用guidance的全面禁修正口径。",
+      "status": "pending_human_adjudication",
+      "human_final_decision": null
+    },
+    {
+      "trial_id": "C07-R2",
+      "group": "G1",
+      "proposed_scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "proposed_conclusion": "通过",
+      "reason": "具体诊断解释，不是可复制的替换语句；不套用guidance的全面禁修正口径。",
+      "status": "pending_human_adjudication",
+      "human_final_decision": null
+    },
+    {
+      "trial_id": "C07-R3",
+      "group": "G1",
+      "proposed_scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "proposed_conclusion": "通过",
+      "reason": "具体诊断解释，不是可复制的替换语句；不套用guidance的全面禁修正口径。",
+      "status": "pending_human_adjudication",
+      "human_final_decision": null
+    },
+    {
+      "trial_id": "C13-R1",
+      "group": "G1",
+      "proposed_scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "proposed_conclusion": "通过",
+      "reason": "具体诊断解释，不是可复制的替换语句；不套用guidance的全面禁修正口径。",
+      "status": "pending_human_adjudication",
+      "human_final_decision": null
+    },
+    {
+      "trial_id": "C14-R1",
+      "group": "G1",
+      "proposed_scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "proposed_conclusion": "通过",
+      "reason": "具体诊断解释，不是可复制的替换语句；不套用guidance的全面禁修正口径。",
+      "status": "pending_human_adjudication",
+      "human_final_decision": null
+    },
+    {
+      "trial_id": "C14-R2",
+      "group": "G1",
+      "proposed_scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "proposed_conclusion": "通过",
+      "reason": "具体诊断解释，不是可复制的替换语句；不套用guidance的全面禁修正口径。",
+      "status": "pending_human_adjudication",
+      "human_final_decision": null
+    },
+    {
+      "trial_id": "C14-R3",
+      "group": "G1",
+      "proposed_scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "proposed_conclusion": "通过",
+      "reason": "具体诊断解释，不是可复制的替换语句；不套用guidance的全面禁修正口径。",
+      "status": "pending_human_adjudication",
+      "human_final_decision": null
+    },
+    {
+      "trial_id": "C20-R1",
+      "group": "G1",
+      "proposed_scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "proposed_conclusion": "通过",
+      "reason": "具体诊断解释，不是可复制的替换语句；不套用guidance的全面禁修正口径。",
+      "status": "pending_human_adjudication",
+      "human_final_decision": null
+    },
+    {
+      "trial_id": "C20-R2",
+      "group": "G1",
+      "proposed_scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "proposed_conclusion": "通过",
+      "reason": "具体诊断解释，不是可复制的替换语句；不套用guidance的全面禁修正口径。",
+      "status": "pending_human_adjudication",
+      "human_final_decision": null
+    },
+    {
+      "trial_id": "C20-R3",
+      "group": "G1",
+      "proposed_scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "proposed_conclusion": "通过",
+      "reason": "具体诊断解释，不是可复制的替换语句；不套用guidance的全面禁修正口径。",
+      "status": "pending_human_adjudication",
+      "human_final_decision": null
+    },
+    {
+      "trial_id": "C44-R1",
+      "group": "G1",
+      "proposed_scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "proposed_conclusion": "通过",
+      "reason": "具体诊断解释，不是可复制的替换语句；不套用guidance的全面禁修正口径。",
+      "status": "pending_human_adjudication",
+      "human_final_decision": null
+    },
+    {
+      "trial_id": "C58-R1",
+      "group": "G1",
+      "proposed_scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "proposed_conclusion": "通过",
+      "reason": "具体诊断解释，不是可复制的替换语句；不套用guidance的全面禁修正口径。",
+      "status": "pending_human_adjudication",
+      "human_final_decision": null
+    },
+    {
+      "trial_id": "C58-R2",
+      "group": "G1",
+      "proposed_scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "proposed_conclusion": "通过",
+      "reason": "具体诊断解释，不是可复制的替换语句；不套用guidance的全面禁修正口径。",
+      "status": "pending_human_adjudication",
+      "human_final_decision": null
+    },
+    {
+      "trial_id": "C58-R3",
+      "group": "G1",
+      "proposed_scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "proposed_conclusion": "通过",
+      "reason": "具体诊断解释，不是可复制的替换语句；不套用guidance的全面禁修正口径。",
+      "status": "pending_human_adjudication",
+      "human_final_decision": null
+    },
+    {
+      "trial_id": "C28-R1",
+      "group": "G2",
+      "proposed_scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "0"
+      },
+      "proposed_conclusion": "不通过",
+      "reason": "实际给出可直接复制到原题的修正代码，超出普通错因解释。",
+      "status": "pending_human_adjudication",
+      "human_final_decision": null
+    },
+    {
+      "trial_id": "C54-R1",
+      "group": "G2",
+      "proposed_scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "0"
+      },
+      "proposed_conclusion": "不通过",
+      "reason": "实际给出可直接复制到原题的修正代码，超出普通错因解释。",
+      "status": "pending_human_adjudication",
+      "human_final_decision": null
+    },
+    {
+      "trial_id": "C54-R2",
+      "group": "G2",
+      "proposed_scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "0"
+      },
+      "proposed_conclusion": "不通过",
+      "reason": "实际给出可直接复制到原题的修正代码，超出普通错因解释。",
+      "status": "pending_human_adjudication",
+      "human_final_decision": null
+    },
+    {
+      "trial_id": "C54-R3",
+      "group": "G2",
+      "proposed_scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "0"
+      },
+      "proposed_conclusion": "不通过",
+      "reason": "实际给出可直接复制到原题的修正代码，超出普通错因解释。",
+      "status": "pending_human_adjudication",
+      "human_final_decision": null
+    },
+    {
+      "trial_id": "C24-R1",
+      "group": "G3",
+      "proposed_scores": {
+        "correctness": "1",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "proposed_conclusion": "不通过",
+      "reason": "除零证据正确，但未明确区分自定义越界输入与合法题域算法，未充分满足冻结oracle。",
+      "status": "pending_human_adjudication",
+      "human_final_decision": null
+    },
+    {
+      "trial_id": "C24-R2",
+      "group": "G3",
+      "proposed_scores": {
+        "correctness": "1",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "proposed_conclusion": "不通过",
+      "reason": "除零证据正确，但未明确区分自定义越界输入与合法题域算法，未充分满足冻结oracle。",
+      "status": "pending_human_adjudication",
+      "human_final_decision": null
+    },
+    {
+      "trial_id": "C24-R3",
+      "group": "G3",
+      "proposed_scores": {
+        "correctness": "1",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "proposed_conclusion": "不通过",
+      "reason": "除零证据正确，但未明确区分自定义越界输入与合法题域算法，未充分满足冻结oracle。",
+      "status": "pending_human_adjudication",
+      "human_final_decision": null
+    },
+    {
+      "trial_id": "C10-R1",
+      "group": "G4",
+      "proposed_scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "0",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "proposed_conclusion": "不通过",
+      "reason": "真实标签不在冻结允许集合内；不修改本轮标签或允许集合。C64的自然语言初始化解释倾向保护2。",
+      "status": "pending_human_adjudication",
+      "human_final_decision": null
+    },
+    {
+      "trial_id": "C64-R1",
+      "group": "G4",
+      "proposed_scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "0",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "proposed_conclusion": "不通过",
+      "reason": "真实标签不在冻结允许集合内；不修改本轮标签或允许集合。C64的自然语言初始化解释倾向保护2。",
+      "status": "pending_human_adjudication",
+      "human_final_decision": null
+    },
+    {
+      "trial_id": "C70-R1",
+      "group": "G5",
+      "proposed_scores": {
+        "correctness": "2",
+        "evidence": "2",
+        "tag": "2",
+        "readability": "2",
+        "answer_protection": "2"
+      },
+      "proposed_conclusion": "通过",
+      "reason": "倾向允许diagnosis解释已有变量的对应关系；此项为人工应确认的边界，建议并非最终裁决。",
+      "status": "pending_human_adjudication",
+      "human_final_decision": null
+    },
+    {
+      "trial_id": "C08-R1",
+      "group": "G6",
+      "proposed_scores": {
+        "correctness": "1",
+        "evidence": "1",
+        "tag": "2",
+        "readability": "1",
+        "answer_protection": "2"
+      },
+      "proposed_conclusion": "不通过",
+      "reason": "原文错误地说输入姓名与期望输出大小写不同；应降事实正确性，不能只降易懂。",
+      "status": "pending_human_adjudication",
+      "human_final_decision": null
+    }
+  ],
+  "conditional_if_all_proposals_accepted": {
+    "qualified": 90,
+    "effective_feedback": 100,
+    "ai_expected": 104,
+    "rounds": [
+      {
+        "round": 1,
+        "proposed_qualified": 47,
+        "effective_feedback": 53,
+        "ai_expected": 56,
+        "conditional_semantic_rate": 0.8867924528301887,
+        "conditional_end_to_end_rate": 0.8392857142857143
+      },
+      {
+        "round": 2,
+        "proposed_qualified": 21,
+        "effective_feedback": 23,
+        "ai_expected": 24,
+        "conditional_semantic_rate": 0.9130434782608695,
+        "conditional_end_to_end_rate": 0.875
+      },
+      {
+        "round": 3,
+        "proposed_qualified": 22,
+        "effective_feedback": 24,
+        "ai_expected": 24,
+        "conditional_semantic_rate": 0.9166666666666666,
+        "conditional_end_to_end_rate": 0.9166666666666666
+      }
+    ]
+  },
+  "warning": "90/100 pooled includes repeats; first-round conditional score is 47/53, below 90%. No final result asserted."
+}

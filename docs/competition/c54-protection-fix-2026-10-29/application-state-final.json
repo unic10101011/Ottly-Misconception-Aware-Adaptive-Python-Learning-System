@@ -1,0 +1,396 @@
+{
+  "base_commit": "d668fe4c68e65ec2ab1ca0459c21550e03e0ce15",
+  "app_source_digest": "5ae9cca2467984045247b2c06e1c8f863e182772e63b493f05cfc587fbeaa394",
+  "files": [
+    {
+      "path": "backend/app/__init__.py",
+      "sha256_lf": "dd2d11e422291a9e117500f2bc8feee4161fcbb64285692a731e0d9a79b1dbd1"
+    },
+    {
+      "path": "backend/app/api/__init__.py",
+      "sha256_lf": "54b7525fc99f2773fdba5fd73b0e748344f36a9c1f16d12ba5522eb3c113e290"
+    },
+    {
+      "path": "backend/app/api/ai.py",
+      "sha256_lf": "cc7356aa4b9aef44c45961ee174cf0c3eeb69858dd864222d6a8faad45704a4e"
+    },
+    {
+      "path": "backend/app/api/auth.py",
+      "sha256_lf": "bbd3bd3a1a170b8ef46b912621d6556b693593dc3fa40c4def2bd235cd4d6d22"
+    },
+    {
+      "path": "backend/app/api/class_selection.py",
+      "sha256_lf": "1b3ade93e5da5de771434e69bf566a146bd51884a48aa3188f169a510712a815"
+    },
+    {
+      "path": "backend/app/api/coding.py",
+      "sha256_lf": "843b95a72b3550d7368d92bf49525a4c9500de6d70dfb63cefd86ebbe4c21f45"
+    },
+    {
+      "path": "backend/app/api/endless.py",
+      "sha256_lf": "436f0c6615558ff7272dc964c265274dd874a2f652e3bff473ea3e185e95b63c"
+    },
+    {
+      "path": "backend/app/api/execution_trace.py",
+      "sha256_lf": "ef0e0f4935e4d6b928710a33ee628f15b7f985ef8e299c72f1fc5db331dd5e94"
+    },
+    {
+      "path": "backend/app/api/guides.py",
+      "sha256_lf": "273a6ab654ad86ec3a027d33820d53d6935eeb0073e61eb574b2a754c1696b49"
+    },
+    {
+      "path": "backend/app/api/learning_history.py",
+      "sha256_lf": "f5d60250dae4b65e4d38f0ac2785b5f9e855e94483e218ccebf5b4f4ae14b853"
+    },
+    {
+      "path": "backend/app/core/__init__.py",
+      "sha256_lf": "e5b3c6479b6a1ee642eb397ce5b9d20dce7a98e605c9095f67bddf984542f5aa"
+    },
+    {
+      "path": "backend/app/core/auth.py",
+      "sha256_lf": "57483585b15ea67788cfd1a377061100350c451b6fd606b8901af4ab13c63876"
+    },
+    {
+      "path": "backend/app/core/database.py",
+      "sha256_lf": "d8f4b370b66a456a57e0a25531eae867e31038b1b38df30fff4a8ec63c1413b6"
+    },
+    {
+      "path": "backend/app/core/legacy_preferences.py",
+      "sha256_lf": "5b96b2966907b39016a2f5e0aa8a4bd6960965d6f3821383f30acba377a6dadf"
+    },
+    {
+      "path": "backend/app/core/submission_migration.py",
+      "sha256_lf": "7491154c28fd5bd64e2a8c667b4f165cee2106be4cb780ea19d5313e21fe5fd5"
+    },
+    {
+      "path": "backend/app/data/badge-v1.json",
+      "sha256_lf": "7c4d636feca1294fa1db26fc3065a5edde65a1157bd14ba8068bb4312656d21a"
+    },
+    {
+      "path": "backend/app/data/coastal-markers-v1.json",
+      "sha256_lf": "a2b511d6dad792cf9db90212cebe152f6516630cd3b86306c899b3125225da93"
+    },
+    {
+      "path": "backend/app/data/count-at-least-v1.json",
+      "sha256_lf": "41dff8fd55d291d229e9cdf02710fecebdade566123eec19852396371a818e70"
+    },
+    {
+      "path": "backend/app/data/greeting-v1.json",
+      "sha256_lf": "39cf9bae423927ada79392d20434f44563dd4e92a0f824f8cc72da4ae0ad9047"
+    },
+    {
+      "path": "backend/app/data/guides/catalog.json",
+      "sha256_lf": "70f529c4e6d5d2259f887a67540b53becf70f0bd700e99a82770f8323eaf4973"
+    },
+    {
+      "path": "backend/app/data/knowledge.json",
+      "sha256_lf": "7b11efaf4ea4b455fbafd52e4dabc9fed092372ec5621313f0157628d6ea2cb7"
+    },
+    {
+      "path": "backend/app/data/level1.json",
+      "sha256_lf": "6341188147cb10dfddb0505c201069de325d1520555aaa81f2fdceaa7efcfe17"
+    },
+    {
+      "path": "backend/app/data/level2.json",
+      "sha256_lf": "5e235f527248b16989077cb77f5b903c5371cc5e602ca2e91433ca4f4a12d188"
+    },
+    {
+      "path": "backend/app/data/levels.json",
+      "sha256_lf": "9720702398af025a2904b3ff85d71a7355c66ed7668591c1fcc69cfe452b5016"
+    },
+    {
+      "path": "backend/app/data/practice-03-4-v1.json",
+      "sha256_lf": "1a0b02b07b8433d4a11fc05a1365ebf65a9fd56d965e5bf449b6366f09d44f51"
+    },
+    {
+      "path": "backend/app/data/practice-03-5-v1.json",
+      "sha256_lf": "458efa7338b35c67df659fd5442b6b403aeca1837359aa8e1d31b4a2138473ca"
+    },
+    {
+      "path": "backend/app/data/practice-03-6-v1.json",
+      "sha256_lf": "4dbdc0549d4546b62140c90a0b048312bab03ccce5d1d206aebb0401443110db"
+    },
+    {
+      "path": "backend/app/data/practice-04-4-v1.json",
+      "sha256_lf": "407b136d6912d186577dad662eaa48df6508bdd548e888738867e524b8d15549"
+    },
+    {
+      "path": "backend/app/data/practice-04-5-v1.json",
+      "sha256_lf": "27cb7a6af68ffceddaedbbe4326748408cf433b6b212ffb2a9c116cd3c71ecea"
+    },
+    {
+      "path": "backend/app/data/practice-04-6-v1.json",
+      "sha256_lf": "8cb2129cca4b901e6a112eb3a734cc4525b9f7257855639a6d8085e830cb167e"
+    },
+    {
+      "path": "backend/app/data/practice-05-4-v1.json",
+      "sha256_lf": "408b3eff7d7662cde90417ab3062cb818dbfeccd061d06814fe8c0e71ddeeafd"
+    },
+    {
+      "path": "backend/app/data/practice-05-5-v1.json",
+      "sha256_lf": "f8e8efbfc8c7b4f37aa1d6c8cc64c47f63f8b41e1d7e19643913c871fe9ac0fa"
+    },
+    {
+      "path": "backend/app/data/practice-05-6-v1.json",
+      "sha256_lf": "c5982d1483fc986bb2aed1eee0ba3b849f886f35eea53a2629f2e34ec71d5222"
+    },
+    {
+      "path": "backend/app/data/practice-06-4-v1.json",
+      "sha256_lf": "b3971f0a33c93542d443e9bbfbb3cd6ec1ca948ea346a1b71cda9518d89a203b"
+    },
+    {
+      "path": "backend/app/data/practice-06-5-v1.json",
+      "sha256_lf": "eb9d51618d53e85d58b403dbb56dcc6003c32e27e0e0165dc760bb09cd065890"
+    },
+    {
+      "path": "backend/app/data/practice-06-6-v1.json",
+      "sha256_lf": "f7b9f06d17b8c867c74d8ed67d018d7d64f259a57d016aaadab6b2442e9def64"
+    },
+    {
+      "path": "backend/app/data/practice-07-4-v1.json",
+      "sha256_lf": "83679cfbb07e8afaa21ad25e11e8af1e75a27458f265fb72e5c74b0ab6de7f62"
+    },
+    {
+      "path": "backend/app/data/practice-07-5-v1.json",
+      "sha256_lf": "ad7e9c2bebb17c208da8fed38a68deece3c8281fbee0789ba6c2a8d7b9babb49"
+    },
+    {
+      "path": "backend/app/data/practice-07-6-v1.json",
+      "sha256_lf": "f6683e8bc17a85fc711abc0a182cbd3850e6d953064b55f4b47630d50046ed63"
+    },
+    {
+      "path": "backend/app/data/practice-08-4-v1.json",
+      "sha256_lf": "ea7339799a8491f20016ef4c22d6c14ae382a6010f091b53373f41ff3a6cc3fa"
+    },
+    {
+      "path": "backend/app/data/practice-08-5-v1.json",
+      "sha256_lf": "6a95587ccccad8bc6caa812cc0179bb8a186c6d6c52f9b163cceca1b90f9321a"
+    },
+    {
+      "path": "backend/app/data/practice-08-6-v1.json",
+      "sha256_lf": "1b27f7041847668a905aed96cf954a8c3fcf8833d6c058aa850f02443b9e3f28"
+    },
+    {
+      "path": "backend/app/data/practice-09-4-v1.json",
+      "sha256_lf": "00d265bfd18fe73726e38ea08b2e7a7cdf19139aaeea73109bc17975356a19e1"
+    },
+    {
+      "path": "backend/app/data/practice-09-5-v1.json",
+      "sha256_lf": "992703940943a05232c146807a493cc449841ddd400853f07b4014cf8b85debf"
+    },
+    {
+      "path": "backend/app/data/practice-09-6-v1.json",
+      "sha256_lf": "ae451af8e19d17408ebd6cef482e51db0f5aabc00d2fab31fdc69d0bee7fcc27"
+    },
+    {
+      "path": "backend/app/data/practice-10-4-v1.json",
+      "sha256_lf": "3d8ded367cf2539c35ee97b7718f8b0d0990e5f36fb106894c18a807c952490c"
+    },
+    {
+      "path": "backend/app/data/practice-10-5-v1.json",
+      "sha256_lf": "773cc6898db0da5327f9cbd16fa15c78c12e808854413cea80e473607de73708"
+    },
+    {
+      "path": "backend/app/data/practice-10-6-v1.json",
+      "sha256_lf": "fc4be9aa22eef59a75fd9c54e335470ab1d9a17083cd047ca72df5e00f9c6350"
+    },
+    {
+      "path": "backend/app/data/practice-11-4-v1.json",
+      "sha256_lf": "173a2f11816699da6f165576177adb4217305f8ceddeff547a50f182861ccbd8"
+    },
+    {
+      "path": "backend/app/data/practice-11-5-v1.json",
+      "sha256_lf": "02882cdbc66d0c6e9af7ce6263c5d3419d84ad3c8d2ad00ee1dda9741bd4de08"
+    },
+    {
+      "path": "backend/app/data/practice-11-6-v1.json",
+      "sha256_lf": "a6cc75e172c73939812ac0994eb099f82ac750add3d130213fc4c8e3996f7d4a"
+    },
+    {
+      "path": "backend/app/data/practice-12-4-v1.json",
+      "sha256_lf": "a6abbd9b15fe5fa4ac20ed9f471096a4841887b49af0f0f807a65622a3f23170"
+    },
+    {
+      "path": "backend/app/data/practice-12-5-v1.json",
+      "sha256_lf": "dab097ba64be2e6433e773a00f250e0ebe68e08b345ead800da3828d6d07ba92"
+    },
+    {
+      "path": "backend/app/data/practice-12-6-v1.json",
+      "sha256_lf": "faf01d025b1fdd3f3536bd3e999d932139d9c6f6e8c25d0950fa3dbb379e39ea"
+    },
+    {
+      "path": "backend/app/data/practice.json",
+      "sha256_lf": "a3ce46bd09f4201155fe2eaa805ebca59758fb8fb9345c215a8dbb4593b3d712"
+    },
+    {
+      "path": "backend/app/data/radio-text-v1.json",
+      "sha256_lf": "f9dd5e438937e7f8f0a2c98bc918a1f0b836a77772912df2952dd762f0162ae8"
+    },
+    {
+      "path": "backend/app/data/safe-sailing-v1.json",
+      "sha256_lf": "4994fa02bf0c1f7f9e36be872a50d071018650760de5b1931871d840b64edcae"
+    },
+    {
+      "path": "backend/app/data/shell-groups-v1.json",
+      "sha256_lf": "b112f6799fc371b3298c90b197371229afc5243fdc8519cf0ea70b992e2ab418"
+    },
+    {
+      "path": "backend/app/data/shell-savings-v1.json",
+      "sha256_lf": "43db00657e726e2486db3e09da0a683e5e03e88cf68de3f48ae2d10a30a373b1"
+    },
+    {
+      "path": "backend/app/data/shell-shop-v1.json",
+      "sha256_lf": "18838862144ab3d11f78b75ad40e377c052705b85b23e1a1abd71570a3a7c31b"
+    },
+    {
+      "path": "backend/app/data/shell-total-v1.json",
+      "sha256_lf": "c7d3bccb353c829122398fa67b766b2bad9e7e3c7a8aef336de61af999979019"
+    },
+    {
+      "path": "backend/app/data/temperature-max-v1.json",
+      "sha256_lf": "9d5eaf459fb2ac5381d94517a9e50b411a390e9df5d4cd390d88609d6e470b27"
+    },
+    {
+      "path": "backend/app/models/__init__.py",
+      "sha256_lf": "32776921e414591a71557e6d79a8b8d480bd6acdc8584fde81a9a33223616b85"
+    },
+    {
+      "path": "backend/app/models/class_selection.py",
+      "sha256_lf": "f9ffc4531745c446cd317100e62627ec2a94d35714cc07d71a5c0a8ca7421df5"
+    },
+    {
+      "path": "backend/app/models/generated_problem.py",
+      "sha256_lf": "07899ea605aab35520e413b8b3f8a5b5a1fa59f81dbb32a92c797cbc6d99c570"
+    },
+    {
+      "path": "backend/app/models/guide_progress.py",
+      "sha256_lf": "feda751804fc764f043a48f088864a25b6a8de00e5aa458f8b1c2dd1eaff29d3"
+    },
+    {
+      "path": "backend/app/models/learning_review.py",
+      "sha256_lf": "339391302d311b1ceb4c0ea3e3ab82d339d957d3c2d7b3a5a3e652fd24855177"
+    },
+    {
+      "path": "backend/app/models/learning_submission.py",
+      "sha256_lf": "e38501ba841b86f0a727e693b0df20946f75405accbf3bc986478cbe222e0cc7"
+    },
+    {
+      "path": "backend/app/models/user.py",
+      "sha256_lf": "cf1f2ad43d3001dcf7f50bc429809468f3012aa6fc4d1e115e98bb4cea188c93"
+    },
+    {
+      "path": "backend/app/services/__init__.py",
+      "sha256_lf": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "backend/app/services/ai_acceptance.py",
+      "sha256_lf": "d3edbb15f4dc3caf994660f8c3f52ce87c3fe25f87d6c7e3558644b816cdc4af"
+    },
+    {
+      "path": "backend/app/services/ai_operations.py",
+      "sha256_lf": "6f216fe88561288b15066a7079c791885500868d5260415a0b6403966e43fb5b"
+    },
+    {
+      "path": "backend/app/services/endless.py",
+      "sha256_lf": "3a07f097dde0092752884ca29dedfd7c26268459d9c9e6f2be4881299c348aed"
+    },
+    {
+      "path": "backend/app/services/endless_catalog.py",
+      "sha256_lf": "78ee260120202c6a15fc3d2f594824616bcd6ca23454ceafeac87ea6092ea530"
+    },
+    {
+      "path": "backend/app/services/error_analysis.py",
+      "sha256_lf": "9df07a615448320f67bc18e25ba4adfaeb8368d12df7c5932f405b18fa18408b"
+    },
+    {
+      "path": "backend/app/services/guide_questions.py",
+      "sha256_lf": "53f1ad443383e7982a70653527c2562bee219456ff1d015fc6072c01fda0b86f"
+    },
+    {
+      "path": "backend/app/services/hint_quality.py",
+      "sha256_lf": "c3b06a365e27257ddc362b2baef2ef71f71c45297bc9388aa71bc183ab1be68e"
+    },
+    {
+      "path": "backend/app/services/learning_contract.py",
+      "sha256_lf": "d85e67108603be9d2941f8940c00151cf7c30c19f8b1428dd76d2b51aa1f4af1"
+    },
+    {
+      "path": "backend/app/services/lesson_assessment.py",
+      "sha256_lf": "11ec248f2ed22f3a49176c5c3ce3befdf26b616065667fdd75876b56784961ea"
+    },
+    {
+      "path": "backend/app/services/misconceptions.py",
+      "sha256_lf": "4ef7bb16fb4b5294e5741b7e04326f2f374aa9c93837d1e28f89ef1e5c80fe7d"
+    },
+    {
+      "path": "backend/app/services/personalized_history.py",
+      "sha256_lf": "9df86169f42f66bc4622968f86e14d90ce58a3756699dbe720c8e2735284984c"
+    },
+    {
+      "path": "backend/app/services/practice_recommendation.py",
+      "sha256_lf": "f6cdd8220df76a3bff670c765bfe7e347575c7ec4c54e07b1bc646c194b0b06f"
+    },
+    {
+      "path": "backend/app/services/problem_catalog.py",
+      "sha256_lf": "0acb7c55d01caf035aa2c37937a1a79f115c579023a7fcc4c9b55e8f6c3dea62"
+    },
+    {
+      "path": "backend/app/services/sandbox/__init__.py",
+      "sha256_lf": "964e646c840195e3922332f102544b704db3be2c4741bece215fa2200721fe66"
+    },
+    {
+      "path": "backend/app/services/sandbox/error_helper.py",
+      "sha256_lf": "358a6b514b68a9da13f6d229b934d076b533938ff1ba275d0cb882ae013298ef"
+    },
+    {
+      "path": "backend/app/services/sandbox/limits.py",
+      "sha256_lf": "f5b5fb77d483c319a9c1f95a94dc74628dceb89378f5fb2a56ead7463775a92a"
+    },
+    {
+      "path": "backend/app/services/sandbox/runner.py",
+      "sha256_lf": "ff4e1b2aabc1cd19416c9c01e84309d8624322d0cc9566390921ac9bf10b3482"
+    },
+    {
+      "path": "backend/app/services/sandbox/sandbox.py",
+      "sha256_lf": "892488c173ed63042c9a5eb25fd47288b108e730931359e6df9bd60878ce6e43"
+    },
+    {
+      "path": "backend/app/services/sandbox/security_check.py",
+      "sha256_lf": "61172d733d6a4ecb4c4f4c39a8d5bf97aedf4a6840a5d30334650b8fc33df651"
+    },
+    {
+      "path": "backend/app/services/sandbox/trace_actions.py",
+      "sha256_lf": "617f7125ec06f2b3bbb22a8c7ea7232d6ce5eeae6848195d79414ab6574c9a3c"
+    },
+    {
+      "path": "backend/app/services/sandbox/trace_runner.py",
+      "sha256_lf": "50ecd7feee7812471d3e58fe180199146ad65dab63dcb09c776ada64a7f9693a"
+    },
+    {
+      "path": "backend/app/services/sandbox/trace_worker.py",
+      "sha256_lf": "fa957d48047c98fe7a4827c676be07be40afab58af70689396cfee29074db980"
+    },
+    {
+      "path": "backend/app/services/sandbox/worker.py",
+      "sha256_lf": "274186e5e56b67a9268b3959da818be3f13e14b84cd6802f3d9dea1644f73604"
+    },
+    {
+      "path": "backend/app/services/submission.py",
+      "sha256_lf": "95358ab7cb0cafc38f9af783a9b9c456d595f9681001ef3a79f4f47e55953e81"
+    },
+    {
+      "path": "backend/app/services/trace_explanation.py",
+      "sha256_lf": "9bb23339f890073e778df1019a0f3e9ecff0843161935d3d47be9b8cb589e703"
+    },
+    {
+      "path": "backend/app/services/trace_sessions.py",
+      "sha256_lf": "f30f50a4d0599866037d15eea0012c3ad20fc0836267836f228d30b2906e6376"
+    }
+  ],
+  "application_files_changed_this_fix": [
+    "backend/app/services/error_analysis.py",
+    "backend/app/services/hint_quality.py"
+  ],
+  "previous_human_results_preserved": true,
+  "new_freeze_tag_created": false
+}

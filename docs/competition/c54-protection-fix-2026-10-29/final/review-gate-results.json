@@ -1,0 +1,233 @@
+{
+  "status": "complete",
+  "items": [
+    {
+      "id": "G01-original-C54-R3",
+      "expected_issue": "answer_leak",
+      "started_at": "2026-10-29T05:45:16.754032+00:00",
+      "candidate": {
+        "misconception_tag": "accumulation_error",
+        "suspected_cause": "循环体内缺少对 saved 的推进：题目要求每天存入 3 枚，应该在循环中让 saved 增加 3（或等价地让循环不断逼近 target）。当前只更新天数 days，导致 saved 一直为 0，while 条件永远为真，程序超时。",
+        "evidence": [
+          {
+            "case_id": "run",
+            "field": "error_message",
+            "quote": "代码执行超过 3 秒，执行进程已终止",
+            "explanation": "由于 saved 从未增加，saved < target 恒成立，循环无限执行，最终被判定超时终止。"
+          }
+        ],
+        "knowledge_points": [
+          "while 循环与终止",
+          "累加器与变量更新"
+        ]
+      },
+      "actual_issues": [
+        "answer_leak"
+      ],
+      "passed": true,
+      "seconds": 6.14
+    },
+    {
+      "id": "G02-paraphrased-update",
+      "expected_issue": "answer_leak",
+      "started_at": "2026-10-29T05:45:22.897945+00:00",
+      "candidate": {
+        "misconception_tag": "accumulation_error",
+        "suspected_cause": "循环条件依赖的量没有变化。请在每轮迭代中把已存贝壳数再加三枚，这样才能达到目标。",
+        "evidence": [
+          {
+            "case_id": "run",
+            "field": "error_message",
+            "quote": "代码执行超过 3 秒，执行进程已终止",
+            "explanation": "由于 saved 从未增加，saved < target 恒成立，循环无限执行，最终被判定超时终止。"
+          }
+        ],
+        "knowledge_points": [
+          "while 循环与终止",
+          "累加器与变量更新"
+        ]
+      },
+      "actual_issues": [
+        "answer_leak"
+      ],
+      "passed": true,
+      "seconds": 4.043
+    },
+    {
+      "id": "G03-rewritten-update",
+      "expected_issue": "answer_leak",
+      "started_at": "2026-10-29T05:45:26.943917+00:00",
+      "candidate": {
+        "misconception_tag": "accumulation_error",
+        "suspected_cause": "要结束本题循环，需要在循环体中补充把 saved 每轮增加 3 的操作；当前代码没有这一步。",
+        "evidence": [
+          {
+            "case_id": "run",
+            "field": "error_message",
+            "quote": "代码执行超过 3 秒，执行进程已终止",
+            "explanation": "由于 saved 从未增加，saved < target 恒成立，循环无限执行，最终被判定超时终止。"
+          }
+        ],
+        "knowledge_points": [
+          "while 循环与终止",
+          "累加器与变量更新"
+        ]
+      },
+      "actual_issues": [
+        "answer_leak"
+      ],
+      "passed": true,
+      "seconds": 4.04
+    },
+    {
+      "id": "G-C54-R1",
+      "expected_issue": null,
+      "started_at": "2026-10-29T05:45:30.987413+00:00",
+      "candidate": {
+        "misconception_tag": "accumulation_error",
+        "suspected_cause": "循环体内只更新了天数 days，没有更新已存贝壳数 saved；saved 永远为 0，导致 while 条件始终成立，程序无法终止。",
+        "evidence": [
+          {
+            "case_id": "run",
+            "field": "error_message",
+            "quote": "代码执行超过 3 秒，执行进程已终止",
+            "explanation": "输入 7 时 saved 未增加，while saved < target 一直为真，循环持续执行直至超时。"
+          }
+        ],
+        "knowledge_points": [
+          "while 循环与终止",
+          "累加器与变量更新"
+        ]
+      },
+      "actual_issues": [],
+      "passed": true,
+      "seconds": 1.926
+    },
+    {
+      "id": "G-C54-R2",
+      "expected_issue": null,
+      "started_at": "2026-10-29T05:45:32.916980+00:00",
+      "candidate": {
+        "misconception_tag": "accumulation_error",
+        "suspected_cause": "循环推进变量 saved 没有在循环体内按每天 3 枚更新，导致循环条件一直为真，days 无限递增而无法结束。",
+        "evidence": [
+          {
+            "case_id": "run",
+            "field": "error_message",
+            "quote": "代码执行超过 3 秒，执行进程已终止",
+            "explanation": "在输入 7 时，saved 始终为 0，while saved < target 永远成立，循环无法终止，所以执行超时。"
+          }
+        ],
+        "knowledge_points": [
+          "while 循环与终止",
+          "累加器与变量更新"
+        ]
+      },
+      "actual_issues": [],
+      "passed": true,
+      "seconds": 1.983
+    },
+    {
+      "id": "G-C07-R1",
+      "expected_issue": null,
+      "started_at": "2026-10-29T05:45:34.903053+00:00",
+      "candidate": {
+        "misconception_tag": "other",
+        "suspected_cause": "第 2 行末尾把整数 1 直接和字符串拼接。Python 只允许字符串与字符串用 + 相连，int 与 str 相加会抛出 TypeError。程序本意是拼接感叹号字符，却误写成了数字 1，因此既发生了类型错误，也缺少了 expected 中的感叹号。",
+        "evidence": [
+          {
+            "case_id": "sample-1",
+            "field": "error_message",
+            "quote": "不能将 int 和字符串直接相加",
+            "explanation": "输入 Ottly 时，\"Hello, \" + guest 的结果是字符串 \"Hello, Ottly\"；继续加整数 1 时触发该类型错误，程序中止，actual_output 为空，没有输出 \"Hello, Ottly!\"。"
+          }
+        ],
+        "knowledge_points": [
+          "字符串与输出",
+          "变量、输入与字符串拼接"
+        ]
+      },
+      "actual_issues": [],
+      "passed": true,
+      "seconds": 3.003
+    },
+    {
+      "id": "G-C14-R1",
+      "expected_issue": null,
+      "started_at": "2026-10-29T05:45:37.909540+00:00",
+      "candidate": {
+        "misconception_tag": "other",
+        "suspected_cause": "总价应使用乘法 price × quantity，但代码中使用了加法 price + quantity，导致总价计算错误，并进一步使差额计算也错误。",
+        "evidence": [
+          {
+            "case_id": "sample-1",
+            "field": "actual_output",
+            "quote": "7\n13",
+            "explanation": "输入 4、3、20 时，price + quantity 得到 7，budget - cost 得到 13，与应得的总价 12 和差额 8 不符。"
+          }
+        ],
+        "knowledge_points": [
+          "整数输入与算术运算"
+        ]
+      },
+      "actual_issues": [],
+      "passed": true,
+      "seconds": 2.312
+    },
+    {
+      "id": "G-C58-R1",
+      "expected_issue": null,
+      "started_at": "2026-10-29T05:45:40.224397+00:00",
+      "candidate": {
+        "misconception_tag": "accumulation_error",
+        "suspected_cause": "计数变量 count 的初始值设成了 1，导致最终计数比实际出现次数多 1；本题中 a 实际出现 3 次，却输出 4。",
+        "evidence": [
+          {
+            "case_id": "sample-1",
+            "field": "actual_output",
+            "quote": "6\n4",
+            "explanation": "实际输出第二行为 4，而输入文本 banana 中目标字符 a 只出现 3 次，多出的 1 来自计数变量的初始值。"
+          }
+        ],
+        "knowledge_points": [
+          "字符串遍历与条件计数",
+          "累加器与变量更新"
+        ]
+      },
+      "actual_issues": [],
+      "passed": true,
+      "seconds": 1.613
+    },
+    {
+      "id": "G-D06-expression",
+      "expected_issue": null,
+      "started_at": "2026-10-29T05:45:41.843256+00:00",
+      "candidate": {
+        "misconception_tag": "range_boundary",
+        "suspected_cause": "range 的上界多加了 1：range(1, n + 2) 会输出到 n+1，应让终点为 n+1（即 range(1, n + 1)）才能只包含 1 到 n；n=0 时当前写法也会错误输出 1。",
+        "evidence": [
+          {
+            "case_id": "sample-1",
+            "field": "actual_output",
+            "quote": "1\n2\n3\n4",
+            "explanation": "n=3 时 range(1, n+2)=range(1,5)，除正确的 1、2、3 外多产生 4，形成第 4 行错误输出。"
+          },
+          {
+            "case_id": "sample-2",
+            "field": "actual_output",
+            "quote": "1",
+            "explanation": "n=0 时 range(1, n+2)=range(1,2) 仍产生 1，因此本应无输出却输出了第 1 行 1。"
+          }
+        ],
+        "knowledge_points": [
+          "for 循环与 range"
+        ]
+      },
+      "actual_issues": [],
+      "passed": true,
+      "seconds": 4.155
+    }
+  ],
+  "passed": 9,
+  "total": 9
+}

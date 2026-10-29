@@ -1,0 +1,729 @@
+{
+  "status": "human_adjudication_finalized_with_recorded_failures",
+  "created_at": "2026-10-29T11:27:03.432198+08:00",
+  "application_baseline": {
+    "tag": "acceptance-baseline-2026-10-29",
+    "commit": "d668fe4c68e65ec2ab1ca0459c21550e03e0ce15"
+  },
+  "dataset_sha256": "6144c9223e82c214dea8ef5f960d2080418389817fac9b7c1d08c768359395d0",
+  "adjudication_source": "adjudication.snapshot.txt",
+  "adjudication_sha256": "c8467caa85bae7eaf06df5a1d3e079065d430afc858b283797e337fbdfd4776e",
+  "human_reviewers": 2,
+  "adjudication_signatures": [
+    "C-2026-10-29"
+  ],
+  "interpretation_note": "Signature C is the saved adjudicator label, not a claim of a third independent rating.",
+  "conclusions": {
+    "通过": 91,
+    "正确跳过": 16,
+    "不通过": 9,
+    "调用失败未评分": 4
+  },
+  "rounds": [
+    {
+      "round": 1,
+      "trial_count": 72,
+      "ai_expected": 56,
+      "effective_feedback": 53,
+      "qualified": 48,
+      "not_qualified": 5,
+      "no_feedback": 3,
+      "controls": 16,
+      "effective_return_rate": 0.9464285714285714,
+      "semantic_pass_rate": 0.9056603773584906,
+      "end_to_end_semantic_rate": 0.8571428571428571
+    },
+    {
+      "round": 2,
+      "trial_count": 24,
+      "ai_expected": 24,
+      "effective_feedback": 23,
+      "qualified": 21,
+      "not_qualified": 2,
+      "no_feedback": 1,
+      "controls": 0,
+      "effective_return_rate": 0.9583333333333334,
+      "semantic_pass_rate": 0.9130434782608695,
+      "end_to_end_semantic_rate": 0.875
+    },
+    {
+      "round": 3,
+      "trial_count": 24,
+      "ai_expected": 24,
+      "effective_feedback": 24,
+      "qualified": 22,
+      "not_qualified": 2,
+      "no_feedback": 0,
+      "controls": 0,
+      "effective_return_rate": 1.0,
+      "semantic_pass_rate": 0.9166666666666666,
+      "end_to_end_semantic_rate": 0.9166666666666666
+    }
+  ],
+  "aggregate_including_repeats": {
+    "ai_expected": 104,
+    "effective_feedback": 100,
+    "qualified": 91,
+    "effective_return_rate": 0.9615384615384616,
+    "semantic_pass_rate": 0.91,
+    "end_to_end_semantic_rate": 0.875
+  },
+  "primary_first_round_semantic_target": {
+    "target": 0.9,
+    "observed": 0.9056603773584906,
+    "met": true,
+    "scope": "Team predeclared semantic target only; not all acceptance requirements passed."
+  },
+  "overall_all_requirements_passed": false,
+  "open_quality_failures": 9,
+  "displayed_replacement_code_trials": 4,
+  "provider_calls": 149,
+  "provider_usage_totals": {
+    "prompt_tokens": 163228,
+    "completion_tokens": 70824,
+    "total_tokens": 234052,
+    "prompt_cache_hit_tokens": 69626,
+    "prompt_cache_miss_tokens": 93602
+  },
+  "cost": null,
+  "cost_note": "Token usage captured; actual billed cost not returned by provider response.",
+  "ai_trial_end_to_end_seconds": {
+    "n": 104,
+    "median": 5.935,
+    "p95_nearest_rank": 9.074,
+    "max": 27.091
+  },
+  "stability": {
+    "groups": 24,
+    "three_effective_feedback": 22,
+    "three_qualified": 20,
+    "items": [
+      {
+        "case_id": "C01",
+        "effective_feedback": 2,
+        "qualified": 2,
+        "outcomes": [
+          "通过",
+          "调用失败未评分",
+          "通过"
+        ]
+      },
+      {
+        "case_id": "C04",
+        "effective_feedback": 3,
+        "qualified": 3,
+        "outcomes": [
+          "通过",
+          "通过",
+          "通过"
+        ]
+      },
+      {
+        "case_id": "C07",
+        "effective_feedback": 3,
+        "qualified": 3,
+        "outcomes": [
+          "通过",
+          "通过",
+          "通过"
+        ]
+      },
+      {
+        "case_id": "C12",
+        "effective_feedback": 3,
+        "qualified": 3,
+        "outcomes": [
+          "通过",
+          "通过",
+          "通过"
+        ]
+      },
+      {
+        "case_id": "C14",
+        "effective_feedback": 3,
+        "qualified": 3,
+        "outcomes": [
+          "通过",
+          "通过",
+          "通过"
+        ]
+      },
+      {
+        "case_id": "C15",
+        "effective_feedback": 3,
+        "qualified": 3,
+        "outcomes": [
+          "通过",
+          "通过",
+          "通过"
+        ]
+      },
+      {
+        "case_id": "C20",
+        "effective_feedback": 3,
+        "qualified": 3,
+        "outcomes": [
+          "通过",
+          "通过",
+          "通过"
+        ]
+      },
+      {
+        "case_id": "C24",
+        "effective_feedback": 3,
+        "qualified": 0,
+        "outcomes": [
+          "不通过",
+          "不通过",
+          "不通过"
+        ]
+      },
+      {
+        "case_id": "C25",
+        "effective_feedback": 3,
+        "qualified": 3,
+        "outcomes": [
+          "通过",
+          "通过",
+          "通过"
+        ]
+      },
+      {
+        "case_id": "C27",
+        "effective_feedback": 3,
+        "qualified": 3,
+        "outcomes": [
+          "通过",
+          "通过",
+          "通过"
+        ]
+      },
+      {
+        "case_id": "C31",
+        "effective_feedback": 3,
+        "qualified": 3,
+        "outcomes": [
+          "通过",
+          "通过",
+          "通过"
+        ]
+      },
+      {
+        "case_id": "C33",
+        "effective_feedback": 3,
+        "qualified": 3,
+        "outcomes": [
+          "通过",
+          "通过",
+          "通过"
+        ]
+      },
+      {
+        "case_id": "C38",
+        "effective_feedback": 3,
+        "qualified": 3,
+        "outcomes": [
+          "通过",
+          "通过",
+          "通过"
+        ]
+      },
+      {
+        "case_id": "C42",
+        "effective_feedback": 3,
+        "qualified": 3,
+        "outcomes": [
+          "通过",
+          "通过",
+          "通过"
+        ]
+      },
+      {
+        "case_id": "C43",
+        "effective_feedback": 2,
+        "qualified": 2,
+        "outcomes": [
+          "调用失败未评分",
+          "通过",
+          "通过"
+        ]
+      },
+      {
+        "case_id": "C45",
+        "effective_feedback": 3,
+        "qualified": 3,
+        "outcomes": [
+          "通过",
+          "通过",
+          "通过"
+        ]
+      },
+      {
+        "case_id": "C49",
+        "effective_feedback": 3,
+        "qualified": 3,
+        "outcomes": [
+          "通过",
+          "通过",
+          "通过"
+        ]
+      },
+      {
+        "case_id": "C54",
+        "effective_feedback": 3,
+        "qualified": 0,
+        "outcomes": [
+          "不通过",
+          "不通过",
+          "不通过"
+        ]
+      },
+      {
+        "case_id": "C58",
+        "effective_feedback": 3,
+        "qualified": 3,
+        "outcomes": [
+          "通过",
+          "通过",
+          "通过"
+        ]
+      },
+      {
+        "case_id": "C60",
+        "effective_feedback": 3,
+        "qualified": 3,
+        "outcomes": [
+          "通过",
+          "通过",
+          "通过"
+        ]
+      },
+      {
+        "case_id": "C61",
+        "effective_feedback": 3,
+        "qualified": 3,
+        "outcomes": [
+          "通过",
+          "通过",
+          "通过"
+        ]
+      },
+      {
+        "case_id": "C66",
+        "effective_feedback": 3,
+        "qualified": 3,
+        "outcomes": [
+          "通过",
+          "通过",
+          "通过"
+        ]
+      },
+      {
+        "case_id": "C69",
+        "effective_feedback": 3,
+        "qualified": 3,
+        "outcomes": [
+          "通过",
+          "通过",
+          "通过"
+        ]
+      },
+      {
+        "case_id": "C72",
+        "effective_feedback": 3,
+        "qualified": 3,
+        "outcomes": [
+          "通过",
+          "通过",
+          "通过"
+        ]
+      }
+    ],
+    "note": "Counts of three available/qualified outputs, not a separate human rating of phrase-level cause consistency."
+  },
+  "tag_allowed_set_matches": {
+    "effective_diagnoses": 44,
+    "matched": 42,
+    "actual_distribution": {
+      "syntax_error": 3,
+      "variable_error": 3,
+      "other": 29,
+      "condition_error": 1,
+      "accumulation_error": 7,
+      "range_boundary": 1
+    },
+    "items": [
+      {
+        "trial_id": "C01-R1",
+        "actual": "syntax_error",
+        "allowed": [
+          "syntax_error",
+          "other"
+        ],
+        "matches": true
+      },
+      {
+        "trial_id": "C02-R1",
+        "actual": "variable_error",
+        "allowed": [
+          "variable_error",
+          "other"
+        ],
+        "matches": true
+      },
+      {
+        "trial_id": "C03-R1",
+        "actual": "other",
+        "allowed": [
+          "other"
+        ],
+        "matches": true
+      },
+      {
+        "trial_id": "C04-R1",
+        "actual": "other",
+        "allowed": [
+          "other"
+        ],
+        "matches": true
+      },
+      {
+        "trial_id": "C07-R1",
+        "actual": "other",
+        "allowed": [
+          "other"
+        ],
+        "matches": true
+      },
+      {
+        "trial_id": "C09-R1",
+        "actual": "other",
+        "allowed": [
+          "other"
+        ],
+        "matches": true
+      },
+      {
+        "trial_id": "C10-R1",
+        "actual": "variable_error",
+        "allowed": [
+          "other"
+        ],
+        "matches": false
+      },
+      {
+        "trial_id": "C12-R1",
+        "actual": "other",
+        "allowed": [
+          "other"
+        ],
+        "matches": true
+      },
+      {
+        "trial_id": "C13-R1",
+        "actual": "other",
+        "allowed": [
+          "other"
+        ],
+        "matches": true
+      },
+      {
+        "trial_id": "C14-R1",
+        "actual": "other",
+        "allowed": [
+          "other"
+        ],
+        "matches": true
+      },
+      {
+        "trial_id": "C16-R1",
+        "actual": "other",
+        "allowed": [
+          "other"
+        ],
+        "matches": true
+      },
+      {
+        "trial_id": "C20-R1",
+        "actual": "other",
+        "allowed": [
+          "other"
+        ],
+        "matches": true
+      },
+      {
+        "trial_id": "C24-R1",
+        "actual": "other",
+        "allowed": [
+          "other"
+        ],
+        "matches": true
+      },
+      {
+        "trial_id": "C28-R1",
+        "actual": "syntax_error",
+        "allowed": [
+          "syntax_error",
+          "other"
+        ],
+        "matches": true
+      },
+      {
+        "trial_id": "C34-R1",
+        "actual": "condition_error",
+        "allowed": [
+          "condition_error",
+          "other"
+        ],
+        "matches": true
+      },
+      {
+        "trial_id": "C36-R1",
+        "actual": "other",
+        "allowed": [
+          "other"
+        ],
+        "matches": true
+      },
+      {
+        "trial_id": "C42-R1",
+        "actual": "other",
+        "allowed": [
+          "other"
+        ],
+        "matches": true
+      },
+      {
+        "trial_id": "C44-R1",
+        "actual": "accumulation_error",
+        "allowed": [
+          "accumulation_error",
+          "other"
+        ],
+        "matches": true
+      },
+      {
+        "trial_id": "C54-R1",
+        "actual": "accumulation_error",
+        "allowed": [
+          "accumulation_error",
+          "other"
+        ],
+        "matches": true
+      },
+      {
+        "trial_id": "C58-R1",
+        "actual": "accumulation_error",
+        "allowed": [
+          "accumulation_error",
+          "other"
+        ],
+        "matches": true
+      },
+      {
+        "trial_id": "C64-R1",
+        "actual": "range_boundary",
+        "allowed": [
+          "other"
+        ],
+        "matches": false
+      },
+      {
+        "trial_id": "C66-R1",
+        "actual": "other",
+        "allowed": [
+          "other"
+        ],
+        "matches": true
+      },
+      {
+        "trial_id": "C70-R1",
+        "actual": "variable_error",
+        "allowed": [
+          "variable_error",
+          "other"
+        ],
+        "matches": true
+      },
+      {
+        "trial_id": "C04-R2",
+        "actual": "other",
+        "allowed": [
+          "other"
+        ],
+        "matches": true
+      },
+      {
+        "trial_id": "C07-R2",
+        "actual": "other",
+        "allowed": [
+          "other"
+        ],
+        "matches": true
+      },
+      {
+        "trial_id": "C12-R2",
+        "actual": "other",
+        "allowed": [
+          "other"
+        ],
+        "matches": true
+      },
+      {
+        "trial_id": "C14-R2",
+        "actual": "other",
+        "allowed": [
+          "other"
+        ],
+        "matches": true
+      },
+      {
+        "trial_id": "C20-R2",
+        "actual": "other",
+        "allowed": [
+          "other"
+        ],
+        "matches": true
+      },
+      {
+        "trial_id": "C24-R2",
+        "actual": "other",
+        "allowed": [
+          "other"
+        ],
+        "matches": true
+      },
+      {
+        "trial_id": "C42-R2",
+        "actual": "other",
+        "allowed": [
+          "other"
+        ],
+        "matches": true
+      },
+      {
+        "trial_id": "C54-R2",
+        "actual": "accumulation_error",
+        "allowed": [
+          "accumulation_error",
+          "other"
+        ],
+        "matches": true
+      },
+      {
+        "trial_id": "C58-R2",
+        "actual": "accumulation_error",
+        "allowed": [
+          "accumulation_error",
+          "other"
+        ],
+        "matches": true
+      },
+      {
+        "trial_id": "C66-R2",
+        "actual": "other",
+        "allowed": [
+          "other"
+        ],
+        "matches": true
+      },
+      {
+        "trial_id": "C01-R3",
+        "actual": "syntax_error",
+        "allowed": [
+          "syntax_error",
+          "other"
+        ],
+        "matches": true
+      },
+      {
+        "trial_id": "C04-R3",
+        "actual": "other",
+        "allowed": [
+          "other"
+        ],
+        "matches": true
+      },
+      {
+        "trial_id": "C07-R3",
+        "actual": "other",
+        "allowed": [
+          "other"
+        ],
+        "matches": true
+      },
+      {
+        "trial_id": "C12-R3",
+        "actual": "other",
+        "allowed": [
+          "other"
+        ],
+        "matches": true
+      },
+      {
+        "trial_id": "C14-R3",
+        "actual": "other",
+        "allowed": [
+          "other"
+        ],
+        "matches": true
+      },
+      {
+        "trial_id": "C20-R3",
+        "actual": "other",
+        "allowed": [
+          "other"
+        ],
+        "matches": true
+      },
+      {
+        "trial_id": "C24-R3",
+        "actual": "other",
+        "allowed": [
+          "other"
+        ],
+        "matches": true
+      },
+      {
+        "trial_id": "C42-R3",
+        "actual": "other",
+        "allowed": [
+          "other"
+        ],
+        "matches": true
+      },
+      {
+        "trial_id": "C54-R3",
+        "actual": "accumulation_error",
+        "allowed": [
+          "accumulation_error",
+          "other"
+        ],
+        "matches": true
+      },
+      {
+        "trial_id": "C58-R3",
+        "actual": "accumulation_error",
+        "allowed": [
+          "accumulation_error",
+          "other"
+        ],
+        "matches": true
+      },
+      {
+        "trial_id": "C66-R3",
+        "actual": "other",
+        "allowed": [
+          "other"
+        ],
+        "matches": true
+      }
+    ]
+  },
+  "retained_adjudication_difference": {
+    "trial_id": "C08-R1",
+    "group": "G6",
+    "human_conclusion": "通过，错因不易懂但分析正确",
+    "disposition": "Honor human judgment; preserve original wording and the Codex factual-wording concern. No original output rewritten."
+  }
+}

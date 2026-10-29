@@ -1,0 +1,4 @@
+{
+  "source": "c54-protection-fix-2026-10-29/provider-calls.jsonl",
+  "raw": "{\"code_observation\": \"对输入 7，saved 初始为 0，days 初始为 0；while saved < target 的判断每次都检查 saved 是否小于 7。循环体内只执行 days += 1，saved 始终为 0，因此判断条件持续为真，循环不会结束，程序最终超时。\", \"suspected_cause\": \"循环体没有改变 saved 的取值，导致 while saved < target 的条件对本题输入始终成立，循环无法终止，触发超时；days 虽然在递增，但无法使循环退出。\", \"evidence\": [{\"case_id\": \"run\", \"field\": \"error_message\", \"quote\": \"代码执行超过 3 秒，执行进程已终止\", \"explanation\": \"输入 7 时 saved 一直保持 0，小于 target 的条件永远成立，循环无限执行 days += 1，3 秒后被终止。\"}], \"knowledge_points\": [\"while 循环与终止\", \"累加器与变量更新\"], \"misconception_tag\": \"accumulation_error\"}"
+}

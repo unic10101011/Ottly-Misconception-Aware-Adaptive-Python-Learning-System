@@ -1,0 +1,25 @@
+ Container ottly-core72-fix-retest Creating 
+ Container ottly-core72-fix-retest Created 
+{"trial_id": "C10-R1", "status": "ready", "checks": {"expected_status": true, "route": true, "tag_allowed": true}}
+{"trial_id": "C24-R1", "status": "ready", "checks": {"expected_status": true, "route": true, "tag_allowed": true}}
+{"trial_id": "C24-R2", "status": "ready", "checks": {"expected_status": true, "route": true, "tag_allowed": true}}
+{"trial_id": "C24-R3", "status": "ready", "checks": {"expected_status": true, "route": true, "tag_allowed": true}}
+{"trial_id": "C28-R1", "status": "ready", "checks": {"expected_status": true, "route": true, "tag_allowed": true}}
+{"trial_id": "C54-R1", "status": "ready", "checks": {"expected_status": true, "route": true, "tag_allowed": true}}
+{"trial_id": "C54-R2", "status": "ready", "checks": {"expected_status": true, "route": true, "tag_allowed": true}}
+{"trial_id": "C54-R3", "status": "ready", "checks": {"expected_status": true, "route": true, "tag_allowed": true}}
+{"trial_id": "C64-R1", "status": "ready", "checks": {"expected_status": true, "route": true, "tag_allowed": true}}
+AI guidance rejected problem_id=coastal-markers-v1 reason=Guidance must not contain replacement statements
+{"trial_id": "C37-R1", "status": "invalid_response", "checks": {"expected_status": false}}
+{"trial_id": "C40-R1", "status": "ready", "checks": {"expected_status": true, "route": true, "tag_allowed": true}}
+{"trial_id": "C43-R1", "status": "ready", "checks": {"expected_status": true, "route": true}}
+{"trial_id": "C01-R2", "status": "ready", "checks": {"expected_status": true, "route": true, "tag_allowed": true}}
+{"trial_id": "C08-R1", "status": "ready", "checks": {"expected_status": true, "route": true}}
+{"trial_id": "C07-R1", "status": "ready", "checks": {"expected_status": true, "route": true, "tag_allowed": true}}
+{"trial_id": "C14-R1", "status": "ready", "checks": {"expected_status": true, "route": true, "tag_allowed": true}}
+{"trial_id": "C20-R1", "status": "ready", "checks": {"expected_status": true, "route": true, "tag_allowed": true}}
+{"trial_id": "C58-R1", "status": "ready", "checks": {"expected_status": true, "route": true, "tag_allowed": true}}
+AI analysis rejected problem_id=count-at-least-v1 reason=NameError cause does not describe an undefined name
+{"trial_id": "C70-R1", "status": "invalid_response", "checks": {"expected_status": false}}
+{"trial_id": "C05-R1", "status": "skipped", "checks": {"expected_status": true}}
+{"trials": 20, "statuses": {"ready": 17, "invalid_response": 2, "skipped": 1}, "technical_passed": 18, "provider_attempts": 34, "human_semantic_pass_rate": null}

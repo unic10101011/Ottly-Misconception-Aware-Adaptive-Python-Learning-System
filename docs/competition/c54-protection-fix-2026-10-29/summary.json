@@ -1,0 +1,60 @@
+{
+  "status": "c54_repair_automated_checks_complete_human_review_pending",
+  "completed_at": "2026-10-29T05:55:07.477849+00:00",
+  "application_source_digest": "5ae9cca2467984045247b2c06e1c8f863e182772e63b493f05cfc587fbeaa394",
+  "application_files_changed_this_fix": [
+    "backend/app/services/error_analysis.py",
+    "backend/app/services/hint_quality.py"
+  ],
+  "regression": {
+    "passed": 636,
+    "skipped": 1,
+    "subtests_passed": 9,
+    "warnings": 1,
+    "targeted_passed_included": 149
+  },
+  "first_round": {
+    "generation": {
+      "trials": 12,
+      "statuses": {
+        "invalid_response": 1,
+        "ready": 10,
+        "skipped": 1
+      },
+      "technical_passed": 11,
+      "provider_attempts": 30,
+      "human_semantic_pass_rate": null
+    },
+    "review_gates_passed": 8
+  },
+  "final_round": {
+    "generation": {
+      "trials": 12,
+      "statuses": {
+        "ready": 11,
+        "skipped": 1
+      },
+      "technical_passed": 12,
+      "provider_attempts": 30,
+      "human_semantic_pass_rate": null
+    },
+    "review_gates_passed": 9,
+    "review_gates_total": 9
+  },
+  "human_semantic_pass_rate": null,
+  "human_review": "pending",
+  "old_human_18_of_19_preserved": true,
+  "provider_attempts": 60,
+  "http_200": 59,
+  "connection_failures_before_retry": 1,
+  "usage_total_tokens": 107463,
+  "raw_round_provider_attempt_counts_include_review_gates": true,
+  "deployed_source_verified": true,
+  "database_counts_unchanged": {
+    "users": 150,
+    "learning_submissions": 1074
+  },
+  "independent_unseen_acceptance": false,
+  "new_freeze_tag_created": false,
+  "committed_or_pushed": false
+}

@@ -1,0 +1,194 @@
+{
+  "status": "c54_repair_automated_checks_complete_human_review_pending",
+  "mutable_human_form": "人工复测检查表.md",
+  "files": [
+    {
+      "path": "acceptance.jsonl",
+      "sha256": "ff09fb79060c1cf5d0bc6868cb7752844e7c7f47041f2c7926c4b9f523376c58"
+    },
+    {
+      "path": "application-cumulative.patch",
+      "sha256": "fad761791737a4a14965f5281c8c3604c17055d6fd2aff61c8e15a250e77f5f5"
+    },
+    {
+      "path": "application-phase1.patch",
+      "sha256": "6e162ffe0caaa0400d197573bdfed9731c36c36639522cc766b615aa21f8898a"
+    },
+    {
+      "path": "application-state-final.json",
+      "sha256": "4e958d2793028abb03a09a93027090b788c3ab57c73af8a3b549c394901f9f90"
+    },
+    {
+      "path": "application-state.json",
+      "sha256": "565503d73998b230b5ead08a59e9d28de3768bda4f88f06d33abf3f51b21fb91"
+    },
+    {
+      "path": "audit_payloads.py",
+      "sha256": "fb6c44c6b29fe296224e38be0bbc6d03340bbd45592a9a1e92c852c166854b86"
+    },
+    {
+      "path": "backend-build.txt",
+      "sha256": "d97cc060e1a92b399d59771ac997728406180e993bc506c9aa565468049b74e7"
+    },
+    {
+      "path": "backend-regression.txt",
+      "sha256": "14478c23f168090073c910a70d28c23b32a7a032fbc20fd0d61108f5f8346961"
+    },
+    {
+      "path": "built-image-check.json",
+      "sha256": "ccad4d86e395db2e36856307ebb0f106adeb5e6c626614f982d880d43aac7a1e"
+    },
+    {
+      "path": "database-after.json",
+      "sha256": "51f9b8b7d4d31ef6dcfd894cc0471ed26aaee847142c8833cf1777359d073467"
+    },
+    {
+      "path": "database-before.json",
+      "sha256": "51f9b8b7d4d31ef6dcfd894cc0471ed26aaee847142c8833cf1777359d073467"
+    },
+    {
+      "path": "error_analysis.before.snapshot.txt",
+      "sha256": "88d2dcdc66e6df23eb6a34bd1907cbba53619f6b11af4403eb5bebe6d31ff144"
+    },
+    {
+      "path": "error_analysis.phase1.snapshot.txt",
+      "sha256": "a8c7f8c728d9f35a69eb8552be110657f91a70e57f77dac3e8a70fe4d00db9d9"
+    },
+    {
+      "path": "execution-lock-final.json",
+      "sha256": "0a7c61c61b2cb7169fb2f194d6cbdf170db89580ac723454bd205af4ab772f49"
+    },
+    {
+      "path": "execution-lock.json",
+      "sha256": "2db6d0523c2d7faea9287897525ab3f90f7d5e5e41bc92dcbcf343c4c688b219"
+    },
+    {
+      "path": "final/acceptance.jsonl",
+      "sha256": "2785f68c2831afd3b01b9431c4a3449c616e57ec3e9c9d964708f3c7c9cc35b8"
+    },
+    {
+      "path": "final/provider-calls.jsonl",
+      "sha256": "0fc27b0514c3f5275d3700c59a6a7a934026461877075d12313d3a23ed895a25"
+    },
+    {
+      "path": "final/provider-usage.json",
+      "sha256": "fd031ff8d985b04671bba8bacd1f61a9f84a2add94f473fc9d604d67ef91d25b"
+    },
+    {
+      "path": "final/real-ai-results.json",
+      "sha256": "6d5868fc1e360c496f3e7fba0a32f71adef62662b70f792e1258377f9d3abc32"
+    },
+    {
+      "path": "final/review-gate-results.json",
+      "sha256": "b024196ec4bd3a576a3c772b7894bf11cc933f7d7e902232ff9a702c780b479f"
+    },
+    {
+      "path": "finalize_report.py",
+      "sha256": "ffa298c9f12cad437e36a1fe9ea49d20089b54066cdfd9db1a1da22802d11d19"
+    },
+    {
+      "path": "health-check.json",
+      "sha256": "577e41f9e3e394ee18f3b41bbade15fa56dd9d5792a70d251a5d8cb1b1bdad6c"
+    },
+    {
+      "path": "hint_quality.before.snapshot.txt",
+      "sha256": "e569a099f564d410d8d61938fa32bcfc93c6204380329e996c8d0f051422b288"
+    },
+    {
+      "path": "live-console-final.txt",
+      "sha256": "a5fcb0ceab15d80c6a7705bc8867af425f846737025d113a756449dccec36621"
+    },
+    {
+      "path": "live-console.txt",
+      "sha256": "57f386ddd51692a14f9f62e67cf8e1b131f15e45ae1924dc8183421e598314b5"
+    },
+    {
+      "path": "live_retest.py",
+      "sha256": "877d120a8340e646e4fba81718c62a593e3c81cb2d799a6082f790c7cdac7ad2"
+    },
+    {
+      "path": "payload-audit.json",
+      "sha256": "5b61532c5ccc6d70734c7c2c0a308eec1c15aa0b45dded61b6fc6859f5241574"
+    },
+    {
+      "path": "phase1-test-snapshot-provenance.json",
+      "sha256": "1fd77dcb569aac2bfef83a4ff0766230693b29883f5adee7d25dae875771e329"
+    },
+    {
+      "path": "prepare_retest.py",
+      "sha256": "08f32cd3299947887b7ed5241973646a86f244117075c1da942cd2fb4a72f876"
+    },
+    {
+      "path": "provider-calls.jsonl",
+      "sha256": "50a95e0025a4df63f21285bd57ecaccb7cd53a6f945eefc019dfb6aaa62d4234"
+    },
+    {
+      "path": "provider-usage.json",
+      "sha256": "5839c164cad3d450c724d0e79ed6f094bf51828beb129c09c792be8da71654ec"
+    },
+    {
+      "path": "real-ai-results.json",
+      "sha256": "20e73d7bf0be70b46f1d0628c8b6d10d0d73feae7926f4b37d14a001c801004b"
+    },
+    {
+      "path": "record_state.py",
+      "sha256": "8d5fdb110a4cd8b8ff51144d5df4f7fb69f7e7f704c8ab471bab98e50a67fc41"
+    },
+    {
+      "path": "render_results.py",
+      "sha256": "2f06451b36b1a3fb9ecc0d8cdb60a3e8f86712aaa585fd50d43d1f14469f84d8"
+    },
+    {
+      "path": "replay-fixtures.json",
+      "sha256": "503a04eb3ce65075367eff990dbf7575be645086a7e718902edb58186f258804"
+    },
+    {
+      "path": "retest-plan.json",
+      "sha256": "c6cb582bf673efd251fb490e852856d6358457b6d6f3bad8ac898e41c1491fe2"
+    },
+    {
+      "path": "review-gate-results.json",
+      "sha256": "efa9935553fca89d062c0d55b5606285e644fba0584b4394398fc4184113f3be"
+    },
+    {
+      "path": "running-image.json",
+      "sha256": "71a1e3753740901c10b330c2c46d1d9ca3115264f756f3bc28ab6f7a58982a02"
+    },
+    {
+      "path": "runtime-after.json",
+      "sha256": "1c16bf9e3ed382b5b8369ce58ceed9a3577fa79e172c87b6033ddf1784c49468"
+    },
+    {
+      "path": "source-before.json",
+      "sha256": "91e38e764fed560b1e851a75109175c598c32ff8672c64f3d3f877412a899c06"
+    },
+    {
+      "path": "startup.txt",
+      "sha256": "96d4a9cdea0decf8d46ca4b6b608a2ba80bcc4e897d35443b5e034a662377cbc"
+    },
+    {
+      "path": "summary.json",
+      "sha256": "7a56e956d744e7b4836542a4a5801a3b87500c88fb507dfbc6c750f732a00eb6"
+    },
+    {
+      "path": "targeted-regression-final.txt",
+      "sha256": "7b12ccaa1e00f3750fb333a14a5baf0a65d896eba2f593c434bd4c6b034f045c"
+    },
+    {
+      "path": "targeted-regression.txt",
+      "sha256": "3d4eea893e985deb58e717143eb301e6f7e0ca6fceabf8928d4bad4800089d21"
+    },
+    {
+      "path": "test_c54.phase1.snapshot.txt",
+      "sha256": "59b96b0f907951f5b029f11e34dec656dfba6250084a923ef4b5950d0896c17c"
+    },
+    {
+      "path": "修复与复测报告.md",
+      "sha256": "122d1caf4008d9c500f840d1b83a451ea545e3ce0df16b75c750f5df65980ec9"
+    },
+    {
+      "path": "真实AI复测逐条结果.md",
+      "sha256": "4593be4dcb32d3d25f88347960eb05dda777deafab997fb76396f51f32a14b0c"
+    }
+  ]
+}

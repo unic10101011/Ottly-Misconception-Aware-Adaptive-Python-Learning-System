@@ -1,0 +1,23 @@
+ Container ottly-core72-fix-retest-final Creating 
+ Container ottly-core72-fix-retest-final Created 
+{"trial_id": "C10-R1", "status": "ready", "checks": {"expected_status": true, "route": true, "tag_allowed": true}}
+{"trial_id": "C24-R1", "status": "ready", "checks": {"expected_status": true, "route": true, "tag_allowed": true}}
+{"trial_id": "C24-R2", "status": "ready", "checks": {"expected_status": true, "route": true, "tag_allowed": true}}
+{"trial_id": "C24-R3", "status": "ready", "checks": {"expected_status": true, "route": true, "tag_allowed": true}}
+{"trial_id": "C28-R1", "status": "ready", "checks": {"expected_status": true, "route": true, "tag_allowed": true}}
+{"trial_id": "C54-R1", "status": "ready", "checks": {"expected_status": true, "route": true, "tag_allowed": true}}
+{"trial_id": "C54-R2", "status": "ready", "checks": {"expected_status": true, "route": true, "tag_allowed": true}}
+{"trial_id": "C54-R3", "status": "ready", "checks": {"expected_status": true, "route": true, "tag_allowed": true}}
+{"trial_id": "C64-R1", "status": "ready", "checks": {"expected_status": true, "route": true, "tag_allowed": true}}
+{"trial_id": "C37-R1", "status": "ready", "checks": {"expected_status": true, "route": true}}
+{"trial_id": "C40-R1", "status": "ready", "checks": {"expected_status": true, "route": true, "tag_allowed": true}}
+{"trial_id": "C43-R1", "status": "ready", "checks": {"expected_status": true, "route": true}}
+{"trial_id": "C01-R2", "status": "ready", "checks": {"expected_status": true, "route": true, "tag_allowed": true}}
+{"trial_id": "C08-R1", "status": "ready", "checks": {"expected_status": true, "route": true}}
+{"trial_id": "C07-R1", "status": "ready", "checks": {"expected_status": true, "route": true, "tag_allowed": true}}
+{"trial_id": "C14-R1", "status": "ready", "checks": {"expected_status": true, "route": true, "tag_allowed": true}}
+{"trial_id": "C20-R1", "status": "ready", "checks": {"expected_status": true, "route": true, "tag_allowed": true}}
+{"trial_id": "C58-R1", "status": "ready", "checks": {"expected_status": true, "route": true, "tag_allowed": true}}
+{"trial_id": "C70-R1", "status": "ready", "checks": {"expected_status": true, "route": true, "tag_allowed": true}}
+{"trial_id": "C05-R1", "status": "skipped", "checks": {"expected_status": true}}
+{"trials": 20, "statuses": {"ready": 19, "skipped": 1}, "technical_passed": 20, "provider_attempts": 35, "human_semantic_pass_rate": null}

@@ -4,5 +4,23 @@ docs/competition/feedback-guard-fix-*/** -text whitespace=cr-at-eol,-blank-at-eo
 docs/competition/freeze-2026-10-28/** -text whitespace=cr-at-eol,-blank-at-eof
 docs/competition/layout-migration-2026-10-28/** -text whitespace=cr-at-eol,-blank-at-eof
 docs/competition/layout-migration-2026-10-28/*.txt -whitespace
+docs/competition/core72-2026-10-29/** -text whitespace=cr-at-eol,-blank-at-eof
+docs/competition/core72-live-2026-10-29/** -text whitespace=cr-at-eol,-blank-at-eof
+docs/competition/core72-review-2026-10-29/** -text whitespace=cr-at-eol,-blank-at-eof
+docs/competition/core72-final-2026-10-29/** -text whitespace=cr-at-eol,-blank-at-eof
+docs/competition/core72-fixes-2026-10-29/** -text whitespace=cr-at-eol,-blank-at-eof
+docs/competition/core72-fixes-2026-10-29/*.txt -whitespace
+docs/competition/core72-fixes-review-2026-10-29/** -text whitespace=cr-at-eol,-blank-at-eof
+docs/competition/c54-protection-fix-2026-10-29/** -text whitespace=cr-at-eol,-blank-at-eof
+docs/competition/c54-protection-fix-2026-10-29/*.txt -whitespace
+docs/competition/c54-protection-review-2026-10-29/** -text whitespace=cr-at-eol,-blank-at-eof
+docs/competition/freeze-2026-10-29-r2/** -text whitespace=cr-at-eol,-blank-at-eof
+docs/competition/feature-acceptance-2026-10-29-r2/** -text whitespace=cr-at-eol,-blank-at-eof
+backend/tests/data/c54_answer_protection_regressions.json -text whitespace=cr-at-eol
+backend/tests/data/c54_followup_observation.json -text whitespace=cr-at-eol
+backend/tests/data/core72_feedback_regressions.json -text whitespace=cr-at-eol
+backend/tests/data/core72_followup_regressions.json -text whitespace=cr-at-eol
+docs/competition/core72-fixes-2026-10-29/*.patch -whitespace
+docs/competition/c54-protection-fix-2026-10-29/*.patch -whitespace
 # Verbatim Docker output includes trailing spaces; its published checksum is immutable.
 docs/competition/feedback-guard-fix-2026-10-28/backend-regression.txt -whitespace

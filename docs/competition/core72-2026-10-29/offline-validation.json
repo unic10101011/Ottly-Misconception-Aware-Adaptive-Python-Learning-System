@@ -1,0 +1,2330 @@
+{
+  "kind": "offline_design_validation_not_ai_acceptance",
+  "created_at": "2026-10-29T01:00:15.859184+00:00",
+  "application_baseline": {
+    "tag": "acceptance-baseline-2026-10-29",
+    "commit": "d668fe4c68e65ec2ab1ca0459c21550e03e0ce15"
+  },
+  "dataset_sha256": "6144c9223e82c214dea8ef5f960d2080418389817fac9b7c1d08c768359395d0",
+  "frozen_app_files_checked": 96,
+  "dev12_exact_ast_overlap": [],
+  "real_ai_calls": 0,
+  "database_writes": 0,
+  "cases": [
+    {
+      "id": "C01",
+      "actual": {
+        "judge_status": "execution_error",
+        "passed_cases": 0,
+        "total_cases": 1,
+        "feedback_kind": "diagnosis",
+        "submission_error": "SYNTAX_ERROR",
+        "error_code": "SYNTAX_ERROR"
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true,
+        "error_code": true
+      },
+      "public_observations": [
+        {
+          "case_id": "stdout-1",
+          "passed": false,
+          "expected_output": "Hello, World!",
+          "actual_output": "",
+          "output_available": true,
+          "errors": [
+            {
+              "type": "SYNTAX_ERROR",
+              "line": 1,
+              "message": "unterminated string literal (detected at line 1) (<unknown>, line 1)"
+            }
+          ],
+          "execution_time": 0.0,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C02",
+      "actual": {
+        "judge_status": "execution_error",
+        "passed_cases": 0,
+        "total_cases": 1,
+        "feedback_kind": "diagnosis",
+        "submission_error": "NAME_ERROR",
+        "error_code": "NAME_ERROR"
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true,
+        "error_code": true
+      },
+      "public_observations": [
+        {
+          "case_id": "stdout-1",
+          "passed": false,
+          "expected_output": "Hello, World!",
+          "actual_output": "",
+          "output_available": true,
+          "errors": [
+            {
+              "type": "NAME_ERROR",
+              "line": 1,
+              "message": "变量 'Hello' 没有定义，请先赋值或检查拼写"
+            }
+          ],
+          "execution_time": 0.005,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C03",
+      "actual": {
+        "judge_status": "wrong_answer",
+        "passed_cases": 0,
+        "total_cases": 1,
+        "feedback_kind": "diagnosis",
+        "submission_error": "WRONG_ANSWER",
+        "error_code": "WRONG_ANSWER"
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "stdout-1",
+          "passed": false,
+          "expected_output": "Hello, World!",
+          "actual_output": "",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.0,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C04",
+      "actual": {
+        "judge_status": "wrong_answer",
+        "passed_cases": 0,
+        "total_cases": 1,
+        "feedback_kind": "diagnosis",
+        "submission_error": "WRONG_ANSWER",
+        "error_code": "WRONG_ANSWER"
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "stdout-1",
+          "passed": false,
+          "expected_output": "Hello, World!",
+          "actual_output": "Hello, World !\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C05",
+      "actual": {
+        "judge_status": "accepted",
+        "passed_cases": 1,
+        "total_cases": 1,
+        "feedback_kind": "skipped",
+        "submission_error": null,
+        "error_code": null
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "stdout-1",
+          "passed": true,
+          "expected_output": "Hello, World!",
+          "actual_output": "Hello, World!\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C06",
+      "actual": {
+        "judge_status": "accepted",
+        "passed_cases": 1,
+        "total_cases": 1,
+        "feedback_kind": "skipped",
+        "submission_error": null,
+        "error_code": null
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "stdout-1",
+          "passed": true,
+          "expected_output": "Hello, World!",
+          "actual_output": "  Hello, World!  \n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C07",
+      "actual": {
+        "judge_status": "execution_error",
+        "passed_cases": 0,
+        "total_cases": 4,
+        "feedback_kind": "diagnosis",
+        "submission_error": "TYPE_ERROR",
+        "error_code": "TYPE_ERROR"
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true,
+        "error_code": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": false,
+          "expected_output": "Hello, Ottly!\n",
+          "actual_output": "",
+          "output_available": true,
+          "errors": [
+            {
+              "type": "TYPE_ERROR",
+              "line": 2,
+              "message": "不能将 int 和字符串直接相加"
+            }
+          ],
+          "execution_time": 0.005,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C08",
+      "actual": {
+        "judge_status": "wrong_answer",
+        "passed_cases": 1,
+        "total_cases": 4,
+        "feedback_kind": "guidance",
+        "submission_error": "WRONG_ANSWER",
+        "error_code": "WRONG_ANSWER"
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": false,
+          "expected_output": "Hello, Ottly!\n",
+          "actual_output": "Hello, ottly!\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C09",
+      "actual": {
+        "judge_status": "wrong_answer",
+        "passed_cases": 0,
+        "total_cases": 4,
+        "feedback_kind": "diagnosis",
+        "submission_error": "WRONG_ANSWER",
+        "error_code": "WRONG_ANSWER"
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": false,
+          "expected_output": "Hello, Ottly!\n",
+          "actual_output": "Hello,\nOttly!\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.0,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C10",
+      "actual": {
+        "judge_status": "wrong_answer",
+        "passed_cases": 0,
+        "total_cases": 4,
+        "feedback_kind": "diagnosis",
+        "submission_error": "WRONG_ANSWER",
+        "error_code": "WRONG_ANSWER"
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": false,
+          "expected_output": "Hello, Ottly!\n",
+          "actual_output": "Hello, guest!\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.0,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C11",
+      "actual": {
+        "judge_status": "accepted",
+        "passed_cases": 4,
+        "total_cases": 4,
+        "feedback_kind": "skipped",
+        "submission_error": null,
+        "error_code": null
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": true,
+          "expected_output": "Hello, Ottly!\n",
+          "actual_output": "Hello, Ottly!\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C12",
+      "actual": {
+        "judge_status": "execution_error",
+        "run_success": false,
+        "feedback_kind": "diagnosis",
+        "output": "",
+        "error_code": "EOF_ERROR"
+      },
+      "checks": {
+        "judge_status": true,
+        "run_success": true,
+        "feedback_kind": true,
+        "output": true,
+        "error_code": true
+      },
+      "public_observations": [
+        {
+          "stdin": "",
+          "output": "",
+          "output_available": true,
+          "errors": [
+            {
+              "type": "EOF_ERROR",
+              "line": 95,
+              "column": 0,
+              "message": "运行输入不足，请为每次 input 提供一行输入",
+              "suggestion": "仔细检查这一行的语法\n可以参考教材中的例子对比\n试着把复杂代码拆分成简单步骤"
+            }
+          ]
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C13",
+      "actual": {
+        "judge_status": "execution_error",
+        "passed_cases": 0,
+        "total_cases": 5,
+        "feedback_kind": "diagnosis",
+        "submission_error": "TYPE_ERROR",
+        "error_code": "TYPE_ERROR"
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true,
+        "error_code": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": false,
+          "expected_output": "12\n8\n",
+          "actual_output": "3333\n",
+          "output_available": true,
+          "errors": [
+            {
+              "type": "TYPE_ERROR",
+              "line": 6,
+              "message": "unsupported operand type(s) for -: 'int' and 'str'"
+            }
+          ],
+          "execution_time": 0.005,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C14",
+      "actual": {
+        "judge_status": "wrong_answer",
+        "passed_cases": 0,
+        "total_cases": 5,
+        "feedback_kind": "diagnosis",
+        "submission_error": "WRONG_ANSWER",
+        "error_code": "WRONG_ANSWER"
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": false,
+          "expected_output": "12\n8\n",
+          "actual_output": "7\n13\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.0,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C15",
+      "actual": {
+        "judge_status": "wrong_answer",
+        "passed_cases": 2,
+        "total_cases": 5,
+        "feedback_kind": "guidance",
+        "submission_error": "WRONG_ANSWER",
+        "error_code": "WRONG_ANSWER"
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": false,
+          "expected_output": "12\n8\n",
+          "actual_output": "12\n-8\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.0,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C16",
+      "actual": {
+        "judge_status": "wrong_answer",
+        "passed_cases": 0,
+        "total_cases": 5,
+        "feedback_kind": "diagnosis",
+        "submission_error": "WRONG_ANSWER",
+        "error_code": "WRONG_ANSWER"
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": false,
+          "expected_output": "12\n8\n",
+          "actual_output": "cost: 12\n8\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C17",
+      "actual": {
+        "judge_status": "accepted",
+        "passed_cases": 5,
+        "total_cases": 5,
+        "feedback_kind": "skipped",
+        "submission_error": null,
+        "error_code": null
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": true,
+          "expected_output": "12\n8\n",
+          "actual_output": "12\n8\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C18",
+      "actual": {
+        "judge_status": null,
+        "run_success": true,
+        "feedback_kind": "none",
+        "output": "6\n-6\n",
+        "error_code": null
+      },
+      "checks": {
+        "judge_status": true,
+        "run_success": true,
+        "feedback_kind": true,
+        "output": true,
+        "error_code": true
+      },
+      "public_observations": [
+        {
+          "stdin": "3\n2\n0\n",
+          "output": "6\n-6\n",
+          "output_available": true,
+          "errors": []
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C19",
+      "actual": {
+        "judge_status": "wrong_answer",
+        "passed_cases": 1,
+        "total_cases": 5,
+        "feedback_kind": "guidance",
+        "submission_error": "WRONG_ANSWER",
+        "error_code": "WRONG_ANSWER"
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": false,
+          "expected_output": "3\n2\n",
+          "actual_output": "2\n3\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C20",
+      "actual": {
+        "judge_status": "wrong_answer",
+        "passed_cases": 0,
+        "total_cases": 5,
+        "feedback_kind": "diagnosis",
+        "submission_error": "WRONG_ANSWER",
+        "error_code": "WRONG_ANSWER"
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": false,
+          "expected_output": "3\n2\n",
+          "actual_output": "3.4\n2\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C21",
+      "actual": {
+        "judge_status": "wrong_answer",
+        "passed_cases": 3,
+        "total_cases": 5,
+        "feedback_kind": "guidance",
+        "submission_error": "WRONG_ANSWER",
+        "error_code": "WRONG_ANSWER"
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": false,
+          "expected_output": "3\n2\n",
+          "actual_output": "4\n2\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C22",
+      "actual": {
+        "judge_status": "wrong_answer",
+        "passed_cases": 3,
+        "total_cases": 5,
+        "feedback_kind": "guidance",
+        "submission_error": "WRONG_ANSWER",
+        "error_code": "WRONG_ANSWER"
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": false,
+          "expected_output": "3\n2\n",
+          "actual_output": "3\n14\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C23",
+      "actual": {
+        "judge_status": "accepted",
+        "passed_cases": 5,
+        "total_cases": 5,
+        "feedback_kind": "skipped",
+        "submission_error": null,
+        "error_code": null
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": true,
+          "expected_output": "3\n2\n",
+          "actual_output": "3\n2\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C24",
+      "actual": {
+        "judge_status": "execution_error",
+        "run_success": false,
+        "feedback_kind": "diagnosis",
+        "output": "",
+        "error_code": "ZERO_DIVISION_ERROR"
+      },
+      "checks": {
+        "judge_status": true,
+        "run_success": true,
+        "feedback_kind": true,
+        "output": true,
+        "error_code": true
+      },
+      "public_observations": [
+        {
+          "stdin": "17\n0\n",
+          "output": "",
+          "output_available": true,
+          "errors": [
+            {
+              "type": "ZERO_DIVISION_ERROR",
+              "line": 3,
+              "column": 0,
+              "message": "integer division or modulo by zero",
+              "suggestion": "除数不能为 0，请检查计算逻辑\n在除法前添加判断条件 if y != 0"
+            }
+          ]
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C25",
+      "actual": {
+        "judge_status": "wrong_answer",
+        "passed_cases": 6,
+        "total_cases": 7,
+        "feedback_kind": "guidance",
+        "submission_error": "WRONG_ANSWER",
+        "error_code": "WRONG_ANSWER"
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": true,
+          "expected_output": "SILVER\n",
+          "actual_output": "SILVER\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C26",
+      "actual": {
+        "judge_status": "wrong_answer",
+        "passed_cases": 5,
+        "total_cases": 7,
+        "feedback_kind": "guidance",
+        "submission_error": "WRONG_ANSWER",
+        "error_code": "WRONG_ANSWER"
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": true,
+          "expected_output": "SILVER\n",
+          "actual_output": "SILVER\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C27",
+      "actual": {
+        "judge_status": "wrong_answer",
+        "passed_cases": 5,
+        "total_cases": 7,
+        "feedback_kind": "guidance",
+        "submission_error": "WRONG_ANSWER",
+        "error_code": "WRONG_ANSWER"
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": true,
+          "expected_output": "SILVER\n",
+          "actual_output": "SILVER\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C28",
+      "actual": {
+        "judge_status": "execution_error",
+        "passed_cases": 0,
+        "total_cases": 7,
+        "feedback_kind": "diagnosis",
+        "submission_error": "SYNTAX_ERROR",
+        "error_code": "SYNTAX_ERROR"
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true,
+        "error_code": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": false,
+          "expected_output": "SILVER\n",
+          "actual_output": "",
+          "output_available": true,
+          "errors": [
+            {
+              "type": "SYNTAX_ERROR",
+              "line": 2,
+              "message": "expected ':' (<unknown>, line 2)"
+            }
+          ],
+          "execution_time": 0.0,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C29",
+      "actual": {
+        "judge_status": "accepted",
+        "passed_cases": 7,
+        "total_cases": 7,
+        "feedback_kind": "skipped",
+        "submission_error": null,
+        "error_code": null
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": true,
+          "expected_output": "SILVER\n",
+          "actual_output": "SILVER\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C30",
+      "actual": {
+        "judge_status": "accepted",
+        "passed_cases": 7,
+        "total_cases": 7,
+        "feedback_kind": "skipped",
+        "submission_error": null,
+        "error_code": null
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": true,
+          "expected_output": "SILVER\n",
+          "actual_output": "SILVER\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C31",
+      "actual": {
+        "judge_status": "wrong_answer",
+        "passed_cases": 3,
+        "total_cases": 7,
+        "feedback_kind": "guidance",
+        "submission_error": "WRONG_ANSWER",
+        "error_code": "WRONG_ANSWER"
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": true,
+          "expected_output": "YES\n",
+          "actual_output": "YES\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C32",
+      "actual": {
+        "judge_status": "wrong_answer",
+        "passed_cases": 6,
+        "total_cases": 7,
+        "feedback_kind": "guidance",
+        "submission_error": "WRONG_ANSWER",
+        "error_code": "WRONG_ANSWER"
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": false,
+          "expected_output": "YES\n",
+          "actual_output": "NO\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C33",
+      "actual": {
+        "judge_status": "wrong_answer",
+        "passed_cases": 5,
+        "total_cases": 7,
+        "feedback_kind": "guidance",
+        "submission_error": "WRONG_ANSWER",
+        "error_code": "WRONG_ANSWER"
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": true,
+          "expected_output": "YES\n",
+          "actual_output": "YES\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C34",
+      "actual": {
+        "judge_status": "wrong_answer",
+        "passed_cases": 0,
+        "total_cases": 7,
+        "feedback_kind": "diagnosis",
+        "submission_error": "WRONG_ANSWER",
+        "error_code": "WRONG_ANSWER"
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": false,
+          "expected_output": "YES\n",
+          "actual_output": "NO\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C35",
+      "actual": {
+        "judge_status": "accepted",
+        "passed_cases": 7,
+        "total_cases": 7,
+        "feedback_kind": "skipped",
+        "submission_error": null,
+        "error_code": null
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": true,
+          "expected_output": "YES\n",
+          "actual_output": "YES\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C36",
+      "actual": {
+        "judge_status": "execution_error",
+        "run_success": false,
+        "feedback_kind": "diagnosis",
+        "output": "",
+        "error_code": "VALUE_ERROR"
+      },
+      "checks": {
+        "judge_status": true,
+        "run_success": true,
+        "feedback_kind": true,
+        "output": true,
+        "error_code": true
+      },
+      "public_observations": [
+        {
+          "stdin": "2\nstrong\n",
+          "output": "",
+          "output_available": true,
+          "errors": [
+            {
+              "type": "VALUE_ERROR",
+              "line": 2,
+              "column": 0,
+              "message": "不能把 'strong' 转换成数字",
+              "suggestion": "检查输入的数据格式是否正确\n使用 try-except 捕获可能的输入错误"
+            }
+          ]
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C37",
+      "actual": {
+        "judge_status": "wrong_answer",
+        "passed_cases": 1,
+        "total_cases": 5,
+        "feedback_kind": "guidance",
+        "submission_error": "WRONG_ANSWER",
+        "error_code": "WRONG_ANSWER"
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": false,
+          "expected_output": "1\n2\n3\n",
+          "actual_output": "0\n1\n2\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        },
+        {
+          "case_id": "sample-2",
+          "passed": true,
+          "expected_output": "",
+          "actual_output": "",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.0,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C38",
+      "actual": {
+        "judge_status": "execution_error",
+        "passed_cases": 1,
+        "total_cases": 5,
+        "feedback_kind": "guidance",
+        "submission_error": "NAME_ERROR",
+        "error_code": "NAME_ERROR"
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true,
+        "error_code": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": false,
+          "expected_output": "1\n2\n3\n",
+          "actual_output": "3\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        },
+        {
+          "case_id": "sample-2",
+          "passed": false,
+          "expected_output": "",
+          "actual_output": "",
+          "output_available": true,
+          "errors": [
+            {
+              "type": "NAME_ERROR",
+              "line": 4,
+              "message": "变量 'last_marker' 没有定义，请先赋值或检查拼写"
+            }
+          ],
+          "execution_time": 0.006,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C39",
+      "actual": {
+        "judge_status": "wrong_answer",
+        "passed_cases": 1,
+        "total_cases": 5,
+        "feedback_kind": "guidance",
+        "submission_error": "WRONG_ANSWER",
+        "error_code": "WRONG_ANSWER"
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": false,
+          "expected_output": "1\n2\n3\n",
+          "actual_output": "1\n2\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        },
+        {
+          "case_id": "sample-2",
+          "passed": true,
+          "expected_output": "",
+          "actual_output": "",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C40",
+      "actual": {
+        "judge_status": "wrong_answer",
+        "passed_cases": 0,
+        "total_cases": 5,
+        "feedback_kind": "diagnosis",
+        "submission_error": "WRONG_ANSWER",
+        "error_code": "WRONG_ANSWER"
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": false,
+          "expected_output": "1\n2\n3\n",
+          "actual_output": "-1\n0\n1\n2\n3\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        },
+        {
+          "case_id": "sample-2",
+          "passed": false,
+          "expected_output": "",
+          "actual_output": "-1\n0\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C41",
+      "actual": {
+        "judge_status": "accepted",
+        "passed_cases": 5,
+        "total_cases": 5,
+        "feedback_kind": "skipped",
+        "submission_error": null,
+        "error_code": null
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": true,
+          "expected_output": "1\n2\n3\n",
+          "actual_output": "1\n2\n3\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.0,
+          "visibility": "public"
+        },
+        {
+          "case_id": "sample-2",
+          "passed": true,
+          "expected_output": "",
+          "actual_output": "",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C42",
+      "actual": {
+        "judge_status": "wrong_answer",
+        "passed_cases": 0,
+        "total_cases": 5,
+        "feedback_kind": "diagnosis",
+        "submission_error": "WRONG_ANSWER",
+        "error_code": "WRONG_ANSWER"
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": false,
+          "expected_output": "1\n2\n3\n",
+          "actual_output": "1\n2\n3\ndone\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        },
+        {
+          "case_id": "sample-2",
+          "passed": false,
+          "expected_output": "",
+          "actual_output": "done\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C43",
+      "actual": {
+        "judge_status": "wrong_answer",
+        "passed_cases": 2,
+        "total_cases": 5,
+        "feedback_kind": "guidance",
+        "submission_error": "WRONG_ANSWER",
+        "error_code": "WRONG_ANSWER"
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": false,
+          "expected_output": "10\n",
+          "actual_output": "4\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C44",
+      "actual": {
+        "judge_status": "wrong_answer",
+        "passed_cases": 0,
+        "total_cases": 5,
+        "feedback_kind": "diagnosis",
+        "submission_error": "WRONG_ANSWER",
+        "error_code": "WRONG_ANSWER"
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": false,
+          "expected_output": "10\n",
+          "actual_output": "11\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.0,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C45",
+      "actual": {
+        "judge_status": "wrong_answer",
+        "passed_cases": 1,
+        "total_cases": 5,
+        "feedback_kind": "guidance",
+        "submission_error": "WRONG_ANSWER",
+        "error_code": "WRONG_ANSWER"
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": false,
+          "expected_output": "10\n",
+          "actual_output": "1\n3\n6\n10\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C46",
+      "actual": {
+        "judge_status": "wrong_answer",
+        "passed_cases": 2,
+        "total_cases": 5,
+        "feedback_kind": "guidance",
+        "submission_error": "WRONG_ANSWER",
+        "error_code": "WRONG_ANSWER"
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": false,
+          "expected_output": "10\n",
+          "actual_output": "16\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C47",
+      "actual": {
+        "judge_status": "accepted",
+        "passed_cases": 5,
+        "total_cases": 5,
+        "feedback_kind": "skipped",
+        "submission_error": null,
+        "error_code": null
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": true,
+          "expected_output": "10\n",
+          "actual_output": "10\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.0,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C48",
+      "actual": {
+        "judge_status": "accepted",
+        "passed_cases": 5,
+        "total_cases": 5,
+        "feedback_kind": "skipped",
+        "submission_error": null,
+        "error_code": null
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": true,
+          "expected_output": "10\n",
+          "actual_output": "10\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.0,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C49",
+      "actual": {
+        "judge_status": "wrong_answer",
+        "passed_cases": 3,
+        "total_cases": 5,
+        "feedback_kind": "guidance",
+        "submission_error": "WRONG_ANSWER",
+        "error_code": "WRONG_ANSWER"
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": true,
+          "expected_output": "3\n",
+          "actual_output": "3\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C50",
+      "actual": {
+        "judge_status": "wrong_answer",
+        "passed_cases": 2,
+        "total_cases": 5,
+        "feedback_kind": "guidance",
+        "submission_error": "WRONG_ANSWER",
+        "error_code": "WRONG_ANSWER"
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": false,
+          "expected_output": "3\n",
+          "actual_output": "7\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C51",
+      "actual": {
+        "judge_status": "wrong_answer",
+        "passed_cases": 1,
+        "total_cases": 5,
+        "feedback_kind": "guidance",
+        "submission_error": "WRONG_ANSWER",
+        "error_code": "WRONG_ANSWER"
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": false,
+          "expected_output": "3\n",
+          "actual_output": "9\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C52",
+      "actual": {
+        "judge_status": "wrong_answer",
+        "passed_cases": 1,
+        "total_cases": 5,
+        "feedback_kind": "guidance",
+        "submission_error": "WRONG_ANSWER",
+        "error_code": "WRONG_ANSWER"
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": false,
+          "expected_output": "3\n",
+          "actual_output": "0\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C53",
+      "actual": {
+        "judge_status": "accepted",
+        "passed_cases": 5,
+        "total_cases": 5,
+        "feedback_kind": "skipped",
+        "submission_error": null,
+        "error_code": null
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": true,
+          "expected_output": "3\n",
+          "actual_output": "3\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C54",
+      "actual": {
+        "judge_status": "timeout",
+        "run_success": false,
+        "feedback_kind": "diagnosis",
+        "output": "",
+        "error_code": "TIMEOUT"
+      },
+      "checks": {
+        "judge_status": true,
+        "run_success": true,
+        "feedback_kind": true,
+        "output": true,
+        "error_code": true
+      },
+      "public_observations": [
+        {
+          "stdin": "7\n",
+          "output": "",
+          "output_available": false,
+          "errors": [
+            {
+              "type": "TIMEOUT",
+              "line": null,
+              "column": null,
+              "message": "代码执行超过 3 秒，执行进程已终止",
+              "suggestion": "检查循环终止条件或减少计算量"
+            }
+          ]
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C55",
+      "actual": {
+        "judge_status": "wrong_answer",
+        "passed_cases": 5,
+        "total_cases": 6,
+        "feedback_kind": "guidance",
+        "submission_error": "WRONG_ANSWER",
+        "error_code": "WRONG_ANSWER"
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": true,
+          "expected_output": "6\n3\n",
+          "actual_output": "6\n3\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C56",
+      "actual": {
+        "judge_status": "wrong_answer",
+        "passed_cases": 5,
+        "total_cases": 6,
+        "feedback_kind": "guidance",
+        "submission_error": "WRONG_ANSWER",
+        "error_code": "WRONG_ANSWER"
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": true,
+          "expected_output": "6\n3\n",
+          "actual_output": "6\n3\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C57",
+      "actual": {
+        "judge_status": "wrong_answer",
+        "passed_cases": 2,
+        "total_cases": 6,
+        "feedback_kind": "guidance",
+        "submission_error": "WRONG_ANSWER",
+        "error_code": "WRONG_ANSWER"
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": false,
+          "expected_output": "6\n3\n",
+          "actual_output": "6\n6\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C58",
+      "actual": {
+        "judge_status": "wrong_answer",
+        "passed_cases": 0,
+        "total_cases": 6,
+        "feedback_kind": "diagnosis",
+        "submission_error": "WRONG_ANSWER",
+        "error_code": "WRONG_ANSWER"
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": false,
+          "expected_output": "6\n3\n",
+          "actual_output": "6\n4\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C59",
+      "actual": {
+        "judge_status": "accepted",
+        "passed_cases": 6,
+        "total_cases": 6,
+        "feedback_kind": "skipped",
+        "submission_error": null,
+        "error_code": null
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": true,
+          "expected_output": "6\n3\n",
+          "actual_output": "6\n3\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C60",
+      "actual": {
+        "judge_status": "wrong_answer",
+        "passed_cases": 2,
+        "total_cases": 6,
+        "feedback_kind": "guidance",
+        "submission_error": "WRONG_ANSWER",
+        "error_code": "WRONG_ANSWER"
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": false,
+          "expected_output": "6\n3\n",
+          "actual_output": "6\n0\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C61",
+      "actual": {
+        "judge_status": "wrong_answer",
+        "passed_cases": 4,
+        "total_cases": 6,
+        "feedback_kind": "guidance",
+        "submission_error": "WRONG_ANSWER",
+        "error_code": "WRONG_ANSWER"
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": true,
+          "expected_output": "9\n",
+          "actual_output": "9\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C62",
+      "actual": {
+        "judge_status": "wrong_answer",
+        "passed_cases": 2,
+        "total_cases": 6,
+        "feedback_kind": "guidance",
+        "submission_error": "WRONG_ANSWER",
+        "error_code": "WRONG_ANSWER"
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": false,
+          "expected_output": "9\n",
+          "actual_output": "2\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C63",
+      "actual": {
+        "judge_status": "wrong_answer",
+        "passed_cases": 3,
+        "total_cases": 6,
+        "feedback_kind": "guidance",
+        "submission_error": "WRONG_ANSWER",
+        "error_code": "WRONG_ANSWER"
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": false,
+          "expected_output": "9\n",
+          "actual_output": "7\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C64",
+      "actual": {
+        "judge_status": "execution_error",
+        "passed_cases": 0,
+        "total_cases": 6,
+        "feedback_kind": "diagnosis",
+        "submission_error": "INDEX_ERROR",
+        "error_code": "INDEX_ERROR"
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true,
+        "error_code": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": false,
+          "expected_output": "9\n",
+          "actual_output": "",
+          "output_available": true,
+          "errors": [
+            {
+              "type": "INDEX_ERROR",
+              "line": 5,
+              "message": "列表索引超出范围，检查列表长度"
+            }
+          ],
+          "execution_time": 0.005,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C65",
+      "actual": {
+        "judge_status": "accepted",
+        "passed_cases": 6,
+        "total_cases": 6,
+        "feedback_kind": "skipped",
+        "submission_error": null,
+        "error_code": null
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": true,
+          "expected_output": "9\n",
+          "actual_output": "9\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C66",
+      "actual": {
+        "judge_status": "wrong_answer",
+        "passed_cases": 0,
+        "total_cases": 6,
+        "feedback_kind": "diagnosis",
+        "submission_error": "WRONG_ANSWER",
+        "error_code": "REQUIREMENT_NOT_MET"
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true,
+        "error_code": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": false,
+          "expected_output": "9\n",
+          "actual_output": "",
+          "output_available": false,
+          "errors": [
+            {
+              "type": "REQUIREMENT_NOT_MET",
+              "line": null,
+              "message": "本关请通过比较更新最大值，不使用 max、sorted 或 sort。"
+            }
+          ],
+          "execution_time": 0.0,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C67",
+      "actual": {
+        "judge_status": "wrong_answer",
+        "passed_cases": 2,
+        "total_cases": 7,
+        "feedback_kind": "guidance",
+        "submission_error": "WRONG_ANSWER",
+        "error_code": "WRONG_ANSWER"
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": false,
+          "expected_output": "3\n",
+          "actual_output": "2\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C68",
+      "actual": {
+        "judge_status": "wrong_answer",
+        "passed_cases": 2,
+        "total_cases": 7,
+        "feedback_kind": "guidance",
+        "submission_error": "WRONG_ANSWER",
+        "error_code": "WRONG_ANSWER"
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": false,
+          "expected_output": "3\n",
+          "actual_output": "0\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C69",
+      "actual": {
+        "judge_status": "wrong_answer",
+        "passed_cases": 5,
+        "total_cases": 7,
+        "feedback_kind": "guidance",
+        "submission_error": "WRONG_ANSWER",
+        "error_code": "WRONG_ANSWER"
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": true,
+          "expected_output": "3\n",
+          "actual_output": "3\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C70",
+      "actual": {
+        "judge_status": "execution_error",
+        "passed_cases": 0,
+        "total_cases": 7,
+        "feedback_kind": "diagnosis",
+        "submission_error": "NAME_ERROR",
+        "error_code": "NAME_ERROR"
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true,
+        "error_code": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": false,
+          "expected_output": "3\n",
+          "actual_output": "",
+          "output_available": true,
+          "errors": [
+            {
+              "type": "NAME_ERROR",
+              "line": 6,
+              "message": "变量 'tally' 没有定义，请先赋值或检查拼写"
+            }
+          ],
+          "execution_time": 0.005,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C71",
+      "actual": {
+        "judge_status": "accepted",
+        "passed_cases": 7,
+        "total_cases": 7,
+        "feedback_kind": "skipped",
+        "submission_error": null,
+        "error_code": null
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": true,
+          "expected_output": "3\n",
+          "actual_output": "3\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "C72",
+      "actual": {
+        "judge_status": "wrong_answer",
+        "passed_cases": 5,
+        "total_cases": 7,
+        "feedback_kind": "guidance",
+        "submission_error": "WRONG_ANSWER",
+        "error_code": "WRONG_ANSWER"
+      },
+      "checks": {
+        "judge_status": true,
+        "passed_cases": true,
+        "total_cases": true,
+        "feedback_kind": true
+      },
+      "public_observations": [
+        {
+          "case_id": "sample-1",
+          "passed": true,
+          "expected_output": "3\n",
+          "actual_output": "3\n",
+          "output_available": true,
+          "errors": [],
+          "execution_time": 0.001,
+          "visibility": "public"
+        }
+      ],
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "summary": {
+    "cases": 72,
+    "matched": 72,
+    "feedback_kinds": {
+      "diagnosis": 24,
+      "skipped": 15,
+      "guidance": 32,
+      "none": 1
+    },
+    "planned_ai_feedback_trials": 104
+  },
+  "runtime_image": "sha256:11172f09655790b4e1fe7e3e09694b987167ae2c81e77f10e0a74030bf93af34",
+  "environment": {
+    "network": "none",
+    "database_mounted": false,
+    "workspace_mount": "read_only",
+    "container_root": "read_only",
+    "output": "dedicated_ignored_cache_bind_mount"
+  }
+}

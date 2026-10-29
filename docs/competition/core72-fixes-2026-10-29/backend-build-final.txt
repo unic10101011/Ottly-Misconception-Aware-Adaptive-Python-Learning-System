@@ -1,0 +1,51 @@
+ Image ottly-backend:local Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 619B 0.0s done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 325B done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/python:3.11-slim@sha256:9c900dea9e8fb7e16277c179b555cc72d29a352dbc33cff48ad5a0412fd5bfc7
+#3 DONE 0.0s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 178B done
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 60.11kB 0.0s done
+#5 DONE 0.0s
+
+#6 [1/5] FROM docker.io/library/python:3.11-slim@sha256:9c900dea9e8fb7e16277c179b555cc72d29a352dbc33cff48ad5a0412fd5bfc7
+#6 resolve docker.io/library/python:3.11-slim@sha256:9c900dea9e8fb7e16277c179b555cc72d29a352dbc33cff48ad5a0412fd5bfc7 0.0s done
+#6 DONE 0.0s
+
+#7 [2/5] WORKDIR /app
+#7 CACHED
+
+#8 [3/5] COPY requirements*.txt .
+#8 CACHED
+
+#9 [4/5] RUN pip install --no-cache-dir -r requirements.lock.txt
+#9 CACHED
+
+#10 [5/5] COPY . .
+#10 DONE 0.1s
+
+#11 exporting to image
+#11 exporting layers
+#11 exporting layers 0.1s done
+#11 exporting manifest sha256:4a708c7a1937d28ecfd2775018e502d1ea5e4e10b537c9c72dbf6c77e6bc6b68 0.0s done
+#11 exporting config sha256:fa3c0715010e128404d9cd0e959cbe9037319cdca160ce0bd93093a9140ced93 0.0s done
+#11 exporting attestation manifest sha256:3922855255a5059e0283aa2fac2a13b099712810ec19445575512fcac5a851bf 0.0s done
+#11 exporting manifest list sha256:5cdb3120332cd7e8cef5f724fa392a5b145f73bc97fc6ec9f02bd246e81939c9 0.0s done
+#11 naming to docker.io/library/ottly-backend:local
+#11 naming to docker.io/library/ottly-backend:local done
+#11 unpacking to docker.io/library/ottly-backend:local 0.1s done
+#11 DONE 0.3s
+
+#12 resolving provenance for metadata file
+#12 DONE 0.0s
+ Image ottly-backend:local Built 

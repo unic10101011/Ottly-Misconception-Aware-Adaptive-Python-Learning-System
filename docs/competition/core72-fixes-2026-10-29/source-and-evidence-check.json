@@ -1,0 +1,38 @@
+{
+  "immutable_evidence_files_verified": 45,
+  "reviewer_name_only_changes_verified": 2,
+  "original_metrics_unchanged": true,
+  "worktree_base_commit": "d668fe4c68e65ec2ab1ca0459c21550e03e0ce15",
+  "frozen_tag_commit": "d668fe4c68e65ec2ab1ca0459c21550e03e0ce15",
+  "modified_application_files": [
+    "backend/app/services/error_analysis.py",
+    "backend/app/services/hint_quality.py",
+    "backend/app/services/misconceptions.py"
+  ],
+  "repair_files": [
+    {
+      "path": "backend/app/services/error_analysis.py",
+      "sha256_lf": "4e84318ecbec87df9f20f88954c7700fd0cb6721e5ecec8fc04eed64184dc088"
+    },
+    {
+      "path": "backend/app/services/hint_quality.py",
+      "sha256_lf": "32c9e4dcf5c0eb20c77b5094d8d5e2a77231cc979cd75471c69a0fece7a6ad76"
+    },
+    {
+      "path": "backend/app/services/misconceptions.py",
+      "sha256_lf": "4ef7bb16fb4b5294e5741b7e04326f2f374aa9c93837d1e28f89ef1e5c80fe7d"
+    },
+    {
+      "path": "backend/tests/test_core72_feedback_regressions.py",
+      "sha256_lf": "5ced849f4324bb40e548702faa9a683049932e431dfa9f72df41090c7bdd627d"
+    },
+    {
+      "path": "backend/tests/test_submission.py",
+      "sha256_lf": "d5f77b6dd5b4f54e78fa52fb290cca2af9628efbdba20ef94013834757ab820d"
+    },
+    {
+      "path": "backend/tests/data/core72_feedback_regressions.json",
+      "sha256_lf": "9dd0527d544500a025cdcd2619a65e532bc1ebc9bd84d4fcf48c890bf1fd00d0"
+    }
+  ]
+}

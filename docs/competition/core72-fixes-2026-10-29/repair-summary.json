@@ -1,0 +1,78 @@
+{
+  "status": "software_fixed_real_replay_complete_human_review_pending",
+  "completed_at": "2026-10-29T04:06:17.297462+00:00",
+  "reviewer_A_display_name": "A",
+  "original_scores_and_adjudication_unchanged": true,
+  "software_regression": {
+    "passed": 628,
+    "skipped": 1,
+    "subtests_passed": 9,
+    "warnings": 1,
+    "skip_reason": "Dedicated MySQL migration test database not configured"
+  },
+  "targeted_regression": {
+    "passed": 125,
+    "included_in_full_suite": true
+  },
+  "real_ai": {
+    "initial_repair_stage": {
+      "trials": 20,
+      "statuses": {
+        "ready": 17,
+        "invalid_response": 2,
+        "skipped": 1
+      },
+      "technical_passed": 18,
+      "provider_attempts": 34,
+      "human_semantic_pass_rate": null
+    },
+    "final_repair_stage": {
+      "trials": 20,
+      "statuses": {
+        "ready": 19,
+        "skipped": 1
+      },
+      "technical_passed": 20,
+      "provider_attempts": 35,
+      "human_semantic_pass_rate": null
+    },
+    "provider_attempts": 69,
+    "total_tokens": 119734,
+    "human_review": "pending",
+    "human_semantic_pass_rate": null,
+    "independent_unseen_acceptance": false
+  },
+  "database_counts_before_and_after": {
+    "users": 150,
+    "learning_submissions": 1074
+  },
+  "runtime_checks": [
+    {
+      "path": "/",
+      "status": 200
+    },
+    {
+      "path": "/api/v1/health",
+      "status": 200
+    },
+    {
+      "path": "/api/v1/auth/me",
+      "status": 401
+    }
+  ],
+  "running_image": {
+    "container_image_id": "sha256:5cdb3120332cd7e8cef5f724fa392a5b145f73bc97fc6ec9f02bd246e81939c9",
+    "manifest": {
+      "mediaType": "application/vnd.oci.image.manifest.v1+json",
+      "digest": "sha256:4a708c7a1937d28ecfd2775018e502d1ea5e4e10b537c9c72dbf6c77e6bc6b68",
+      "size": 1814,
+      "platform": {
+        "architecture": "amd64",
+        "os": "linux"
+      }
+    }
+  },
+  "deployed_final_source_matches": true,
+  "committed_or_pushed": false,
+  "new_freeze_tag_created": false
+}

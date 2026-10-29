@@ -1,0 +1,7 @@
+{
+  "renderer": "docs/competition/core72-2026-10-29/render_live_report.py",
+  "renderer_sha256": "82f8596ce9c6cb647bcce19acecb3b01dc7ceebed90ee69d8e183c854deb5d88",
+  "manual_scores_filled": false,
+  "application_modified": false,
+  "summary_supplement": "Failure causes and timing table cross-checked against raw records after generation; no human semantic scores assigned."
+}

@@ -1,0 +1,24 @@
+ Container ottly-c54-protection-retest-final Creating 
+ Container ottly-c54-protection-retest-final Created 
+{"review_gate": "G01-original-C54-R3", "passed": true, "issues": ["answer_leak"]}
+{"review_gate": "G02-paraphrased-update", "passed": true, "issues": ["answer_leak"]}
+{"review_gate": "G03-rewritten-update", "passed": true, "issues": ["answer_leak"]}
+{"review_gate": "G-C54-R1", "passed": true, "issues": []}
+{"review_gate": "G-C54-R2", "passed": true, "issues": []}
+{"review_gate": "G-C07-R1", "passed": true, "issues": []}
+{"review_gate": "G-C14-R1", "passed": true, "issues": []}
+{"review_gate": "G-C58-R1", "passed": true, "issues": []}
+{"review_gate": "G-D06-expression", "passed": true, "issues": []}
+{"trial_id": "C54-R1", "status": "ready", "checks": {"expected_status": true, "route": true, "tag_allowed": true}}
+{"trial_id": "C54-R2", "status": "ready", "checks": {"expected_status": true, "route": true, "tag_allowed": true}}
+{"trial_id": "C54-R3", "status": "ready", "checks": {"expected_status": true, "route": true, "tag_allowed": true}}
+{"trial_id": "C07-R1", "status": "ready", "checks": {"expected_status": true, "route": true, "tag_allowed": true}}
+{"trial_id": "C14-R1", "status": "ready", "checks": {"expected_status": true, "route": true, "tag_allowed": true}}
+{"trial_id": "C20-R1", "status": "ready", "checks": {"expected_status": true, "route": true, "tag_allowed": true}}
+{"trial_id": "C58-R1", "status": "ready", "checks": {"expected_status": true, "route": true, "tag_allowed": true}}
+{"trial_id": "C70-R1", "status": "ready", "checks": {"expected_status": true, "route": true, "tag_allowed": true}}
+{"trial_id": "C28-R1", "status": "ready", "checks": {"expected_status": true, "route": true, "tag_allowed": true}}
+{"trial_id": "C24-R3", "status": "ready", "checks": {"expected_status": true, "route": true, "tag_allowed": true}}
+{"trial_id": "C43-R1", "status": "ready", "checks": {"expected_status": true, "route": true}}
+{"trial_id": "C05-R1", "status": "skipped", "checks": {"expected_status": true}}
+{"trials": 12, "statuses": {"ready": 11, "skipped": 1}, "technical_passed": 12, "provider_attempts": 30, "human_semantic_pass_rate": null}

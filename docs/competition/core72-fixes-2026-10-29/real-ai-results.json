@@ -1,0 +1,869 @@
+{
+  "started_at": "2026-10-29T03:51:02.588431+00:00",
+  "finished_at": "2026-10-29T03:52:33.328057+00:00",
+  "scope": "Service-level real AI replay of captured execution facts, one attempt per trial; connection-only retry at most once; no content retries. Not a new independent acceptance set or a full HTTP workflow test.",
+  "real_ai": true,
+  "fixture_sha256": "e475068b5eb550a1478779fcb878b930a8bb9fe0c2c8602b2f015dd456a80c30",
+  "human_review": "pending",
+  "trials": [
+    {
+      "trial_id": "C10-R1",
+      "started_at": "2026-10-29T03:51:02.594468+00:00",
+      "finished_at": "2026-10-29T03:51:07.199711+00:00",
+      "result": {
+        "status": "ready",
+        "message": "错因分析由 AI 根据本次执行生成；三级提示采用已审核的基础提示。",
+        "model": "deepseek-flash",
+        "content": {
+          "misconception_tag": "other",
+          "suspected_cause": "打印语句把变量名 guest 写进了字符串字面量内部，导致输出的是固定文本 Hello, guest!，而不是变量 guest 的值 Ottly。需要区分字符串中的字符和变量取值。",
+          "evidence": [
+            {
+              "case_id": "sample-1",
+              "field": "actual_output",
+              "quote": "Hello, guest!",
+              "explanation": "本次输入为 Ottly，但实际输出为 Hello, guest!，说明输出内容中的 guest 是字面量文本，未替换为已保存的输入值 Ottly。"
+            }
+          ],
+          "knowledge_points": [
+            "字符串与输出",
+            "变量、输入与字符串拼接"
+          ],
+          "hints": {
+            "level1": "问候语中哪部分会随输入变化？",
+            "level2": "查看变量是否真正接收了输入，打印时有没有把变量名加上引号。",
+            "level3": "把输出分成固定前缀、姓名和标点三部分，逐字对照样例，记录连接处的空格和末尾标点。"
+          }
+        },
+        "feedback_kind": "diagnosis",
+        "guidance": null,
+        "source": "ai",
+        "model_load_ms": 0.0,
+        "personalization": {
+          "used": false,
+          "related_history_count": 0
+        }
+      },
+      "checks": {
+        "expected_status": true,
+        "route": true,
+        "tag_allowed": true
+      },
+      "seconds": 4.603,
+      "technical_passed": true
+    },
+    {
+      "trial_id": "C24-R1",
+      "started_at": "2026-10-29T03:51:07.201909+00:00",
+      "finished_at": "2026-10-29T03:51:12.932359+00:00",
+      "result": {
+        "status": "ready",
+        "message": "错因分析由 AI 根据本次执行生成；三级提示采用已审核的基础提示。",
+        "model": "deepseek-flash",
+        "content": {
+          "misconception_tag": "other",
+          "suspected_cause": "题目规定每袋容量 k 的范围是 1–100，而本次自定义输入把 capacity 设成了0，代码直接用 capacity 做整除和取余运算，所以触发 ZeroDivisionError。该异常来自越界输入，不能据此判断在合法输入下这个算法有错。",
+          "evidence": [
+            {
+              "case_id": "run",
+              "field": "error_message",
+              "quote": "integer division or modulo by zero",
+              "explanation": "输入第二行 capacity 为0，第3行执行 shells // capacity 时发生除以零错误，因此程序没有输出。"
+            }
+          ],
+          "knowledge_points": [
+            "整数输入与算术运算",
+            "整除与取余"
+          ],
+          "hints": {
+            "level1": "怎样把题目要求拆成可以逐步核对的步骤？",
+            "level2": "结合报错信息，查看出错操作使用的数据类型、输入内容和执行条件。",
+            "level3": "用本次输入逐步推演报错前的操作，记录相关变量的值和类型，修改后重新运行。"
+          }
+        },
+        "feedback_kind": "diagnosis",
+        "guidance": null,
+        "source": "ai",
+        "model_load_ms": 0.0,
+        "personalization": {
+          "used": false,
+          "related_history_count": 0
+        }
+      },
+      "checks": {
+        "expected_status": true,
+        "route": true,
+        "tag_allowed": true
+      },
+      "seconds": 5.727,
+      "technical_passed": true
+    },
+    {
+      "trial_id": "C24-R2",
+      "started_at": "2026-10-29T03:51:12.934640+00:00",
+      "finished_at": "2026-10-29T03:51:20.203253+00:00",
+      "result": {
+        "status": "ready",
+        "message": "错因分析由 AI 根据本次执行生成；三级提示采用已审核的基础提示。",
+        "model": "deepseek-flash",
+        "content": {
+          "misconception_tag": "other",
+          "suspected_cause": "第二行容量 0 超出题目公开范围 1–100；代码将 capacity 直接作为 // 和 % 的除数，所以本次越界输入导致除以零异常。不能据此断言合法容量输入下算法错误。",
+          "evidence": [
+            {
+              "case_id": "run",
+              "field": "error_message",
+              "quote": "integer division or modulo by zero",
+              "explanation": "本次输入中 capacity=0，执行 shells // capacity 时触发该除以零异常。"
+            }
+          ],
+          "knowledge_points": [
+            "整数输入与算术运算",
+            "整除与取余"
+          ],
+          "hints": {
+            "level1": "怎样把题目要求拆成可以逐步核对的步骤？",
+            "level2": "结合报错信息，查看出错操作使用的数据类型、输入内容和执行条件。",
+            "level3": "用本次输入逐步推演报错前的操作，记录相关变量的值和类型，修改后重新运行。"
+          }
+        },
+        "feedback_kind": "diagnosis",
+        "guidance": null,
+        "source": "ai",
+        "model_load_ms": 0.0,
+        "personalization": {
+          "used": false,
+          "related_history_count": 0
+        }
+      },
+      "checks": {
+        "expected_status": true,
+        "route": true,
+        "tag_allowed": true
+      },
+      "seconds": 7.266,
+      "technical_passed": true
+    },
+    {
+      "trial_id": "C24-R3",
+      "started_at": "2026-10-29T03:51:20.205426+00:00",
+      "finished_at": "2026-10-29T03:51:25.893975+00:00",
+      "result": {
+        "status": "ready",
+        "message": "错因分析由 AI 根据本次执行生成；三级提示采用已审核的基础提示。",
+        "model": "deepseek-flash",
+        "content": {
+          "misconception_tag": "other",
+          "suspected_cause": "本次异常是因为输入中的每袋容量 capacity 为 0，导致第 3 行用 0 做除数。该输入越出题目给定的容量范围，因此这次报错来自越界输入；不能据此断言在合法输入下整除或取余的算法有误。",
+          "evidence": [
+            {
+              "case_id": "run",
+              "field": "error_message",
+              "quote": "integer division or modulo by zero",
+              "explanation": "输入中 capacity 为 0，执行第 3 行 shells // capacity 时发生除零错误，报错信息为 integer division or modulo by zero。"
+            }
+          ],
+          "knowledge_points": [
+            "整数输入与算术运算",
+            "整除与取余"
+          ],
+          "hints": {
+            "level1": "怎样把题目要求拆成可以逐步核对的步骤？",
+            "level2": "结合报错信息，查看出错操作使用的数据类型、输入内容和执行条件。",
+            "level3": "用本次输入逐步推演报错前的操作，记录相关变量的值和类型，修改后重新运行。"
+          }
+        },
+        "feedback_kind": "diagnosis",
+        "guidance": null,
+        "source": "ai",
+        "model_load_ms": 0.0,
+        "personalization": {
+          "used": false,
+          "related_history_count": 0
+        }
+      },
+      "checks": {
+        "expected_status": true,
+        "route": true,
+        "tag_allowed": true
+      },
+      "seconds": 5.686,
+      "technical_passed": true
+    },
+    {
+      "trial_id": "C28-R1",
+      "started_at": "2026-10-29T03:51:25.896653+00:00",
+      "finished_at": "2026-10-29T03:51:29.827219+00:00",
+      "result": {
+        "status": "ready",
+        "message": "错因分析由 AI 根据本次执行生成；三级提示采用已审核的基础提示。",
+        "model": "deepseek-flash",
+        "content": {
+          "misconception_tag": "syntax_error",
+          "suspected_cause": "第 2 行的 if 条件语句末尾漏写了冒号，Python 要求 if 条件后必须有冒号，导致语法解析失败。",
+          "evidence": [
+            {
+              "case_id": "sample-1",
+              "field": "error_message",
+              "quote": "expected ':' (<unknown>, line 2)",
+              "explanation": "真实执行结果指出第 2 行缺少冒号，说明 IF 条件后的冒号缺失使程序无法运行。"
+            }
+          ],
+          "knowledge_points": [
+            "比较与条件分支"
+          ],
+          "hints": {
+            "level1": "Python 写一行代码时，需要遵守哪些基本格式？",
+            "level2": "先看报错行和上一行，检查标点、括号或缩进是否符合 Python 的写法。",
+            "level3": "从报错行开始逐字对照示例，先修改一处可疑写法并重新运行；语法通过后再检查结果。"
+          }
+        },
+        "feedback_kind": "diagnosis",
+        "guidance": null,
+        "source": "ai",
+        "model_load_ms": 0.0,
+        "personalization": {
+          "used": false,
+          "related_history_count": 0
+        }
+      },
+      "checks": {
+        "expected_status": true,
+        "route": true,
+        "tag_allowed": true
+      },
+      "seconds": 3.93,
+      "technical_passed": true
+    },
+    {
+      "trial_id": "C54-R1",
+      "started_at": "2026-10-29T03:51:29.830104+00:00",
+      "finished_at": "2026-10-29T03:51:33.331284+00:00",
+      "result": {
+        "status": "ready",
+        "message": "错因分析由 AI 根据本次执行生成；三级提示采用已审核的基础提示。",
+        "model": "deepseek-flash",
+        "content": {
+          "misconception_tag": "accumulation_error",
+          "suspected_cause": "循环推进变量 saved 在循环体内没有被更新，始终为 0，导致 while 条件 saved < target 永远为真，无法终止；本题要求每天存入 3 枚，应在每轮循环中让已存贝壳数增加 3。",
+          "evidence": [
+            {
+              "case_id": "run",
+              "field": "error_message",
+              "quote": "代码执行超过 3 秒，执行进程已终止",
+              "explanation": "输入 7 时 saved 一直为 0，days 不断增加，while 循环无法退出，因此超时被终止。"
+            }
+          ],
+          "knowledge_points": [
+            "while 循环与终止",
+            "累加器与变量更新"
+          ],
+          "hints": {
+            "level1": "怎样把题目要求拆成可以逐步核对的步骤？",
+            "level2": "结合报错信息，查看出错操作使用的数据类型、输入内容和执行条件。",
+            "level3": "用本次输入逐步推演报错前的操作，记录相关变量的值和类型，修改后重新运行。"
+          }
+        },
+        "feedback_kind": "diagnosis",
+        "guidance": null,
+        "source": "ai",
+        "model_load_ms": 0.0,
+        "personalization": {
+          "used": false,
+          "related_history_count": 0
+        }
+      },
+      "checks": {
+        "expected_status": true,
+        "route": true,
+        "tag_allowed": true
+      },
+      "seconds": 3.498,
+      "technical_passed": true
+    },
+    {
+      "trial_id": "C54-R2",
+      "started_at": "2026-10-29T03:51:33.333781+00:00",
+      "finished_at": "2026-10-29T03:51:37.830456+00:00",
+      "result": {
+        "status": "ready",
+        "message": "错因分析由 AI 根据本次执行生成；三级提示采用已审核的基础提示。",
+        "model": "deepseek-flash",
+        "content": {
+          "misconception_tag": "accumulation_error",
+          "suspected_cause": "循环体只更新了天数 days，没有让已存贝壳数 saved 随每天存入的 3 枚增加，因此 saved < target 永远成立，程序陷入无限循环并超时。",
+          "evidence": [
+            {
+              "case_id": "run",
+              "field": "error_message",
+              "quote": "代码执行超过 3 秒，执行进程已终止",
+              "explanation": "输入 7 后，因为 saved 一直为 0，循环条件 0 < 7 始终成立，循环无法结束，最终超时被终止。"
+            }
+          ],
+          "knowledge_points": [
+            "累加器与变量更新",
+            "while 循环与终止"
+          ],
+          "hints": {
+            "level1": "怎样把题目要求拆成可以逐步核对的步骤？",
+            "level2": "结合报错信息，查看出错操作使用的数据类型、输入内容和执行条件。",
+            "level3": "用本次输入逐步推演报错前的操作，记录相关变量的值和类型，修改后重新运行。"
+          }
+        },
+        "feedback_kind": "diagnosis",
+        "guidance": null,
+        "source": "ai",
+        "model_load_ms": 0.0,
+        "personalization": {
+          "used": false,
+          "related_history_count": 0
+        }
+      },
+      "checks": {
+        "expected_status": true,
+        "route": true,
+        "tag_allowed": true
+      },
+      "seconds": 4.494,
+      "technical_passed": true
+    },
+    {
+      "trial_id": "C54-R3",
+      "started_at": "2026-10-29T03:51:37.833458+00:00",
+      "finished_at": "2026-10-29T03:51:43.239382+00:00",
+      "result": {
+        "status": "ready",
+        "message": "错因分析由 AI 根据本次执行生成；三级提示采用已审核的基础提示。",
+        "model": "deepseek-flash",
+        "content": {
+          "misconception_tag": "accumulation_error",
+          "suspected_cause": "循环中的累计变量 saved 没有更新，缺少“每天存入 3 枚”的推进操作，使 saved < target 恒为真，程序反复计数并最终超时。",
+          "evidence": [
+            {
+              "case_id": "run",
+              "field": "error_message",
+              "quote": "代码执行超过 3 秒，执行进程已终止",
+              "explanation": "本次输入 7 时进程因超时被终止，这与 saved 一直为 0、循环条件恒真相符。"
+            }
+          ],
+          "knowledge_points": [
+            "while 循环与终止",
+            "累加器与变量更新"
+          ],
+          "hints": {
+            "level1": "怎样把题目要求拆成可以逐步核对的步骤？",
+            "level2": "结合报错信息，查看出错操作使用的数据类型、输入内容和执行条件。",
+            "level3": "用本次输入逐步推演报错前的操作，记录相关变量的值和类型，修改后重新运行。"
+          }
+        },
+        "feedback_kind": "diagnosis",
+        "guidance": null,
+        "source": "ai",
+        "model_load_ms": 0.0,
+        "personalization": {
+          "used": false,
+          "related_history_count": 0
+        }
+      },
+      "checks": {
+        "expected_status": true,
+        "route": true,
+        "tag_allowed": true
+      },
+      "seconds": 5.403,
+      "technical_passed": true
+    },
+    {
+      "trial_id": "C64-R1",
+      "started_at": "2026-10-29T03:51:43.242087+00:00",
+      "finished_at": "2026-10-29T03:51:49.633542+00:00",
+      "result": {
+        "status": "ready",
+        "message": "错因分析由 AI 根据本次执行生成；三级提示采用已审核的基础提示。",
+        "model": "deepseek-flash",
+        "content": {
+          "misconception_tag": "other",
+          "suspected_cause": "初始化 largest 时使用了 values[n]；长度为 n 的列表最大下标是 n-1，访问 values[n] 必然越界，导致程序在逐个比较前异常终止，未输出最大值 9。",
+          "evidence": [
+            {
+              "case_id": "sample-1",
+              "field": "error_message",
+              "quote": "列表索引超出范围，检查列表长度",
+              "explanation": "本次输入 n=4，列表只有 4 个元素，下标 4 超出 0 到 3 的合法范围，因此报列表索引越界。"
+            }
+          ],
+          "knowledge_points": [
+            "列表与遍历",
+            "累加器与变量更新"
+          ],
+          "hints": {
+            "level1": "怎样把题目要求拆成可以逐步核对的步骤？",
+            "level2": "结合报错信息，查看出错操作使用的数据类型、输入内容和执行条件。",
+            "level3": "用本次输入逐步推演报错前的操作，记录相关变量的值和类型，修改后重新运行。"
+          }
+        },
+        "feedback_kind": "diagnosis",
+        "guidance": null,
+        "source": "ai",
+        "model_load_ms": 0.0,
+        "personalization": {
+          "used": false,
+          "related_history_count": 0
+        }
+      },
+      "checks": {
+        "expected_status": true,
+        "route": true,
+        "tag_allowed": true
+      },
+      "seconds": 6.388,
+      "technical_passed": true
+    },
+    {
+      "trial_id": "C37-R1",
+      "started_at": "2026-10-29T03:51:49.636152+00:00",
+      "finished_at": "2026-10-29T03:51:53.484622+00:00",
+      "result": {
+        "status": "invalid_response",
+        "message": "AI 提示未通过内容检查，判题结果已保留。",
+        "model": "deepseek-flash",
+        "content": null,
+        "feedback_kind": "guidance",
+        "guidance": null,
+        "source": "ai",
+        "model_load_ms": 0.0,
+        "personalization": {
+          "used": false,
+          "related_history_count": 0
+        }
+      },
+      "checks": {
+        "expected_status": false
+      },
+      "seconds": 3.845,
+      "technical_passed": false
+    },
+    {
+      "trial_id": "C40-R1",
+      "started_at": "2026-10-29T03:51:53.487563+00:00",
+      "finished_at": "2026-10-29T03:52:00.858397+00:00",
+      "result": {
+        "status": "ready",
+        "message": "错因分析由 AI 根据本次执行生成；三级提示采用已审核的基础提示。",
+        "model": "deepseek-flash",
+        "content": {
+          "misconception_tag": "range_boundary",
+          "suspected_cause": "for 循环的 range 起点写成了 -1，导致每次都会多输出 -1 和 0；应让循环从 1 开始，同时终点需包含 n。样例 2 中 n 为 0 时仍产生 -1、0，也是同一范围错误造成的。",
+          "evidence": [
+            {
+              "case_id": "sample-1",
+              "field": "actual_output",
+              "quote": "-1\n0\n1\n2\n3",
+              "explanation": "输入 3 时实际从 -1 开始输出到 3，前两行 -1、0 是多余的，说明 range 起点和范围不符合题目要求。"
+            },
+            {
+              "case_id": "sample-2",
+              "field": "actual_output",
+              "quote": "-1\n0",
+              "explanation": "输入 0 时仍输出 -1 和 0，而题目要求不输出任何字符，说明循环范围在 n 为 0 时也没有排除这些值。"
+            }
+          ],
+          "knowledge_points": [
+            "for 循环与 range"
+          ],
+          "hints": {
+            "level1": "怎样把题目要求拆成可以逐步核对的步骤？",
+            "level2": "结合输入、计算和输出的关系，查看产生公开结果的代码操作。",
+            "level3": "对照题目要求，找出公开结果里的第一处不同，再回到产生它的代码位置检查。"
+          }
+        },
+        "feedback_kind": "diagnosis",
+        "guidance": null,
+        "source": "ai",
+        "model_load_ms": 0.0,
+        "personalization": {
+          "used": false,
+          "related_history_count": 0
+        }
+      },
+      "checks": {
+        "expected_status": true,
+        "route": true,
+        "tag_allowed": true
+      },
+      "seconds": 7.37,
+      "technical_passed": true
+    },
+    {
+      "trial_id": "C43-R1",
+      "started_at": "2026-10-29T03:52:00.861436+00:00",
+      "finished_at": "2026-10-29T03:52:04.716529+00:00",
+      "result": {
+        "status": "ready",
+        "message": "AI 提示已生成，可以先思考再修改代码。",
+        "model": "deepseek-flash",
+        "content": null,
+        "feedback_kind": "guidance",
+        "guidance": {
+          "hint": "把注意力放在循环体里那句 `total = 0`：它在每轮迭代开始时都会执行。可以取 n 等于 4，手动写下每轮迭代结束时累加变量的值，再和期望输出 10 对照。也可以思考，累加变量应该在进入循环之前还是在循环之中设置初始值，才能让前面几轮的结果保留下来。",
+          "knowledge_points": [
+            "累加器与变量更新",
+            "for 循环与 range"
+          ],
+          "question": {
+            "prompt": "用变量累加循环中每一项的值时，累加变量的初始值应放在哪里最合适？",
+            "options": [
+              "每轮循环开始时，在循环体内重新设置",
+              "在循环开始之前设置一次，循环中只更新它的值",
+              "等循环结束后再设置",
+              "不需要初始值，直接使用即可"
+            ],
+            "correct_index": 1,
+            "explanation": "累加变量要在循环前初始化一次，循环内只更新其值；如果每轮都重置，此前的累加结果会被丢掉，最终只能保留最后一轮的结果。"
+          }
+        },
+        "source": "ai",
+        "model_load_ms": 0.0,
+        "personalization": {
+          "used": false,
+          "related_history_count": 0
+        }
+      },
+      "checks": {
+        "expected_status": true,
+        "route": true
+      },
+      "seconds": 3.852,
+      "technical_passed": true
+    },
+    {
+      "trial_id": "C01-R2",
+      "started_at": "2026-10-29T03:52:04.719420+00:00",
+      "finished_at": "2026-10-29T03:52:08.744358+00:00",
+      "result": {
+        "status": "ready",
+        "message": "错因分析由 AI 根据本次执行生成；三级提示采用已审核的基础提示。",
+        "model": "deepseek-flash",
+        "content": {
+          "misconception_tag": "syntax_error",
+          "suspected_cause": "字符串字面量缺少结束双引号：\"Hello, World! 后面没有闭合的双引号，导致 Python 报 unterminated string literal，程序无法运行并输出预期内容。",
+          "evidence": [
+            {
+              "case_id": "stdout-1",
+              "field": "error_message",
+              "quote": "unterminated string literal (detected at line 1) (<unknown>, line 1)",
+              "explanation": "该错误表明第 1 行的字符串没有正确结束；由于语法解析失败，实际输出为空。"
+            }
+          ],
+          "knowledge_points": [
+            "字符串与输出"
+          ],
+          "hints": {
+            "level1": "Python 写一行代码时，需要遵守哪些基本格式？",
+            "level2": "先看报错行和上一行，检查标点、括号或缩进是否符合 Python 的写法。",
+            "level3": "从报错行开始逐字对照示例，先修改一处可疑写法并重新运行；语法通过后再检查结果。"
+          }
+        },
+        "feedback_kind": "diagnosis",
+        "guidance": null,
+        "source": "ai",
+        "model_load_ms": 0.0,
+        "personalization": {
+          "used": false,
+          "related_history_count": 0
+        }
+      },
+      "checks": {
+        "expected_status": true,
+        "route": true,
+        "tag_allowed": true
+      },
+      "seconds": 4.022,
+      "technical_passed": true
+    },
+    {
+      "trial_id": "C08-R1",
+      "started_at": "2026-10-29T03:52:08.747034+00:00",
+      "finished_at": "2026-10-29T03:52:12.803301+00:00",
+      "result": {
+        "status": "ready",
+        "message": "AI 提示已生成，可以先思考再修改代码。",
+        "model": "deepseek-flash",
+        "content": null,
+        "feedback_kind": "guidance",
+        "guidance": {
+          "hint": "观察代码中 `guest.lower()` 对字母大小写做了什么改动，再对照题目“保留姓名的大小写”的要求，以及公开样例里实际输出与期望输出在首字母大小写上的差异。",
+          "knowledge_points": [
+            "字符串与输出",
+            "变量、输入与字符串拼接"
+          ],
+          "question": {
+            "prompt": "当题目要求保留输入文本的原有大小写时，使用会把字母统一转为小写的字符串方法会产生什么效果？",
+            "options": [
+              "完全保留输入中每个字母的原有大小写",
+              "可能把原本大写的字母变成小写，从而改变大小写",
+              "只会删除姓名内部空格，不影响字母大小写",
+              "只会影响最后输出的标点符号"
+            ],
+            "correct_index": 1,
+            "explanation": "小写转换会改变字母的大小写表现，因此与“保留姓名的大小写”的要求不一致；内部空格和标点是否保留需要分别检查。"
+          }
+        },
+        "source": "ai",
+        "model_load_ms": 0.0,
+        "personalization": {
+          "used": false,
+          "related_history_count": 0
+        }
+      },
+      "checks": {
+        "expected_status": true,
+        "route": true
+      },
+      "seconds": 4.054,
+      "technical_passed": true
+    },
+    {
+      "trial_id": "C07-R1",
+      "started_at": "2026-10-29T03:52:12.805757+00:00",
+      "finished_at": "2026-10-29T03:52:18.828285+00:00",
+      "result": {
+        "status": "ready",
+        "message": "错因分析由 AI 根据本次执行生成；三级提示采用已审核的基础提示。",
+        "model": "deepseek-flash",
+        "content": {
+          "misconception_tag": "other",
+          "suspected_cause": "第 2 行把整数 1 当作感叹号，直接与字符串相加；Python 不允许字符串和 int 直接相加，因此抛出 TypeError，导致 print 没有执行、程序无输出。",
+          "evidence": [
+            {
+              "case_id": "sample-1",
+              "field": "error_message",
+              "quote": "不能将 int 和字符串直接相加",
+              "explanation": "输入 Ottly 后，guest 是字符串；\"Hello, \" + guest 的结果也是字符串，再与整数 1 相加就触发了该 TypeError，程序没有输出 Hello, Ottly!。"
+            }
+          ],
+          "knowledge_points": [
+            "字符串与输出",
+            "变量、输入与字符串拼接"
+          ],
+          "hints": {
+            "level1": "问候语中哪部分会随输入变化？",
+            "level2": "结合报错信息，查看出错操作使用的数据类型、输入内容和执行条件。",
+            "level3": "用本次输入逐步推演报错前的操作，记录相关变量的值和类型，修改后重新运行。"
+          }
+        },
+        "feedback_kind": "diagnosis",
+        "guidance": null,
+        "source": "ai",
+        "model_load_ms": 0.0,
+        "personalization": {
+          "used": false,
+          "related_history_count": 0
+        }
+      },
+      "checks": {
+        "expected_status": true,
+        "route": true,
+        "tag_allowed": true
+      },
+      "seconds": 6.02,
+      "technical_passed": true
+    },
+    {
+      "trial_id": "C14-R1",
+      "started_at": "2026-10-29T03:52:18.830986+00:00",
+      "finished_at": "2026-10-29T03:52:23.048612+00:00",
+      "result": {
+        "status": "ready",
+        "message": "错因分析由 AI 根据本次执行生成；三级提示采用已审核的基础提示。",
+        "model": "deepseek-flash",
+        "content": {
+          "misconception_tag": "other",
+          "suspected_cause": "总价应当按“单价 × 数量”计算，但代码里写成了加法，用 4 + 3 = 7 代替了 4 × 3 = 12；于是差额又按 20 - 7 = 13 被连锁算错，而正确结果应为 12 和 8。",
+          "evidence": [
+            {
+              "case_id": "sample-1",
+              "field": "actual_output",
+              "quote": "7\n13",
+              "explanation": "因为程序用 price + quantity 得到 7，所以第 1 行输出 7；再用 budget - cost 得到 20 - 7 = 13，所以第 2 行输出 13。这两行说明两处输出都不正确，且都源于总价计算用错运算符。"
+            }
+          ],
+          "knowledge_points": [
+            "整数输入与算术运算"
+          ],
+          "hints": {
+            "level1": "怎样把题目要求拆成可以逐步核对的步骤？",
+            "level2": "结合输入、计算和输出的关系，查看产生公开结果的代码操作。",
+            "level3": "对照题目要求，找出公开结果里的第一处不同，再回到产生它的代码位置检查。"
+          }
+        },
+        "feedback_kind": "diagnosis",
+        "guidance": null,
+        "source": "ai",
+        "model_load_ms": 0.0,
+        "personalization": {
+          "used": false,
+          "related_history_count": 0
+        }
+      },
+      "checks": {
+        "expected_status": true,
+        "route": true,
+        "tag_allowed": true
+      },
+      "seconds": 4.215,
+      "technical_passed": true
+    },
+    {
+      "trial_id": "C20-R1",
+      "started_at": "2026-10-29T03:52:23.051486+00:00",
+      "finished_at": "2026-10-29T03:52:26.522332+00:00",
+      "result": {
+        "status": "ready",
+        "message": "错因分析由 AI 根据本次执行生成；三级提示采用已审核的基础提示。",
+        "model": "deepseek-flash",
+        "content": {
+          "misconception_tag": "other",
+          "suspected_cause": "第 1 行使用了真除法运算符 /，所以计算完整袋数时结果保留为浮点数 3.4；题目要求的是能装满的完整袋数，应通过整除得到整数部分。",
+          "evidence": [
+            {
+              "case_id": "sample-1",
+              "field": "actual_output",
+              "quote": "3.4\n2",
+              "explanation": "输入 17 和 5 后，首行 n / k 输出 3.4，而非完整袋数 3；第 2 行取余输出 2 正确。"
+            }
+          ],
+          "knowledge_points": [
+            "整除与取余",
+            "整数输入与算术运算"
+          ],
+          "hints": {
+            "level1": "怎样把题目要求拆成可以逐步核对的步骤？",
+            "level2": "结合输入、计算和输出的关系，查看产生公开结果的代码操作。",
+            "level3": "对照题目要求，找出公开结果里的第一处不同，再回到产生它的代码位置检查。"
+          }
+        },
+        "feedback_kind": "diagnosis",
+        "guidance": null,
+        "source": "ai",
+        "model_load_ms": 0.0,
+        "personalization": {
+          "used": false,
+          "related_history_count": 0
+        }
+      },
+      "checks": {
+        "expected_status": true,
+        "route": true,
+        "tag_allowed": true
+      },
+      "seconds": 3.47,
+      "technical_passed": true
+    },
+    {
+      "trial_id": "C58-R1",
+      "started_at": "2026-10-29T03:52:26.525463+00:00",
+      "finished_at": "2026-10-29T03:52:30.551291+00:00",
+      "result": {
+        "status": "ready",
+        "message": "错因分析由 AI 根据本次执行生成；三级提示采用已审核的基础提示。",
+        "model": "deepseek-flash",
+        "content": {
+          "misconception_tag": "accumulation_error",
+          "suspected_cause": "计数变量 count 的初始值错设为 1，而目标字符出现次数应从 0 开始累计；因此 banana 中的 3 个 a 被多算成 4 次。",
+          "evidence": [
+            {
+              "case_id": "sample-1",
+              "field": "actual_output",
+              "quote": "6\n4",
+              "explanation": "第一行 6 与正确结果一致；第二行应为 3 次，但实际输出 4，说明计数初值多了 1。"
+            }
+          ],
+          "knowledge_points": [
+            "字符串遍历与条件计数",
+            "累加器与变量更新"
+          ],
+          "hints": {
+            "level1": "怎样把题目要求拆成可以逐步核对的步骤？",
+            "level2": "结合输入、计算和输出的关系，查看产生公开结果的代码操作。",
+            "level3": "对照题目要求，找出公开结果里的第一处不同，再回到产生它的代码位置检查。"
+          }
+        },
+        "feedback_kind": "diagnosis",
+        "guidance": null,
+        "source": "ai",
+        "model_load_ms": 0.0,
+        "personalization": {
+          "used": false,
+          "related_history_count": 0
+        }
+      },
+      "checks": {
+        "expected_status": true,
+        "route": true,
+        "tag_allowed": true
+      },
+      "seconds": 4.023,
+      "technical_passed": true
+    },
+    {
+      "trial_id": "C70-R1",
+      "started_at": "2026-10-29T03:52:30.554302+00:00",
+      "finished_at": "2026-10-29T03:52:33.316992+00:00",
+      "result": {
+        "status": "invalid_response",
+        "message": "错因分析未通过内容检查，判题结果已保留。请先对照实际输出或报错。",
+        "model": "deepseek-flash",
+        "content": null,
+        "feedback_kind": "diagnosis",
+        "guidance": null,
+        "source": "ai",
+        "model_load_ms": 0.0,
+        "personalization": {
+          "used": false,
+          "related_history_count": 0
+        }
+      },
+      "checks": {
+        "expected_status": false
+      },
+      "seconds": 2.759,
+      "technical_passed": false
+    },
+    {
+      "trial_id": "C05-R1",
+      "started_at": "2026-10-29T03:52:33.320779+00:00",
+      "finished_at": "2026-10-29T03:52:33.325487+00:00",
+      "result": {
+        "status": "skipped",
+        "message": "测试已通过，无需 AI 分析。",
+        "model": null,
+        "content": null,
+        "feedback_kind": "diagnosis",
+        "guidance": null,
+        "source": "ai",
+        "model_load_ms": 0.0,
+        "personalization": {
+          "used": false,
+          "related_history_count": 0
+        }
+      },
+      "checks": {
+        "expected_status": true
+      },
+      "seconds": 0.002,
+      "technical_passed": true
+    }
+  ],
+  "summary": {
+    "trials": 20,
+    "statuses": {
+      "ready": 17,
+      "invalid_response": 2,
+      "skipped": 1
+    },
+    "technical_passed": 18,
+    "provider_attempts": 34,
+    "human_semantic_pass_rate": null
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "status": "human_adjudication_finalized_with_recorded_failures",
+  "files": [
+    {
+      "path": "adjudication-decisions.json",
+      "sha256": "188cc7387c440eaeee3a39274922119979727c9664f2fed1e87aef5502a63cda"
+    },
+    {
+      "path": "adjudication.snapshot.txt",
+      "sha256": "c8467caa85bae7eaf06df5a1d3e079065d430afc858b283797e337fbdfd4776e"
+    },
+    {
+      "path": "final-reviews.json",
+      "sha256": "3017656ca59a4f9362ba317211fecdac77d6dc61d9c77c353154412081780b8c"
+    },
+    {
+      "path": "final-summary.json",
+      "sha256": "94e7c160711967cfa24c131363f029e4663b2c1755f5dcc6bfa4890362a01966"
+    },
+    {
+      "path": "finalize_acceptance.py",
+      "sha256": "b5f34c401635844fffb93aff84fddab570d4c9a12ff19b9852bb3eb5968b6847"
+    },
+    {
+      "path": "人工验收定稿.md",
+      "sha256": "339d9f2db9c6757a91bfd9f15b077066869c6801a9120a8cc6fe8b9b8ddc0670"
+    },
+    {
+      "path": "最终逐条记录.md",
+      "sha256": "0d815c3fa433ce0effb18744798f4fd97bb15e0034e80db983b85642f8eda98b"
+    }
+  ],
+  "sources": [
+    {
+      "path": "docs/competition/core72-2026-10-29/design-lock.json",
+      "sha256": "c67608689d5461b9cd10b22d0179891da2a0f230d6f5493a0c782ffe008f3644"
+    },
+    {
+      "path": "docs/competition/core72-live-2026-10-29/evidence-manifest.json",
+      "sha256": "8f0f8128d0f81fb93091cdf8a51a53041234330be42e4a62c8e5b4348d5da336"
+    },
+    {
+      "path": "docs/competition/core72-review-2026-10-29/review-manifest.json",
+      "sha256": "7d28da684ec4163917a94d576db9b612fef02a978f3440bd593a0225e75ee16a"
+    },
+    {
+      "path": "docs/competition/core72-review-2026-10-29/分歧核对说明.md",
+      "sha256": "c8467caa85bae7eaf06df5a1d3e079065d430afc858b283797e337fbdfd4776e"
+    }
+  ]
+}

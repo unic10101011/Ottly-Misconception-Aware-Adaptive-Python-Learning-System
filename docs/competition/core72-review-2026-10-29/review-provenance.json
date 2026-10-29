@@ -1,0 +1,21 @@
+{
+  "sources": [
+    {
+      "reviewer": "A",
+      "source": "docs/competition/core72-2026-10-29/人工验收表.md",
+      "snapshot": "review-A.snapshot.txt",
+      "sha256": "afcf783f764b44fbe56461557b472c3995163396e485807ab7822ca27a302668",
+      "identity": "unic"
+    },
+    {
+      "reviewer": "B",
+      "source": "docs/competition/core72-2026-10-29/人工验收表(1).md",
+      "snapshot": "review-B.snapshot.txt",
+      "sha256": "51bbb01892cb9c24ecfdb9348571905f7c9c7d20ab0ef513a8179db0da49e30b",
+      "identity": "第二位独立复核人（未署名，用户已澄清非unic）"
+    }
+  ],
+  "original_scores_overwritten": false,
+  "model_calls_added": 0,
+  "application_modified": false
+}

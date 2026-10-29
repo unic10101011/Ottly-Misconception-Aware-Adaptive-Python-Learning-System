@@ -1,0 +1,29 @@
+{
+  "application_digest": "2b796d575a71309f70b06e28dabcaaa33edd5ee5966bf819be2d9a93f8ef9be9",
+  "files": [
+    {
+      "path": "docs/competition/c54-protection-fix-2026-10-29/retest-plan.json",
+      "sha256": "c6cb582bf673efd251fb490e852856d6358457b6d6f3bad8ac898e41c1491fe2"
+    },
+    {
+      "path": "docs/competition/c54-protection-fix-2026-10-29/replay-fixtures.json",
+      "sha256": "503a04eb3ce65075367eff990dbf7575be645086a7e718902edb58186f258804"
+    },
+    {
+      "path": "docs/competition/c54-protection-fix-2026-10-29/live_retest.py",
+      "sha256": "877d120a8340e646e4fba81718c62a593e3c81cb2d799a6082f790c7cdac7ad2"
+    },
+    {
+      "path": "docs/competition/c54-protection-fix-2026-10-29/source-before.json",
+      "sha256": "91e38e764fed560b1e851a75109175c598c32ff8672c64f3d3f877412a899c06"
+    },
+    {
+      "path": "backend/tests/test_c54_answer_protection.py",
+      "sha256": "59b96b0f907951f5b029f11e34dec656dfba6250084a923ef4b5950d0896c17c"
+    },
+    {
+      "path": "backend/tests/data/c54_answer_protection_regressions.json",
+      "sha256": "4e15b97b5bf5abea886d4fefc85212a62bbafa33c42d7cea28c51fd770e2818e"
+    }
+  ]
+}

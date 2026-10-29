@@ -1,0 +1,476 @@
+{
+  "planned_trials": 120,
+  "completed_trials": 120,
+  "rounds": [
+    {
+      "round": 1,
+      "trials": 72,
+      "ai_expected": 56,
+      "valid_ai": 53,
+      "controls": 16,
+      "technical_passed": 69,
+      "statuses": {
+        "ready": 53,
+        "skipped": 15,
+        "no_analysis": 1,
+        "unavailable": 1,
+        "invalid_response": 2
+      }
+    },
+    {
+      "round": 2,
+      "trials": 24,
+      "ai_expected": 24,
+      "valid_ai": 23,
+      "controls": 0,
+      "technical_passed": 23,
+      "statuses": {
+        "invalid_response": 1,
+        "ready": 23
+      }
+    },
+    {
+      "round": 3,
+      "trials": 24,
+      "ai_expected": 24,
+      "valid_ai": 24,
+      "controls": 0,
+      "technical_passed": 24,
+      "statuses": {
+        "ready": 24
+      }
+    }
+  ],
+  "ai_expected": 104,
+  "valid_ai": 100,
+  "technical_passed": 116,
+  "provider_calls": 149,
+  "provider_http_statuses": {
+    "200": 148,
+    "None": 1
+  },
+  "provider_response_models": {
+    "deepseek-flash": 148,
+    "null": 1
+  },
+  "provider_usage_totals": {
+    "prompt_tokens": 163228,
+    "completion_tokens": 70824,
+    "total_tokens": 234052,
+    "prompt_cache_hit_tokens": 69626,
+    "prompt_cache_miss_tokens": 93602
+  },
+  "payload_audit_passed": true,
+  "human_semantic_review": "pending",
+  "semantic_pass_rate": null,
+  "end_to_end_semantic_rate": null,
+  "cost": null,
+  "cost_note": "Token usage captured; actual billed cost not returned by provider response.",
+  "record_counts": {
+    "new_synthetic_accounts": 120,
+    "setup_submissions": 660,
+    "target_submissions": 109,
+    "database_before": {
+      "users": 30,
+      "learning_submissions": 305
+    },
+    "database_after": {
+      "users": 150,
+      "learning_submissions": 1074
+    },
+    "user_delta_matches": true,
+    "submission_delta_matches": true
+  },
+  "target_end_to_end_seconds": {
+    "n": 120,
+    "median": 5.774,
+    "p95_nearest_rank": 9.042,
+    "max": 27.091
+  },
+  "ai_trial_end_to_end_seconds": {
+    "n": 104,
+    "median": 5.935,
+    "p95_nearest_rank": 9.074,
+    "max": 27.091
+  },
+  "submission_judge_seconds": {
+    "n": 109,
+    "median": 0.112,
+    "p95_nearest_rank": 0.157,
+    "max": 0.15988999999999998
+  },
+  "feedback_endpoint_seconds": {
+    "n": 94,
+    "median": 5.736,
+    "p95_nearest_rank": 8.919,
+    "max": 26.951
+  },
+  "provider_call_seconds": {
+    "n": 149,
+    "median": 3.82,
+    "p95_nearest_rank": 7.34,
+    "max": 26.909
+  },
+  "stability": [
+    {
+      "case_id": "C01",
+      "trials": [
+        "C01-R1",
+        "C01-R2",
+        "C01-R3"
+      ],
+      "valid_feedback": 2,
+      "statuses": [
+        "ready",
+        "invalid_response",
+        "ready"
+      ],
+      "human_semantic_consistency": "pending"
+    },
+    {
+      "case_id": "C04",
+      "trials": [
+        "C04-R1",
+        "C04-R2",
+        "C04-R3"
+      ],
+      "valid_feedback": 3,
+      "statuses": [
+        "ready",
+        "ready",
+        "ready"
+      ],
+      "human_semantic_consistency": "pending"
+    },
+    {
+      "case_id": "C07",
+      "trials": [
+        "C07-R1",
+        "C07-R2",
+        "C07-R3"
+      ],
+      "valid_feedback": 3,
+      "statuses": [
+        "ready",
+        "ready",
+        "ready"
+      ],
+      "human_semantic_consistency": "pending"
+    },
+    {
+      "case_id": "C12",
+      "trials": [
+        "C12-R1",
+        "C12-R2",
+        "C12-R3"
+      ],
+      "valid_feedback": 3,
+      "statuses": [
+        "ready",
+        "ready",
+        "ready"
+      ],
+      "human_semantic_consistency": "pending"
+    },
+    {
+      "case_id": "C14",
+      "trials": [
+        "C14-R1",
+        "C14-R2",
+        "C14-R3"
+      ],
+      "valid_feedback": 3,
+      "statuses": [
+        "ready",
+        "ready",
+        "ready"
+      ],
+      "human_semantic_consistency": "pending"
+    },
+    {
+      "case_id": "C15",
+      "trials": [
+        "C15-R1",
+        "C15-R2",
+        "C15-R3"
+      ],
+      "valid_feedback": 3,
+      "statuses": [
+        "ready",
+        "ready",
+        "ready"
+      ],
+      "human_semantic_consistency": "pending"
+    },
+    {
+      "case_id": "C20",
+      "trials": [
+        "C20-R1",
+        "C20-R2",
+        "C20-R3"
+      ],
+      "valid_feedback": 3,
+      "statuses": [
+        "ready",
+        "ready",
+        "ready"
+      ],
+      "human_semantic_consistency": "pending"
+    },
+    {
+      "case_id": "C24",
+      "trials": [
+        "C24-R1",
+        "C24-R2",
+        "C24-R3"
+      ],
+      "valid_feedback": 3,
+      "statuses": [
+        "ready",
+        "ready",
+        "ready"
+      ],
+      "human_semantic_consistency": "pending"
+    },
+    {
+      "case_id": "C25",
+      "trials": [
+        "C25-R1",
+        "C25-R2",
+        "C25-R3"
+      ],
+      "valid_feedback": 3,
+      "statuses": [
+        "ready",
+        "ready",
+        "ready"
+      ],
+      "human_semantic_consistency": "pending"
+    },
+    {
+      "case_id": "C27",
+      "trials": [
+        "C27-R1",
+        "C27-R2",
+        "C27-R3"
+      ],
+      "valid_feedback": 3,
+      "statuses": [
+        "ready",
+        "ready",
+        "ready"
+      ],
+      "human_semantic_consistency": "pending"
+    },
+    {
+      "case_id": "C31",
+      "trials": [
+        "C31-R1",
+        "C31-R2",
+        "C31-R3"
+      ],
+      "valid_feedback": 3,
+      "statuses": [
+        "ready",
+        "ready",
+        "ready"
+      ],
+      "human_semantic_consistency": "pending"
+    },
+    {
+      "case_id": "C33",
+      "trials": [
+        "C33-R1",
+        "C33-R2",
+        "C33-R3"
+      ],
+      "valid_feedback": 3,
+      "statuses": [
+        "ready",
+        "ready",
+        "ready"
+      ],
+      "human_semantic_consistency": "pending"
+    },
+    {
+      "case_id": "C38",
+      "trials": [
+        "C38-R1",
+        "C38-R2",
+        "C38-R3"
+      ],
+      "valid_feedback": 3,
+      "statuses": [
+        "ready",
+        "ready",
+        "ready"
+      ],
+      "human_semantic_consistency": "pending"
+    },
+    {
+      "case_id": "C42",
+      "trials": [
+        "C42-R1",
+        "C42-R2",
+        "C42-R3"
+      ],
+      "valid_feedback": 3,
+      "statuses": [
+        "ready",
+        "ready",
+        "ready"
+      ],
+      "human_semantic_consistency": "pending"
+    },
+    {
+      "case_id": "C43",
+      "trials": [
+        "C43-R1",
+        "C43-R2",
+        "C43-R3"
+      ],
+      "valid_feedback": 2,
+      "statuses": [
+        "invalid_response",
+        "ready",
+        "ready"
+      ],
+      "human_semantic_consistency": "pending"
+    },
+    {
+      "case_id": "C45",
+      "trials": [
+        "C45-R1",
+        "C45-R2",
+        "C45-R3"
+      ],
+      "valid_feedback": 3,
+      "statuses": [
+        "ready",
+        "ready",
+        "ready"
+      ],
+      "human_semantic_consistency": "pending"
+    },
+    {
+      "case_id": "C49",
+      "trials": [
+        "C49-R1",
+        "C49-R2",
+        "C49-R3"
+      ],
+      "valid_feedback": 3,
+      "statuses": [
+        "ready",
+        "ready",
+        "ready"
+      ],
+      "human_semantic_consistency": "pending"
+    },
+    {
+      "case_id": "C54",
+      "trials": [
+        "C54-R1",
+        "C54-R2",
+        "C54-R3"
+      ],
+      "valid_feedback": 3,
+      "statuses": [
+        "ready",
+        "ready",
+        "ready"
+      ],
+      "human_semantic_consistency": "pending"
+    },
+    {
+      "case_id": "C58",
+      "trials": [
+        "C58-R1",
+        "C58-R2",
+        "C58-R3"
+      ],
+      "valid_feedback": 3,
+      "statuses": [
+        "ready",
+        "ready",
+        "ready"
+      ],
+      "human_semantic_consistency": "pending"
+    },
+    {
+      "case_id": "C60",
+      "trials": [
+        "C60-R1",
+        "C60-R2",
+        "C60-R3"
+      ],
+      "valid_feedback": 3,
+      "statuses": [
+        "ready",
+        "ready",
+        "ready"
+      ],
+      "human_semantic_consistency": "pending"
+    },
+    {
+      "case_id": "C61",
+      "trials": [
+        "C61-R1",
+        "C61-R2",
+        "C61-R3"
+      ],
+      "valid_feedback": 3,
+      "statuses": [
+        "ready",
+        "ready",
+        "ready"
+      ],
+      "human_semantic_consistency": "pending"
+    },
+    {
+      "case_id": "C66",
+      "trials": [
+        "C66-R1",
+        "C66-R2",
+        "C66-R3"
+      ],
+      "valid_feedback": 3,
+      "statuses": [
+        "ready",
+        "ready",
+        "ready"
+      ],
+      "human_semantic_consistency": "pending"
+    },
+    {
+      "case_id": "C69",
+      "trials": [
+        "C69-R1",
+        "C69-R2",
+        "C69-R3"
+      ],
+      "valid_feedback": 3,
+      "statuses": [
+        "ready",
+        "ready",
+        "ready"
+      ],
+      "human_semantic_consistency": "pending"
+    },
+    {
+      "case_id": "C72",
+      "trials": [
+        "C72-R1",
+        "C72-R2",
+        "C72-R3"
+      ],
+      "valid_feedback": 3,
+      "statuses": [
+        "ready",
+        "ready",
+        "ready"
+      ],
+      "human_semantic_consistency": "pending"
+    }
+  ]
+}

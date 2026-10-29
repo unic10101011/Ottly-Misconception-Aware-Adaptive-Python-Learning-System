@@ -1,0 +1,105 @@
+{
+  "dataset_id": "ottly-core72-2026-10-29-v1",
+  "files": [
+    {
+      "path": "acceptance.jsonl",
+      "sha256": "9ca5b920316843cbbb02b427484db4507fc052aea5bd2990374fed2657352f1d"
+    },
+    {
+      "path": "counts-after.json",
+      "sha256": "51f9b8b7d4d31ef6dcfd894cc0471ed26aaee847142c8833cf1777359d073467"
+    },
+    {
+      "path": "counts-before.json",
+      "sha256": "56ceb10759b42f1536259c67b2088c8cdf8c7f9e2484761135f893a818282121"
+    },
+    {
+      "path": "execution-lock.json",
+      "sha256": "17c7bd4dba079efc6ab38e2084735c81d315d1cdffdccf853d36eed3b2943a94"
+    },
+    {
+      "path": "payload-audit.json",
+      "sha256": "e9d4a11c38816dc126f7e1b525cf2c905cfa3392d87e2e00a556db04e35ebaa2"
+    },
+    {
+      "path": "provider-calls.jsonl",
+      "sha256": "4d87feba6f63eed8efa59c25e7a1b5ff139a7f6aebca9998273a40fc6b91e68d"
+    },
+    {
+      "path": "report-generation.json",
+      "sha256": "aace96876679667c49c2ade252865df7891747104af0a74c317d6c03ec7ce289"
+    },
+    {
+      "path": "responses.json",
+      "sha256": "0655580b377067824107f5f481414a613a52066aa32d17c31a94480e4ddabf14"
+    },
+    {
+      "path": "runtime-after.json",
+      "sha256": "205fe316d0e4dcb5304d21f62b5ab6a6c5e04d564b85b206e097eda43a42fc30"
+    },
+    {
+      "path": "runtime-before.json",
+      "sha256": "5aee2d7e4082d1786229a36d2f03be687352c0e4304f4858c80613bfe919ef83"
+    },
+    {
+      "path": "runtime-override.yaml",
+      "sha256": "33714f7d9a26c5cb83f1aaf2f31aec8f26aa447b672c785920ce1b0639fda4a6"
+    },
+    {
+      "path": "summary.json",
+      "sha256": "694b5a06042e580318ad616daa2ae7a8ead34cc97038e9e3d9f426c7ae1a1eb6"
+    },
+    {
+      "path": "真实调用汇总.md",
+      "sha256": "85294d5943fb69d638d405be1050e61270cb9edf59c53668c9e23b9022d0e61f"
+    },
+    {
+      "path": "逐条结果-L01.md",
+      "sha256": "319aa00b18538cac3ddc6abed141a204a9e00f78fa3b361bc9389d6501b75001"
+    },
+    {
+      "path": "逐条结果-L02.md",
+      "sha256": "a891f433a4afed04e2e4246db595e0e9e75152176e1c371a5ef6bf58c64420f6"
+    },
+    {
+      "path": "逐条结果-L03.md",
+      "sha256": "2b62c4c7bceebff091ea63f5876e00aa99b04a039a16e008c77cfa44d0af202e"
+    },
+    {
+      "path": "逐条结果-L04.md",
+      "sha256": "cb54943b32126aa9c5792060964d9392d35f51f2e3c88e8a8336f13afac934cc"
+    },
+    {
+      "path": "逐条结果-L05.md",
+      "sha256": "4c01887ec67b2dacd9cb2c677ec2ae2499534c0f33fb5810e40ab2a437f849f4"
+    },
+    {
+      "path": "逐条结果-L06.md",
+      "sha256": "a9426c2072d1c9abca73f069a3393006b870de973c55fbdec958ea0672dcc09f"
+    },
+    {
+      "path": "逐条结果-L07.md",
+      "sha256": "d37e83d747835f29c3ea511a075a3be6045897964d97cd188d42414bb15019f5"
+    },
+    {
+      "path": "逐条结果-L08.md",
+      "sha256": "528a7ef82142059fe67a2f5c87480e4992359c226a1ce5d2d573cd2e0650a5c3"
+    },
+    {
+      "path": "逐条结果-L09.md",
+      "sha256": "48245e0cb6a8ac070c5512579e5859bf794941096a7c9f16ff28558c8b4ef601"
+    },
+    {
+      "path": "逐条结果-L10.md",
+      "sha256": "e1a7729f4c17ebf4e587b64965a868345043c5314e583969c9bde38aff9ea473"
+    },
+    {
+      "path": "逐条结果-L11.md",
+      "sha256": "e45f2525ab6237396a5ef3422c8ccfea54cf56074dffc8bcc7d40438050ecf6e"
+    },
+    {
+      "path": "逐条结果-L12.md",
+      "sha256": "8f12942c45d4d9e1555c5beb5754062a545f12f3813ad33b16eb465c6516cbc8"
+    }
+  ]
+}

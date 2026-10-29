@@ -1,0 +1,27 @@
+services:
+  ai-evidence:
+    image: sha256:11172f09655790b4e1fe7e3e09694b987167ae2c81e77f10e0a74030bf93af34
+    entrypoint: ["python", "/observer/capture_proxy.py"]
+    volumes:
+      - ./docs/competition/core72-2026-10-29:/observer:ro
+      - ./.cache/core72-live-2026-10-29:/evidence
+    networks: [web]
+    read_only: true
+    tmpfs: [/tmp]
+    user: "10001:10001"
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; assert urllib.request.urlopen('http://127.0.0.1:8080/health').status==200"]
+      interval: 2s
+      timeout: 2s
+      retries: 15
+  backend:
+    environment:
+      DEEPSEEK_BASE_URL: http://ai-evidence:8080
+      AI_ACCEPTANCE_LOG: /evidence/acceptance.jsonl
+    volumes:
+      - ./.cache/core72-live-2026-10-29:/evidence
+    depends_on:
+      ai-evidence:
+        condition: service_healthy
