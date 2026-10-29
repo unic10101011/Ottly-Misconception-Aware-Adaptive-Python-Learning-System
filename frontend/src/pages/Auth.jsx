@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import xingxing from './images/xingxing.png'
 import yunduo from './images/yunduo.png'
-import loginhaita from './images/loginhaita.png'
+import AuthWave from '../components/AuthWave'
 
 function Auth() {
   const [activeTab, setActiveTab] = useState('login')
@@ -142,19 +142,13 @@ function Auth() {
     <div className="auth-page">
       <img src={xingxing} alt="" className="auth-decoration auth-star" />
       <img src={yunduo} alt="" className="auth-decoration auth-cloud" />
-      <div className="auth-wave" aria-hidden="true" />
+      <AuthWave />
       <div className="auth-shell">
         <section className="auth-welcome" aria-label="Ottly 欢迎页">
-          <span className="auth-eyebrow">OTTLY · PYTHON LEARNING</span>
-          <h1>嗨獭</h1>
-          <p>Hello, Ottly!</p>
-          <img src={loginhaita} alt="向你打招呼的小海獭" className="auth-otter" />
+          <img src="/login/Title.png" alt="嗨獭 Hello, Ottly!" className="auth-title-img" />
         </section>
         <section className="auth-card" aria-label="账号登录与注册">
-          <span className="auth-card-eyebrow">开始你的学习旅程</span>
-          <h2>{activeTab === 'login' ? '欢迎回来' : '加入 Ottly'}</h2>
-          <p className="auth-card-subtitle">{activeTab === 'login' ? '登录后继续你的 Python 闯关。' : '创建账号，保存每一步学习进度。'}</p>
-
+          <h2 className="auth-card-title">开启你的Python学习之旅</h2>
           <div className="auth-tabs" role="tablist" aria-label="账号操作">
             <button type="button" role="tab" aria-selected={activeTab === 'login'} className={activeTab === 'login' ? 'active' : ''} onClick={() => { setActiveTab('login'); setShowPassword(false); setMessage('') }}>登录</button>
             <button type="button" role="tab" aria-selected={activeTab === 'register'} className={activeTab === 'register' ? 'active' : ''} onClick={() => { setActiveTab('register'); setShowPassword(false); setMessage('') }}>注册</button>
