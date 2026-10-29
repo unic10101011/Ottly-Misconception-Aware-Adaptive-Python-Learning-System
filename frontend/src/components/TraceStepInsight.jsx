@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { requestTraceExplanation } from './codeApi.mjs'
+import AiRetry from './AiRetry.jsx'
 
 export default function TraceStepInsight({ trace, index }) {
   const [answers, setAnswers] = useState({})
@@ -37,7 +38,8 @@ export default function TraceStepInsight({ trace, index }) {
     </button>
     {!trace.trace_id && step && <small>请在正式题目页重新打开回放，再向 Ottly 提问。</small>}
     {answer && <div className="trace-ai-answer" role="status"><p className="trace-ai-preview">{preview}</p>{answer.length > preview.length && <details key={index}><summary>展开完整解释</summary><p>{answer}</p></details>}</div>}
-    {errors[index] && <p className="trace-ai-error" role="alert">{errors[index]}</p>}
+    {errors[index] && <AiRetry message={errors[index]} pending={pending === index} onRetry={explain} label="重新生成这一步的讲解" />}
+    {pending === index && <AiRetry pending onRetry={explain} pendingLabel="Ottly 正在解释这一步…" />}
     {pending !== null && !answers[index] && <small>解释不会阻止你切换步骤，最多等待约25秒。</small>}
   </section>
 }

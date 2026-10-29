@@ -13,7 +13,7 @@ function load(file, overrides) {
   const loaded = new Module(filename, module)
   loaded.filename = filename
   loaded.paths = Module._nodeModulePaths(path.dirname(filename))
-  loaded.require = id => Object.hasOwn(overrides, id) ? overrides[id]
+  loaded.require = id => id.endsWith('AiRetry.jsx') ? require('./load-ai-retry.cjs') : Object.hasOwn(overrides, id) ? overrides[id]
     : id.endsWith('.png') ? 'test.png' : require(id)
   loaded._compile(compiled.code, filename)
   return loaded.exports.default

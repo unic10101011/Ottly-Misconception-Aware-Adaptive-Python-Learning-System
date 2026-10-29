@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ChatContent from '../components/ChatContent.jsx';
+import AiRetry from '../components/AiRetry.jsx';
 import chathaita from './images/chathaita.png';
 import yonghu from './images/yonghu.png';
 import chatbeijing from './images/chatbeijing.png'; // 背景图
@@ -24,6 +25,8 @@ const AIchat = () => {
   const [question, setQuestion] = useState("");
   const [activeTab, setActiveTab] = useState("chat");
   const [selectedSessionFilter, setSelectedSessionFilter] = useState("");
+  const failedReplyRef = useRef(null);
+  const [failedReply, setFailedReply] = useState(null);
   const chatBodyRef = useRef(null);
   const questionInputRef = useRef(null);
   const sendingRef = useRef(false);
@@ -91,7 +94,8 @@ const AIchat = () => {
   };
 
   const loadSessionHistory = async (sessionId = undefined, quiet = false) => {
-    if (sendingRef.current) return;
+    if (sendingRef.current || (quiet && failedReplyRef.current)) return;
+    failedReplyRef.current = null; setFailedReply(null);
     const requestVersion = ++sessionRequestRef.current;
     if (!quiet) setSessionHistoryLoading(true);
     setSessionHistoryError('');
@@ -136,28 +140,33 @@ const AIchat = () => {
     loadSessionHistory(null);
   };
 
-  const sendMessage = async (e) => {
+  const sendMessage = async (e, retry = null) => {
     e.preventDefault();
-    if (sendingRef.current || sending || sessionHistoryLoading || sessionHistoryError || contextFull || !question.trim()) return;
+    const sentQuestion = retry?.question ?? question;
+    const baseMessages = retry?.messages ?? messages;
+    if (sendingRef.current || sending || sessionHistoryLoading || sessionHistoryError || contextFull || !sentQuestion.trim()) return;
+    failedReplyRef.current = null; setFailedReply(null);
     sendingRef.current = true;
     sessionRequestRef.current++;
     setSending(true);
     setSessionNotice('');
 
-    const newMessages = [...messages, { content: question, isUser: true }, { content: "", isUser: false }];
+    const newMessages = [...baseMessages, { content: sentQuestion, isUser: true }, { content: "", isUser: false }];
     setMessages(newMessages);
     setQuestion("");
     setTyping(true);
 
     let restoreAfterSend = false;
     let streamFailed = false;
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 100000);
     try {
       const response = await fetch("/api/v1/ai/chat", {
-        method: "POST",
+        method: "POST", signal: controller.signal,
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("access_token")}` },
-        body: JSON.stringify({ question, stream: true, session_id: currentSessionId, runtime_id: runtimeRef.current }),
+        body: JSON.stringify({ question: sentQuestion, stream: true, session_id: currentSessionId, runtime_id: runtimeRef.current }),
       });
 
       if (!response.ok) {
@@ -165,8 +174,8 @@ const AIchat = () => {
         const detail = result.detail;
         if (['CHAT_CONTEXT_FULL', 'CHAT_RUNTIME_CHANGED', 'CHAT_BUSY'].includes(detail?.code)) {
           if (mountedRef.current) {
-            setMessages(messages);
-            setQuestion(question);
+            setMessages(baseMessages);
+            setQuestion(sentQuestion);
             setSessionNotice(detail.message);
             if (detail.code === 'CHAT_CONTEXT_FULL') setContextFull(true);
           }
@@ -199,7 +208,7 @@ const AIchat = () => {
                   if (json.content === "[END]") { ended = true; continue; }
                   if (json.error) {
                     streamFailed = true;
-                    if (mountedRef.current) { setSessionNotice(json.content); setQuestion(question); }
+                    if (mountedRef.current) { setSessionNotice(json.content); setQuestion(sentQuestion); }
                   }
                   fullAnswer += json.content;
                   if (mountedRef.current) {
@@ -216,6 +225,7 @@ const AIchat = () => {
         }
       }
 
+      if (streamFailed) throw new Error('模型调用失败，请稍后重试。');
       if (!ended) throw new Error('回复连接中断，请稍后重试');
       if (mountedRef.current) {
         if (sessionIdFromResponse) setCurrentSessionId(sessionIdFromResponse);
@@ -225,11 +235,14 @@ const AIchat = () => {
     } catch (error) {
       console.error("错误:", error);
       if (mountedRef.current) {
-        setQuestion(question);
-        setSessionNotice(error.message || 'AI 服务暂时不可用，请稍后重试。');
+        setQuestion(sentQuestion);
+        const failure = { question: sentQuestion, messages: baseMessages, message: error.name === 'AbortError' ? '生成超时，请重试。' : error.message || 'AI 服务暂时不可用。' };
+        failedReplyRef.current = failure; setFailedReply(failure);
+        setSessionNotice('');
         setMessages((prev) => [...prev.slice(0, -1), { content: '本次回复未完成，请重试。', isUser: false }]);
       }
     } finally {
+      clearTimeout(timeout);
       sendingRef.current = false;
       if (mountedRef.current) {
         setTyping(false);
@@ -311,7 +324,9 @@ const AIchat = () => {
                     <img src={chathaita} alt="小海獭" className="chat-avatar" />
                   )}
                   <div className="chat-message-bubble">
-                    {msg.isUser ? msg.content : <ChatContent content={msg.content} />}
+                    {!msg.isUser && failedReply && i === messages.length - 1
+                      ? <AiRetry message={failedReply.message} pending={sending} onRetry={event => sendMessage(event, failedReply)} label="重新生成这条回复" />
+                      : msg.isUser ? msg.content : <ChatContent content={msg.content} />}
                   </div>
                   {msg.isUser && (
                     <img src={yonghu} alt="用户" className="chat-avatar" />

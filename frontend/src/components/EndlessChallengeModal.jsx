@@ -1,12 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { startEndlessChallenge } from './codeApi.mjs'
+import AiRetry from './AiRetry.jsx'
 
 export default function EndlessChallengeModal({ onClose }) {
   const navigate = useNavigate()
   const dialogRef = useRef(null)
   const firstChoiceRef = useRef(null)
   const requestRef = useRef(null)
+  const lastMode = useRef('ottly')
   const [busy, setBusy] = useState(false)
   const [progress, setProgress] = useState('')
   const [error, setError] = useState('')
@@ -25,6 +27,7 @@ export default function EndlessChallengeModal({ onClose }) {
 
   const choose = async mode => {
     if (requestRef.current) return
+    lastMode.current = mode
     const controller = new AbortController()
     requestRef.current = controller
     setBusy(true)
@@ -68,6 +71,6 @@ export default function EndlessChallengeModal({ onClose }) {
       </button>
     </div>
     {progress && <p className="endless-progress" role="status">{progress}</p>}
-    {error && <p className="endless-error" role="alert">{error}</p>}
+    {error && <AiRetry message={error} pending={busy} onRetry={() => choose(lastMode.current)} label="重新准备挑战题目" />}
   </dialog>
 }

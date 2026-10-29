@@ -5,7 +5,7 @@ import ProblemMetadata from '../components/ProblemMetadata.jsx'
 import StatusStamp from '../components/StatusStamp.jsx'
 import PythonEditor from '../components/PythonEditor.jsx'
 import { knowledgeName, questionKnowledgeIds, mistakeOverviewUrl } from '../components/mistakeGrouping.mjs'
-import { getLearningHistory, getMistakeQuestions, getKnowledge, requestAnalysis, requestCode } from '../components/codeApi.mjs'
+import { getLearningHistory, getMistakeQuestions, getKnowledge, requestAnalysis, requestRunAnalysis, requestCode } from '../components/codeApi.mjs'
 
 const HISTORY_PAGE_SIZE = 10
 const formatDate = value => new Date(value).toLocaleString('zh-CN')
@@ -38,6 +38,7 @@ function MistakeDetail() {
   const pendingHistoryRef = useRef(new Set())
   const mountedRef = useRef(false)
   const initializedProblemRef = useRef(null)
+  const runRef = useRef(null)
   const busy = running || submitting
   const selected = questions.find(item => item.problem_id === selectedId)
 
@@ -76,6 +77,7 @@ function MistakeDetail() {
     selectedRef.current = selectedId
     if (!selected || initializedProblemRef.current === selectedId) return
     initializedProblemRef.current = selectedId
+    runRef.current = null
     setCode(selected.last_wrong_code)
     setRunResult(null)
     setSubmission(null)
@@ -106,6 +108,7 @@ function MistakeDetail() {
     if (busy) return
     setCode(value)
     setRunResult(null)
+    runRef.current = null
     setSubmission(null)
     latestSubmissionRef.current = null
     setActionError('')
@@ -114,6 +117,7 @@ function MistakeDetail() {
   const runCode = async () => {
     if (busy || !code.trim()) return
     const problemId = selectedId
+    runRef.current = null
     setRunning(true)
     setActionError('')
     setRunResult(null)
@@ -123,6 +127,7 @@ function MistakeDetail() {
       const result = await requestCode('run', { code, timeout: 3, stdin, problem_id: problemId }, localStorage.getItem('access_token'))
       if (!mountedRef.current || selectedRef.current !== problemId) return
       setRunResult(result)
+      runRef.current = result
     } catch (error) {
       if (!mountedRef.current) return
       setActionError(error.message)
@@ -135,6 +140,7 @@ function MistakeDetail() {
   const submitReview = async () => {
     if (busy || !code.trim() || !selected) return
     const problemId = selected.problem_id
+    runRef.current = null
     setSubmitting(true)
     setRunResult(null)
     setActionError('')
@@ -176,9 +182,48 @@ function MistakeDetail() {
     }
   }
 
+  const retryRunAnalysis = async () => {
+    const original = runRef.current
+    if (!original?.analysis_id || original.analysis?.status === 'preparing') return
+    const pending = { ...original, analysis: { ...original.analysis, status: 'preparing' } }
+    runRef.current = pending
+    setRunResult(pending)
+    try {
+      const data = await requestRunAnalysis(original.analysis_id, localStorage.getItem('access_token'))
+      if (!mountedRef.current || runRef.current !== pending) return
+      const updated = { ...original, analysis: data.analysis }
+      runRef.current = updated
+      setRunResult(updated)
+    } catch (error) {
+      if (!mountedRef.current || runRef.current !== pending) return
+      const updated = { ...original, analysis: { ...original.analysis, status: 'unavailable', message: error.message } }
+      runRef.current = updated
+      setRunResult(updated)
+    }
+  }
+
+  const retryReviewAnalysis = async () => {
+    const original = submission
+    if (!original || pendingHistoryRef.current.has(original.submission_id)) return
+    const id = original.submission_id
+    pendingHistoryRef.current.add(id)
+    setSubmission({ ...original, analysis: { ...original.analysis, status: 'preparing' } })
+    try {
+      const data = await requestAnalysis(id, localStorage.getItem('access_token'))
+      if (!mountedRef.current || latestSubmissionRef.current !== id) return
+      setSubmission({ ...original, analysis: data.analysis, timings: data.timings })
+      setHistoryReload(value => value + 1)
+      setSummaryReload(value => value + 1)
+    } catch (error) {
+      if (mountedRef.current && latestSubmissionRef.current === id)
+        setSubmission({ ...original, analysis: { ...original.analysis, status: 'unavailable', message: error.message } })
+    } finally { pendingHistoryRef.current.delete(id) }
+  }
+
   const prepareHistoryAnalysis = item => {
-    if (item.analysis?.status !== 'preparing' || pendingHistoryRef.current.has(item.id)) return
+    if (['ready', 'skipped'].includes(item.analysis?.status) || pendingHistoryRef.current.has(item.id)) return
     pendingHistoryRef.current.add(item.id)
+    setHistory(current => current.map(row => row.id === item.id ? { ...row, analysis: { ...row.analysis, status: 'preparing' } } : row))
     requestAnalysis(item.id, localStorage.getItem('access_token'))
       .then(data => {
         if (!mountedRef.current) return
@@ -242,7 +287,7 @@ function MistakeDetail() {
               <div className="lesson-input">
                 <label htmlFor="review-stdin">运行输入（每次 input 读取一行）</label>
                 <textarea id="review-stdin" value={stdin} readOnly={busy} maxLength={8000} rows={3}
-                  onChange={event => { setStdin(event.target.value); setRunResult(null) }} />
+                  onChange={event => { setStdin(event.target.value); setRunResult(null); runRef.current = null }} />
               </div>
               <div className="mistake-actions">
                 <button type="button" className="mistake-secondary-button" disabled={busy || !code.trim()}
@@ -257,8 +302,8 @@ function MistakeDetail() {
                 {runResult.errors?.map((error, index) =>
                   <p key={index}>{error.type}：{error.message}</p>)}</div>}
               {runResult?.analysis && <SubmissionFeedback
-                result={{ judge: runResult.judge, analysis: runResult.analysis }} showJudge={false} />}
-              {submission && <SubmissionFeedback result={submission} />}
+                result={{ judge: runResult.judge, analysis: runResult.analysis }} showJudge={false} onRetry={retryRunAnalysis} />}
+              {submission && <SubmissionFeedback result={submission} onRetry={retryReviewAnalysis} />}
             </div>
           </div>}
 
@@ -293,7 +338,7 @@ function MistakeDetail() {
             {historyError && <p className="mistake-alert" role="alert">{historyError}</p>}
             {!historyLoading && !historyError && history.map(item =>
               <details className="mistake-history-item" key={item.id}
-                onToggle={event => { if (event.currentTarget.open) prepareHistoryAnalysis(item) }}>
+                onToggle={event => { if (event.currentTarget.open && item.analysis?.status === 'preparing') prepareHistoryAnalysis(item) }}>
                 <summary><span className={item.passed ? 'judge-passed' : 'judge-failed'}>
                   {item.passed ? '通过' : '未通过'}</span><strong>{formatDate(item.created_at)}</strong>
                   <small>{item.judge.passed_cases} / {item.judge.total_cases} 个测试通过</small></summary>
@@ -301,7 +346,7 @@ function MistakeDetail() {
                   <ProblemMetadata version={item.version} difficulty={item.difficulty}
                     knowledgeIds={item.knowledge_ids} knowledgeNames={knowledgeNames} />
                   {!item.passed && <p>错误分类：{item.error_type || '历史记录未提供'}</p>}
-                  <SubmissionFeedback result={{ judge: item.judge, analysis: item.analysis }} />
+                  <SubmissionFeedback result={{ judge: item.judge, analysis: item.analysis }} onRetry={() => prepareHistoryAnalysis(item)} />
                 </div>
               </details>)}
             {historyTotal > HISTORY_PAGE_SIZE && <div className="mistake-pagination">

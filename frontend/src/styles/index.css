@@ -1184,6 +1184,15 @@ button:disabled { cursor: not-allowed; }
 .btn-next-level:hover:not(:disabled) { background: #d9eee4; }
 .ottly-analysis-pending { display: inline-flex; align-items: center; gap: 7px; color: #456477; font-size: 13px; }
 .ottly-analysis-pending > span { width: 8px; height: 8px; border-radius: 50%; background: #2996bd; box-shadow: 0 0 0 4px #e4f5fb; }
+.ai-retry { display: inline-flex; align-items: center; flex-wrap: wrap; gap: 8px; color: #73542b; font-size: 13px; line-height: 1.6; }
+.ai-retry-button { display: inline-flex; align-items: center; gap: 5px; border: 1px solid #afd1df; border-radius: 8px; padding: 5px 9px; background: #f1faff; color: #17648b; cursor: pointer; font: inherit; }
+.ai-retry-button:hover { background: #dfF2fa; }
+.ai-retry-button:focus-visible { outline: 3px solid #ffcb66; outline-offset: 2px; }
+.ai-retry-button:disabled { opacity: .65; cursor: wait; }
+.ai-retry-detail { flex-basis: 100%; color: #687887; overflow-wrap: anywhere; }
+.ai-retry .is-spinning { animation: ai-retry-spin 1s linear infinite; }
+@keyframes ai-retry-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .ai-retry .is-spinning { animation: none; } }
 .code-buttons button:active:not(:disabled) { transform: scale(.96); }
 .otter-footer { position: fixed; right: clamp(14px, 2vw, 30px); bottom: max(14px, env(safe-area-inset-bottom)); z-index: 50; display: block; width: auto; padding: 0; background: transparent; }
 .otter-help { display: flex; align-items: center; gap: 10px; width: auto; min-height: 68px; padding: 7px 13px 7px 8px; border: 1px solid #a8d3e5; border-radius: 18px; background: #f8fdff; color: #255e7b; text-align: left; cursor: pointer; box-shadow: 0 10px 28px rgba(32, 94, 127, .19); transition: background-color .16s ease-out, transform .16s ease-out; }

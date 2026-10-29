@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import AiRetry from './AiRetry.jsx'
 
 const statusLabels = {
   accepted: '全部测试通过',
@@ -33,7 +34,7 @@ function GuidanceFeedback({ guidance }) {
   </div>
 }
 
-function SubmissionFeedback({ result, showJudge = true, showAnalysis = true }) {
+function SubmissionFeedback({ result, showJudge = true, showAnalysis = true, onRetry }) {
   const { judge, analysis } = result
   const content = analysis?.status === 'ready' ? analysis.content : null
   const guidance = analysis?.status === 'ready' && analysis.feedback_kind === 'guidance' ? analysis.guidance : null
@@ -92,7 +93,7 @@ function SubmissionFeedback({ result, showJudge = true, showAnalysis = true }) {
           ))}
         </div>
       ) : (
-        <p className="analysis-status" role="status">{analysis?.message || 'AI 分析暂不可用，判题结果已保留。请稍后重新提交。'}</p>
+        <AiRetry status={analysis?.status} message={analysis?.message || 'AI 分析暂不可用，判题结果已保留。'} onRetry={onRetry} />
       ))}
     </section>
   )

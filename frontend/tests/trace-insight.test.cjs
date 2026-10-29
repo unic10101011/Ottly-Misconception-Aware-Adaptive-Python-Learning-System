@@ -19,7 +19,7 @@ function setup(file) {
   const loaded = new Module(filename, module)
   loaded.filename = filename; loaded.paths = Module._nodeModulePaths(path.dirname(filename))
   const nativeRequire = loaded.require.bind(loaded)
-  loaded.require = id => id === 'react' ? hooks : id === './codeApi.mjs' ? {
+  loaded.require = id => id.endsWith('AiRetry.jsx') ? require('./load-ai-retry.cjs') : id === 'react' ? hooks : id === './codeApi.mjs' ? {
     requestTraceExplanation: (...args) => { calls.push(args); return new Promise((yes, no) => { resolve = yes; reject = no }) },
   } : nativeRequire(id)
   loaded._compile(transformSync(fs.readFileSync(filename, 'utf8'), { loader: 'jsx', format: 'cjs' }).code, filename)

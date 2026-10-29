@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { createStoryState, currentStoryNode, stepStory } from './storyEngine.mjs'
 import { askGuideQuestion } from '../codeApi.mjs'
+import AiRetry from '../AiRetry.jsx'
 
 function useModal(ref) {
   useEffect(() => {
@@ -164,7 +165,7 @@ export default function StoryDialogue({ story, canSkip, onFinish, onSkip, onExit
         <div className="story-nameplate">Ottly</div>
         <div className="story-heading"><span id="story-title">第 {story.levelNo || 1} 关 · {story.title}</span><span>{story.knowledge}</span></div>
         <div className="story-content" ref={answerContent} tabIndex={expandedAnswer ? -1 : undefined} aria-label={expandedAnswer ? 'Ottly 的解答' : undefined}>
-          {asking ? <p className="story-copy" role="status">Ottly 正在思考，你也可以直接继续。</p> : <>
+          {asking ? <p className="story-copy" role="status"><AiRetry pending onRetry={ask} pendingLabel="Ottly 正在思考，你也可以直接继续。" /></p> : <>
             <p className="story-copy" aria-hidden="true">{text.slice(0, count)}</p>
             <p className="story-sr" aria-live="polite" aria-atomic="true">{text}</p></>}
           {saveError && <p role="alert" className="story-save-error">{saveError}</p>}
@@ -173,10 +174,10 @@ export default function StoryDialogue({ story, canSkip, onFinish, onSkip, onExit
           <label htmlFor="story-question">向 Ottly 提问</label>
           <div className="story-question-row"><input id="story-question" type="text" maxLength={1000}
             placeholder="输入你对本关知识点的疑问…" value={question} disabled={asking || historyOpen}
-            onChange={event => setQuestion(event.target.value)} />
+            onChange={event => { setQuestion(event.target.value); setQuestionError('') }} />
             <button type="submit" disabled={!revealed || !question.trim() || asking || historyOpen}>{asking ? '正在解答…' : '发送问题'}</button></div>
           {asking && <span role="status">Ottly 正在思考，你也可以直接继续。</span>}
-          {questionError && <span role="alert" className="story-save-error">{questionError}</span>}
+          {questionError && <span role="alert"><AiRetry message={questionError} pending={asking} onRetry={ask} label="重新生成本次知识问答" /></span>}
         </form>}
         <footer className="story-footer">
           {node.type === 'choice' ? <><span>{expandedAnswer ? '读完后可以继续提问，或继续挑战。' : canAskQuestion ? '可以输入问题，也可以跳过提问继续。' : '选择一个想了解的问题，或直接继续。'}</span>

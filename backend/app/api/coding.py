@@ -1,6 +1,7 @@
 import logging
 import json
 from time import perf_counter
+from secrets import token_urlsafe
 
 from fastapi import APIRouter, Depends, Header, HTTPException, Query
 from fastapi.responses import StreamingResponse
@@ -29,6 +30,26 @@ from app.services.learning_contract import (
 
 router = APIRouter(dependencies=[Depends(get_current_user)])
 logger = logging.getLogger(__name__)
+
+# Short-lived, bounded execution evidence. A retry never executes student code.
+run_analyses = {}
+
+
+@router.post('/code/run-analysis/{analysis_id}')
+async def retry_run_analysis(analysis_id: str, current_user: User = Depends(get_current_user)):
+    snapshot = run_analyses.get(analysis_id)
+    if not snapshot or snapshot['user_id'] != current_user.id or perf_counter() - snapshot['created'] > 1800:
+        raise HTTPException(status_code=404, detail='本次运行证据已过期，请重新运行代码。')
+    with ai_operation(current_user.id, 'run-analysis', analysis_id):
+        analysis = snapshot.get('analysis')
+        if not analysis or analysis.status != 'ready':
+            try:
+                analysis = await analyze_failure(snapshot['problem'], snapshot['code'], snapshot['judge'], execution_mode='run')
+            except Exception:
+                logger.exception('Run analysis retry failed; original execution evidence remains available')
+                analysis = AnalysisResult(status='unavailable', message='AI 分析暂不可用，运行结果已保留。')
+            snapshot['analysis'] = analysis
+        return {'code': 200, 'data': {'analysis': contract_analysis(analysis, snapshot['scope']).model_dump(mode='json')}}
 
 
 class CodeRunRequest(BaseModel):
@@ -78,6 +99,16 @@ async def execute_code(request: CodeRunRequest, current_user: User = Depends(get
         )
         data['judge'] = contract_judge(judge, code=request.code).model_dump(mode='json')
         scope = analysis_knowledge_scope(lesson) if lesson else []
+        for key, snapshot in list(run_analyses.items()):
+            if perf_counter() - snapshot['created'] > 1800:
+                run_analyses.pop(key, None)
+        if len(run_analyses) >= 128:
+            run_analyses.pop(next(iter(run_analyses)))
+        analysis_id = token_urlsafe(24)
+        snapshot = {'user_id': current_user.id, 'created': perf_counter(), 'problem': problem,
+                    'code': request.code, 'judge': judge, 'scope': scope}
+        run_analyses[analysis_id] = snapshot
+        data['analysis_id'] = analysis_id
 
         async def finish_analysis():
             try:
@@ -86,6 +117,7 @@ async def execute_code(request: CodeRunRequest, current_user: User = Depends(get
                 logger.exception('Run analysis failed; execution result remains available')
                 analysis = AnalysisResult(status='unavailable', message='AI 分析暂不可用，运行结果已保留。')
             data['analysis'] = contract_analysis(analysis, scope).model_dump(mode='json')
+            snapshot['analysis'] = analysis
 
         if stream_analysis:
             async def progress():
@@ -392,7 +424,7 @@ async def _prepare_analysis(submission_id, user_id, db):
     ).first()
     if record is None:
         raise HTTPException(status_code=404, detail='提交记录不存在')
-    if record.analysis_json and record.analysis_json.get('status') != 'preparing':
+    if record.analysis_json and record.analysis_json.get('status') in {'ready', 'skipped'}:
         analysis = history_analysis(record, contract_judge(record.judge_json, code=record.code))
         return {'schema_version': SCHEMA_VERSION, 'code': 200, 'data': {
             'submission_id': record.id, 'analysis': analysis.model_dump(mode='json') if analysis else None,

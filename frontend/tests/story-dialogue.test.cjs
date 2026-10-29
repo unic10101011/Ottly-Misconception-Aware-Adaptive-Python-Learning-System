@@ -28,7 +28,7 @@ function harness(file, overrides) {
   loaded.filename = filename
   loaded.paths = Module._nodeModulePaths(path.dirname(filename))
   const nativeRequire = loaded.require.bind(loaded)
-  loaded.require = id => id === 'react' ? hooks : Object.hasOwn(overrides, id) ? overrides[id] : nativeRequire(id)
+  loaded.require = id => id.endsWith('AiRetry.jsx') ? require('./load-ai-retry.cjs') : id === 'react' ? hooks : Object.hasOwn(overrides, id) ? overrides[id] : nativeRequire(id)
   loaded._compile(transformSync(fs.readFileSync(filename, 'utf8'), { loader: 'jsx', format: 'cjs' }).code, filename)
   const render = props => { cursor = 0; refCursor = 0; return loaded.exports.default(props) }
   render.mount = () => { collect = false; return effects.map(effect => effect()) }

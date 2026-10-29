@@ -14,6 +14,39 @@ const jsonResponse = data => new Response(JSON.stringify({ code: 200, data }), {
 const find = (node, predicate) => !React.isValidElement(node) ? null : predicate(node) ? node
   : React.Children.toArray(node.props.children).map(child => find(child, predicate)).find(Boolean)
 
+test('a failed reply retries in place once without duplicating the user question', async () => {
+  let attempts = 0, finish
+  const env = environment(async (url) => {
+    if (url === '/api/v1/ai/chat') {
+      attempts++
+      if (attempts === 1) throw new TypeError('Failed to fetch')
+      return new Promise(resolve => { finish = resolve })
+    }
+    return jsonResponse(snapshot({ messages: [] }))
+  })
+  const chat = mountChat()
+  try {
+    chat.render(); await tick()
+    let tree = chat.render()
+    find(tree, n => n.props.id === 'chat-question').props.onChange({ target: { value: '为什么需要等号？' } })
+    tree = chat.render()
+    await find(tree, n => n.type === 'form').props.onSubmit({ preventDefault() {} })
+    tree = chat.render()
+    const retry = find(tree, n => n.props.label === '重新生成这条回复')
+    assert.ok(retry)
+    const promise = retry.props.onRetry({ preventDefault() {} })
+    retry.props.onRetry({ preventDefault() {} })
+    await tick()
+    assert.equal(attempts, 2)
+    const html = renderToStaticMarkup(chat.render())
+    assert.equal((html.match(/为什么需要等号？/g) || []).length, 1)
+    finish(new Response('data: {"content":"解释"}\n\ndata: {"content":"[END]"}\n\n', { headers: { 'Content-Type': 'text/event-stream' } }))
+    await promise
+    const calls = env.calls.filter(c => c.url === '/api/v1/ai/chat')
+    assert.equal(JSON.parse(calls[0].options.body).question, JSON.parse(calls[1].options.body).question)
+  } finally { chat.unmount(); env.restore() }
+})
+
 function mountChat() {
   const values = [], refs = [], effects = []
   let stateIndex = 0, refIndex = 0, effectIndex = 0
@@ -41,6 +74,7 @@ function mountChat() {
   loaded.filename = filename
   loaded.paths = Module._nodeModulePaths(path.dirname(filename))
   loaded.require = id => {
+    if (id.endsWith('AiRetry.jsx')) return require('./load-ai-retry.cjs')
     if (id === 'react') return hooks
     if (id === 'react-router-dom') return { useNavigate: () => () => {} }
     if (id.endsWith('.png')) return 'test.png'

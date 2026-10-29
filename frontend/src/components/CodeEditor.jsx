@@ -5,7 +5,8 @@ import PracticeRecommendationModal from './PracticeRecommendationModal.jsx'
 import ExecutionReplay from './ExecutionReplay.jsx'
 import { executionReplayLessons } from './executionReplayConfig.mjs'
 import PythonEditor from './PythonEditor.jsx'
-import { requestCode, requestAnalysis, requestPracticeRecommendation } from './codeApi.mjs'
+import AiRetry from './AiRetry.jsx'
+import { requestCode, requestAnalysis, requestRunAnalysis, requestPracticeRecommendation } from './codeApi.mjs'
 import { readCodeDraft, saveCodeDraft } from './codeDraft.mjs'
 
 function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, onSubmitted, title, children, teaching, completionPanel, nextAction, acceptsInput = false, persistentOutput = acceptsInput, sampleInput = '', allowReset = false, resetMode = 'template' }) {
@@ -33,6 +34,7 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, onS
   const particlesRef = useRef([])
   const cannonRef = useRef(null)
   const busyRef = useRef(false)
+  const analysisRetryRef = useRef(null)
   const submissionRef = useRef(null)
   const mountedRef = useRef(false)
   const successTimerRef = useRef(null)
@@ -45,6 +47,7 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, onS
 
   const updateCode = (value) => {
     if (busyRef.current) return
+    analysisRetryRef.current = null
     setCode(value)
     setRecommendation(null)
     setRecommendationPending(false)
@@ -81,6 +84,7 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, onS
 
   const runCode = async () => {
     if (busyRef.current) return
+    analysisRetryRef.current = null
     const showRunOutput = (text, type) => {
       if (persistentOutput) {
         setRunOutput({ text, type })
@@ -109,7 +113,7 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, onS
     const displayExecution = result => {
       executionResult = result
       if (!result.success && result.analysis && result.judge) {
-        const feedback = { origin: 'run', judge: result.judge, analysis: result.analysis }
+        const feedback = { origin: 'run', analysis_id: result.analysis_id, judge: result.judge, analysis: result.analysis }
         submissionRef.current = feedback
         setSubmission(feedback)
       }
@@ -145,7 +149,7 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, onS
     } catch (error) {
       if (mountedRef.current) {
         if (executionResult) {
-          const feedback = { origin: 'run', judge: executionResult.judge, analysis: {
+          const feedback = { origin: 'run', analysis_id: executionResult.analysis_id, judge: executionResult.judge, analysis: {
             status: 'unavailable', message: `AI 分析暂不可用：${error.message} 运行结果已保留。`, content: null,
           } }
           submissionRef.current = feedback
@@ -159,8 +163,33 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, onS
     }
   }
 
+  const retryAnalysis = async () => {
+    const original = submissionRef.current
+    if (!original || analysisRetryRef.current || original.analysis?.status === 'preparing') return
+    if (!original.submission_id && !original.analysis_id) return
+    const pending = { ...original, analysis: { ...original.analysis, status: 'preparing' } }
+    analysisRetryRef.current = pending
+    submissionRef.current = pending
+    setSubmission(pending)
+    try {
+      const data = original.origin === 'run'
+        ? await requestRunAnalysis(original.analysis_id, localStorage.getItem('access_token'))
+        : await requestAnalysis(original.submission_id, localStorage.getItem('access_token'))
+      if (!mountedRef.current || submissionRef.current !== pending) return
+      const updated = { ...original, analysis: data.analysis, timings: data.timings }
+      submissionRef.current = updated
+      setSubmission(updated)
+    } catch (error) {
+      if (!mountedRef.current || submissionRef.current !== pending) return
+      const updated = { ...original, analysis: { ...original.analysis, status: 'unavailable', message: error.message } }
+      submissionRef.current = updated
+      setSubmission(updated)
+    } finally { if (analysisRetryRef.current === pending) analysisRetryRef.current = null }
+  }
+
   const submitCode = async () => {
     if (busyRef.current) return
+    analysisRetryRef.current = null
     if (!code.trim()) {
       setOutput('请先输入代码')
       setOutputType('error')
@@ -496,14 +525,18 @@ function CodeEditor({ initialCode, problemId, userId, onSuccess, onAccepted, onS
               {submitting ? '提交中...' : '提交判题'}
             </button>
             {nextAction && <button type="button" className="btn-next-level" onClick={nextAction} disabled={busy}>前往下一关 →</button>}
-            {analysisPending && <span className="ottly-analysis-pending" role="status"><span aria-hidden="true" />{isPartialFailure ? 'Ottly正在准备思考提示' : 'Ottly正在分析错因'}</span>}
+            {analysisPending && (analysisRetryRef.current
+              ? <AiRetry pending onRetry={retryAnalysis} pendingLabel={isPartialFailure ? 'Ottly正在准备思考提示' : 'Ottly正在分析错因'} />
+              : <span className="ottly-analysis-pending" role="status"><span aria-hidden="true" />{isPartialFailure ? 'Ottly正在准备思考提示' : 'Ottly正在分析错因'}</span>)}
+            {submission && !submission.judge.passed && !analysisPending && !diagnosisReady && <AiRetry
+              status={submission.analysis?.status} message={submission.analysis?.message} onRetry={retryAnalysis} />}
             {recommendationPending && <span className="ottly-analysis-pending" role="status"><span aria-hidden="true" />Ottly正在挑选加练题</span>}
           </div>
           {submission && (
             <SubmissionFeedback
               result={submission}
               showJudge={submission.origin !== 'run'}
-              showAnalysis={!diagnosisReady}
+              showAnalysis={!diagnosisReady && analysisPending}
             />
           )}
           {completionPanel}

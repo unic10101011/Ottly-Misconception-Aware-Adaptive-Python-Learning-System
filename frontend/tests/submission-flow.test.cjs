@@ -21,7 +21,7 @@ function loadJsx(file, overrides = {}) {
   loaded.filename = filename
   loaded.paths = Module._nodeModulePaths(path.dirname(filename))
   const nativeRequire = loaded.require.bind(loaded)
-  loaded.require = id => Object.hasOwn(overrides, id) ? overrides[id]
+  loaded.require = id => id.endsWith('AiRetry.jsx') ? require('./load-ai-retry.cjs') : Object.hasOwn(overrides, id) ? overrides[id]
     : id.endsWith('/PythonEditor.jsx') ? PythonEditorStub
     : ['./PracticeRecommendationModal.jsx', '../components/EndlessChallengeModal.jsx', './ExecutionReplay.jsx'].includes(id)
       ? { default: () => null } : nativeRequire(id)
@@ -665,6 +665,45 @@ test('Ottly entry waits for diagnosis, opens on demand, and ignores results afte
     else delete global.localStorage
   }
 })
+test('failed analysis retries only the original submission, blocks double clicks and discards replies after editing', async () => {
+  const values = [], refs = [], effects = [], pending = [], ids = []
+  let cursor = 0, refCursor = 0, collect = true, submits = 0
+  const hooks = { ...React,
+    useState(initial) { const i = cursor++; if (!(i in values)) values[i] = typeof initial === 'function' ? initial() : initial
+      return [values[i], next => { values[i] = typeof next === 'function' ? next(values[i]) : next }] },
+    useRef(initial) { return refs[refCursor++] ||= { current: initial } },
+    useEffect(fn) { if (collect) effects.push(fn) }, useCallback: fn => fn,
+  }
+  const Editor = loadJsx('../src/components/CodeEditor.jsx', { react: hooks,
+    'react-router-dom': { useNavigate: () => () => {} }, './SubmissionFeedback.jsx': () => null,
+    './codeDraft.mjs': { readCodeDraft: () => null, saveCodeDraft: () => true },
+    './codeApi.mjs': {
+      requestCode: async () => { submits++; return { ...failure, submission_id: 991, analysis: { status: 'invalid_response' } } },
+      requestAnalysis: id => { ids.push(id); return new Promise(resolve => pending.push(resolve)) },
+    },
+  })
+  const previous = Object.getOwnPropertyDescriptor(global, 'localStorage')
+  Object.defineProperty(global, 'localStorage', { configurable: true, value: { getItem: () => 'owner' } })
+  const render = () => { cursor = 0; refCursor = 0; return Editor({ initialCode: 'print(0)', problemId: 'level1' }) }
+  const find = (tree, predicate) => !React.isValidElement(tree) ? null : predicate(tree) ? tree
+    : React.Children.toArray(tree.props.children).map(child => find(child, predicate)).find(Boolean)
+  try {
+    let tree = render(); const cleanups = effects.map(fn => fn()); collect = false
+    await find(tree, n => n.props.className === 'btn-submit').props.onClick()
+    tree = render()
+    const retry = find(tree, n => n.props.onRetry)
+    assert.ok(retry)
+    const promise = retry.props.onRetry()
+    retry.props.onRetry()
+    assert.deepEqual(ids, [991]); assert.equal(submits, 1)
+    assert.match(renderToStaticMarkup(render()), /正在重试/)
+    find(render(), n => n.props.className === 'code-input-editor').props.onChange('print(1)')
+    pending[0]({ analysis: failure.analysis }); await promise
+    assert.doesNotMatch(renderToStaticMarkup(render()), /Ottly有话要说|Repeated replacement/)
+    cleanups.filter(Boolean).forEach(fn => fn())
+  } finally { if (previous) Object.defineProperty(global, 'localStorage', previous); else delete global.localStorage }
+})
+
 test('editor shows the judge before analysis resolves and keeps the verdict', async () => {
   const effects = []
   const updates = []
@@ -870,8 +909,8 @@ test('opening an unfinished history entry resumes only that analysis', async () 
     assert.equal(typeof finishAnalysis, 'function')
     finishAnalysis({ analysis: failure.analysis })
     await new Promise(resolve => setImmediate(resolve))
-    const changed = updates.find(update => update.index === 11 && typeof update.next === 'function')
-    states[11] = changed.next([item])
+    for (const changed of updates.filter(update => update.index === 11 && typeof update.next === 'function'))
+      states[11] = changed.next(states[11])
     assert.equal(states[11][0].analysis.status, 'ready')
     stateIndex = 0
     const html = renderToStaticMarkup(History())
