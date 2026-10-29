@@ -75,7 +75,7 @@ function SubmissionFeedback({ result, showJudge = true, showAnalysis = true, onR
         </li>)}
       </ul>}
       </>}
-      {showAnalysis && (judge.passed ? <p className="analysis-status">全部测试用例通过，本次未调用 AI。</p> : analysis?.status === 'preparing' ? (
+      {showAnalysis && (judge.passed ? <p className="analysis-status">全部测试用例通过。</p> : analysis?.status === 'preparing' ? (
         <p className="analysis-status" role="status">{isPartial ? 'Ottly正在准备思考提示，判题结果已显示。' : 'Ottly正在分析错因，判题结果已显示，你可以先对照测试检查代码。'}</p>
       ) : guidance ? (
         <GuidanceFeedback key={result.submission_id || guidance.question?.prompt || guidance.hint} guidance={guidance} />
@@ -83,7 +83,6 @@ function SubmissionFeedback({ result, showJudge = true, showAnalysis = true, onR
         <div className="ai-feedback">
           <p><strong>{analysis.source === 'fixed' ? '基础说明：' : '疑似原因：'}</strong>{content.suspected_cause}</p>
           <p><strong>相关知识点：</strong>{content.knowledge_points.join('、')}</p>
-          {!!content.knowledge_ids?.length && <p><strong>知识点编号：</strong>{content.knowledge_ids.join('、')}</p>}
           {content.evidence.map((item, index) => (
             <div className="analysis-evidence" key={index}>
               <strong>依据：{item.case_id} · {item.field === 'actual_output' ? '实际输出' : '错误信息'}</strong>

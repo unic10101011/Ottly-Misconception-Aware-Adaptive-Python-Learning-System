@@ -864,7 +864,6 @@ body {
 .mistake-workbench-heading h1 { font-size: clamp(25px, 3vw, 34px); font-weight: 800; line-height: 1.4; color: #143e58; margin: 8px 0 0; overflow-wrap: anywhere; }
 .mistake-detail-stamp { position: absolute; top: -34px; right: 28px; width: 104px; }
 .mistake-detail-stamp small { display: block; text-align: center; color: #647c88; font-size: 12px; margin-top: 8px; }
-.mistake-workbench > .problem-metadata { margin: 0 28px 16px; }
 .mistake-tabs { display: flex; gap: 24px; padding: 0 24px; border-bottom: 1px solid #e0eaf3; }
 .mistake-tabs button { min-height: 46px; background: none; border: 0; border-bottom: 3px solid transparent; padding: 12px 2px 11px; color: #718596; font-weight: 700; cursor: pointer; }
 .mistake-tabs button.active { border-bottom-color: #4a90e2; color: #256aaa; }
@@ -926,7 +925,6 @@ body {
   .mistake-workbench-heading { min-height: 102px; padding: 22px 126px 12px 18px; gap: 12px; }
   .mistake-detail-stamp { width: 88px; right: 18px; top: -28px; }
   .mistake-detail-stamp small { font-size: 11px; }
-  .mistake-workbench > .problem-metadata { margin: 0 18px 16px; }
   .mistake-group-heading { align-items: flex-start; }
   .mistake-group-heading h2 { font-size: 19px; }
   .mistake-problem-pane { max-height: 42dvh; padding: 20px 18px; }
@@ -967,7 +965,6 @@ body {
 .lesson-input .btn-hint { justify-self: start; }
 .lesson-output { padding: 0 16px 16px; }
 .draft-status { margin: 10px 16px; color: #53656b; font-size: 13px; }
-.problem-metadata { padding: 8px 20px; color: #53656b; font-size: 13px; overflow-wrap: anywhere; }
 .lesson-output h4 { margin: 0; font-size: 16px; font-weight: 600; }
 .lesson-output .output-box { min-height: 100px; max-height: 320px; overflow-y: auto; }
 .lesson-complete { margin-top: 20px; padding: 20px; border: 1px solid #a3cbbb; border-radius: 12px; background: #f2faf6; }

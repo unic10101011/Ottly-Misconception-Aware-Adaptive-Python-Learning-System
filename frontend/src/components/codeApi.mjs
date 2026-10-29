@@ -22,7 +22,7 @@ export async function requestCode(action, payload, token, options = {}) {
       })
     } catch (error) {
       if (error.name === 'AbortError') throw new Error('请求超时，请稍后重试。')
-      throw new Error('无法连接到服务器，请检查网络和后端服务。')
+      throw new Error('暂时无法连接，请检查网络后重试。')
     }
     if (response.status === 401) {
       const error = new Error('登录已过期，请重新登录后提交。')
@@ -86,7 +86,7 @@ async function requestLearningHistory(path, method, token, body, timeoutMs = 150
       })
     } catch (error) {
       if (error.name === 'AbortError') throw new Error('请求超时，请稍后重试。')
-      throw new Error('无法连接到服务器，请检查网络和后端服务。')
+      throw new Error('暂时无法连接，请检查网络后重试。')
     }
     if (response.status === 401) {
       const error = new Error('登录已过期，请重新登录后查看。')

@@ -91,21 +91,7 @@ test('partial feedback pending state promises guidance instead of a diagnosis', 
   assert.doesNotMatch(html, /正在分析错因/)
 })
 
-test('snapshot metadata distinguishes known values from unavailable historical values', () => {
-  const Metadata = loadJsx('../src/components/ProblemMetadata.jsx')
-  const current = renderToStaticMarkup(React.createElement(Metadata, {
-    version: 2, difficulty: 3, knowledgeIds: ['K02'], knowledgeNames: { K02: '变量与输入' },
-  }))
-  assert.match(current, /版本 2/)
-  assert.match(current, /综合/)
-  assert.match(current, /变量与输入/)
-  const old = renderToStaticMarkup(React.createElement(Metadata, { version: null, difficulty: null, knowledgeIds: [] }))
-  assert.match(old, /历史版本未提供/)
-  assert.match(old, /历史记录未提供/)
-  assert.doesNotMatch(old, /基础|版本 1/)
-})
-
-test('contract failure IDs and mapped knowledge IDs render alongside existing explanations', () => {
+test('judge failures and explanations remain visible without internal knowledge IDs', () => {
   const Feedback = loadJsx('../src/components/SubmissionFeedback.jsx')
   const result = { ...failure,
     judge: { ...failure.judge, failed_tests: ['stdout-1'] },
@@ -113,7 +99,7 @@ test('contract failure IDs and mapped knowledge IDs render alongside existing ex
   }
   const html = renderToStaticMarkup(React.createElement(Feedback, { result, visibleHintCount: 3 }))
   assert.match(html, /未通过测试：stdout-1/)
-  assert.match(html, /K08/)
+  assert.doesNotMatch(html, /K08|知识点编号/)
   assert.match(html, /accumulation/)
 })
 
@@ -770,7 +756,6 @@ test('review run errors display diagnosis only with current question context', a
   const History = loadJsx('../src/pages/MistakeDetail.jsx', {
     react: hooks, 'react-router-dom': { useNavigate: () => () => {}, useParams: () => ({ problemId: 'level2' }), useSearchParams: () => [new URLSearchParams('knowledge=K08'), () => {}], Link: ({ to, children, ...props }) => React.createElement('a', { ...props, href: to }, children) },
     '../components/StatusStamp.jsx': loadJsx('../src/components/StatusStamp.jsx'),
-    '../components/ProblemMetadata.jsx': () => null,
     '../components/MisconceptionOverview.jsx': () => null,
     '../components/SubmissionFeedback.jsx': Feedback,
     '../components/codeApi.mjs': { requestCode: async (...args) => { calls.push(args); return runtime } },
@@ -826,7 +811,6 @@ test('review submission also shows the judge before its analysis request finishe
     react: hooks,
     'react-router-dom': { useNavigate: () => () => {}, useParams: () => ({ problemId: 'level2' }), useSearchParams: () => [new URLSearchParams('knowledge=K08'), () => {}], Link: ({ to, children, ...props }) => React.createElement('a', { ...props, href: to }, children) },
     '../components/StatusStamp.jsx': loadJsx('../src/components/StatusStamp.jsx'),
-    '../components/ProblemMetadata.jsx': () => null,
     '../components/MisconceptionOverview.jsx': () => null,
     '../components/SubmissionFeedback.jsx': { default: () => null },
     '../components/codeApi.mjs': {
@@ -888,7 +872,6 @@ test('opening an unfinished history entry resumes only that analysis', async () 
     react: hooks,
     'react-router-dom': { useNavigate: () => () => {}, useParams: () => ({ problemId: 'level2' }), useSearchParams: () => [new URLSearchParams('knowledge=K08'), () => {}], Link: ({ to, children, ...props }) => React.createElement('a', { ...props, href: to }, children) },
     '../components/StatusStamp.jsx': loadJsx('../src/components/StatusStamp.jsx'),
-    '../components/ProblemMetadata.jsx': () => null,
     '../components/MisconceptionOverview.jsx': () => null,
     '../components/SubmissionFeedback.jsx': loadJsx('../src/components/SubmissionFeedback.jsx'),
     '../components/codeApi.mjs': {
@@ -1379,7 +1362,6 @@ test('mistake insight shows the AI matched practice focus and direct link', () =
       useRef: value => ({ current: value }), useEffect: () => {} },
     'react-router-dom': { useNavigate: () => () => {}, useParams: () => ({ problemId: 'level1' }), useSearchParams: () => [new URLSearchParams('knowledge=K08'), () => {}], Link: ({ to, children, ...props }) => React.createElement('a', { ...props, href: to }, children) },
     '../components/StatusStamp.jsx': loadJsx('../src/components/StatusStamp.jsx'),
-    '../components/ProblemMetadata.jsx': () => null,
     '../components/MisconceptionOverview.jsx': () => null,
     '../components/SubmissionFeedback.jsx': { default: () => null },
     '../components/codeApi.mjs': {},
@@ -1402,7 +1384,6 @@ test('mistake overview groups cards and links to an independent review page with
       useSearchParams: () => [new URLSearchParams(), () => {}],
       Link: ({ to, children, ...props }) => React.createElement('a', { ...props, href: to }, children) },
     '../components/StatusStamp.jsx': () => null,
-    '../components/ProblemMetadata.jsx': () => null,
     '../components/MisconceptionOverview.jsx': () => null,
     '../components/SubmissionFeedback.jsx': { default: () => null },
     '../components/codeApi.mjs': {},
@@ -1444,7 +1425,6 @@ test('detail loads the requested question after refresh and preserves edits when
       useSearchParams: () => [new URLSearchParams('knowledge=K08'), () => {}],
       Link: ({ to, children, ...props }) => React.createElement('a', { ...props, href: to }, children) },
     '../components/StatusStamp.jsx': loadJsx('../src/components/StatusStamp.jsx'),
-    '../components/ProblemMetadata.jsx': () => null,
     '../components/SubmissionFeedback.jsx': () => null,
     '../components/codeApi.mjs': {},
   })

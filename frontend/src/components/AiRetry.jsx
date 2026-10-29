@@ -2,7 +2,7 @@ import React from 'react'
 
 export default function AiRetry({ status, message = '', pending = false, onRetry, label = '重新生成', pendingLabel = '正在重新生成…' }) {
   const configuration = /密钥|Key|额度|余额|配置|401|402/i.test(message)
-  const text = configuration ? 'AI 服务暂不可用，请检查模型配置'
+  const text = configuration ? 'AI 暂时无法回答，请稍后重试'
     : status === 'timeout' || /超时|timeout/i.test(message) ? '生成超时'
     : status === 'invalid_response' || /内容检查|格式|校验/.test(message) ? '本次回答未能生成'
     : /网络|连接|fetch|network/i.test(message) ? '连接失败'

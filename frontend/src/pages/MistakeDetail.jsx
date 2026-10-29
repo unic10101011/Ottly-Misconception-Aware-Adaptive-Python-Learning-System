@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import SubmissionFeedback from '../components/SubmissionFeedback.jsx'
-import ProblemMetadata from '../components/ProblemMetadata.jsx'
 import StatusStamp from '../components/StatusStamp.jsx'
 import PythonEditor from '../components/PythonEditor.jsx'
 import { knowledgeName, questionKnowledgeIds, mistakeOverviewUrl } from '../components/mistakeGrouping.mjs'
@@ -264,8 +263,6 @@ function MistakeDetail() {
             <div><span className="mistake-eyebrow">{selected.source} · 复习这一题</span><h1>{selected.title}</h1></div>
             <div className="mistake-detail-stamp"><StatusStamp passed={latestPassed} /><small>最近提交：{latestPassed === true ? '已通过' : latestPassed === false ? '未通过' : '待尝试'}</small></div>
           </div>
-          <ProblemMetadata version={selected.version} difficulty={selected.difficulty}
-            knowledgeIds={selected.knowledge_ids} knowledgeNames={knowledgeNames} />
           <div className="mistake-tabs" role="tablist" aria-label="错题页面">
             <button type="button" role="tab" id="review-practice-tab" aria-controls="review-practice-panel" aria-selected={tab === 'practice'}
               className={tab === 'practice' ? 'active' : ''} onClick={() => setTab('practice')}>重新做题</button>
@@ -343,8 +340,6 @@ function MistakeDetail() {
                   {item.passed ? '通过' : '未通过'}</span><strong>{formatDate(item.created_at)}</strong>
                   <small>{item.judge.passed_cases} / {item.judge.total_cases} 个测试通过</small></summary>
                 <div className="mistake-history-body"><strong>当时提交的代码</strong><pre>{item.code}</pre>
-                  <ProblemMetadata version={item.version} difficulty={item.difficulty}
-                    knowledgeIds={item.knowledge_ids} knowledgeNames={knowledgeNames} />
                   {!item.passed && <p>错误分类：{item.error_type || '历史记录未提供'}</p>}
                   <SubmissionFeedback result={{ judge: item.judge, analysis: item.analysis }} onRetry={() => prepareHistoryAnalysis(item)} />
                 </div>
